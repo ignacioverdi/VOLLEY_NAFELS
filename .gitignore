@@ -117,6 +117,21 @@ LLAVE_DEMO.txt
 _respaldo_*/
 _respaldo*/
 
+# ── LAS COPIAS QUE DEJA EL NAVEGADOR AL BAJAR UN ARCHIVO ───────────────
+#  Cuando se baja un archivo a una carpeta donde ya existe uno con ese
+#  nombre, Windows le agrega "-1": panel_vivo-1.html, panel_estilo-1.js.
+#  Son versiones VIEJAS, nadie las enlaza, y sin embargo se publicaban:
+#  900 KB de una pantalla de hace una semana, con sello de version nuevo
+#  en cada corrida de PUBLICAR.
+#  Medido contra los 290 archivos de la carpeta: estos patrones agarran
+#  solo esas copias. Ni los icon-192.png, ni los datos_video_25-26, ni
+#  ningun archivo de verdad.
+*-[0-9].html
+*-[0-9].js
+*-[0-9].css
+*-[0-9].py
+*-[0-9].json
+
 # Las detecciones que guarda MEDIR_SAQUES para no volver a mirar el video cada
 # vez que se afina una regla. Son 20 MB por entrenamiento y se rehacen solas.
 

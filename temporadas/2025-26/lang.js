@@ -698,6 +698,53 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* ══ PANTALLA DE ACTIVIDAD · 05-10-2026 ════════════════════════════════
+       "Quién entra y qué mira". Van acá arriba, igual que el bloque de abajo:
+       si alguna de estas frases ya existiera más abajo, gana la de abajo. */
+    "Quién entra y qué mira": { en:"Who logs in and what they watch", de:"Wer sich einloggt und was er anschaut" },
+    "7 días": { en:"7 days", de:"7 Tage" },
+    "14 días": { en:"14 days", de:"14 Tage" },
+    "30 días": { en:"30 days", de:"30 Tage" },
+    "Los que menos video miran": { en:"Who watches the least video", de:"Wer am wenigsten Video schaut" },
+    "Los que hace más que no entran": { en:"Who has been away the longest", de:"Wer am längsten nicht da war" },
+    "Por nombre": { en:"By name", de:"Nach Name" },
+    "Entraron hoy": { en:"Logged in today", de:"Heute eingeloggt" },
+    "Entraron esta semana": { en:"Logged in this week", de:"Diese Woche eingeloggt" },
+    "Minutos de video en el período": { en:"Minutes of video in the period", de:"Videominuten im Zeitraum" },
+    "Sin mirar un solo video": { en:"Have not watched any video", de:"Haben kein Video angeschaut" },
+    "Cada cuadrito es un día:": { en:"Each square is one day:", de:"Jedes Kästchen ist ein Tag:" },
+    "no entró": { en:"did not log in", de:"nicht eingeloggt" },
+    "entró, sin video": { en:"logged in, no video", de:"eingeloggt, kein Video" },
+    "hasta 5 min de video": { en:"up to 5 min of video", de:"bis 5 Min Video" },
+    "5 min de video o más": { en:"5 min of video or more", de:"5 Min Video oder mehr" },
+    "Qué anota la app": { en:"What the app records", de:"Was die App aufzeichnet" },
+    ": qué pantalla abrió cada uno y a qué hora, y cuántos segundos de video reprodujo en cada pantalla. Nada más: ni qué miró dentro de la pantalla, ni qué tocó, ni dónde estaba.":
+      { en:": which screen each person opened and at what time, and how many seconds of video they played on each screen. Nothing else: not what they looked at inside the screen, not what they tapped, not where they were.",
+        de:": welchen Bildschirm jede Person geöffnet hat und wann, und wie viele Sekunden Video sie auf jedem Bildschirm abgespielt hat. Nichts weiter: nicht, was sie im Bildschirm angesehen hat, nicht, was sie angetippt hat, nicht, wo sie war." },
+    "Los segundos se cuentan sólo cuando el video avanza de verdad. Adelantar, saltar de corte o arrastrar la barra no suma nada, así que el número es piso, no techo.":
+      { en:"Seconds only count while the video actually advances. Skipping ahead, jumping to another clip or dragging the bar adds nothing, so the number is a floor, not a ceiling.",
+        de:"Sekunden zählen nur, während das Video wirklich läuft. Vorspulen, zu einem anderen Schnitt springen oder die Leiste ziehen zählt nicht, die Zahl ist also eine Untergrenze, keine Obergrenze." },
+    "Decíselo al plantel.": { en:"Tell the squad.", de:"Sag es dem Kader." },
+    "Que sepan que queda registrado cambia para qué sirve: pasa de ser un control a ser una herramienta — \"el martes no lo vio nadie, lo vemos juntos\".":
+      { en:"Knowing it is recorded changes what it is for: it stops being surveillance and becomes a tool — \"nobody watched it on Tuesday, let us watch it together\".",
+        de:"Zu wissen, dass es aufgezeichnet wird, ändert den Zweck: aus Kontrolle wird ein Werkzeug — \"am Dienstag hat es niemand angesehen, schauen wir es gemeinsam\"." },
+    "Persona": { en:"Person", de:"Person" },
+    "Última vez": { en:"Last seen", de:"Zuletzt" },
+    "Pantallas": { en:"Screens", de:"Bildschirme" },
+    "Día por día": { en:"Day by day", de:"Tag für Tag" },
+    "Pantallas que abrió en el período": { en:"Screens opened in the period", de:"Im Zeitraum geöffnete Bildschirme" },
+    "Ninguna.": { en:"None.", de:"Keine." },
+    "ayer": { en:"yesterday", de:"gestern" },
+    "No pude leer la base. ¿Estás con tu sesión iniciada?": { en:"I could not read the database. Are you signed in?", de:"Ich konnte die Datenbank nicht lesen. Bist du angemeldet?" },
+    "Todavía no hay nada anotado.": { en:"Nothing recorded yet.", de:"Noch nichts aufgezeichnet." },
+    "Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.": { en:"Recording starts from now on, every time someone opens a screen.", de:"Die Aufzeichnung beginnt ab jetzt, jedes Mal wenn jemand einen Bildschirm öffnet." },
+    "Esta pantalla es sólo para el cuerpo técnico.": { en:"This screen is for the coaching staff only.", de:"Dieser Bildschirm ist nur für das Trainerteam." },
+    "Qué pantallas abre cada uno y cuántos minutos de video mira. Día por día, para saber a quién hay que sentarse a mirar el video al lado.":
+      { en:"Which screens each person opens and how many minutes of video they watch. Day by day, so you know who you need to sit down and watch video with.",
+        de:"Welche Bildschirme jede Person öffnet und wie viele Videominuten sie schaut. Tag für Tag, damit du weißt, mit wem du dich zum Videoschauen hinsetzen musst." },
+    "Ver quién entra y qué mira": { en:"See who logs in and what they watch", de:"Sehen, wer sich einloggt und was er anschaut" },
+    "Sólo jugadores": { en:"Players only", de:"Nur Spieler" },
+
     /* ══ AGUJEROS TAPADOS · 03-10-2026 ══════════════════════════════════════
        Medido pantalla por pantalla: se cargo cada una en castellano, se paso a
        aleman y se anoto lo que NO cambio, descontando nombres de jugadores,
@@ -1073,6 +1120,130 @@
   '▼ Ver todos ({1})': { en:'▼ See all ({1})', de:'▼ Alle anzeigen ({1})' },
   'zona {1} contra {2}': { en:'zone {1} against {2}', de:'Zone {1} gegen {2}' },
   'Zona preferida: {1}': { en:'Preferred zone: {1}', de:'Bevorzugte Zone: {1}' },
+  'le falta': { en:'short of it', de:'fehlt noch' },
+  'Ataque (Total)': { en:'Attack (Total)', de:'Angriff (Gesamt)' },
+  '{1} ataques': { en:'{1} attacks', de:'{1} Angriffe' },
+  'Mapas de destino': { en:'Target maps', de:'Zielkarten' },
+  'Bloqueados - Origen ({1})': { en:'Blocked - Origin ({1})', de:'Geblockt - Ursprung ({1})' },
+  'MI PERFORMANCE VS OBJETIVO': { en:'MY PERFORMANCE VS TARGET', de:'MEINE LEISTUNG VS ZIEL' },
+
+  /* ── LA SINTESIS DEL PARTIDO ──────────────────────────────────────────── */
+  'Síntesis del partido': { en:'Match synthesis', de:'Spielzusammenfassung' },
+  'Síntesis del partido · NAFELS': { en:'Match synthesis · NAFELS', de:'Spielzusammenfassung · NAFELS' },
+  'El partido entero sin los tiempos muertos: de saque a saque, un rally atrás del otro y en orden. Como la síntesis del Data Volley, pero sin generar un archivo.':
+    { en:'The whole match with the dead time taken out: serve to serve, one rally after another, in order. Like the Data Volley synthesis, but without generating a file.',
+      de:'Das ganze Spiel ohne Leerlauf: von Aufschlag zu Aufschlag, ein Ballwechsel nach dem anderen, der Reihe nach. Wie die Data-Volley-Zusammenfassung, nur ohne Datei.' },
+  'Los rallies': { en:'The rallies', de:'Die Ballwechsel' },
+  'Cargando el video…': { en:'Loading the video…', de:'Video wird geladen…' },
+  'Seguido': { en:'Continuous', de:'Durchgehend' },
+  'Todos los sets': { en:'All sets', de:'Alle Sätze' },
+  'rallies': { en:'rallies', de:'Ballwechsel' },
+  'de juego': { en:'of play', de:'Spielzeit' },
+  'Elegí un partido': { en:'Pick a match', de:'Wähle ein Spiel' },
+  'Se necesitan los cortes de ese partido y el link del video.':
+    { en:'That match needs its clips and the video link.',
+      de:'Dieses Spiel braucht seine Clips und den Video-Link.' },
+  'Todavía no hay partidos con video': { en:'No matches with video yet', de:'Noch keine Spiele mit Video' },
+  'Hace falta un partido con sus cortes y el link del video cargado.':
+    { en:'A match needs its clips and its video link loaded.',
+      de:'Ein Spiel braucht seine Clips und den eingetragenen Video-Link.' },
+  'nota.sintesis': {
+    es:'Es el partido entero sin los tiempos muertos: arranca en el saque y corta cuando termina la jugada. Los rallies van en orden, uno atrás del otro, como la síntesis del Data Volley. Con <b>Seguido</b> no para entre rally y rally.',
+    en:'It is the whole match with the dead time taken out: it starts on the serve and cuts when the rally ends. The rallies run in order, one after another, like the Data Volley synthesis. With <b>Continuous</b> it does not stop between rallies.',
+    de:'Es ist das ganze Spiel ohne Leerlauf: es beginnt beim Aufschlag und schneidet ab, wenn der Ballwechsel endet. Die Ballwechsel laufen der Reihe nach, einer nach dem anderen, wie die Data-Volley-Zusammenfassung. Mit <b>Durchgehend</b> hält es zwischen den Ballwechseln nicht an.' },
+  /* El parrafo de arriba de «Objetivos del plantel». Por clave, como la nota:
+     es largo y el traductor de frases deja afuera los textos muy largos. */
+  'lead.objetivos': {
+    es:'Una fila por jugador, una columna por fundamento. Arriba el número de esta semana, abajo lo que le falta para su objetivo, y más abajo sobre cuántas acciones está hecho. Ordenado de peor a mejor: los que hay que mirar primero quedan arriba. Son los mismos números que ve cada jugador en su perfil.',
+    en:'One row per player, one column per skill. On top, this week\'s number; below it, how far they are from their goal; and below that, on how many actions it is based. Sorted worst to best: the ones to look at first stay on top. They are the same numbers each player sees in their own profile.',
+    de:'Eine Zeile pro Spieler, eine Spalte pro Element. Oben die Zahl dieser Woche, darunter was zum Ziel fehlt, und darunter, auf wie vielen Aktionen sie beruht. Von schlecht nach gut sortiert: wer zuerst angeschaut werden muss, steht oben. Es sind dieselben Zahlen, die jeder Spieler in seinem Profil sieht.' },
+  'Click para editar': { en:'Click to edit', de:'Zum Bearbeiten klicken' },
+  /* La nota de abajo de «Objetivos del plantel». Va por clave y no por texto
+     porque lleva cursivas adentro: traducida pedazo por pedazo quedaba una
+     frase rota en ingles y en aleman. */
+  'nota.casilla': {
+    es:'<b>Cómo leer una casilla.</b> El número grande es lo que lleva hecho esta semana; abajo dice <i>de 42</i> si ya llegó o <i>falta 1,7</i> si no; y el número chiquito es cuántas acciones lo sostienen — un 100% de un ataque y uno de treinta se ven iguales si no lo mirás. Un punto gris significa que ese fundamento no le corresponde al puesto. La cuenta de arriba —<i>objetivos cumplidos</i>— solo mira los que tienen acciones cargadas esta semana: un objetivo sin acciones todavía no está ni cumplido ni fallado.',
+    en:'<b>How to read a box.</b> The big number is what they have done this week; below it says <i>of 42</i> if they reached it or <i>1.7 short</i> if not; and the small number is how many actions it is based on — 100% from one attack and from thirty look the same if you do not check. A grey dot means that skill does not apply to their position. The count on top —<i>goals met</i>— only looks at the ones with actions logged this week: a goal with no actions is neither met nor missed yet.',
+    de:'<b>Wie man ein Feld liest.</b> Die grosse Zahl ist, was diese Woche erreicht wurde; darunter steht <i>von 42</i>, wenn das Ziel erreicht ist, oder <i>1,7 fehlen</i>, wenn nicht; und die kleine Zahl sagt, auf wie vielen Aktionen es beruht — 100% aus einem Angriff und aus dreissig sehen gleich aus, wenn man nicht hinschaut. Ein grauer Punkt heisst, dass dieses Element nicht zur Position gehört. Die Zahl oben —<i>erreichte Ziele</i>— zählt nur die mit Aktionen aus dieser Woche: ein Ziel ohne Aktionen ist weder erreicht noch verfehlt.' },
+
+  /* ══════════════════════════════════════════════════════════════════════════
+     QUINTA BARRIDA — 5/10/2026
+     Las pantallas que se muestran en volley-stats.com: informe de equipo,
+     objetivos del plantel, ranking, la tabla de la liga y la hoja de saque.
+     Son las que ve un club de afuera ANTES de comprar, asi que no pueden
+     tener una sola palabra en castellano.
+     ══════════════════════════════════════════════════════════════════════════ */
+
+  /* ── informe de equipo: las frases que arma el motor ──────────────────── */
+  'El ataque saca {1} puntos mas de lo que la recepcion le da':
+    { en:'The attack returns {1} points more than the reception gives it',
+      de:'Der Angriff holt {1} Punkte mehr heraus, als die Annahme hergibt' },
+  '{1}% de cambio de saque contra {2}% esperado':
+    { en:'{1}% side-out against {2}% expected', de:'{1}% Side-out gegenüber {2}% erwartet' },
+  'Con recepcion positiva se gana {1} puntos menos que el resto de la liga':
+    { en:'With a positive reception the team wins {1} points fewer than the rest of the league',
+      de:'Mit positiver Annahme gewinnt das Team {1} Punkte weniger als der Rest der Liga' },
+  'En P3 el equipo cambia de saque {1} puntos por debajo de su propio promedio':
+    { en:'In P3 the team sides out {1} points below its own average',
+      de:'In P3 liegt das Side-out des Teams {1} Punkte unter dem eigenen Schnitt' },
+
+  /* ── objetivos del plantel ────────────────────────────────────────────── */
+  'Los objetivos del plantel, en una hoja':
+    { en:'The squad objectives, on one sheet', de:'Die Kaderziele, auf einem Blatt' },
+  'objetivos cumplidos': { en:'goals met', de:'erreichte Ziele' },
+  'llegó al objetivo': { en:'reached the goal', de:'Ziel erreicht' },
+  'sin acciones esta semana': { en:'no actions this week', de:'keine Aktionen diese Woche' },
+  'Cómo leer una casilla.': { en:'How to read a box.', de:'Wie man ein Feld liest.' },
+  'El número grande es lo que lleva hecho esta semana;':
+    { en:'The big number is what they have done this week;',
+      de:'Die grosse Zahl ist, was diese Woche erreicht wurde;' },
+  'abajo dice': { en:'below it says', de:'darunter steht' },
+  'si ya llegó o': { en:'whether they reached it or', de:'ob das Ziel erreicht ist oder' },
+  'el número chiquito de abajo es sobre cuántas acciones está hecho':
+    { en:'the small number below says on how many actions it is based',
+      de:'die kleine Zahl darunter sagt, auf wie vielen Aktionen es beruht' },
+
+  /* ── la tabla de la liga ──────────────────────────────────────────────── */
+  '{1} jugadores · {2} con menos de {3} no entran al ranking · {4}':
+    { en:'{1} players · {2} with fewer than {3} are out of the ranking · {4}',
+      de:'{1} Spieler · {2} mit weniger als {3} sind nicht in der Rangliste · {4}' },
+  'Los rivales de copa que se enfrentaron una sola vez, y los jugadores con muy pocas acciones, distorsionan el ranking':
+    { en:'Cup opponents played only once, and players with very few actions, distort the ranking',
+      de:'Pokalgegner, gegen die nur einmal gespielt wurde, und Spieler mit sehr wenigen Aktionen verzerren die Rangliste' },
+
+  /* ── la hoja de saque de un jugador ───────────────────────────────────── */
+  'sin filtrar': { en:'unfiltered', de:'ungefiltert' },
+  'Fácil': { en:'Easy', de:'Leicht' },
+  'Fácil (−)': { en:'Easy (−)', de:'Leicht (−)' },
+  'Mín.': { en:'Min.', de:'Min.' },
+  '{1} saques · {2} sin zona': { en:'{1} serves · {2} with no zone', de:'{1} Aufschläge · {2} ohne Zone' },
+  'Su zona es la': { en:'Their zone is', de:'Seine Zone ist' },
+  'En qué zona cae el saque': { en:'Where the serve lands', de:'Wo der Aufschlag landet' },
+  '· cancha del rival': { en:'· opponent court', de:'· Feld des Gegners' },
+  'Doble-click en zona con ▶ → video (partidos con 🎥)':
+    { en:'Double-click a zone with ▶ → video (matches with 🎥)',
+      de:'Doppelklick auf eine Zone mit ▶ → Video (Spiele mit 🎥)' },
+  'Cómo le va': { en:'How it is going', de:'Wie es läuft' },
+  'Qué saque usa': { en:'Which serve they use', de:'Welchen Aufschlag er nutzt' },
+  'Con qué intensidad': { en:'How hard', de:'Mit welcher Härte' },
+  'tu velocidad habitual · máximo': { en:'your usual speed · top', de:'deine übliche Geschwindigkeit · Maximum' },
+  '· sobre {1} saques medidos': { en:'· over {1} measured serves', de:'· über {1} gemessene Aufschläge' },
+  'Los que terminan en punto salen': { en:'The ones that end in a point come out', de:'Die, die im Punkt enden, kommen' },
+  '{1} km/h más rápido': { en:'{1} km/h faster', de:'{1} km/h schneller' },
+  'que los que errás. El riesgo te está rindiendo.':
+    { en:'faster than the ones you miss. The risk is paying off.',
+      de:'schneller als die, die du verschlägst. Das Risiko zahlt sich aus.' },
+  'El número es la': { en:'The number is the', de:'Die Zahl ist der' },
+  'mediana': { en:'median', de:'Median' },
+  ': un saque mal medido no te mueve la fila. Debajo, sobre cuántos saques está hecho. Con menos de 3 va en gris.':
+    { en:': one badly measured serve does not move the row. Below, on how many serves it is based. With fewer than 3 it goes grey.',
+      de:': ein schlecht gemessener Aufschlag verschiebt die Zeile nicht. Darunter, auf wie vielen Aufschlägen es beruht. Unter 3 wird es grau.' },
+  'Ver todos los videos juntos, de todas las zonas':
+    { en:'Watch all the videos together, from every zone',
+      de:'Alle Videos zusammen ansehen, aus allen Zonen' },
+  'El mismo número y el mismo semáforo que la batería de este fundamento':
+    { en:'The same number and the same colour as the battery for this skill',
+      de:'Dieselbe Zahl und dieselbe Ampel wie die Batterie dieses Elements' },
   /* el ranking usa el rotulo corto, sin el % adelante */
   'Atq Rápida': { en:'Quick atk', de:'Schneller Angriff' },
   'Atq Alta': { en:'High-ball atk', de:'Hoher Angriff' },
@@ -5440,14 +5611,36 @@
     });
   }
 
+  /* ══ UNA REPASADA VIEJA NO LE PUEDE GANAR A UN CAMBIO NUEVO ══════════════
+     La repasada se hacia con dos setTimeout a 700 y 2000 ms y nadie los
+     cancelaba. Si alguien pasaba la app a aleman y a los dos segundos volvia
+     al castellano, el castellano se aplicaba bien... y un rato despues
+     entraba la repasada en aleman, programada ANTES, y volvia a traducir
+     todo. La pantalla se daba vuelta sola delante del jugador.
+
+     Era el agujero que quedaba del arreglo del camino de vuelta: ese arreglo
+     hizo que applyDataT('es') devolviera el castellano —y lo devuelve bien,
+     medido—, pero la repasada vieja lo pisaba despues.
+
+     Dos frenos, a proposito, porque cada uno tapa un caso distinto:
+       1. al pedir un idioma nuevo se cancelan las repasadas pendientes
+          (tambien cuando el idioma nuevo es el castellano, que sale por el
+          return de abajo sin programar nada);
+       2. y cada repasada, antes de tocar algo, se fija si el idioma sigue
+          siendo el suyo. Si entre medio hubo otro cambio por un camino que
+          no pase por aca, igual no hace nada. */
+  var _repasoTimers = [];
   function _repasar(lang){
+    try{ _repasoTimers.forEach(function(h){ clearTimeout(h); }); }catch(e){}
+    _repasoTimers = [];
     if (lang === 'es') return;
     [700, 2000].forEach(function(ms){
-      setTimeout(function(){
+      _repasoTimers.push(setTimeout(function(){
+        try{ if (getLang() !== lang) return; }catch(e){}
         try{ applyDataT(lang); }catch(e){}
         try{ translateTextNodes(lang); }catch(e){}
         try{ translateAttrs(lang); }catch(e){}
-      }, ms);
+      }, ms));
     });
   }
 

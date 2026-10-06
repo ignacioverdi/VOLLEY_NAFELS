@@ -16,6 +16,42 @@ var FB_KEY  = 'AIzaSyDsl7RZkk0vuPUP0IADZcf6cgrv5_Wp5Fg';   // clave pública del
 var FB_DOM  = 'nafels.app';       // dominio interno de las cuentas de jugadores
 var FB_CLUB = 'NÄFELS';
 
+/* ══ DÓNDE VIVEN LOS DATOS DE ESTE CLUB ═════════════════════════════
+   NÄFELS tiene su base entera para sí: sus datos cuelgan de la raíz y FB_RAMA
+   queda vacía. Los clubes que vengan después comparten UNA base, cada uno en
+   su propia rama:
+
+       clubes/<club>/roles/...      clubes/<club>/sesiones/...
+
+   Las reglas sólo dejan leer y escribir adentro de la rama propia: nadie ve
+   los datos de otro club. Por eso toda ruta pasa por fbRuta().
+
+   En un cliente, GENERAR_PLANTILLA cambia la línea de abajo por '{{club}}'.
+   Acá queda vacía y fbRuta() devuelve la ruta tal cual: para NÄFELS no cambia
+   absolutamente nada.
+
+   POR QUÉ VIVE ACÁ Y NO EN UNA COPIA APARTE
+   Hasta hoy el cliente tenía su propio firebase.js, a mano, en
+   CLIENTE VOLEY STATS\EXTRAS. Esa copia se congeló el 29/07 y se quedó sin 22
+   funciones que esta app fue ganando: fbStream, la categoría del jugador, la
+   llave guardada para scoutear sin señal, el registro de actividad. Nadie se
+   enteraba porque no fallaba nada: al cliente nuevo simplemente le faltaban
+   cosas. Con la rama acá adentro hay un solo archivo y no vuelve a pasar.
+   ═══════════════════════════════════════════════════════════════════════ */
+var FB_RAMA = '';   /* el nombre corto del club, en minúscula. Vacía = la raíz */
+
+function fbRuta(camino){
+  var c = String(camino || '').replace(/^\/+/, '');
+  if (!FB_RAMA || FB_RAMA.charAt(0) === '{') return c;   /* sin rama: la raíz */
+  if (c.indexOf('clubes/') === 0) return c;              /* ya viene armada */
+  return 'clubes/' + FB_RAMA + '/' + c;
+}
+
+/* Arma la dirección completa de un pedido a la base. */
+function fbURL(camino, sufijo){
+  return FB_URL + '/' + fbRuta(camino) + '.json' + (sufijo || '');
+}
+
 function fbKey(path){
   return 'fb_' + path.replace(/[^a-zA-Z0-9]/g, '_');
 }
@@ -121,7 +157,7 @@ function _fbTraerLlave(){
   if(typeof guardarLlave !== 'function') return Promise.resolve();
   try{ if(localStorage.getItem('club_llave')) return Promise.resolve(); }catch(e){}
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/' + (typeof fbRuta === 'function' ? fbRuta('llave') : 'llave') + '.json' + q)
+    return fetch(fbURL('llave', q))
       .then(function(r){ return r.json(); })
       .then(function(k){ if(typeof k === 'string' && k.length >= 32) guardarLlave(k); })
       .catch(function(){});
@@ -190,7 +226,7 @@ function _fbRegistrarDisp(){
   var tipo = /iPad|Tablet/i.test(ua) ? 'Tablet'
            : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId() + '.json' + q, {
+    return fetch(fbURL('sesiones/dispositivos/' + FB_SES.uid + '/' + _fbDispId(), q), {
       method:'PATCH', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ tipo:tipo, mail:FB_SES.email||'',
                              desde:(FB_SES.emitido||Date.now()), ultimo:Date.now() })
@@ -210,7 +246,7 @@ function _fbRegistrarAcceso(){
            : /Android|iPhone|Mobile/i.test(ua) ? 'Celular' : 'Computadora';
   var id = 'a' + Date.now().toString(36) + Math.random().toString(36).slice(2,7);
   _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones/accesos/' + id + '.json' + q, {
+    return fetch(fbURL('sesiones/accesos/' + id, q), {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ uid:FB_SES.uid, mail:FB_SES.email||'',
                              cuando:Date.now(), tipo:tipo, disp:_fbDispId() })
@@ -226,7 +262,7 @@ function _fbControlSesion(){
   if(_fbCtrlHecho && (Date.now() - _fbCtrlHecho) < 60000) return Promise.resolve();
   _fbCtrlHecho = Date.now();
   return _fbSufijo().then(function(q){
-    return fetch(FB_URL + '/sesiones.json' + q).then(function(r){ return r.json(); });
+    return fetch(fbURL('sesiones', q)).then(function(r){ return r.json(); });
   }).then(function(d){
     if(!d || d.error) return _fbRegistrarDisp();
     /* ── SI NO SE SABE CUANDO SE CREO, NO SE CIERRA ────────────────────
@@ -298,8 +334,8 @@ function _fbCargarRolReal(){
   return _fbSufijo().then(function(q){
     /* Rol (coach/at/pf/player) y numero de camiseta, los dos atados al UID.
        El numero lo necesitan la vista por jugador y los avisos personales. */
-    var pRol = fetch(FB_URL + '/roles/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
-    var pNum = fetch(FB_URL + '/jugador_num/' + FB_SES.uid + '.json' + q).then(function(r){ return r.json(); });
+    var pRol = fetch(fbURL('roles/' + FB_SES.uid, q)).then(function(r){ return r.json(); });
+    var pNum = fetch(fbURL('jugador_num/' + FB_SES.uid, q)).then(function(r){ return r.json(); });
     return Promise.all([pRol, pNum]).then(function(res){
       var rol = res[0], num = res[1];
       try{
@@ -472,7 +508,7 @@ function fbStream(path, callback){
     _fbArrancar().then(_fbSufijo).then(function(q){
       if(muerto) return;
       try{
-        es = new EventSource(FB_URL + '/' + path + '.json' + q);
+        es = new EventSource(fbURL(path, q));
       }catch(e){ return; }
 
       function leer(ev){
@@ -683,7 +719,7 @@ function fbSet(path, value){
   try{ localStorage.setItem(fbKey(path), JSON.stringify(value)); }catch(e){}
   return _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return false;
-    return fetch(FB_URL + '/' + path + '.json' + q, {
+    return fetch(fbURL(path, q), {
       method:'PUT', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(value)
     }).then(function(r){ return !!(r && r.ok); })
@@ -701,7 +737,7 @@ function fbGet(path, callback){
   }
   _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return local();
-    fetch(FB_URL + '/' + path + '.json' + q)
+    fetch(fbURL(path, q))
       .then(function(r){ return r.json(); })
       .then(function(data){
         if(data !== null && data !== undefined && !(data && data.error)){
@@ -723,7 +759,7 @@ function fbPush(path, value){
   }catch(e){}
   _fbArrancar().then(_fbSufijo).then(function(q){
     if(FB_OFF) return;
-    fetch(FB_URL + '/' + path + '.json' + q, {
+    fetch(fbURL(path, q), {
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify(value)
     }).catch(function(){});
@@ -843,3 +879,243 @@ if(FB_TEMP_CERRADA){ (function(){
 
   try{ console.info('[temporada ' + FB_TEMP_CERRADA + '] modo museo: se mira, no se escribe.'); }catch(e){}
 })(); }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   REGISTRO DE ACTIVIDAD  ·  qué pantallas abre cada uno y cuánto video mira
+   ══════════════════════════════════════════════════════════════════════════
+   Hasta ahora la app sólo anotaba el INGRESO (sesiones/accesos): quién puso
+   mail y clave y cuándo. Eso no alcanza para la pregunta real del cuerpo
+   técnico, que es "¿este jugador miró el video o no?".
+
+   Se anotan DOS cosas, las dos por día, las dos ordenadas por fecha para
+   poder leer sólo el último mes y no toda la temporada:
+
+     sesiones/pantallas/<AAAAMMDD>/<uid>/<pantalla>  -> la última vez que la abrió
+     sesiones/videos/<AAAAMMDD>/<uid>/<pantalla>     -> segundos de video que reprodujo
+     sesiones/activo/<uid>                           -> { mail, ult, pant }
+
+   El tercero es un resumen de una línea por persona: sirve para contestar
+   "¿quién no entra desde hace días?" sin leer el historial completo.
+
+   LO QUE NO SE INVENTA
+   Los segundos se cuentan sólo cuando el reproductor avanza de verdad: cada
+   segundo se mira cuánto se movió el video y se suma si el salto es positivo
+   y menor a 3 segundos. Adelantar, saltar de corte o arrastrar la barra no
+   suma nada. Y no se guarda ningún "porcentaje visto": en Cortes y en
+   Síntesis el video es el partido completo y la app salta de jugada en
+   jugada, así que un porcentaje ahí no querría decir nada.
+
+   POR QUÉ ACÁ Y NO EN CADA PANTALLA
+   firebase.js ya está en 58 de las 67 pantallas y es el único archivo que
+   sabe quién es el que está mirando. Poniéndolo acá no hay que tocar ni una
+   pantalla: ni las seis que tienen reproductor de YouTube. Todo el bloque
+   está envuelto en try/catch — si algo de esto falla, la app sigue igual y
+   lo único que se pierde es el registro.
+
+   EN LA DEMO NO ESCRIBE NADA: HACER_DEMO.py bloquea los pedidos a Firebase y
+   entra en modo sin conexión, así que estas escrituras mueren solas.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+
+  /* ── el día de hoy, como 20261005 (es la llave que ordena el historial) ─ */
+  function actDia(){
+    try{
+      var d = new Date();
+      return String(d.getFullYear())
+           + String(d.getMonth() + 1).padStart(2, '0')
+           + String(d.getDate()).padStart(2, '0');
+    }catch(e){ return '00000000'; }
+  }
+
+  /* ── el nombre de la pantalla, servible como llave de Firebase ──────────
+     Firebase no acepta  .  $  #  [  ]  /  en el nombre de una llave: si va
+     un punto, la escritura se rechaza entera. panel_vivo.html queda como
+     panel_vivo_html. */
+  var _pant = null;
+  function actPant(){
+    if(_pant) return _pant;
+    try{
+      var p = String(location.pathname || '').split('/').pop() || 'index.html';
+      p = p.split('?')[0].split('#')[0];
+      if(!p) p = 'index.html';
+      _pant = p.replace(/\./g, '_').replace(/[\$#\[\]\/]/g, '') || 'index_html';
+    }catch(e){ _pant = 'desconocida'; }
+    return _pant;
+  }
+
+  function hay(){
+    try{
+      if(typeof FB_TEMP_CERRADA !== 'undefined' && FB_TEMP_CERRADA) return false;
+      if(typeof FB_OFF !== 'undefined' && FB_OFF) return false;
+      return !!(typeof FB_SES !== 'undefined' && FB_SES && FB_SES.uid);
+    }catch(e){ return false; }
+  }
+
+  function patch(ruta, valor, final){
+    if(!hay()) return Promise.resolve();
+    return _fbSufijo().then(function(q){
+      var opc = { method:'PATCH', headers:{'Content-Type':'application/json'},
+                  body: JSON.stringify(valor) };
+      if(final) opc.keepalive = true;   /* para que salga aunque se cierre la pestaña */
+      return window.fetch(fbURL(ruta, q), opc);
+    }).catch(function(){});
+  }
+
+  /* ════ 1 · LA PANTALLA ═══════════════════════════════════════════════════
+     Una vez por apertura. Dos escrituras chicas y nada más: no hay latido ni
+     pedido repetido, para no sumarle tráfico a la app. */
+  function anotarPantalla(){
+    if(!hay()) return;
+    var ahora = Date.now(), p = actPant(), o = {};
+    o[p] = ahora;
+    patch('sesiones/pantallas/' + actDia() + '/' + FB_SES.uid, o);
+    patch('sesiones/activo/' + FB_SES.uid,
+          { mail: FB_SES.email || '', ult: ahora, pant: p });
+  }
+
+  /* ════ 2 · EL VIDEO ══════════════════════════════════════════════════════ */
+  var seg = 0,          /* segundos reproducidos en esta apertura */
+      enviado = 0,      /* de esos, cuántos ya se guardaron */
+      base = 0,         /* lo que ya había guardado hoy en esta pantalla */
+      baseP = null,     /* la lectura de ese valor, en curso */
+      baseDia = '',
+      tic = null, ultT = 0, vueltas = 0;
+
+  /* Lo que ya había anotado hoy. Se lee UNA vez y sólo si alguien le da play:
+     en las pantallas sin video no cuesta ni un pedido. */
+  function leerBase(){
+    if(baseP) return baseP;
+    baseDia = actDia();
+    baseP = _fbSufijo().then(function(q){
+      return window.fetch(fbURL('sesiones/videos/' + baseDia + '/'
+                              + FB_SES.uid + '/' + actPant(), q))
+        .then(function(r){ return r.json(); });
+    }).then(function(v){ base = Number(v) || 0; })
+      .catch(function(){ base = 0; });
+    return baseP;
+  }
+
+  function guardar(final){
+    if(!hay()) return;
+    var ahora = Math.round(seg);
+    if(ahora <= enviado) return;
+    if(!final && (ahora - enviado) < 5) return;   /* no vale un pedido por 2 segundos */
+    enviado = ahora;
+    leerBase().then(function(){
+      var dia = actDia();
+      /* si cruzó la medianoche, el día nuevo arranca de cero */
+      if(dia !== baseDia){ base = 0; baseDia = dia; }
+      var o = {};
+      o[actPant()] = base + ahora;
+      return patch('sesiones/videos/' + dia + '/' + FB_SES.uid, o, final);
+    }).catch(function(){});
+  }
+
+  function arrancarTic(p){
+    if(tic) return;
+    try{ ultT = (p.getCurrentTime && p.getCurrentTime()) || 0; }catch(e){ ultT = 0; }
+    tic = setInterval(function(){
+      try{
+        var t = p.getCurrentTime ? p.getCurrentTime() : 0, d = t - ultT;
+        ultT = t;
+        /* sólo avance real: un salto grande o para atrás no es tiempo mirado */
+        if(d > 0 && d < 3) seg += d;
+        if((++vueltas % 20) === 0) guardar(0);
+      }catch(e){}
+    }, 1000);
+  }
+  function pararTic(){ if(tic){ clearInterval(tic); tic = null; } }
+
+  function estado(e){
+    try{
+      var p = e && e.target, st = e && e.data;
+      if(!p) return;
+      if(st === 1){ leerBase(); arrancarTic(p); }   /* 1 = reproduciendo */
+      else { pararTic(); guardar(0); }
+    }catch(x){}
+  }
+
+  /* ── engancharse a CUALQUIER reproductor de YouTube de la pantalla ───────
+     Se reemplaza YT.Player por una versión que le agrega nuestro oyente a
+     los eventos y después llama al original. La pantalla no se entera: su
+     propio onStateChange se sigue llamando igual, con los mismos argumentos.
+     Así no hay que tocar cortes, sintesis, armadores, game_plan, plan_partido
+     ni panel_vivo. */
+  var envuelto = 0;
+  function envolver(){
+    try{
+      if(envuelto || !window.YT || !YT.Player) return;
+      var Orig = YT.Player;
+      function Mio(el, cfg){
+        try{
+          cfg = cfg || {};
+          var ev = cfg.events = cfg.events || {};
+          var antes = ev.onStateChange;
+          ev.onStateChange = function(){
+            try{ estado(arguments[0]); }catch(x){}
+            if(typeof antes === 'function') return antes.apply(this, arguments);
+          };
+        }catch(x){}
+        return new Orig(el, cfg);
+      }
+      Mio.prototype = Orig.prototype;
+      YT.Player = Mio;
+      envuelto = 1;
+    }catch(e){}
+  }
+
+  /* La API de YouTube avisa que está lista llamando a
+     window.onYouTubeIframeAPIReady. Nos metemos delante de esa variable para
+     envolver YT.Player ANTES de que la pantalla cree su reproductor, sin
+     importar en qué orden se cargaron los archivos. */
+  var suyo = null;
+  function listoYT(){
+    envolver();
+    if(typeof suyo === 'function'){
+      try{ return suyo.apply(window, arguments); }catch(e){}
+    }
+  }
+  try{
+    suyo = window.onYouTubeIframeAPIReady || null;
+    Object.defineProperty(window, 'onYouTubeIframeAPIReady', {
+      configurable: true,
+      get: function(){ return listoYT; },
+      set: function(f){ suyo = f; }
+    });
+  }catch(e){
+    /* si el navegador no deja, queda la red de abajo */
+  }
+
+  /* Red de seguridad: si la API ya estaba cargada o el aviso se perdió, se
+     revisa unas cuantas veces en los primeros 30 segundos y después se deja
+     de mirar. */
+  envolver();
+  (function(){
+    var n = 0, r = setInterval(function(){
+      envolver();
+      if(envuelto || ++n > 20) clearInterval(r);
+    }, 1500);
+  })();
+
+  /* ── al irse de la pantalla, lo que quedó sin guardar ───────────────────
+     pagehide es el único que llega en iPhone cuando se cierra la pestaña o
+     se pasa a otra app; visibilitychange cubre el resto. */
+  try{
+    window.addEventListener('pagehide', function(){ pararTic(); guardar(1); });
+    document.addEventListener('visibilitychange', function(){
+      if(document.visibilityState === 'hidden') guardar(1);
+    });
+  }catch(e){}
+
+  /* ── arranque: la pantalla se anota cuando ya se sabe quién entró ───────── */
+  function inicio(){ try{ anotarPantalla(); }catch(e){} }
+  try{
+    if(typeof _fbListo !== 'undefined' && _fbListo && _fbListo.then)
+      _fbListo.then(inicio).catch(function(){});
+    else setTimeout(inicio, 2000);
+  }catch(e){ setTimeout(inicio, 2000); }
+
+  /* por si otra pantalla quiere mirarlo desde la consola */
+  try{ window.ACTIVIDAD = { pant: actPant, dia: actDia,
+                            seg: function(){ return Math.round(seg); } }; }catch(e){}
+})();

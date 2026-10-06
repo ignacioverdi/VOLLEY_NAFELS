@@ -24,6 +24,41 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil, glob
 from collections import defaultdict, Counter
 
+# ── EL PUESTO DE CADA JUGADOR ──────────────────────────────────────────────
+#  Sale del plantel del club, que es donde esta la verdad: lo carga el cuerpo
+#  tecnico en ALTA DE JUGADORES y se actualiza cuando cambia alguien.
+#
+#  Antes era una tabla por dorsal escrita a mano aca adentro. Dos problemas:
+#  se desactualiza sin que nadie se entere -medido: decia ARMADOR donde el
+#  plantel dice PUNTA- y en otro club le asigna a cada uno el puesto de otra
+#  persona, porque los dorsales no son los mismos.
+#
+#  Deducirlo de la cancha tampoco alcanza: midiendo un partido real, asi solo
+#  se acierta al LIBERO y a los CENTRALES, y 7 de 12 quedan en OTRO.
+#
+#  Se exige window.PLANTEL_ para no confundirse con otro archivo que empiece
+#  igual (plantel_desde_dvw.js es codigo, no datos). Si el plantel no esta,
+#  devuelve vacio y el motor deduce lo que puede, como antes.
+def _pos_del_plantel():
+    import re as _re, glob as _g
+    out = {}
+    for ruta in sorted(_g.glob('plantel_*.js')):
+        try:
+            s = open(ruta, encoding='utf-8', errors='replace').read()
+        except OSError:
+            continue
+        if 'window.PLANTEL_' not in s:
+            continue
+        for bloque in _re.findall(r'\{[^{}]*\}', s):
+            mn = _re.search(r'\bnum\s*:\s*(\d+)', bloque)
+            mp = _re.search(r'\bpos\s*:\s*[\x27\x22]([^\x27\x22]+)[\x27\x22]', bloque)
+            if mn and mp:
+                out[int(mn.group(1))] = mp.group(1).strip().upper()
+        if out:
+            break
+    return out
+
+
 # ── LA FECHA DE UNA SESION ───────────────────────────────────────────────────
 _FECHAS_ADENTRO = {}
 
@@ -181,7 +216,7 @@ def normalize_combo(combo):
 
 # ── CONFIGURACIÓN ─────────────────────────────────────────────────
 # ═══════════════════════════════════════════════════════════════════
-# CONFIGURACIÓN CASLA (Liga Argentina División de Honor)
+# CONFIGURACION DE LA LIGA
 # ═══════════════════════════════════════════════════════════════════
 # Solo el equipo propio. Los rivales salen de los .dvw al procesarlos, asi que
 # no hace falta escribirlos: cualquier liga funciona sin configurar nada.
@@ -260,13 +295,9 @@ def equipos_de_los_datos(teams_data, actuales, propio):
 if 'MAIN_TEAM' not in dir() or not MAIN_TEAM or MAIN_TEAM.startswith('{{'):
     MAIN_TEAM = 'Nafels'   # el equipo propio
 
-# Posiciones oficiales del plantel CASLA (por número de camiseta).
+# Los puestos salen del plantel del club (ver _pos_del_plantel).
 # Fuente única de verdad — coincide con EQUIPO_DEMO de jugador.html.
-CASLA_POS_OFICIAL = {
-    1:'ARMADOR', 2:'CENTRAL', 3:'OPUESTO', 4:'ARMADOR', 5:'CENTRAL',
-    6:'OPUESTO', 7:'CENTRAL', 8:'LIBERO', 9:'PUNTA', 10:'PUNTA',
-    11:'PUNTA', 14:'PUNTA', 15:'CENTRAL'
-}
+POS_OFICIAL = _pos_del_plantel()   # el puesto sale del plantel del club
 
 
 TEAM_COLORS = {
@@ -306,7 +337,19 @@ def norm(name):
         return x.upper().strip()
 
     entro = _plano(limpio)
-    conocidos = set(TEAM_NORM.values())
+    # ══ DE DONDE SALEN LOS NOMBRES CONOCIDOS ═══════════════════════════════
+    #  De DOS lados: la tabla de equivalencias -que en un cliente nace vacia a
+    #  proposito, porque los equipos de otra liga no le sirven- y la lista de
+    #  equipos de la liga, que SI se llena desde config_club.json al dar de
+    #  alta.
+    #
+    #  Mirando solo la tabla, en un cliente el conjunto queda vacio, la busqueda
+    #  por parecido no corre nunca, y el motor no reconoce ni a su propio club:
+    #  un .dvw que dice "AXPO NAFELS" no llega a "Nafels". Descarta TODOS los
+    #  partidos, escribe los archivos de datos vacios... y termina diciendo
+    #  "LISTO - 1 partidos en la base". Medido con un partido real: 0 partidos
+    #  en vez de 1, datos_partidos.js de 370 bytes en vez de 226 KB.
+    conocidos = set(TEAM_NORM.values()) | set(NLA_TEAMS or [])
     for corto in sorted(conocidos, key=len, reverse=True):
         if _plano(corto) in entro:
             return corto
@@ -1254,7 +1297,7 @@ def apply_heatmap_safety_fixes(html):
 
 
 
-# Funciones a integrar en update_db_casla.py para los armadores
+# Funciones de los armadores
 
 def _get_positions(content, players_section):
     """Lee la posición codificada (campo 13) de cada jugador.
@@ -2672,7 +2715,7 @@ def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025
             # corrigio el club, lo que declara el .dvw y recien despues la
             # deduccion.
             _rr = POS_MAP.get(_roster_club.get(str(num), ''))
-            pos_det = _rr or CASLA_POS_OFICIAL.get(num) or _detectar_pos(num)
+            pos_det = _rr or POS_OFICIAL.get(num) or _detectar_pos(num)
             _canch=to_canchitas(P) if P else {'saques':[],'ataques':[],'recepcion':{}}
             partidos_jug.append({'num':num,'nombre':nm,'pos':pos_det,
                 'color':POS_COLOR.get(pos_det,'#64748b'),'info':{},
