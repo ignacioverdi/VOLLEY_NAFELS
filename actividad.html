@@ -99,11 +99,11 @@ tr.det td{background:#0A0B14;border-top:none;padding:0}
   tr.det td{display:block;padding:0}
 }
 </style>
-<script src="categorias_club.js?v=20261005-2342"></script>
-<script src="selector_categoria.js?v=20261005-2342"></script>
-<script src="plantel_nafels.js?v=20261005-2342" onerror="void 0"></script>
-<script src="lang.js?v=20261005-2342"></script>
-<link rel="stylesheet" href="movil.css?v=20261005-2342">
+<script src="categorias_club.js?v=20261006-0726"></script>
+<script src="selector_categoria.js?v=20261006-0726"></script>
+<script src="plantel_nafels.js?v=20261006-0726" onerror="void 0"></script>
+<script src="lang.js?v=20261006-0726"></script>
+<link rel="stylesheet" href="movil.css?v=20261006-0726">
 </head>
 <body>
 
@@ -153,9 +153,9 @@ tr.det td{background:#0A0B14;border-top:none;padding:0}
   </div>
 </div>
 
-<script src="datos_seguros.js?v=20261005-2342" onerror="void 0"></script>
-<script src="firebase.js?v=20261005-2342"></script>
-<script src="firebase_por_categoria.js?v=20261005-2342"></script>
+<script src="datos_seguros.js?v=20261006-0726" onerror="void 0"></script>
+<script src="firebase.js?v=20261006-0726"></script>
+<script src="firebase_por_categoria.js?v=20261006-0726"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    QUIÉN ENTRA Y QUÉ MIRA
@@ -208,7 +208,7 @@ function diasDelRango(){
 
 function leer(ruta, extra){
   return _fbSufijo().then(function(q){
-    var u = FB_URL + '/' + ruta + '.json' + q;
+    var u = fbURL(ruta, q);
     if(extra) u += (q ? '&' : '?') + extra;
     return fetch(u).then(function(r){ return r.json(); });
   });
@@ -445,7 +445,7 @@ function esperarSesion(){
 }
 esperarSesion();
 </script>
-<script src="volver_inicio.js?v=20261005-2342" onerror="void 0"></script>
-<script src="ayuda.js?v=20261005-2342"></script>
+<script src="volver_inicio.js?v=20261006-0726" onerror="void 0"></script>
+<script src="ayuda.js?v=20261006-0726"></script>
 </body>
 </html>
