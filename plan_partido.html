@@ -234,7 +234,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261006-1302">
+<link rel="stylesheet" href="movil.css?v=20261006-1312">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -382,10 +382,10 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20261006-1302" onerror="void 0"></script>
-<script src="categorias_club.js?v=20261006-1302"></script>
-<script src="selector_categoria.js?v=20261006-1302"></script>
-<script src="mi_fila.js?v=20261006-1302" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261006-1312" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261006-1312"></script>
+<script src="selector_categoria.js?v=20261006-1312"></script>
+<script src="mi_fila.js?v=20261006-1312" onerror="void 0"></script>
 </head>
 <body>
 <div class="wrap">
@@ -527,8 +527,8 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261006-1302"></script>
-<script src="filtro_tipo.js?v=20261006-1302" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261006-1312"></script>
+<script src="filtro_tipo.js?v=20261006-1312" onerror="void 0"></script>
   <script src="liga_data.js.enc" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -543,13 +543,13 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20261006-1302"></script>
-<script src="firebase_por_categoria.js?v=20261006-1302"></script>
+<script src="firebase.js?v=20261006-1312"></script>
+<script src="firebase_por_categoria.js?v=20261006-1312"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20261006-1302" onerror="void 0"></script>
-<script src="velocidades_saque.js?v=20261006-1302" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20261006-1312" onerror="void 0"></script>
+<script src="velocidades_saque.js?v=20261006-1312" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -893,6 +893,21 @@ function armSoloArmadores(T){
 
      Para el rival manda lo que detecto el motor, que es la unica fuente que
      hay de el. El plantel se usa solo para el propio club. */
+  /* ══ EL NUMERO QUE COINCIDE DE CASUALIDAD ════════════════════
+     El respaldo de abajo se activa solo si NINGUN armador detectado figura
+     en el plantel, y eso no alcanza: basta UN numero repetido para arruinarlo.
+
+     VCS arma con el #6 —136 armados en el partido— y su #4 hizo 20. Nuestro
+     #4 es armador, asi que ese uno pasaba el filtro, el respaldo no se
+     activaba, y la pantalla se quedaba SOLO con el #4: el armador titular
+     del rival desaparecia del plan. A St Gallen le pasaba igual con el #2.
+
+     El plantel habla de este equipo solo si CONOCE A TODOS los armadores
+     que detecto el motor. Si hay uno que no figura —el #6 de VCS no existe
+     en el nuestro—, el plantel es de otro equipo y no se filtra nada. */
+  var _todosConocidos = T.setters.every(function(s){ return armPuestoDe(s.num) !== ''; });
+  if(!_todosConocidos) return T;
+
   var solo = T.setters.filter(function(s){ return armPuestoDe(s.num) === 'ARMADOR'; });
 
   /* ══ SI EL PLANTEL NO RECONOCE A NADIE, NO FILTRA ════════════════════════
@@ -1965,8 +1980,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20261006-1302" onerror="void 0"></script>
-<script src="lang.js?v=20261006-1302" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261006-1312" onerror="void 0"></script>
+<script src="lang.js?v=20261006-1312" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -1984,7 +1999,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20261006-1302" onerror="void 0"></script>
-<script src="ayuda.js?v=20261006-1302"></script>
+<script src="volver_inicio.js?v=20261006-1312" onerror="void 0"></script>
+<script src="ayuda.js?v=20261006-1312"></script>
 </body>
 </html>
