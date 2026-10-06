@@ -125,11 +125,11 @@
   </div>
 </div>
 
-<script src="firebase.js?v=20261006-0920" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261006-0920" onerror="void 0"></script>
-<script src="lang.js?v=20261006-0920" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261006-0920" onerror="void 0"></script>
-<script src="video_delay.js?v=20261006-0920" onerror="void 0"></script>
+<script src="firebase.js?v=20261006-1237" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261006-1237" onerror="void 0"></script>
+<script src="lang.js?v=20261006-1237" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261006-1237" onerror="void 0"></script>
+<script src="video_delay.js?v=20261006-1237" onerror="void 0"></script>
 <script>
 /* ── lo que el motor espera encontrar ─────────────────────────────────────── */
 function $(id){ return document.getElementById(id); }
@@ -137,7 +137,7 @@ function hayVideo(){ var v=$('vacio'); if(v) v.style.display='none'; }
 
 function vdBuscarCamaras(){
   var sel=$('vd-cam'), est=$('vd-estado');
-  if(!window.VideoDelay || !VideoDelay.camaras){ est.textContent='Falta video_delay.js'; return; }
+  if(!window.VideoDelay || !VideoDelay.camaras){ est.textContent='La cámara USB no está en esta versión. Conectá el celular.'; return; }
   est.textContent='Buscando cámaras…';
   /* los nombres solo aparecen despues de dar permiso: se pide una cualquiera,
      se apaga enseguida, y recien ahi se arma la lista */
@@ -160,7 +160,7 @@ function vdBuscarCamaras(){
   });
 }
 function vdConectarLocal(){
-  if(!window.VideoDelay || !VideoDelay.conectarLocal){ $('vd-estado').textContent='Falta video_delay.js'; return; }
+  if(!window.VideoDelay || !VideoDelay.conectarLocal){ $('vd-estado').textContent='La cámara USB no está en esta versión. Conectá el celular.'; return; }
   VideoDelay.conectarLocal($('vd-cam').value);
   hayVideo();
 }

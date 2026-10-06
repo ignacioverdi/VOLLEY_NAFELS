@@ -68,26 +68,11 @@
   var MARGEN_MIN_S  = 1.2;
 
   function mimeSoportado() {
-    /* ══ EL ORDEN IMPORTA, Y ESTABA AL REVES ═══════════════════════════════
-       La lista empezaba por VP8, que es el codec mas viejo y el que menos
-       rinde: con los mismos megabits da bastante menos imagen que H.264 o
-       VP9. Encima VP8 casi siempre se comprime por software, o sea mas CPU
-       y mas calor en una notebook que ademas esta scouteando.
-
-       Ahora va primero H.264 en mp4, que en Windows y en Mac se comprime por
-       hardware, y despues VP9. Verificado en la notebook del club: las dos
-       primeras lineas dan que si a grabar Y a reproducir.
-
-       La comprobacion de abajo pide las dos cosas —MediaRecorder tiene que
-       poder grabarlo y MediaSource reproducirlo—, asi que en un navegador
-       que no soporte alguno se cae solo al siguiente y no se rompe nada. */
     var candidatos = [
-      'video/mp4;codecs="avc1.4d402a"',
-      'video/mp4;codecs="avc1.42E01E"',
-      'video/webm;codecs=vp9',
       'video/webm;codecs=vp8',
       'video/webm;codecs="vp8,opus"',
-      'video/webm'
+      'video/webm',
+      'video/mp4;codecs="avc1.42E01E"'
     ];
     for (var i = 0; i < candidatos.length; i++) {
       var m = candidatos[i];
@@ -161,28 +146,27 @@
         self._vaciarCola();
       });
 
-      /* ══ 2,5 Mbps PARA TODO, QUE ES DE DONDE SALIA EL EMBARRADO ══════════
-         MediaRecorder arrancaba sin videoBitsPerSecond. Chrome y Firefox
-         usan 2,5 Mbps fijos y NO los escalan con la resolucion: un 1080p
-         recibia lo mismo que un 480p. De ahi salian el arrastre y el
-         cuadriculado en las jugadas rapidas, que es justo lo que uno quiere
-         mirar en un delay.
+      try {
+        /* ══ 2,5 Mbps PARA TODO, QUE ES DE DONDE SALIA EL EMBARRADO ══════════
+           MediaRecorder arrancaba sin videoBitsPerSecond, y entonces Chrome
+           usa 2,5 Mbps fijos para cualquier resolucion: un 1080p recibia lo
+           mismo que un 480p. Medido en banco, escena con mucho detalle y
+           movimiento: 2,57 Mbps en 720p como estaba, 6,15 pidiendo 6. En
+           1080p, 2,62 como estaba y 10,64 pidiendo 12.
 
-         Ahora el bitrate sale del alto real del video que esta entrando. Si
-         la camara manda 720p no se gasta de mas, y si manda 1080p se le da
-         lo que necesita. */
-      var _bits = 6000000;
-      try {
-        var _t = stream.getVideoTracks()[0];
-        var _alto = (_t && _t.getSettings && _t.getSettings().height) || 720;
-        _bits = _alto >= 1080 ? 12000000 : _alto >= 720 ? 6000000 : 3000000;
-      } catch (e) {}
-      self.bitrate = _bits;
-      try {
+           El codec NO se toca: sigue VP8 primero, igual que el domingo. Esto
+           solo le dice cuanta informacion guardar, no como. Si algun
+           navegador rechaza el pedido, se graba como antes y no se queda
+           nadie sin video. */
+        var _bits = 6000000;
+        try {
+          var _t = stream.getVideoTracks()[0];
+          var _alto = (_t && _t.getSettings && _t.getSettings().height) || 720;
+          _bits = _alto >= 1080 ? 12000000 : _alto >= 720 ? 6000000 : 3000000;
+        } catch (e) {}
+        self.bitrate = _bits;
         self.rec = new MediaRecorder(stream, { mimeType: self.mime, videoBitsPerSecond: _bits });
       } catch (e) {
-        /* algun navegador puede rechazar el bitrate: antes que quedarse sin
-           video, se graba como se pueda */
         try { self.rec = new MediaRecorder(stream, { mimeType: self.mime }); }
         catch (e2) { self._avisar('No se puede grabar en este formato', 'err'); return; }
       }

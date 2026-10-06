@@ -73,106 +73,6 @@
 
   function $(id){ return document.getElementById(id); }
 
-  /* ══════════════════════════════════════════════════════════════════════════
-     LA CAMARA ENCHUFADA A ESTA MISMA COMPUTADORA
-     El camino de siempre es: el telefono filma, manda el video por WebRTC a
-     traves del wifi del gimnasio, y aca se vuelve a comprimir para poder
-     retrasarlo. Son dos compresiones y una red en el medio, y la red del
-     gimnasio muchas veces bloquea las conexiones entre dispositivos.
-
-     Con una camara enchufada por USB —una webcam, una capturadora de HDMI, o
-     la camara virtual de OBS— no hay nada de eso: el video entra directo, sin
-     red y sin la primera compresion. Es como trabajan las apps de delay que
-     andan bien, que hacen todo dentro de un solo aparato.
-
-     El resto del motor no cambia: onStreamRecibido() ya recibe un stream y no
-     pregunta de donde salio.
-     ══════════════════════════════════════════════════════════════════════════ */
-  var localStream = null;
-
-  function camaras(){
-    if(!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return Promise.resolve([]);
-    return navigator.mediaDevices.enumerateDevices().then(function(ds){
-      return ds.filter(function(d){ return d.kind === 'videoinput'; });
-    }).catch(function(){ return []; });
-  }
-
-  function conectarLocal(deviceId){
-    queremos = true; reintento = 0; _rearmes = 0;
-    if(connected) _cerrarConexion();
-    salaId = null; viewerId = null;
-    setEstado('Abriendo la cámara…', 'wait');
-    var c = { audio:false, video:{ width:{ideal:1920}, height:{ideal:1080}, frameRate:{ideal:60} } };
-    if(deviceId) c.video.deviceId = { exact: deviceId };
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-      setEstado('Este navegador no deja abrir la cámara.', 'err'); return;
-    }
-    navigator.mediaDevices.getUserMedia(c).then(function(st){
-      localStream = st; liveStream = st; connected = true;
-      var t = st.getVideoTracks()[0];
-      /* 'motion' le avisa al navegador que esto es deporte: prioriza que no se
-         arrastre la imagen antes que el detalle fino de un cuadro quieto. */
-      if(t){ try{ t.contentHint = 'motion'; }catch(e){} }
-      onStreamRecibido(st);
-      _vigilarVida();
-    }).catch(function(e){
-      var n = (e && e.name) || 'error';
-      setEstado(n === 'NotReadableError'
-        ? 'La cámara está ocupada por otro programa. Cerrá el que la esté usando y probá de nuevo.'
-        : n === 'NotAllowedError'
-        ? 'El navegador no dio permiso para la cámara. Permitila y volvé a intentar.'
-        : 'No pude abrir la cámara (' + n + ').', 'err');
-    });
-  }
-
-  /* ══════════════════════════════════════════════════════════════════════════
-     LA LINEA QUE DICE CON QUE ESTA ANDANDO
-     Sin esto, «se ve mal» y «se traba» son opiniones. El motor ya contaba los
-     tirones, las podas forzadas y los pedacitos que no entraron, pero no los
-     miraba nadie. Acá se muestran, junto con la resolucion real que entro y
-     los megabits con los que se esta comprimiendo.
-
-     Si dice 640×360, el problema esta en la camara o en la red y no hay ajuste
-     del grabador que lo arregle. Si los tirones suben solos, el problema es el
-     buffer. Son dos caminos distintos y este renglon los separa. */
-  var _diagTimer = null;
-  function _pintarDiag(){
-    var el = $('vd-diag'); if(!el) return;
-    var t = liveStream && liveStream.getVideoTracks ? liveStream.getVideoTracks()[0] : null;
-    var sg = (t && t.getSettings) ? t.getSettings() : {};
-    var d = (BD && BD.diag) ? BD.diag : null;
-    var _m = (BD && BD.mime) || _mimeUsado || '';
-    var _b = (BD && BD.bitrate) || _bitsCiclos || 0;
-    var cod = _m ? String(_m).replace('video/','').replace(/;\s*co/, ' ').replace('decs=','').replace(/"/g,'') : '—';
-    var mb = _b ? (_b/1000000).toFixed(0) + ' Mbps' : '—';
-    var partes = [];
-    partes.push((sg.width||'?') + '×' + (sg.height||'?') + (sg.frameRate ? ' · ' + Math.round(sg.frameRate) + ' fps' : ''));
-    partes.push(cod + ' · ' + mb);
-    partes.push(BD ? 'buffer continuo' : 'clips de 12 s');
-    if(d) partes.push('tirones ' + (d.esperas||0) + ' · podas ' + (d.podadosForzados||0) + ' · perdidos ' + (d.trozosRechazados||0));
-    el.textContent = partes.join('   ·   ');
-  }
-  function _arrancarDiag(){
-    if(_diagTimer) clearInterval(_diagTimer);
-    _pintarDiag();
-    _diagTimer = setInterval(_pintarDiag, 2000);
-  }
-
-  /* ══ EL REARME SE AGOTABA Y NO VOLVIA ══════════════════════════════════════
-     Si se corta la imagen, el motor se rearma solo, pero el contador llegaba a
-     tres y no volvia a cero hasta que alguien tocaba Conectar a mano. En un
-     partido de dos horas con tres microcortes, el cuarto dejaba la pantalla en
-     negro sin que nadie se enterara.
-
-     Ahora, despues de un minuto y medio seguido con video entrando, el
-     presupuesto se repone. Tres cortes en un minuto siguen siendo motivo para
-     avisar que algo anda mal; tres cortes repartidos en dos horas no. */
-  var _vidaTimer = null;
-  function _vigilarVida(){
-    if(_vidaTimer) clearTimeout(_vidaTimer);
-    _vidaTimer = setTimeout(function(){ _rearmes = 0; _vidaTimer = null; }, 90000);
-  }
-
   /* ── conectar a una sala ── */
   function conectar(sala, esReintento){
     if(!esReintento){ queremos = true; reintento = 0; _rearmes = 0; }
@@ -282,8 +182,6 @@
   var cicloBuf = [];            /* pedazos del ciclo en curso */
   var cicloIni = 0;
   var recTimer = null;
-  var _mimeUsado = '';          /* con que se esta grabando, para el renglon */
-  var _bitsCiclos = 0;
   var rallyMarks = [];          /* timestamps de fin de cada punto (del scout) */
   var _lastRally = -1;
 
@@ -330,86 +228,25 @@
       };
       if(BD.arrancar(stream)){
         escucharCierreDeRally();
-        _vigilarVida();
-        _arrancarDiag();
         return;                      /* motor nuevo andando */
       }
       BD = null;                     /* no se pudo: se sigue como antes */
     }
     iniciarGrabacionEnCiclos(stream);
     escucharCierreDeRally();
-    _arrancarDiag();
-  }
-
-  /* ══ EL MOTOR VIEJO TAMBIEN MERECE BUENA IMAGEN ═══════════════════════════
-     El arreglo del codec y del bitrate estaba solo en delay_buffer.js, o sea
-     solo en el motor nuevo. Pero el de clips es el que viene funcionando en la
-     cancha, y grababa igual que siempre: VP8 —el codec mas viejo— y los 2,5
-     Mbps por defecto del navegador para cualquier resolucion.
-
-     Medido en la notebook del club, misma camara y misma escena: 1,27 Mbps
-     como estaba, 6,86 pidiendo 12. Cinco veces mas informacion.
-
-     Ahora los dos motores graban igual de bien. Asi la mejora de imagen no
-     depende de cual de los dos este corriendo, y si algun dia hay que volver
-     al viejo no se pierde.
-
-     Diferencia con el otro motor: aca el clip se reproduce directo en un
-     <video>, no por MediaSource. Entonces lo que hay que preguntar es si el
-     elemento lo sabe reproducir, no si MediaSource lo acepta. */
-  function _mimeCiclos(){
-    if(!window.MediaRecorder || !MediaRecorder.isTypeSupported) return '';
-    var v = document.createElement('video');
-    /* OJO con el orden, que aca NO es el mismo que en el otro motor.
-       El motor nuevo arma un video continuo con MediaSource y ahi mp4 con
-       H.264 es lo mejor y esta verificado en la notebook del club.
-
-       Este motor hace otra cosa: guarda cada clip como blob y se lo da
-       directo a un <video>. Ese camino con WebM y VP9 es el mas transitado y
-       el que menos sorpresas da, y la ganancia grande viene del bitrate, no
-       del codec. Como este es el motor que viene funcionando en la cancha, se
-       elige lo conservador: VP9 primero. */
-    var cand = ['video/webm;codecs=vp9',
-                'video/mp4;codecs="avc1.4d402a"',
-                'video/mp4;codecs="avc1.42E01E"',
-                'video/webm;codecs=vp8',
-                'video/webm'];
-    for(var i=0;i<cand.length;i++){
-      var m = cand[i];
-      if(!MediaRecorder.isTypeSupported(m)) continue;
-      var puede = '';
-      try{ puede = v.canPlayType(m); }catch(e){ puede = ''; }
-      if(puede) return m;
-    }
-    return '';
   }
 
   /* graba de a ciclos completos; cada ciclo cerrado es un video reproducible */
   function iniciarGrabacionEnCiclos(stream){
     ciclos = []; cicloBuf = [];
-    var mime = _mimeCiclos();
-    _mimeUsado = mime;
+    var mime = (window.MediaRecorder && MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) ? 'video/webm;codecs=vp8'
+             : (window.MediaRecorder && MediaRecorder.isTypeSupported('video/webm') ? 'video/webm' : '');
     function nuevoCiclo(){
       if(!stream || !stream.active) return;
       cicloBuf = []; cicloIni = Date.now();
       var rec;
-      /* el bitrate sale del alto real del video que esta entrando, igual que
-         en el otro motor: 12 Mbps en 1080p, 6 en 720p, 3 abajo */
-      var _bits = 6000000;
-      try{
-        var _t = stream.getVideoTracks()[0];
-        var _alto = (_t && _t.getSettings && _t.getSettings().height) || 720;
-        _bits = _alto >= 1080 ? 12000000 : _alto >= 720 ? 6000000 : 3000000;
-      }catch(e){}
-      _bitsCiclos = _bits;
-      var _opts = mime ? { mimeType:mime, videoBitsPerSecond:_bits }
-                       : { videoBitsPerSecond:_bits };
-      try{ rec = new MediaRecorder(stream, _opts); }
-      catch(e){
-        /* si rechaza el bitrate, antes que quedarse sin video se graba como se pueda */
-        try{ rec = new MediaRecorder(stream, mime?{mimeType:mime}:undefined); }
-        catch(e2){ return; }
-      }
+      try{ rec = new MediaRecorder(stream, mime?{mimeType:mime}:undefined); }
+      catch(e){ return; }
       rec.ondataavailable = function(e){ if(e.data && e.data.size>0) cicloBuf.push(e.data); };
       rec.onstop = function(){
         if(cicloBuf.length){
@@ -593,15 +430,6 @@
     if(_espTimer){ clearInterval(_espTimer); _espTimer=null; }
     if(recorder && recorder.state!=='inactive'){ try{ recorder.stop(); }catch(e){} }
     recorder=null;
-    if(_vidaTimer){ clearTimeout(_vidaTimer); _vidaTimer=null; }
-    if(_diagTimer){ clearInterval(_diagTimer); _diagTimer=null; }
-    var _dg=$('vd-diag'); if(_dg) _dg.textContent='';
-    /* la camara local se apaga de verdad: si no, queda la luz prendida y el
-       aparato tomado para cualquier otro programa */
-    if(localStream){
-      try{ localStream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
-      localStream=null;
-    }
     if(pc){ try{ pc.close(); }catch(e){} pc=null; }
     if(salaId && viewerId){ videoSet('video_signal/'+salaId+'/requests/'+viewerId, null); }
     ciclos.forEach(function(c){ try{ URL.revokeObjectURL(c.url); }catch(e){} });
@@ -619,23 +447,9 @@
 
   window.VideoDelay = {
     conectar: conectar,
-    conectarLocal: conectarLocal,
-    camaras: camaras,
     desconectar: desconectar,
     setDelay: setDelay,
     replayUltimoPunto: replayUltimoPunto,
-    estaConectado: function(){ return connected; },
-    /* para el recuadro de diagnostico: tirones, podas forzadas y pedacitos
-       rechazados. Hasta ahora el motor los contaba y no los miraba nadie. */
-    diag: function(){
-      var d = (BD && BD.diag) ? BD.diag : null;
-      return { motor: BD ? 'buffer' : (connected ? 'ciclos' : 'apagado'),
-               mime: (BD && BD.mime) || null,
-               bitrate: (BD && BD.bitrate) || null,
-               esperas: d ? d.esperas : null,
-               podadosForzados: d ? (d.podadosForzados||0) : null,
-               trozosRechazados: d ? d.trozosRechazados : null,
-               rearmes: _rearmes };
-    }
+    estaConectado: function(){ return connected; }
   };
 })();
