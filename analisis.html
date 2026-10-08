@@ -24,24 +24,24 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261008-1305" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261008-1305" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261008-1332" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261008-1332" onerror="void 0"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261008-1305"></script>
-<script src="filtro_tipo.js?v=20261008-1305" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261008-1332"></script>
+<script src="filtro_tipo.js?v=20261008-1332" onerror="void 0"></script>
   <script src="datos_baterias.js.enc" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261008-1305" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261008-1332" onerror="void 0"></script>
 
-  <script src="datos_historial.js?v=20261008-1305" onerror="void 0"></script>
-  <script src="utils.js?v=20261008-1305" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261008-1332" onerror="void 0"></script>
+  <script src="utils.js?v=20261008-1332" onerror="void 0"></script>
   <!-- El plantel del club: de aca salen el apellido y el PUESTO de cada
        dorsal. Sin esto, las solapas Comparativa y Ranking no tenian de
        donde sacar el puesto y quedaban vacias. -->
-  <script src="plantel_nafels.js?v=20261008-1305" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261008-1332" onerror="void 0"></script>
   <!-- modo_toggle.js sacado: se superponia con el selector de idioma. -->
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -277,15 +277,15 @@ window.OBJETIVOS_CONFIG = (window.OBJETIVOS_CONFIG && window.OBJETIVOS_CONFIG.me
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261008-1305" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261008-1305"></script>
+<script src="firebase.js?v=20261008-1332" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261008-1332"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261008-1305">
+<link rel="stylesheet" href="movil.css?v=20261008-1332">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261008-1305" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261008-1332" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -336,6 +336,51 @@ function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
     <button class="tab-btn activo" id="filtro-todos" onclick="setFiltroTipo('todos',this)" data-t="📋 TODOS"><span data-t="📋 TODOS">📋 TODOS</span></button>
     <button class="tab-btn" id="filtro-partidos" onclick="setFiltroTipo('P',this)" data-t="🏆 PARTIDOS"><span data-t="🏆 PARTIDOS">🏆 PARTIDOS</span></button>
     <button class="tab-btn" id="filtro-entrenamientos" onclick="setFiltroTipo('E',this)" data-t="🏋️ ENTRENAMIENTOS"><span data-t="🏋️ ENTRENAMIENTOS">🏋️ ENTRENAMIENTOS</span></button>
+  </div>
+  <!-- ══ Selector desplegable de sesiones ═══════════════════════════════════
+       Las tarjetas de abajo crecen sin freno: con la temporada entera encima
+       tapaban la pantalla, y solo se podia mirar UNA sesion o TODAS.
+
+       Este desplegable pone una casilla por sesion -con buscador y accesos
+       rapidos- y escribe la eleccion en FILTRO_INDICES, que es exactamente lo
+       que sesionesEnFoco() ya leia para armar el acumulado. Ningun motor de
+       calculo cambia: se le pasa otra lista de sesiones, nada mas. -->
+  <style>
+  .sel-chip{padding:5px 11px;border-radius:7px;cursor:pointer;background:transparent;
+    border:1px solid var(--border2);color:var(--mut);font-family:'Barlow Condensed',sans-serif;
+    font-size:12px;letter-spacing:1.3px;text-transform:uppercase;transition:all .15s}
+  .sel-chip:hover{border-color:rgba(129,140,248,.5);color:var(--txt)}
+  .sel-fila{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;
+    cursor:pointer;font-size:13px;color:var(--txt);font-family:'Barlow Condensed',sans-serif}
+  .sel-fila:hover{background:var(--card2)}
+  .sel-fila input{width:16px;height:16px;accent-color:#818cf8;cursor:pointer;flex:0 0 auto}
+  .sel-fila.on{background:rgba(129,140,248,.08)}
+  </style>
+  <div id="sel-ses" style="position:relative;margin:0 0 14px 0">
+    <button type="button" class="tab-btn" id="sel-ses-btn" onclick="selSesToggle()"
+      style="cursor:pointer;display:inline-flex;align-items:center;gap:8px">
+      <span id="sel-ses-lbl">&#128197; ELEGIR SESIONES</span><span style="opacity:.55">&#9662;</span>
+    </button>
+    <div id="sel-ses-panel" style="display:none;position:absolute;z-index:60;top:calc(100% + 6px);left:0;
+      width:min(470px,calc(100vw - 34px));background:var(--card);border:1px solid var(--border2);
+      border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.55);padding:10px">
+      <input id="sel-ses-q" type="text" placeholder="Buscar rival o fecha..." oninput="selSesPintarLista()"
+        style="width:100%;box-sizing:border-box;padding:8px 10px;border-radius:8px;border:1px solid var(--border2);
+        background:rgba(255,255,255,.04);color:var(--txt);font-size:13px;margin-bottom:8px;
+        font-family:'Barlow Condensed',sans-serif">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+        <button type="button" class="sel-chip" onclick="selSesRapido('todas')">Todas</button>
+        <button type="button" class="sel-chip" onclick="selSesRapido('5')">&#218;ltimas 5</button>
+        <button type="button" class="sel-chip" onclick="selSesRapido('mes')">Este mes</button>
+        <button type="button" class="sel-chip" onclick="selSesRapido('ninguna')">Limpiar</button>
+      </div>
+      <div id="sel-ses-lista" style="max-height:320px;overflow:auto;border-top:1px solid var(--border);padding-top:6px"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;
+        border-top:1px solid var(--border);padding-top:8px">
+        <div id="sel-ses-cuenta" style="font-size:11px;color:var(--mut);letter-spacing:1px"></div>
+        <button type="button" class="sel-chip" onclick="selSesToggle()">Listo</button>
+      </div>
+    </div>
   </div>
   <div id="objetivos-panel" style="margin-bottom:20px"></div>
 <script>
@@ -431,6 +476,10 @@ var TAB_ACTIVO = 'saque';
 var VISTA_ACTIVA = 'equipo';
 var FILTRO_TIPO = 'todos';
 var FILTRO_INDICES = null;
+/* Sesiones marcadas a mano en el desplegable. null = ninguna marcada. */
+var SEL_MULTI = null;
+/* Cuantas tarjetas se dibujan sin desplegar la grilla entera. */
+var GRID_TOPE = 8;
 
 window.addEventListener('load', function(){
   function tryLoad(attempts){
@@ -462,49 +511,117 @@ function setFiltroTipo(tipo, btn){
      sus numeros. Se vuelve al acumulado del grupo nuevo. */
   PARTIDO_IDX = -2;
   FILTRO_INDICES = null;
+  SEL_MULTI = null;
 
   renderPartidosGrid();
+  try{ selSesPintarLista(); }catch(e){}
   try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
   try{ _sincronizarBaterias(); }catch(e){}
+}
+
+/* ══ Fecha de la sesion en milisegundos ════════════════════════════════════
+   Las tarjetas salian en el orden en que el motor escribio la base, que no es
+   el cronologico: 03/10 y 04/10 aparecian antes que 19/09. Se ordenan por
+   fecha de verdad, de la mas reciente a la mas vieja.
+
+   El turno desempata el mismo dia: la Tarde va despues de la Manana. Una
+   sesion sin fecha legible da 0 y queda al final, nunca arriba. */
+function _sesFechaMs(p){
+  var txt = String((p && p.fecha) || '').trim();
+  var f = txt.split(/[\/\-.]/);
+  if(f.length !== 3) return 0;
+  var a, m, dd;
+  if(f[0].length === 4){ a = +f[0]; m = +f[1]; dd = +f[2]; }
+  else { dd = +f[0]; m = +f[1]; a = +f[2]; }
+  if(!a || !m || !dd) return 0;
+  if(a < 100) a += 2000;
+  var t = Date.UTC(a, m - 1, dd);
+  if(isNaN(t)) return 0;
+  var tu = String((p && p.turno) || '').toUpperCase();
+  return t + (tu === 'T' ? 7200000 : tu === 'M' ? 3600000 : 0);
+}
+
+/* Las sesiones del tipo elegido, de la mas nueva a la mas vieja, cada una con
+   su posicion ORIGINAL en DATA.entrenamientos: todo el resto del sistema
+   (FILTRO_INDICES, PARTIDO_IDX, las baterias) sigue hablando de esa posicion,
+   asi que reordenar la vista no puede cambiarla. */
+function _sesionesOrdenadas(){
+  var L = [];
+  var todas = (DATA && DATA.entrenamientos) ? DATA.entrenamientos : [];
+  todas.forEach(function(p, i){
+    if(!p) return;
+    if(FILTRO_TIPO !== 'todos' && (p.tipo||'P') !== FILTRO_TIPO) return;
+    L.push({ p: p, i: i, t: _sesFechaMs(p) });
+  });
+  L.sort(function(a, b){ return (b.t - a.t) || (b.i - a.i); });
+  return L;
+}
+
+function _tarjetaSesion(p, i){
+  var tipo = p.tipo||'P';
+  var res = p.resultado||{};
+  var esPartido = tipo==='P';
+  var ganado = setsDelClub(res) > setsDelRival(res);
+  var sets = (res.sets||[]).join(' · ');
+  var btn = document.createElement('button');
+  btn.className = 'partido-btn';
+  btn.setAttribute('data-idx', i);
+  if(esPartido){
+    btn.innerHTML = '<div class="pb-fecha">🏆 '+(p.fecha||'')+'</div><div class="pb-rival">vs '+(p.rival||'RIVAL')+'</div>'+
+      '<div class="pb-res '+(ganado?'res-win':'res-loss')+'">NAFELS '+(setsDelClub(res))+' — '+(res.rival||0)+'</div>'+
+      '<div class="pb-sets">'+sets+'</div>';
+  } else {
+    btn.innerHTML = '<div class="pb-fecha">🏋️ '+(p.fecha||'')+turnoTxt(p)+'</div><div class="pb-rival">'+(p.rival||'Entrenamiento')+'</div>'+
+      '<div class="pb-res" style="color:var(--indigo)">ENTRENAMIENTO</div>';
+  }
+  btn.onclick = function(){ selectPartido(i, this); };
+  return btn;
 }
 
 function renderPartidosGrid(){
   var grid = document.getElementById('partidos-grid');
   grid.innerHTML = '';
-  var filtrados = DATA.entrenamientos.filter(function(p){ return FILTRO_TIPO==='todos'||(p.tipo||'P')===FILTRO_TIPO; });
+  var orden = _sesionesOrdenadas();
   var tipoLabel = FILTRO_TIPO==='todos'?'sesiones':FILTRO_TIPO==='P'?'partidos':'entrenamientos';
   var btnAcum = document.createElement('button');
   btnAcum.className = 'partido-btn acum';
-  btnAcum.innerHTML = '<div class="pb-fecha">TEMPORADA 2026</div><div class="pb-rival">ACUMULADO</div><div class="pb-res" style="color:var(--indigo)">'+filtrados.length+' '+tipoLabel.toUpperCase()+'</div>';
+  btnAcum.innerHTML = '<div class="pb-fecha">TEMPORADA 2026</div><div class="pb-rival">ACUMULADO</div><div class="pb-res" style="color:var(--indigo)">'+orden.length+' '+tipoLabel.toUpperCase()+'</div>';
   btnAcum.onclick = function(){ selectPartidoFiltrado(-1, this); };
   grid.appendChild(btnAcum);
-  DATA.entrenamientos.forEach(function(p, i){
-    var tipo = p.tipo||'P';
-    if(FILTRO_TIPO !== 'todos' && tipo !== FILTRO_TIPO) return;
-    var res = p.resultado||{};
-    var esPartido = tipo==='P';
-    var ganado = setsDelClub(res) > setsDelRival(res);
-    var sets = (res.sets||[]).join(' · ');
-    var btn = document.createElement('button');
-    btn.className = 'partido-btn';
-    if(esPartido){
-      btn.innerHTML = '<div class="pb-fecha">🏆 '+(p.fecha||'')+'</div><div class="pb-rival">vs '+(p.rival||'RIVAL')+'</div>'+
-        '<div class="pb-res '+(ganado?'res-win':'res-loss')+'">NAFELS '+(setsDelClub(res))+' — '+(res.rival||0)+'</div>'+
-        '<div class="pb-sets">'+sets+'</div>';
-    } else {
-      btn.innerHTML = '<div class="pb-fecha">🏋️ '+(p.fecha||'')+turnoTxt(p)+'</div><div class="pb-rival">'+(p.rival||'Entrenamiento')+'</div>'+
-        '<div class="pb-res" style="color:var(--indigo)">ENTRENAMIENTO</div>';
-    }
-    btn.onclick = function(){ selectPartido(i, this); };
-    grid.appendChild(btn);
-  });
-  if(grid.children.length === 1){
+
+  /* Con muchas sesiones la grilla se come la pantalla: se muestran las mas
+     recientes y el resto queda a un clic, sin perder ninguna. */
+  var tope = (GRID_TOPE && orden.length > GRID_TOPE + 1) ? GRID_TOPE : orden.length;
+  orden.slice(0, tope).forEach(function(o){ grid.appendChild(_tarjetaSesion(o.p, o.i)); });
+
+  if(tope < orden.length){
+    var mas = document.createElement('button');
+    mas.className = 'partido-btn';
+    mas.style.borderColor = 'rgba(129,140,248,.35)';
+    mas.innerHTML = '<div class="pb-fecha">+ '+(orden.length - tope)+' MÁS</div>'+
+      '<div class="pb-rival">VER TODAS</div>'+
+      '<div class="pb-res" style="color:var(--indigo)">'+orden.length+' EN TOTAL</div>';
+    mas.onclick = function(){ GRID_TOPE = 0; renderPartidosGrid(); _selPintarGrid(); };
+    grid.appendChild(mas);
+  } else if(!GRID_TOPE && orden.length > 9){
+    var menos = document.createElement('button');
+    menos.className = 'partido-btn';
+    menos.innerHTML = '<div class="pb-fecha">▴</div><div class="pb-rival">VER MENOS</div>'+
+      '<div class="pb-res" style="color:var(--mut)">SOLO LAS 8 ÚLTIMAS</div>';
+    menos.onclick = function(){ GRID_TOPE = 8; renderPartidosGrid(); _selPintarGrid(); };
+    grid.appendChild(menos);
+  }
+
+  if(!orden.length){
     var e=document.createElement('div'); e.style.cssText='color:var(--mut);font-size:13px;padding:20px;';
     e.textContent='No hay '+(FILTRO_TIPO==='P'?'partidos':'entrenamientos')+' cargados.'; grid.appendChild(e);
   }
+  try{ _selPintarResumen(); }catch(e){}
 }
 
 function selectPartidoFiltrado(idx, btn){
+  SEL_MULTI = null;
+  try{ selSesPintarLista(); }catch(e){}
   if(idx===-1 && FILTRO_TIPO!=='todos'){
     var idxsFiltrados=[];
     DATA.entrenamientos.forEach(function(p,i){ if((p.tipo||'P')===FILTRO_TIPO) idxsFiltrados.push(i); });
@@ -514,6 +631,8 @@ function selectPartidoFiltrado(idx, btn){
 }
 
 function selectPartido(idx, btn){
+  SEL_MULTI = null;
+  try{ selSesPintarLista(); }catch(e){}
   FILTRO_INDICES=null; PARTIDO_IDX=idx;
   activarPartidoBtns(btn);
 }
@@ -1682,12 +1801,12 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261008-1305"></script>
-<script src="lang.js?v=20261008-1305"></script>
-<script src="temporadas_menu.js?v=20261008-1305"></script>
+<script src="chat_nafels.js?v=20261008-1332"></script>
+<script src="lang.js?v=20261008-1332"></script>
+<script src="temporadas_menu.js?v=20261008-1332"></script>
 
 <!-- ════════════════════════════════════════════════════════════════════════
-     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20261008-1305">, y el
+     Este codigo estaba adentro de <script src="temporadas_menu.js?v=20261008-1332">, y el
      navegador ignora por completo lo que hay adentro de una etiqueta que
      carga un archivo: las funciones nunca se definian y las tablas de
      saque, recepcion y ataque fallaban al llamarlas.
@@ -2092,7 +2211,166 @@ try{
   }
 }catch(e){}
 </script>
-<script src="ayuda.js?v=20261008-1305"></script>
+<script>
+/* ══ Motor del desplegable de sesiones ═════════════════════════════════════
+   Todo lo de aca abajo solo escribe SEL_MULTI, FILTRO_INDICES y PARTIDO_IDX
+   -las tres variables que el analisis ya usaba- y vuelve a pedir el dibujo
+   con las funciones que ya existian. No hay cuenta nueva en ningun lado. */
+
+function selSesToggle(){
+  var p = document.getElementById('sel-ses-panel');
+  if(!p) return;
+  var abrir = (p.style.display === 'none' || !p.style.display);
+  p.style.display = abrir ? 'block' : 'none';
+  if(abrir){
+    selSesPintarLista();
+    try{ document.getElementById('sel-ses-q').focus(); }catch(e){}
+  }
+}
+
+/* Clic afuera: se cierra, como cualquier desplegable. */
+document.addEventListener('click', function(ev){
+  var w = document.getElementById('sel-ses');
+  var p = document.getElementById('sel-ses-panel');
+  if(!w || !p || p.style.display === 'none') return;
+  if(!w.contains(ev.target)) p.style.display = 'none';
+});
+
+function _selEtiqueta(p){
+  var t = (p.tipo||'P');
+  return (t === 'P' ? '🏆 ' : '🏋️ ') +
+         (p.fecha || 'sin fecha') + (t === 'P' ? '' : turnoTxt(p)) +
+         '  ·  ' + (t === 'P' ? ('vs ' + (p.rival || 'RIVAL')) : (p.rival || 'Entrenamiento'));
+}
+
+function selSesPintarLista(){
+  var cont = document.getElementById('sel-ses-lista');
+  if(!cont) return;
+  var q = '';
+  try{ q = (document.getElementById('sel-ses-q').value || '').trim().toLowerCase(); }catch(e){}
+  var orden = _sesionesOrdenadas();
+  cont.innerHTML = '';
+  var vistos = 0;
+  orden.forEach(function(o){
+    var txt = _selEtiqueta(o.p);
+    if(q && txt.toLowerCase().indexOf(q) < 0) return;
+    vistos++;
+    var on = !!(SEL_MULTI && SEL_MULTI.indexOf(o.i) >= 0);
+    var fila = document.createElement('label');
+    fila.className = 'sel-fila' + (on ? ' on' : '');
+    var cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = on;
+    cb.onchange = function(){ selSesMarcar(o.i, this.checked); };
+    var sp = document.createElement('span');
+    sp.textContent = txt;
+    fila.appendChild(cb);
+    fila.appendChild(sp);
+    cont.appendChild(fila);
+  });
+  if(!vistos){
+    var v = document.createElement('div');
+    v.style.cssText = 'padding:10px;color:var(--mut);font-size:12px';
+    v.textContent = 'Nada coincide con la búsqueda.';
+    cont.appendChild(v);
+  }
+  _selPintarResumen();
+}
+
+function selSesMarcar(i, on){
+  if(!SEL_MULTI) SEL_MULTI = [];
+  var k = SEL_MULTI.indexOf(i);
+  if(on && k < 0) SEL_MULTI.push(i);
+  if(!on && k >= 0) SEL_MULTI.splice(k, 1);
+  if(!SEL_MULTI.length) SEL_MULTI = null;
+  /* la fila marcada se pinta sola, sin rearmar la lista: asi no se pierde ni
+     la busqueda escrita ni la posicion del scroll */
+  try{
+    var filas = document.querySelectorAll('#sel-ses-lista .sel-fila');
+    for(var n = 0; n < filas.length; n++){
+      var c = filas[n].querySelector('input');
+      if(c) filas[n].classList[c.checked ? 'add' : 'remove']('on');
+    }
+  }catch(e){}
+  _selAplicar();
+}
+
+function selSesRapido(modo){
+  var orden = _sesionesOrdenadas();
+  if(modo === 'ninguna') SEL_MULTI = null;
+  else if(modo === 'todas') SEL_MULTI = orden.map(function(o){ return o.i; });
+  else if(modo === '5') SEL_MULTI = orden.slice(0, 5).map(function(o){ return o.i; });
+  else if(modo === 'mes'){
+    var hoy = new Date();
+    var desde = Date.UTC(hoy.getFullYear(), hoy.getMonth(), 1);
+    SEL_MULTI = orden.filter(function(o){ return o.t >= desde; }).map(function(o){ return o.i; });
+  }
+  if(SEL_MULTI && !SEL_MULTI.length) SEL_MULTI = null;
+  selSesPintarLista();
+  _selAplicar();
+}
+
+function _selPintarResumen(){
+  var n = SEL_MULTI ? SEL_MULTI.length : 0;
+  var lbl = document.getElementById('sel-ses-lbl');
+  if(lbl) lbl.textContent = n === 0 ? '📅 ELEGIR SESIONES'
+    : (n === 1 ? '📅 1 SESIÓN ELEGIDA' : '📅 ' + n + ' SESIONES ELEGIDAS');
+  var cta = document.getElementById('sel-ses-cuenta');
+  if(cta){
+    var tot = 0;
+    try{ tot = _sesionesOrdenadas().length; }catch(e){}
+    cta.textContent = n === 0 ? 'Sin elegir: se muestra el acumulado' : (n + ' de ' + tot + ' elegidas');
+  }
+  var b = document.getElementById('sel-ses-btn');
+  if(b) b.classList[n ? 'add' : 'remove']('activo');
+}
+
+function _selPintarGrid(){
+  var acum = document.querySelector('#partidos-grid .partido-btn.acum');
+  if(acum) acum.classList[SEL_MULTI ? 'remove' : 'add']('activo');
+  var tarj = document.querySelectorAll('#partidos-grid .partido-btn[data-idx]');
+  for(var n = 0; n < tarj.length; n++){
+    var d = +tarj[n].getAttribute('data-idx');
+    tarj[n].classList[(SEL_MULTI && SEL_MULTI.indexOf(d) >= 0) ? 'add' : 'remove']('activo');
+  }
+}
+
+/* Aplica la eleccion del desplegable. Una sola sesion marcada se mira como si
+   hubieras hecho clic en su tarjeta; varias, como un acumulado de esas; y
+   ninguna, el acumulado de todo lo que deja pasar el filtro de tipo. */
+function _selAplicar(){
+  if(SEL_MULTI && SEL_MULTI.length === 1){ FILTRO_INDICES = null; PARTIDO_IDX = SEL_MULTI[0]; }
+  else if(SEL_MULTI && SEL_MULTI.length){ FILTRO_INDICES = SEL_MULTI.slice(); PARTIDO_IDX = -2; }
+  else { FILTRO_INDICES = null; PARTIDO_IDX = -2; }
+
+  _selPintarGrid();
+  _selPintarResumen();
+
+  try{ document.getElementById('tabs-equipo').style.display = 'flex'; }catch(e){}
+  try{ document.getElementById('tabs').style.display = 'flex'; }catch(e){}
+  try{ document.getElementById('contenido').style.display = 'block'; }catch(e){}
+  try{ document.getElementById('vista-individual').style.display = 'none'; }catch(e){}
+  try{ document.getElementById('vista-comparar').style.display = 'none'; }catch(e){}
+
+  /* La vista vuelve a EQUIPO, igual que al hacer clic en una tarjeta: los
+     tres botones de arriba tienen que quedar pintados en consecuencia. */
+  try{
+    VISTA_ACTIVA = 'equipo';
+    document.querySelectorAll('#tabs-equipo .tab-btn').forEach(function(b, n){
+      b.style.background  = n === 0 ? 'rgba(232,25,44,.08)' : 'var(--card)';
+      b.style.borderColor = n === 0 ? 'rgba(232,25,44,.3)'  : 'var(--border)';
+      b.style.color       = n === 0 ? 'var(--txt)'          : 'var(--mut)';
+    });
+  }catch(e){}
+
+  try{ _sincronizarBaterias(); }catch(e){}
+  try{ renderTab(typeof TAB_ACTIVO !== 'undefined' ? TAB_ACTIVO : 'saque'); }catch(e){}
+  setTimeout(function(){
+    try{ if(typeof renderObjetivos !== 'undefined') renderObjetivos('objetivos-panel'); }catch(e){}
+  }, 50);
+}
+</script>
+<script src="ayuda.js?v=20261008-1332"></script>
 </body>
 </html>
 <!-- © 2025-2026 Volley-Stats · Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
