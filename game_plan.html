@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261008-1332"></script>
-<script src="selector_categoria.js?v=20261008-1332"></script>
-<script src="objetivos_config.js?v=20261008-1332"></script>
+<script src="categorias_club.js?v=20261008-1340"></script>
+<script src="selector_categoria.js?v=20261008-1340"></script>
+<script src="objetivos_config.js?v=20261008-1340"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -327,7 +327,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   }
 }
 </style>
-<script src="lang.js?v=20261008-1332" onerror="void 0"></script>
+<script src="lang.js?v=20261008-1340" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -338,17 +338,17 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261008-1332"></script>
+<script src="datos_seguros.js?v=20261008-1340"></script>
 <script src="liga_data.js.enc"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261008-1332" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261008-1332"></script>
+<script src="firebase.js?v=20261008-1340" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261008-1340"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
-<script src="videos.js?v=20261008-1332" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20261008-1340" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261008-1332">
+<link rel="stylesheet" href="movil.css?v=20261008-1340">
 </head>
 <body>
 
@@ -3818,8 +3818,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261008-1332"></script>
-<script src="ayuda.js?v=20261008-1332"></script>
+<script src="temporadas_menu.js?v=20261008-1340"></script>
+<script src="ayuda.js?v=20261008-1340"></script>
 </body>
 </html>
 

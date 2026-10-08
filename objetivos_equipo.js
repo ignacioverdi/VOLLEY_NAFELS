@@ -59,6 +59,10 @@ var CSS = ''
 + '.oe-cnt em{font-style:normal;font-size:13px;color:#7C8AA0;font-weight:700}'
 + '.oe-c{display:block;padding:6px 3px;line-height:1.05;border-radius:7px;margin:2px}'
 + '.oe-c u{display:block;text-decoration:none;font-family:Anton,"Bebas Neue",system-ui,sans-serif;font-size:18px;letter-spacing:-.01em}'
+/* El % va pegado al numero y chiquito, igual que en la tarjeta del jugador:
+   un «12,5» suelto no se sabe si son puntos, acciones o por ciento. */
++ '.oe-c u s{text-decoration:none;font-family:"Barlow Condensed",system-ui,sans-serif;font-size:11px;'
++   'font-weight:700;letter-spacing:0;opacity:.6;margin-left:1px}'
 + '.oe-c b{display:block;font-weight:600;font-size:11px;margin-top:1px;color:#64748B;opacity:.9}'
 + '.oe-c i{display:block;font-style:normal;font-size:11px;margin-top:2px;opacity:.75}'
 + '.oe-c.ok{background:rgba(34,197,94,.13)} .oe-c.ok u{color:#4ade80} .oe-c.ok i{color:#4ade80}'
@@ -140,21 +144,29 @@ function ultimaConDatos(){
 var modo = 'entrenamiento';
 var semana = null;
 
+/* Todos estos fundamentos se miden en por ciento, asi que el numero lleva el
+   % pegado y los dos renglones de abajo tambien: «falta 29,5» no dice si son
+   puntos, acciones o por ciento, y la version del jugador ya lo llevaba.
+   El unico numero SIN % es el chiquito de todo abajo, que es la cantidad de
+   acciones sobre las que esta hecho. */
+function pc(v){ return n1(v) + '<s>%</s>'; }
+function pcTxt(v){ return n1(v) + '&nbsp;%'; }
+
 function celda(r){
   if(!r || !r.hay) return '<td><span class="oe-c na">&middot;</span></td>';
   var c = r.ultima;
   if(!c || c.n === 0){
     return '<td><span class="oe-c sin"><u>&mdash;</u><i>'
-         + (c && c.desde != null ? T('cerroCorto', n1(c.desde)) : T('tSinAcc')) + '</i></span></td>';
+         + (c && c.desde != null ? T('cerroCorto', pcTxt(c.desde)) : T('tSinAcc')) + '</i></span></td>';
   }
   if(c.objetivo == null){
-    return '<td><span class="oe-c sin"><u>' + n1(c.val) + '</u><i>' + T('tPrimera') + '</i></span></td>';
+    return '<td><span class="oe-c sin"><u>' + pc(c.val) + '</u><i>' + T('tPrimera') + '</i></span></td>';
   }
   var ok = c.val >= c.objetivo;
   /* Al lado del numero, sobre cuantas acciones esta hecho: un 100% de una
      accion y uno de treinta no son lo mismo, y sin esto se leen igual. */
-  return '<td><span class="oe-c ' + (ok ? 'ok' : 'no') + '"><u>' + n1(c.val) + '</u>'
-       + '<i>' + (ok ? T('tDe', n1(c.objetivo)) : T('tFaltaN', n1(c.objetivo - c.val))) + '</i>'
+  return '<td><span class="oe-c ' + (ok ? 'ok' : 'no') + '"><u>' + pc(c.val) + '</u>'
+       + '<i>' + (ok ? T('tDe', pcTxt(c.objetivo)) : T('tFaltaN', pcTxt(c.objetivo - c.val))) + '</i>'
        + '<b>' + c.n + '</b></span></td>';
 }
 
