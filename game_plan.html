@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261009-1246"></script>
-<script src="selector_categoria.js?v=20261009-1246"></script>
-<script src="objetivos_config.js?v=20261009-1246"></script>
+<script src="categorias_club.js?v=20261010-0143"></script>
+<script src="selector_categoria.js?v=20261010-0143"></script>
+<script src="objetivos_config.js?v=20261010-0143"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -330,8 +330,31 @@ select option { color: #111111 !important; background-color: #ffffff !important;
     align-items: flex-start;
   }
 }
+
+/* ── fichas de jugador: cancha entera, filtros y video (gpn*) ── */
+.gpn-caja{padding:4px 2px 2px}
+.gpn-flt{display:flex;flex-direction:column;gap:7px;margin-bottom:11px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+.gpn-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.gpn-lbl{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:#49566A;font-weight:700;margin-right:2px}
+.gpn-chip{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+  border-radius:7px;padding:4px 9px;font-size:12px;font-weight:600;color:#9AA8BA;cursor:pointer;font-family:inherit;line-height:1.3}
+.gpn-chip:hover{border-color:rgba(255,255,255,.22)}
+.gpn-chip.on{background:rgba(245,165,36,.16);border-color:rgba(245,165,36,.55);color:#F5A524}
+.gpn-chip.ev.on{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.28);color:#E6EDF6}
+.gpn-chip .gpn-n{font-style:normal;font-family:Anton,sans-serif;color:#5E6B7D;font-size:11px}
+.gpn-chip.on .gpn-n{color:inherit;opacity:.8}
+.gpn-rot{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#5E6B7D;margin-bottom:7px}
+.gpn-rot b{font-family:Anton,sans-serif;color:#9AA8BA;letter-spacing:0}
+.gpn-dirs{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.gpn-dir{display:flex;align-items:baseline;gap:8px;font-size:13px;color:#8C9AAC;flex-wrap:wrap}
+.gpn-dot{width:10px;height:10px;border-radius:3px;flex:none}
+.gpn-vbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:11px;background:#F5A524;border:none;
+  color:#0A0D14;border-radius:9px;padding:9px 14px;font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;min-height:36px;letter-spacing:.02em}
+.gpn-vbtn:hover{background:#FFB83D}
+.gpn-vacio{font-size:12px;color:#64748b;font-style:italic;padding:14px 2px}
+@media(max-width:700px){.gpn-chip{font-size:11px;padding:3px 7px}}
 </style>
-<script src="lang.js?v=20261009-1246" onerror="void 0"></script>
+<script src="lang.js?v=20261010-0143" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -342,7 +365,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261009-1246"></script>
+<script src="datos_seguros.js?v=20261010-0143"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -355,13 +378,13 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261009-1246" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261009-1246"></script>
-<script src="videos.js?v=20261009-1246" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261010-0143" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261010-0143"></script>
+<script src="videos.js?v=20261010-0143" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261009-1246">
+<link rel="stylesheet" href="movil.css?v=20261010-0143">
 </head>
 <body>
 
@@ -1805,8 +1828,307 @@ function renderJugador(j,idx){
   return sec;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   FICHAS DE JUGADOR — CANCHA ENTERA, FILTROS Y VIDEO POR ACCION   (gpn*)
+
+   Lo que cambia respecto de las canchitas de canvas que habia antes:
+
+   · Se dibuja la CANCHA ENTERA, no media. Arriba el campo de ellos
+     espejado —1·6·5 / 9·8·7 / 2·3·4— y abajo el nuestro —4·3·2 / 7·8·9 /
+     5·6·1—, con la red en el medio. Asi la pelota sale de la zona real
+     desde donde se remato y cruza. Antes el origen iba escrito al costado
+     y habia que juntarlo mentalmente.
+
+   · El color identifica la CATEGORIA, no la zona: en ataque, desde que
+     zona salio; en saque y recepcion, si fue potencia o flotado. El
+     destino hereda el color de donde vino. La intensidad de la celda
+     mide cuanta pelota cae ahi. Los tres tonos pasaron el test de
+     daltonismo (deutan 11,3 · minimo 8).
+
+   · Debajo, los filtros: por combinacion (o por tipo de saque) y por
+     valoracion, con la misma escala que plan de partido. Cada boton abre
+     el reproductor que YA EXISTE en esta pantalla (gpVidDom/gpVidRender),
+     el mismo del armador, con su lista de clips tildables y el guardado
+     de la seleccion del entrenador. No se duplico nada de eso.
+   ═════════════════════════════════════════════════════════════════════ */
+var GPN_RIVAL_ROWS=[[1,6,5],[9,8,7],[2,3,4]], GPN_PROPIO_ROWS=[[4,3,2],[7,8,9],[5,6,1]];
+var GPN_RCOL={},GPN_RROW={},GPN_PCOL={},GPN_PROW={};
+GPN_RIVAL_ROWS.forEach(function(r,i){r.forEach(function(z,c){GPN_RCOL[z]=c;GPN_RROW[z]=i;});});
+GPN_PROPIO_ROWS.forEach(function(r,i){r.forEach(function(z,c){GPN_PCOL[z]=c;GPN_PROW[z]=i;});});
+/* relleno y linea · texto sobre fondo oscuro · texto sobre el relleno fuerte */
+var GPN_CAT=[['201,132,21','#F5A524','#17120A'],['46,159,212','#5BC8F5','#04222F'],['217,84,142','#D9548E','#2B0612']];
+var GPN_TIPO={POTENCIA:GPN_CAT[0],FLOTADO:GPN_CAT[1]};
+var GPN_EVCOL={'#':'#8FDCF8','+':'#C6D2E0','!':'#8C9AAC','-':'#7C8A9E','/':'#FF8AC4','=':'#FF8A99'};
+var GPN_RESS=[['#','Punto'],['+','Buena'],['!','Media'],['-','Mala'],['/','Bloqueado'],['=','Error']];
+var GPN_RESS_REC=[['#','Perfecta'],['+','Buena'],['!','Media'],['-','Mala'],['/','Sobrepase'],['=','Error']];
+
+function gpnColores(zonas){ var o={}; zonas.slice().sort(function(a,b){return a-b;}).forEach(function(z,i){ o[z]=GPN_CAT[i%3]; }); return o; }
+function gpnAlpha(v,mx,rgb){ if(mx<=0||v<=0) return null; return 'rgba('+rgb+','+(0.09+0.63*(v/mx)).toFixed(3)+')'; }
+function gpnEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+/* cfg: {cells:{zona:valor}, origins:{zona:peso}, flows:[[oz,dz,peso,rgb]],
+        ocol:{zona:[rgb,txt,ink]}, cellCol:{zona:rgb}, cellInk:{zona:hex},
+        focus:'bottom'|'top', fmt, labelIn:{zona:txt}, ramp:{zona:v}, hideVal:[zonas]} */
+function gpnCancha(cfg){
+  var W=400,ROW=76,PAD=6,GAP=7;
+  var down=(cfg.focus!=='top');
+  var hT=down?ROW*0.6:ROW, hB=down?ROW:ROW*0.6;
+  var netY=PAD+hT*3, pyB=netY+GAP, H=pyB+hB*3+4, cw=W/3;
+  var cells=cfg.cells||{}, ramp=cfg.ramp||cells, orig=cfg.origins||{}, ocol=cfg.ocol||{};
+  var mx=0; for(var k in ramp) if(ramp[k]>mx) mx=ramp[k];
+  var omx=0; for(var k2 in orig) if(orig[k2]>omx) omx=orig[k2];
+  var S=['<svg viewBox="0 0 '+W+' '+H.toFixed(1)+'" width="100%" style="display:block;width:100%" role="img" aria-hidden="true">'];
+  function media(rows,y0,rh,detalle){
+    if(!detalle) S.push('<rect x="0" y="'+y0+'" width="'+W+'" height="'+(rh*3).toFixed(1)+'" rx="8" fill="rgba(255,255,255,.016)"/>');
+    rows.forEach(function(row,r){ row.forEach(function(z,c){
+      var x=c*cw,y=y0+r*rh;
+      if(detalle){
+        var rgb=(cfg.cellCol&&cfg.cellCol[z])||(ocol[z]&&ocol[z][0])||'201,132,21';
+        if(!cfg.cellCol && cfg.cellSrc && cfg.cellSrc[z]){ var dm=null,best=-1;
+          for(var o in cfg.cellSrc[z]) if(cfg.cellSrc[z][o]>best){best=cfg.cellSrc[z][o];dm=o;}
+          if(dm&&ocol[dm]) rgb=ocol[dm][0]; }
+        var f=gpnAlpha(ramp[z]||0,mx,rgb)||'rgba(255,255,255,.028)';
+        S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="7" fill="'+f+'"/>');
+      } else {
+        var ov=orig[z]||0;
+        if(ov){ var cc=(ocol[z]&&ocol[z][0])||'201,132,21';
+          S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="6" fill="rgba('+cc+',.30)" stroke="rgba('+cc+',.85)" stroke-width="1.6"/>');
+        } else S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="6" fill="rgba(255,255,255,.022)"/>');
+        S.push('<text x="'+(x+8)+'" y="'+(y+14).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="'+(ov?((ocol[z]&&ocol[z][1])||'#C08A2E'):'#333C4A')+'">'+z+'</text>');
+      }
+    });});
+    var y3=(rows===GPN_RIVAL_ROWS)?y0+rh*2:y0+rh;
+    S.push('<line x1="2" y1="'+y3.toFixed(1)+'" x2="'+(W-2)+'" y2="'+y3.toFixed(1)+'" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="4 5"/>');
+  }
+  media(GPN_RIVAL_ROWS,PAD,hT,!down);
+  media(GPN_PROPIO_ROWS,pyB,hB,down);
+  function ctr(z,arriba){ return arriba?[GPN_RCOL[z]*cw+cw/2,PAD+GPN_RROW[z]*hT+hT/2]:[GPN_PCOL[z]*cw+cw/2,pyB+GPN_PROW[z]*hB+hB/2]; }
+  var fl=cfg.flows||[];
+  if(fl.length){
+    var mf=0; fl.forEach(function(f){ if(f[2]>mf) mf=f[2]; }); if(!mf) mf=1;
+    fl.forEach(function(f){
+      var a=ctr(f[0],down), b=ctr(f[1],!down), col=f[3]||((ocol[f[0]]&&ocol[f[0]][0])||'201,132,21');
+      var kk=f[2]/mf, sw=(1.7+5.3*kk).toFixed(2), op=(0.3+0.45*kk).toFixed(2);
+      S.push('<path d="M'+a[0].toFixed(1)+' '+a[1].toFixed(1)+' Q '+((a[0]+b[0])/2+(b[0]-a[0])*0.06).toFixed(1)+' '+((a[1]+b[1])/2).toFixed(1)+' '+b[0].toFixed(1)+' '+b[1].toFixed(1)+'" fill="none" stroke="rgba('+col+','+op+')" stroke-width="'+sw+'" stroke-linecap="round"/>');
+      S.push('<circle cx="'+b[0].toFixed(1)+'" cy="'+b[1].toFixed(1)+'" r="'+(2.4+2*kk).toFixed(1)+'" fill="rgba('+col+','+Math.min(0.95,(+op)+0.28).toFixed(2)+')"/>');
+    });
+  }
+  var yn=netY+GAP/2;
+  S.push('<line x1="0" y1="'+yn.toFixed(1)+'" x2="'+W+'" y2="'+yn.toFixed(1)+'" stroke="rgba(245,165,36,.6)" stroke-width="2.6" stroke-dasharray="7 6" stroke-linecap="round"/>');
+  [1.6,W-1.6].forEach(function(px){ S.push('<line x1="'+px+'" y1="'+(netY-4).toFixed(1)+'" x2="'+px+'" y2="'+(netY+GAP+4).toFixed(1)+'" stroke="rgba(245,165,36,.75)" stroke-width="3" stroke-linecap="round"/>'); });
+  var ofs=Math.max(11,Math.round((down?hT:hB)*0.42));
+  for(var z in orig){ if(!orig[z]) continue; var p=ctr(+z,down);
+    S.push('<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+ofs*0.36).toFixed(1)+'" text-anchor="middle" font-family="Anton,sans-serif" font-size="'+ofs+'" fill="'+((ocol[z]&&ocol[z][1])||'#F5A524')+'">'+orig[z]+'</text>'); }
+  var rowsD=down?GPN_PROPIO_ROWS:GPN_RIVAL_ROWS, rhD=down?hB:hT, y0D=down?pyB:PAD;
+  var hide=cfg.hideVal||[];
+  rowsD.forEach(function(row,r){ row.forEach(function(z,c){
+    var x=c*cw,y=y0D+r*rhD,v=cells[z]||0, strong=(mx>0&&(ramp[z]||0)>=0.58*mx);
+    var ink=(cfg.cellInk&&cfg.cellInk[z])||'#17120A';
+    if(!cfg.cellInk && cfg.cellSrc && cfg.cellSrc[z]){ var dm2=null,b2=-1;
+      for(var o2 in cfg.cellSrc[z]) if(cfg.cellSrc[z][o2]>b2){b2=cfg.cellSrc[z][o2];dm2=o2;}
+      if(dm2&&ocol[dm2]) ink=ocol[dm2][2]; }
+    S.push('<text x="'+(x+9)+'" y="'+(y+16).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="'+(strong?ink:'#49566A')+'">'+z+'</text>');
+    var lbl=(hide.indexOf(z)>=0)?'·':(v?((cfg.fmt||'%d%')).replace('%d',v):'·');
+    S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD/2+9).toFixed(1)+'" text-anchor="middle" font-family="Anton,sans-serif" font-size="25" fill="'+(strong?ink:(v?'#C6D2E0':'#2F3845'))+'">'+lbl+'</text>');
+    if(cfg.labelIn&&cfg.labelIn[z]) S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD-10).toFixed(1)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="600" fill="'+(strong?ink:'#C6D2E0')+'">'+gpnEsc(cfg.labelIn[z])+'</text>');
+  });});
+  S.push('</svg>');
+  return S.join('');
+}
+
+/* ── las acciones sueltas, con el formato que ya espera el reproductor ── */
+function gpnClips(num,tipo,cat,evFiltro){
+  var td=GP_TD||{}, M=(td.matches)||[], RES=['#','/','+','!','=','-'], RECM=['#','+','!','-','/','='];
+  var out=[], ns=String(num);
+  function push(cod,ev,orig,dest,gi,t){
+    if(!t) return;
+    if(cat && cat!=='all' && cod!==cat) return;
+    if(evFiltro && ev!==evFiltro) return;
+    var mc=M[gi]||null;
+    out.push({code:mc?(mc.code||''):'',t_start:Math.max(0,t-6),t_atk:t,ev:ev,combo:cod,
+              orig:orig,dest:dest,date:mc?mc.date:'',rival:mc?mc.rival:'',num:num});
+  }
+  if(tipo==='ataque'&&td.atk&&td.atk[ns]){
+    td.atk[ns].a.forEach(function(r){ push(GP_COMBOS[r[5]]||'?',RES[r[6]]||'=',r[7],r[8],r[1],r[12]); });
+  } else if(tipo==='saque'&&td.srv&&td.srv[ns]){
+    var p=td.srv[ns];
+    p.s.forEach(function(r){ var t=(p.stypes&&p.stypes[r[4]])||'SQ';
+      push(t.indexOf('M')>=0?'FLOTADO':'POTENCIA',RES[r[5]]||'=',r[6],r[7],r[1],r[9]); });
+  } else if(tipo==='recepcion'&&td.rec&&td.rec[ns]){
+    var q=td.rec[ns];
+    q.r.forEach(function(r){ var t=(q.rtypes&&q.rtypes[r[4]])||'RM';
+      push(t.indexOf('M')>=0?'FLOTADO':'POTENCIA',RECM[r[5]]||'-',r[6],r[7],r[1],r[9]); });
+  }
+  return out;
+}
+
+/* abre el reproductor que ya existe en esta pantalla */
+function gpnVideo(num,tipo,cat,ev){
+  var clips=gpnClips(num,tipo,cat,ev);
+  if(!clips.length){ alert('No hay acciones con video para ese filtro.'); return; }
+  gpVidDom();
+  gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
+  gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(cat||'all')+(ev?('_'+ev):'');
+  var ape=gpApellido(num)||('#'+num);
+  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(cat&&cat!=='all'?(' · '+cat):'')+(ev?(' · '+ev):'')+' — '+clips.length+' acciones';
+  document.getElementById('gpVidOverlay').style.display='flex';
+  clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; c._sel=true; });
+  gpV.readonly=false;
+  gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
+  gpV.ev=null; gpV.idx=-1;
+  gpVidRender();
+}
+
+/* ── los filtros, con la misma escala que plan de partido ── */
+function gpnFiltros(cont,num,tipo,cats,escala,onPick){
+  var acc=gpnClips(num,tipo,'all',null);
+  var cuentaCat={},cuentaEv={};
+  acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
+  var estado={cat:'all',ev:null};
+  var barra=document.createElement('div'); barra.className='gpn-flt';
+  var rowC=document.createElement('div'); rowC.className='gpn-row';
+  var rowE=document.createElement('div'); rowE.className='gpn-row';
+  var lblE=document.createElement('span'); lblE.className='gpn-lbl'; lblE.textContent='Resultado';
+  rowE.appendChild(lblE);
+  function pinta(){
+    [].forEach.call(rowC.querySelectorAll('button'),function(b){ b.classList.toggle('on',b.dataset.cat===estado.cat); });
+    [].forEach.call(rowE.querySelectorAll('button'),function(b){ b.classList.toggle('on',(b.dataset.ev||null)===estado.ev); });
+  }
+  cats.forEach(function(c){
+    var b=document.createElement('button'); b.type='button'; b.className='gpn-chip'; b.dataset.cat=c.k;
+    b.innerHTML=c.html+' <i class="gpn-n">'+(c.k==='all'?acc.length:(cuentaCat[c.k]||0))+'</i>';
+    b.onclick=function(e){ e.stopPropagation(); estado.cat=c.k; pinta(); onPick(estado); };
+    rowC.appendChild(b);
+  });
+  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-chip ev'; bt.dataset.ev='';
+  bt.innerHTML='Todas <i class="gpn-n">'+acc.length+'</i>';
+  bt.onclick=function(e){ e.stopPropagation(); estado.ev=null; pinta(); onPick(estado); };
+  rowE.appendChild(bt);
+  escala.forEach(function(p){
+    if(!cuentaEv[p[0]]) return;
+    var b=document.createElement('button'); b.type='button'; b.className='gpn-chip ev'; b.dataset.ev=p[0];
+    b.innerHTML=p[1]+' <b style="color:'+GPN_EVCOL[p[0]]+'">'+p[0]+'</b> <i class="gpn-n">'+cuentaEv[p[0]]+'</i>';
+    b.onclick=function(e){ e.stopPropagation(); estado.ev=p[0]; pinta(); onPick(estado); };
+    rowE.appendChild(b);
+  });
+  barra.appendChild(rowC); barra.appendChild(rowE);
+  cont.appendChild(barra);
+  pinta();
+  return estado;
+}
+
+function gpnBotonVideo(cont,num,tipo,estado){
+  var b=document.createElement('button'); b.type='button'; b.className='gpn-vbtn';
+  function txt(){ b.innerHTML='▶ Ver video — '+gpnClips(num,tipo,estado.cat,estado.ev).length+' acciones'; }
+  txt(); b._txt=txt;
+  b.onclick=function(e){ e.stopPropagation(); gpnVideo(num,tipo,estado.cat,estado.ev); };
+  cont.appendChild(b);
+  return b;
+}
+
+/* ── la cancha se recalcula con los filtros puestos ── */
+function gpnMapa(acc,tipo){
+  var orig={},cells={},fl={},src={},tot=0;
+  acc.forEach(function(c){
+    var o=c.orig,d=c.dest;
+    if(!o) return;
+    orig[o]=(orig[o]||0)+1;
+    if(!d) return;                       /* bloqueado: no llego a la otra cancha */
+    tot++;
+    cells[d]=(cells[d]||0)+1;
+    var k=o+'>'+d; fl[k]=(fl[k]||0)+1;
+    (src[d]=src[d]||{})[o]=(src[d][o]||0)+1;
+  });
+  var pct={}; for(var z in cells) pct[z]=Math.round(cells[z]/(tot||1)*100);
+  var flows=[]; for(var kk in fl){ var ab=kk.split('>'); flows.push([+ab[0],+ab[1],fl[kk]]); }
+  flows.sort(function(a,b){return b[2]-a[2];});
+  return {orig:orig,cells:pct,crudo:cells,flows:flows.slice(0,8),src:src,conDest:tot};
+}
+
+function gpnDirs(acc,ocol,etq){
+  var por={};
+  acc.forEach(function(c){ if(!c.orig||!c.dest) return;
+    var a=por[c.orig]=por[c.orig]||{tot:0,d:{}}; a.tot++; a.d[c.dest]=(a.d[c.dest]||0)+1; });
+  var out=[];
+  Object.keys(por).map(Number).sort(function(a,b){return por[b].tot-por[a].tot;}).forEach(function(o){
+    var a=por[o], top=Object.keys(a.d).map(Number).sort(function(x,y){return a.d[y]-a.d[x];}).slice(0,2);
+    var col=(ocol[o]||GPN_CAT[0]);
+    var ds=top.map(function(z){ return '<span style="color:#C6D2E0">z'+z+'</span> <b style="font-family:Anton,sans-serif;color:'+col[1]+'">'+Math.round(a.d[z]/a.tot*100)+'%</b>'; }).join(' <span style="color:#3D4857">·</span> ');
+    out.push('<div class="gpn-dir"><span class="gpn-dot" style="background:rgba('+col[0]+',.9)"></span>'
+      +'<span style="color:'+col[1]+';letter-spacing:.05em">'+(etq||'DESDE')+' '+o+'</span>'
+      +'<span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+a.tot+'</b></span>'
+      +'<span style="color:#3D4857">→</span><span>'+ds+'</span></div>');
+  });
+  return out.join('');
+}
+
+function gpnPanel(j,cont,tipo){
+  cont.innerHTML='';
+  var num=j.num;
+  var todas=gpnClips(num,tipo,'all',null);
+  /* Si este jugador no tiene ninguna accion con segundo de video —datos viejos,
+     sin regenerar— se vuelve a las canchitas de siempre en vez de dejar el
+     panel vacio. Nunca se muestra menos de lo que se mostraba antes. */
+  if(!todas.length){
+    cont.style.display='';
+    if(tipo==='ataque') renderPanelAtaqueViejo(j,0,cont);
+    else if(tipo==='saque') renderPanelSaqueViejo(j,0,cont);
+    else renderPanelRecepcionViejo(j,cont);
+    return;
+  }
+  var cats=[{k:'all',html:'<b>Todas</b>'}];
+  if(tipo==='ataque'){
+    var vistos={}; todas.forEach(function(c){ vistos[c.combo]=(vistos[c.combo]||0)+1; });
+    Object.keys(vistos).sort(function(a,b){return vistos[b]-vistos[a];}).forEach(function(c){
+      if(vistos[c]<2) return; cats.push({k:c,html:'<b style="font-family:Anton,sans-serif;color:#E6EDF6">'+c+'</b>'}); });
+  } else {
+    ['POTENCIA','FLOTADO'].forEach(function(t){
+      if(!todas.some(function(c){return c.combo===t;})) return;
+      cats.push({k:t,html:'<span style="color:'+GPN_TIPO[t][1]+'">'+t+'</span>'}); });
+  }
+  var escala=(tipo==='recepcion')?GPN_RESS_REC:GPN_RESS;
+  var caja=document.createElement('div'); caja.className='gpn-caja';
+  var zona=document.createElement('div');
+  var btn=null;
+  var estado=gpnFiltros(caja,num,tipo,cats,escala,function(st){ dibujar(st); if(btn&&btn._txt) btn._txt(); });
+  caja.appendChild(zona);
+  cont.appendChild(caja);
+  btn=gpnBotonVideo(caja,num,tipo,estado);
+
+  function dibujar(st){
+    var acc=gpnClips(num,tipo,st.cat,st.ev);
+    if(!acc.length){ zona.innerHTML='<div class="gpn-vacio">Ninguna acción con ese filtro.</div>'; return; }
+    var m=gpnMapa(acc,tipo), ocol;
+    if(tipo==='ataque'){ ocol=gpnColores(Object.keys(m.orig).map(Number)); }
+    else { ocol={}; var dom={};
+      acc.forEach(function(c){ if(!c.orig) return; var d=dom[c.orig]=dom[c.orig]||{}; d[c.combo]=(d[c.combo]||0)+1; });
+      for(var o in dom){ var b=null,bv=-1; for(var t in dom[o]) if(dom[o][t]>bv){bv=dom[o][t];b=t;} ocol[o]=GPN_TIPO[b]||GPN_CAT[0]; } }
+    var cellCol=null,cellInk=null;
+    if(tipo!=='ataque'){ cellCol={}; cellInk={};
+      var dd={}; acc.forEach(function(c){ if(!c.dest) return; var d=dd[c.dest]=dd[c.dest]||{}; d[c.combo]=(d[c.combo]||0)+1; });
+      for(var z in dd){ var bb=null,bv2=-1; for(var t2 in dd[z]) if(dd[z][t2]>bv2){bv2=dd[z][t2];bb=t2;}
+        var cc=GPN_TIPO[bb]||GPN_CAT[0]; cellCol[z]=cc[0]; cellInk[z]=cc[2]; } }
+    var flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
+    var rot={ataque:'Dónde caen sus remates',saque:'Dónde pone sus saques',recepcion:'Dónde se para y de dónde le sacan'}[tipo];
+    var svg=gpnCancha({cells:m.cells,origins:m.orig,flows:flows,ocol:ocol,cellSrc:m.src,
+                       cellCol:cellCol,cellInk:cellInk,focus:(tipo==='recepcion'?'top':'bottom')});
+    zona.innerHTML='<div class="gpn-rot">'+rot+' · <b>'+acc.length+'</b> acciones'
+      +(m.conDest<acc.length?(' <span style="color:#5E6B7D">('+(acc.length-m.conDest)+' sin destino)</span>'):'')
+      +'</div>'+svg+'<div class="gpn-dirs">'+gpnDirs(acc,ocol,tipo==='recepcion'?'SAQUE DESDE':'DESDE')+'</div>';
+  }
+  dibujar(estado);
+}
+
+/* Los tres paneles de la ficha ahora los dibuja gpnPanel. Las versiones de
+   canvas quedan arriba como renderPanel*Viejo y se usan de red: si algo falla,
+   o si el jugador no tiene acciones con segundo de video, se vuelve a ellas.
+   Para revertir del todo alcanza con cambiar estas tres lineas. */
+function renderPanelAtaque(j,jIdx,grid){ try{ grid.style.display='block'; gpnPanel(j,grid,'ataque'); }catch(e){ try{console.warn('[gpn] ataque',e);}catch(_){} grid.style.display=''; renderPanelAtaqueViejo(j,jIdx,grid); } }
+function renderPanelSaque(j,jIdx,grid){ try{ grid.style.display='block'; gpnPanel(j,grid,'saque'); }catch(e){ try{console.warn('[gpn] saque',e);}catch(_){} grid.style.display=''; renderPanelSaqueViejo(j,jIdx,grid); } }
+function renderPanelRecepcion(j,cont){ try{ cont.style.display='block'; gpnPanel(j,cont,'recepcion'); }catch(e){ try{console.warn('[gpn] recepcion',e);}catch(_){} cont.style.display=''; renderPanelRecepcionViejo(j,cont); } }
+
 // ═══ RECEPCION RIVAL ════════════════════════════════════════════
-function renderPanelRecepcion(j, container){
+function renderPanelRecepcionViejo(j, container){
   container.innerHTML = '';
   var rec = j.recepcion;
   if(!rec || (!rec.flotado && !rec.potencia)){
@@ -1889,7 +2211,7 @@ function renderPanelRecepcion(j, container){
 }
 
 
-function renderPanelAtaque(j,jIdx,grid){
+function renderPanelAtaqueViejo(j,jIdx,grid){
   var combosPos = {
     'PUNTA':   ['X5','V5','X6','V6','XP'],
     'CENTRAL': ['X1','X7','XM','X2'],
@@ -1917,7 +2239,7 @@ function renderPanelAtaque(j,jIdx,grid){
   });
 }
 
-function renderPanelSaque(j,jIdx,grid){
+function renderPanelSaqueViejo(j,jIdx,grid){
   var saques=j.saques||[];
   if(saques.length===0){
     var nd=document.createElement('div');nd.className='no-data-msg';nd.textContent='Sin datos de saque registrados';
@@ -3912,8 +4234,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261009-1246"></script>
-<script src="ayuda.js?v=20261009-1246"></script>
+<script src="temporadas_menu.js?v=20261010-0143"></script>
+<script src="ayuda.js?v=20261010-0143"></script>
 </body>
 </html>
 
