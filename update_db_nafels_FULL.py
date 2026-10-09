@@ -1035,7 +1035,13 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    de dorsales sumaba sobre ellas y la copia crecia igual. Cada corrida
     #    sumaba de nuevo —186, 224, 243, 292 saques— sin techo.
     #    Al subir el numero, las bases contaminadas se rehacen solas.
-    _ESQUEMA = 5          # subir este numero cuando el parser lea algo nuevo
+    # 6: el parser aprendio a leer el SEGUNDO del video (columna 12 del .dvw)
+    #    en cada ataque, saque y recepcion, y el CODIGO del partido. Las bases
+    #    de antes tienen esas acciones guardadas sin el segundo, y como el
+    #    partido "ya estaba cargado" no se volvian a leer: el campo aparecia
+    #    en liga_data pero siempre en cero, y el reproductor no tenia donde
+    #    saltar. Al subir el numero se rehacen solas, una sola vez.
+    _ESQUEMA = 6          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
