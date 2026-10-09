@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20261009-1224" onerror="void 0"></script>
-<script src="utils.js?v=20261009-1224" onerror="void 0"></script>
+<script src="lang.js?v=20261009-1240" onerror="void 0"></script>
+<script src="utils.js?v=20261009-1240" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261009-1224" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261009-1224" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261009-1224"></script>
+<script src="categorias_club.js?v=20261009-1240" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261009-1240" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261009-1240"></script>
   <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
      datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
      jugador nuevo no aparecia hasta su debut. -->
 <!-- Las metas, el semaforo (objClassify) y VB_EFF: la tarjeta de cada
      jugador ahora muestra sus numeros, con el mismo criterio que el resto. -->
-<script src="objetivos_config.js?v=20261009-1224" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261009-1240" onerror="void 0"></script>
 <!-- Las baterias: de ahi salen los numeros y tambien CUANTAS acciones hay
      detras de cada uno (n_sq, n_rec, ...). Es la misma fuente que usa el
      Ranking, para que las dos pantallas no puedan discrepar. -->
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261009-1224" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261009-1240" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <!-- Las fechas de nacimiento viven aca, cifradas. Si no se puede abrir,
      se usa lo que traiga el plantel, que es como funcionaba antes. -->
@@ -113,15 +113,15 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261009-1224" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261009-1224"></script>
+<script src="firebase.js?v=20261009-1240" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261009-1240"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261009-1224">
+<link rel="stylesheet" href="movil.css?v=20261009-1240">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261009-1224" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261009-1240" onerror="void 0"></script>
 </head>
 <body>
 
@@ -193,6 +193,25 @@ var DATA = (function(){
   var deLosPartidos = {};
   (base.jugadores || []).forEach(function(j){ deLosPartidos[j.num] = j; });
 
+  /* ══ LA FOTO DE CADA JUGADOR ═══════════════════════════════════════════
+     Salia solo de datos_equipo.js, que se genera de vez en cuando: la del
+     16/06 traia foto para 5 de los 12 y el resto mostraba el numero gris,
+     aunque el archivo estuviera en la carpeta.
+
+     Ahora, si el dato no la trae, se prueba igual con fotos/NN.jpg, que es
+     como se llaman todas. Si el archivo no esta, el onerror de mas abajo
+     pone el numero como siempre: no se rompe nada, y las fotos nuevas
+     entran sin regenerar nada.
+
+     Va en una funcion porque la lista se arma en DOS lugares —aca y en el
+     vigia de mas abajo, que la rehace cuando los datos llegan tarde—. Con
+     el arreglo en uno solo, el otro la seguia dejando en null. */
+  function eqFotoDe(num, dato){
+    if(dato) return dato;
+    var n = parseInt(num, 10);
+    return (n > 0) ? ('fotos/' + (n < 10 ? '0' : '') + n + '.jpg') : null;
+  }
+
   var jugadores = lista.map(function(p){
     var extra = deLosPartidos[p.num] || {};
     return {
@@ -200,7 +219,16 @@ var DATA = (function(){
       nombre: p.ap || extra.nombre || '',
       pila: p.nombre || '',              /* el nombre de pila */
       pos: p.pos || extra.pos || '',
-      foto: extra.foto || null,
+      /* ══ LA FOTO, POR NUMERO DE CAMISETA ═══════════════════════════════
+         Antes salia solo de datos_equipo.js, que se genera de vez en cuando:
+         la del 16/06 traia foto para 5 de los 12 y el resto mostraba el
+         numero gris, aunque el archivo estuviera en la carpeta.
+
+         Ahora, si el dato no la trae, se prueba igual con fotos/NN.jpg, que
+         es como se llaman todas. Si el archivo no esta, el onerror de mas
+         abajo pone el numero como siempre: no se rompe nada y las fotos
+         nuevas entran sin tener que regenerar nada. */
+      foto: eqFotoDe(p.num, extra.foto),
       /* La altura venia vacia y la edad en 0 en datos_equipo, asi que la
          linea de la tarjeta quedaba en la bandera y un punto suelto. Los
          dos datos estan en plantel_nafels.js, que es la lista real del
@@ -235,7 +263,7 @@ var DATA = (function(){
         DATA = { jugadores: lista.map(function(p){
                    var e = dePartidos[p.num] || {};
                    return { num:p.num, nombre:p.ap || e.nombre || '', pila:p.nombre || '',
-                            pos:p.pos || e.pos || '', foto:e.foto || null,
+                            pos:p.pos || e.pos || '', foto:eqFotoDe(p.num, e.foto),
                             nac:p.nac || '', nacim:eqNacim(p) || '',
                             pais:e.pais || eqBandera(p.nac), altura:e.altura || p.altura || '',
                             edad:e.edad || eqEdad(eqNacim(p)) };
@@ -525,15 +553,31 @@ function render(){
 
     if(j.foto){
       var img = document.createElement('img');
-      img.src = j.foto;
       img.alt = j.nombre;
-      img.onerror = function(){ this.parentElement.innerHTML = '<div class="jug-foto-placeholder">' + j.num + '</div>'; };
+      /* ══ EL AVISO DE ERROR VA ANTES DEL src ══════════════════════════════
+         Estaba despues. Si el archivo no esta y el navegador ya lo tenia
+         marcado como 404, el error salta en el acto —antes de que exista el
+         aviso— y la tarjeta se queda con la imagen rota en vez del numero.
+         Con el aviso puesto primero no se escapa ninguno. */
+      img.onerror = function(){
+        var w = this.parentElement; if(!w) return;
+        var resto = w.querySelector('.jug-num-overlay');
+        w.innerHTML = '<div class="jug-foto-placeholder">' + j.num + '</div>';
+        if(resto) w.appendChild(resto);
+      };
+      img.src = j.foto;
       fotoWrap.appendChild(img);
     } else {
       fotoWrap.innerHTML = '<div class="jug-foto-placeholder">' + j.num + '</div>';
     }
 
-    fotoWrap.innerHTML += '<div class="jug-num-overlay" style="color:' + color + '">#' + j.num + '</div>';
+    /* ══ innerHTML += BORRABA LA FOTO Y SU AVISO ═══════════════════════════
+       Sumar con += vuelve a parsear TODO el bloque: el <img> que se acababa
+       de crear se reemplaza por otro igual pero sin el onerror enganchado.
+       Por eso, con una foto que falta, la tarjeta quedaba con el icono de
+       imagen rota y nunca caia al numero.
+       insertAdjacentHTML agrega sin tocar lo que ya esta. */
+    fotoWrap.insertAdjacentHTML('beforeend', '<div class="jug-num-overlay" style="color:' + color + '">#' + j.num + '</div>');
     /* ══ El puesto, editable por el staff ═══════════════════════════════
        Los puestos salen de lo que declara cada .dvw, y ahi el scout no
        siempre los carga: quedan jugadoras sin puesto o con uno equivocado.
@@ -546,8 +590,8 @@ function render(){
     var _pos = (window.PLANTEL_FIX && window.PLANTEL_FIX[String(j.num)]) || j.pos || '';
     color = POS_COLOR[_pos] || '#64748b';
     fotoWrap.style.borderBottom = '2px solid ' + color;
-    fotoWrap.innerHTML += '<div class="jug-pos-overlay" data-num="' + j.num + '" style="background:rgba(0,0,0,.6);color:' + color + ';border:1px solid ' + color + '33">'
-      + (_pos || '+ puesto') + '</div>';
+    fotoWrap.insertAdjacentHTML('beforeend', '<div class="jug-pos-overlay" data-num="' + j.num + '" style="background:rgba(0,0,0,.6);color:' + color + ';border:1px solid ' + color + '33">'
+      + (_pos || '+ puesto') + '</div>');
 
     card.appendChild(fotoWrap);
 
@@ -683,9 +727,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261009-1224"></script>
-<script src="temporadas_menu.js?v=20261009-1224"></script>
-<script src="ayuda.js?v=20261009-1224"></script>
+<script src="chat_nafels.js?v=20261009-1240"></script>
+<script src="temporadas_menu.js?v=20261009-1240"></script>
+<script src="ayuda.js?v=20261009-1240"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════
