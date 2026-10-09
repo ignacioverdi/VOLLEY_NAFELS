@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261008-2348"></script>
-<script src="selector_categoria.js?v=20261008-2348"></script>
-<script src="lang.js?v=20261008-2348"></script>
+<script src="categorias_club.js?v=20261009-1224"></script>
+<script src="selector_categoria.js?v=20261009-1224"></script>
+<script src="lang.js?v=20261009-1224"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261008-2348">
+<link rel="stylesheet" href="movil.css?v=20261009-1224">
 </head>
 <body>
 
@@ -1314,9 +1314,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261008-2348" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261008-2348"></script>
-<script src="objetivos.js?v=20261008-2348" onerror="void 0"></script>
+<script src="firebase.js?v=20261009-1224" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261009-1224"></script>
+<script src="objetivos.js?v=20261009-1224" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1325,14 +1325,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261008-2348" onerror="void 0"></script>
-<script src="video_delay.js?v=20261008-2348" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261009-1224" onerror="void 0"></script>
+<script src="video_delay.js?v=20261009-1224" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261008-2348" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261008-2348"></script>
+<script src="plantel_nafels.js?v=20261009-1224" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261009-1224"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -4600,7 +4600,9 @@ function parseCommand(raw){
       if(!m){ toast('Cambio mal escrito: usá C6.7',true); return true; }
       if(hacerCambio(side, parseInt(m[1],10), parseInt(m[2],10))) hechos++;
     }
-    if(hechos){ renderAll(); persist(); toast(hechos===2?'Doble cambio':'Cambio hecho'); }
+    /* decia "Cambio hecho" tambien con tres: ahora dice cuantos entraron */
+    if(hechos){ renderAll(); persist();
+      toast(hechos===1?'Cambio hecho':(hechos===2?'Doble cambio':hechos+' cambios hechos')); }
     return true;
   }
   return false;
@@ -5513,6 +5515,46 @@ document.addEventListener('keydown', e=>{
       return;
     }
     e.preventDefault();
+
+    /* ══ ESC = CAMBIO, PRIMERO TIPEANDO ══════════════════════════════════
+       Antes ESC abria derecho la ventana de cambios, que se maneja con el
+       mouse. En vivo eso es soltar el teclado en el unico momento en que no
+       podes: el arbitro ya esta pitando.
+
+       El comando de cambio ya existe y acepta todo lo que hace falta:
+           C01.17              sale el 1, entra el 17
+           C01.17 04.13 09.03  doble, triple, los que sean
+           aC15.05             del visitante
+       Lo unico que faltaba era llegar hasta el sin usar el mouse.
+
+       Ahora ESC escribe el prefijo en el campo y te deja el cursor ahi:
+           ESC              -> «C»    y tipeas 01.17
+           ESC ESC          -> «aC»   el mismo cambio, del visitante
+           ESC ESC ESC      -> la ventana de siempre
+       Y si el campo tiene algo tipeado que no es un prefijo de cambio, no se
+       toca: se abre la ventana, como antes. Nada de lo que escribiste se
+       pierde nunca. */
+    var _v = campo ? String(campo.value || '').trim() : '';
+    if(campo && _v === ''){
+      campo.value = 'C';
+      volverAlTipeo();
+      try{ campo.setSelectionRange(1,1); }catch(_e){}
+      try{ drawDecoder(); drawPickers(); }catch(_e){}
+      toast('Cambio local: escribí sale.entra (ej C01.17). ESC otra vez = visitante.');
+      return;
+    }
+    if(campo && _v.toUpperCase() === 'C'){
+      campo.value = 'aC';
+      volverAlTipeo();
+      try{ campo.setSelectionRange(2,2); }catch(_e){}
+      try{ drawDecoder(); drawPickers(); }catch(_e){}
+      toast('Cambio del visitante: escribí sale.entra (ej aC15.05). ESC otra vez abre la ventana.');
+      return;
+    }
+    if(campo && _v.toUpperCase() === 'AC'){
+      campo.value = '';
+      try{ drawDecoder(); drawPickers(); }catch(_e){}
+    }
     subst(SUBS_SIDE||'home');
     return;
   }
@@ -5781,6 +5823,19 @@ function resetConfig(){ CFG = JSON.parse(JSON.stringify(FACTORY)); save('pv_cfg'
 
 /* la mini cancha: red arriba (zonas 4-3-2), fondo abajo (5-6-1). Zona 1 = quien saca. */
 const LU_GRID=[4,3,2,5,6,1];
+/* ══ EL ORDEN EN QUE SE TIPEA CADA FORMACION ══════════════════════════════
+   LU_GRID es como se DIBUJAN las casillas: la fila de la red arriba (4-3-2)
+   y la de atras abajo (5-6-1). Eso esta bien para el equipo propio, que uno
+   piensa mirando su cancha.
+
+   Pero la formacion del rival se carga leyendo la planilla, y la planilla
+   viene en orden de posicion: 1, 2, 3, 4, 5, 6. Con el orden de dibujo el
+   cursor iba 4-3-2-5-6-1 y habia que ir buscando casilla por casilla.
+
+   Asi que el salto con Enter/Tab tiene su propio orden, distinto del dibujo:
+   el local sigue como estaba y el visitante va 1-2-3-4-5-6, y del 6 vuelve
+   al 1. */
+const LU_TAB={ home:[4,3,2,5,6,1], away:[1,2,3,4,5,6] };
 let LU={home:{n:{},setter:0}, away:{n:{},setter:0}};
 
 function drawLineup(side){
@@ -5806,10 +5861,19 @@ function luSet(side,z,v){
 function luKey(e,side,z){
   if(e.key!=='Enter' && e.key!=='Tab') return;
   e.preventDefault();
-  const i=LU_GRID.indexOf(z);
+  const orden = LU_TAB[side] || LU_GRID;
+  const i = orden.indexOf(z);
   let tgt;
-  if(i < LU_GRID.length-1){ tgt=document.getElementById('lc-'+side+'-'+LU_GRID[i+1]); }
-  else { const other=side==='home'?'away':'home'; tgt=document.getElementById('lc-'+other+'-'+LU_GRID[0]); }
+  if(i >= 0 && i < orden.length-1){
+    tgt = document.getElementById('lc-'+side+'-'+orden[i+1]);
+  } else if(side === 'home'){
+    /* terminado el local se pasa al visitante, a su primera casilla */
+    const ordenA = LU_TAB.away || LU_GRID;
+    tgt = document.getElementById('lc-away-'+ordenA[0]);
+  } else {
+    /* el visitante cierra el circulo: del 6 vuelve al 1 */
+    tgt = document.getElementById('lc-away-'+orden[0]);
+  }
   const inp=tgt && tgt.querySelector('input');
   if(inp){ inp.focus(); if(inp.select) inp.select(); }
 }
@@ -9401,8 +9465,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261008-2348" onerror="void 0"></script>
-<script src="ayuda.js?v=20261008-2348"></script>
+<script src="volver_inicio.js?v=20261009-1224" onerror="void 0"></script>
+<script src="ayuda.js?v=20261009-1224"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10570,11 +10634,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261008-2348" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261009-1224" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261008-2348" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261009-1224" onerror="void 0"></script>
 </body>
 </html>

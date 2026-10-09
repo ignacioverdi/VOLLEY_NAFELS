@@ -471,9 +471,35 @@
     try { pintarPulso(); } catch (e) {}
   };
 
+  /* ══ DE DONDE SALEN LOS RALLIES ════════════════════════════════════════
+     Aca decia anRallies() a secas, y esa funcion ya no es la que parece:
+     analisis_vivo.js la reemplaza por una version que aplica los filtros de
+     la barra de analisis —set, fase, rotacion, jugadores en cancha, tramo
+     del marcador—.
+
+     O sea que este cuadro, que tiene que mostrar como viene el PARTIDO,
+     estaba mostrando como viene lo que haya quedado filtrado arriba. Con un
+     filtro puesto —por ejemplo tocar el set 3 para mirar algo— el cuadro se
+     queda sin rallies y muestra todo en cero. Es lo que paso en el cuarto
+     set: los tres primeros andaban porque no habia ningun filtro activo.
+
+     AV.todos() es la lista COMPLETA, sin filtrar: existe justamente para
+     esto. Si analisis_vivo.js no esta cargado, anRallies() es la original y
+     se usa esa. Y si todos() viniera vacia por lo que sea, se cae a
+     anRallies() antes que no mostrar nada. */
+  function rallesDelPartido() {
+    var av = null;
+    try { av = window.AV; } catch (e) { av = null; }
+    if (av && typeof av.todos === 'function') {
+      var t = null;
+      try { t = av.todos(); } catch (e) { t = null; }
+      if (t && t.length) return t;
+    }
+    try { return anRallies(); } catch (e) { return null; }
+  }
+
   function calcular() {
-    var rs;
-    try { rs = anRallies(); } catch (e) { return null; }
+    var rs = rallesDelPartido();
     if (!rs || !rs.length) return null;
 
     var lado = ladoPulso();

@@ -24,6 +24,27 @@ ESTRUCTURA DE ARCHIVOS:
 import os, re, json, argparse, shutil, glob
 from collections import defaultdict, Counter
 
+
+def _codigo_de_archivo(fname, date):
+    """El codigo con el que se identifica un partido en todo el sistema.
+
+    Es LA MISMA logica que build_video.py (lineas 272-292), que es la que
+    genero los codigos que ya estan cargados en «Cargar videos» y los que
+    indexan mapa_videos.js. Tiene que dar identico o los dos lados no se
+    encuentran: el link existe pero nadie lo puede buscar.
+
+    Verificado contra los 8 partidos de la temporada: los 8 dan el mismo
+    codigo que ya figura en mapa_videos.js.
+    """
+    import unicodedata as _u
+    m = re.search(r'&?[\s_]*(\d{5,6})(?!\d)', fname)
+    if m:
+        return m.group(1)                       # codigo oficial de la liga
+    t = _u.normalize('NFKD', os.path.splitext(fname)[0])
+    t = t.encode('ascii', 'ignore').decode()
+    t = re.sub(r'[^A-Za-z0-9]+', '', t).upper()[:12] or 'SIN'
+    return 'P' + (date or 'sinfecha') + '-' + t
+
 # ── EL PUESTO DE CADA JUGADOR ──────────────────────────────────────────────
 #  Sale del plantel del club, que es donde esta la verdad: lo carga el cuerpo
 #  tecnico en ALTA DE JUGADORES y se actualiza cuando cambia alguien.
@@ -733,10 +754,17 @@ def parse_dvw_both(fpath, temporada):
             # lado, la segunda vuelta las descartaria todas.
             if not _MISMO_EQUIPO and t!=pfx: continue
 
+            # ══ EL SEGUNDO DEL VIDEO ═════════════════════════════════════
+            # La columna 12 del .dvw es el momento de la accion dentro del
+            # video. El armador ya la usaba —por eso era el unico fundamento
+            # con reproductor—; el ataque, el saque y la recepcion la tiraban.
+            # Sin ella no hay con que cortarles un clip.
+            try: _vt=int(sc[12].strip()) if len(sc)>12 and sc[12].strip().isdigit() else 0
+            except: _vt=0
             action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
                     'orig':orig,'dest':dest,'subz':subz,'setter_pos':setter_pos,'set_num':set_num,
                     'date':date,'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
-                    'srv_orig':prev_srv_orig,'temporada':temporada}
+                    'srv_orig':prev_srv_orig,'temporada':temporada,'vt':_vt}
 
             # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════
             #  El #8 se scoutea con un numero para poder cargar sus saques,
@@ -1063,7 +1091,8 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
                 _p = teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dig':[]})
                 _p.setdefault('dig', []).extend(acts)
 
-        games_log.append({'file':fname,'date':date,'home':home,'away':away,'temporada':temporada})
+        games_log.append({'file':fname,'date':date,'home':home,'away':away,'temporada':temporada,
+                          'code':_codigo_de_archivo(fname, date)})
         added += 1
         if added % 10 == 0: print(f"  Parsed {added} files...")
 
@@ -1472,8 +1501,13 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
         home = norm(h_raw); away = norm(a_raw)
         m = re.search(r'(\d{4}-\d{2}-\d{2})', fname)
         date = m.group(1) if m else _fecha_adentro_del_dvw(os.path.join(dvw_dir, fname))
-        mc = re.search(r'\d{4}-\d{2}-\d{2}\s+(\d{3,})', fname)
-        code = mc.group(1) if mc else ''
+        # ══ EL CODIGO DEL PARTIDO ════════════════════════════════════════
+        # Buscaba 3 o mas digitos DESPUES de la fecha, o sea un nombre tipo
+        # "2026-10-07 751238 ...". Ningun .dvw de Nafels se llama asi —son
+        # "&2026-10-07 AXP-VOL.dvw"—, asi que el codigo salia VACIO en los 15
+        # partidos de los 8 equipos, y sin codigo liga_data no puede unir un
+        # partido con su video.
+        code = _codigo_de_archivo(fname, date)
         sig = (date, tuple(sorted([home, away])))
         if date and sig in seen_sigs:
             continue  # mismo partido ya procesado (copia "(1)", re-scout) → no contar doble
@@ -1526,6 +1560,18 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
     for g in (games_log or []):
         r=g.get('result')
         if r and g.get('date'): _RESULTS[(g['date'],g.get('home',''),g.get('away',''))]=r
+    # ══ EL CODIGO DE CADA PARTIDO ════════════════════════════════════════
+    # Lo mismo que _RESULTS pero con el codigo del .dvw: es lo que le faltaba
+    # a liga_data para poder unir un partido con su video, porque
+    # mapa_videos.js esta indexado justo por ese codigo.
+    _CODES={}
+    for g in (games_log or []):
+        c=g.get('code')
+        if c and g.get('date'):
+            _CODES[(g['date'],g.get('home',''),g.get('away',''))]=c
+            _CODES[(g['date'],g.get('away',''),g.get('home',''))]=c
+    def _code_for(date,team,rival):
+        return _CODES.get((date,team,rival),'') or _CODES.get((date,rival,team),'')
     def _res_for(date,team,rival):
         r=_RESULTS.get((date,team,rival))
         if r: return '%d-%d'%(r[0],r[1])
@@ -1541,7 +1587,8 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         # ── Indice de PARTIDO real (date,rival) — para el filtro "partido especifico" ──
         _gseen=sorted(set((a.get('date',''),a.get('rival','')) for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         _gidx={dk:i for i,dk in enumerate(_gseen)}
-        _games_list=[{'i':i,'date':d,'rival':rv,'r':_res_for(d,team,rv)} for i,(d,rv) in enumerate(_gseen)]
+        _games_list=[{'i':i,'date':d,'rival':rv,'r':_res_for(d,team,rv),
+                      'code':_code_for(d,team,rv)} for i,(d,rv) in enumerate(_gseen)]
         def _gi(a): return _gidx.get((a.get('date',''),a.get('rival','')),0)
         # dig_p: la DEFENSA. No se guardaba, y por eso el mapa de calor de
         # defensa era el unico que necesitaba el video cargado —los demas leen
@@ -1558,13 +1605,13 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
                            RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),
                            SUB_IDX.get(a.get('subz',''),0)]
                           for a in dig]}
-            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1,SUB_IDX.get(a.get('subz',''),0)] for a in atk]}
+            if atk: atk_p[ns]={'name':name,'num':num,'a':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,a.get('atype',0),COMBO_IDX.get(a.get('combo',''),-1),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),6,-1,SUB_IDX.get(a.get('subz',''),0),a.get('vt',0)] for a in atk]}
             if srv:
                 stl=list(dict.fromkeys('S'+a.get('stype','Q') for a in srv)) or ['SQ']; sidx={s:i for i,s in enumerate(stl)}
-                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0)] for a in srv]}
+                srv_p[ns]={'name':name,'num':num,'stypes':stl,'s':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,sidx.get('S'+a.get('stype','Q'),0),RES_IDX.get(a.get('effect','='),4),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0),a.get('vt',0)] for a in srv]}
             if rec:
                 rtl=list(dict.fromkeys('R'+a.get('stype','M') for a in rec)) or ['RM']; rtidx={r:i for i,r in enumerate(rtl)}
-                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0)] for a in rec]}
+                rec_p[ns]={'name':name,'apellido':ape,'num':num,'rtypes':rtl,'r':[[ridx.get(a.get('rival',''),0),_gi(a),a.get('set_num',1),1,rtidx.get('R'+a.get('stype','M'),0),REC_IDX.get(a.get('effect','-'),3),a.get('orig',0),a.get('dest',0),SUB_IDX.get(a.get('subz',''),0),a.get('vt',0)] for a in rec]}
         # Armar AMBOS armadores (estructura setters array que usa el game plan)
         team_setters = setters.get(team, [])
         if not isinstance(team_setters, list): team_setters = [team_setters]

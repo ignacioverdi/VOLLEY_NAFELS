@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261008-2348"></script>
-<script src="selector_categoria.js?v=20261008-2348"></script>
-<script src="objetivos_config.js?v=20261008-2348"></script>
+<script src="categorias_club.js?v=20261009-1224"></script>
+<script src="selector_categoria.js?v=20261009-1224"></script>
+<script src="objetivos_config.js?v=20261009-1224"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -127,6 +127,10 @@ body{
 .canchita-cod{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;}
 .canchita-tipo{font-size:8px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;}
 .canchita-canvas-wrap{padding:6px;display:flex;justify-content:center;}
+/* las canchitas de distribucion del armador: con un techo de ancho la
+   seccion entra en una pantalla en vez de pedir scroll */
+.gp-cancha-arm > svg{max-width:320px;width:100%;height:auto;display:inline-block;}
+@media (max-width:900px){ .gp-cancha-arm > svg{max-width:none;} }
 .canchita-stats{
   padding:7px 10px;display:grid;grid-template-columns:repeat(3,1fr);
   gap:3px;border-top:1px solid var(--border);
@@ -327,7 +331,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   }
 }
 </style>
-<script src="lang.js?v=20261008-2348" onerror="void 0"></script>
+<script src="lang.js?v=20261009-1224" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -338,17 +342,17 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261008-2348"></script>
+<script src="datos_seguros.js?v=20261009-1224"></script>
 <script src="liga_data.js.enc"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261008-2348" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261008-2348"></script>
+<script src="firebase.js?v=20261009-1224" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261009-1224"></script>
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
-<script src="videos.js?v=20261008-2348" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="videos.js?v=20261009-1224" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261008-2348">
+<link rel="stylesheet" href="movil.css?v=20261009-1224">
 </head>
 <body>
 
@@ -615,6 +619,71 @@ var GP_TD_VACIO = { name:'—', rivals:[], matches:[], roster:[],
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG] || GP_TD_VACIO;
 var GP_COMBOS = GP_L.combos || {};
 
+/* ══ EL APELLIDO DE CADA JUGADOR ═══════════════════════════════════════════
+   Los nombres llegan del generador como "APELLIDO Nombre": "Balagué Manuel",
+   "Diem Ramon", "SCHMID R Roy". El apellido es TODO menos la ULTIMA palabra,
+   porque apellidos de dos palabras hay —"SCHMID R", "Van Der Berg"— y nombre
+   de pila, en estos archivos, hay siempre uno solo.
+
+   Esto estaba resuelto de tres maneras distintas en la pantalla y dos de
+   ellas se quedaban con la ULTIMA palabra, o sea con el nombre de pila: en
+   «Cómo atacan» se leia "#13 Manuel" en lugar de "#13 Balagué". Ahora hay una
+   sola funcion y la usan todas.
+
+   Y cuando dos jugadores del MISMO equipo comparten apellido se agrega la
+   inicial del nombre. Amriswil lleva a #1 Diem Ramon y a #3 Diem Leandro,
+   los dos liberos: sin la inicial son el mismo renglon y no hay forma de
+   saber de cual se esta hablando. */
+function gpPartirNombre(n){
+  n = String(n == null ? '' : n).replace(/^\d+\s*/, '').trim().replace(/\s+/g, ' ');
+  if(!n) return {ap:'', nom:''};
+  var w = n.split(' ');
+  if(w.length === 1) return {ap:w[0], nom:''};
+  return {ap:w.slice(0, -1).join(' '), nom:w[w.length - 1]};
+}
+function gpCapitalizar(s){
+  return String(s || '').split(' ').map(function(x){
+    /* las iniciales sueltas quedan en mayuscula: "SCHMID R" -> "Schmid R" */
+    return x.length <= 2 ? x.toUpperCase()
+                         : x.charAt(0).toUpperCase() + x.slice(1).toLowerCase();
+  }).join(' ');
+}
+var _gpApeRepetidos = null;
+function gpApeRepetidos(){
+  if(_gpApeRepetidos) return _gpApeRepetidos;
+  var porApe = {}, td = (typeof GP_TD !== 'undefined' && GP_TD) ? GP_TD : {};
+  ['atk', 'srv', 'rec'].forEach(function(sec){
+    var o = td[sec] || {};
+    Object.keys(o).forEach(function(ns){
+      var p = o[ns];
+      if(!p || !p.name) return;
+      var ap = gpPartirNombre(p.name).ap.toUpperCase();
+      if(!ap) return;
+      (porApe[ap] = porApe[ap] || {})[ns] = 1;
+    });
+  });
+  _gpApeRepetidos = {};
+  Object.keys(porApe).forEach(function(ap){
+    if(Object.keys(porApe[ap]).length > 1) _gpApeRepetidos[ap] = 1;
+  });
+  return _gpApeRepetidos;
+}
+/* El apellido listo para mostrar, con inicial si hace falta desempatar. */
+function gpApeMostrar(nombre){
+  var p = gpPartirNombre(nombre);
+  if(!p.ap) return '';
+  var et = gpCapitalizar(p.ap);
+  try{
+    if(p.nom && gpApeRepetidos()[p.ap.toUpperCase()])
+      et += ' ' + p.nom.charAt(0).toUpperCase() + '.';
+  }catch(e){}
+  return et;
+}
+/* La clave con la que se guarda y se busca a un jugador: el DORSAL. Por
+   apellido no alcanza —ver los dos Diem— y es lo que hacia que la recepcion
+   de uno apareciera en la ficha del otro. */
+function gpClaveJug(ns){ return '#' + String(ns); }
+
 // ── Buscar video de un combo desde videos.js ──
 function gpGetVideo(num, tipo, combo){
   try{
@@ -796,7 +865,7 @@ function gpBuildRecepcion(){
   var out={};
   Object.keys(GP_TD.rec||{}).forEach(function(ns){
     var p=GP_TD.rec[ns];
-    var apellido=(p.name||'').replace(/^\d+\s*/,'').split(' ')[0].toUpperCase();
+    var apellido=gpPartirNombre(p.name).ap.toUpperCase();
     var s={flotado:{},potencia:{}};
     ['flotado','potencia'].forEach(function(tp){
       ['desde_z1','desde_z6','desde_z5'].forEach(function(z){
@@ -842,7 +911,19 @@ function gpBuildRecepcion(){
         porDest[tp][pp]=T;
       });
     });
-    if(totAll>=10) out[apellido]={num:parseInt(ns),pos:'',acumulado:s,por_destino:porDest,por_rival:{}};
+    if(totAll>=10){
+      var ficha={num:parseInt(ns),pos:'',acumulado:s,por_destino:porDest,por_rival:{}};
+      /* ══ LA CLAVE ES EL DORSAL ════════════════════════════════════════════
+         Esto se guardaba como out[apellido]. Con dos jugadores del mismo
+         apellido —#1 Diem Ramon y #3 Diem Leandro— el segundo pisaba al
+         primero: uno de los dos desaparecia y el otro mostraba la recepcion
+         que no era. Ahora cada uno tiene su propia entrada.
+
+         La clave por apellido se deja ademas, para el primero que la ocupe,
+         por si alguna pantalla vieja todavia busca asi. */
+      out[gpClaveJug(ns)]=ficha;
+      if(apellido && !out[apellido]) out[apellido]=ficha;
+    }
   });
   return out;
 }
@@ -1040,7 +1121,8 @@ function gpBuildJugadores(){
       saques.sort(function(a,b){return b.tot-a.tot;});
     }
     var pos=(GP_TD.roster&&GP_TD.roster[ns])||'OTRO';
-    var recObj = (window.RECEPCION_RIVAL_DATA && window.RECEPCION_RIVAL_DATA[(name||'').replace(/^\d+\s*/,'').split(' ')[0].toUpperCase()]) || null;
+    /* por dorsal: por apellido se mezclaban los dos Diem */
+    var recObj = (window.RECEPCION_RIVAL_DATA && window.RECEPCION_RIVAL_DATA[gpClaveJug(ns)]) || null;
     var recData = recObj ? recObj.acumulado : null;
     var recDest = recObj ? recObj.por_destino : null;
     if(ataques.length+saques.length>0 || recData){
@@ -2069,15 +2151,14 @@ function gpEvColor(e){ return {'#':'#22c55e','+':'#84cc16','!':'#eab308','-':'#f
 function gpMmss(s){ s=Math.max(0,Math.round(s||0)); var m=Math.floor(s/60),x=s%60; return m+':'+(x<10?'0':'')+x; }
 
 // recolecta los clips de un cuadrante con EL MISMO filtro que la canchita
-function gpPlayerName(num){ if(!num) return ''; var a=(GP_TD&&GP_TD.atk)||{}; var p=a[String(num)]; if(p&&p.name){ var pp=String(p.name).trim().split(' '); return pp[pp.length-1]; } return ''; }
+/* se quedaba con la ultima palabra, que es el NOMBRE de pila, no el apellido */
+function gpPlayerName(num){ if(!num) return ''; var a=(GP_TD&&GP_TD.atk)||{}; var p=a[String(num)]; return (p&&p.name)?gpApeMostrar(p.name):''; }
 function gpApellido(num){
   if(!num) return '';
   var td=GP_TD||{}, p=null, secs=['atk','rec','srv'];
   for(var i=0;i<secs.length;i++){ var sec=td[secs[i]]||{}; if(sec[String(num)] && sec[String(num)].name){ p=sec[String(num)]; break; } }
   if(!p) return '';
-  var w=String(p.name).trim().split(/\s+/), pre=['DE','DEL','DI','LA','LE','VAN','VON','DER','DEN','MC','DA','SAN','SANTA'];
-  var ap=w[0]||''; if(w.length>=2 && pre.indexOf(w[0].toUpperCase())>=0) ap=w[0]+' '+w[1];
-  return ap.split(' ').map(function(x){ return x.charAt(0).toUpperCase()+x.slice(1).toLowerCase(); }).join(' ');
+  return gpApeMostrar(p.name);
 }
 function gpZoneClips(setterObj,pos,phase,rec,zone){
   var RES=['#','/','+','!','=','-'];
@@ -2503,7 +2584,16 @@ function renderArmador(){
         })(key, setterIdx, color));
         card.appendChild(rh);
         var cvW=document.createElement('div');
-        cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2)';
+        /* ══ EL TAMANO DE LA CANCHITA ═══════════════════════════════════════
+           El SVG se estiraba a todo el ancho de la celda: 474 px de ancho por
+           356 de alto, y son DOCE —seis rotaciones por cada armador—. La
+           seccion entera medi­a mas de 1300 px y para ver las de abajo habia
+           que scrollear un rato largo.
+
+           Se le pone un techo y queda centrada. El dibujo no pierde nada:
+           el viewBox es 200x150 y escala solo. */
+        cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2);text-align:center';
+        cvW.classList.add('gp-cancha-arm');
         cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos,setterIdx);
         card.appendChild(cvW);
         var blqRow=document.createElement('div');
@@ -2913,13 +3003,8 @@ function gpScoutingReport(){
   var rep={ataque:[],rotaciones:[],saque:[]};
   var roster=GP_TD.roster||{};
   var medias=gpMediasLiga();
-  function ape(n){
-    n=(n||'').replace(/^\d+\s*/,'').trim();
-    var p=n.split(/\s+/), pre=['DE','DEL','DI','LA','LE','VAN','VON','DER','DEN','MC','DA','SAN','SANTA'];
-    var a=p[p.length-1]||'';
-    if(p.length>=3&&pre.indexOf(p[p.length-2].toUpperCase())>=0)a=p[p.length-2]+' '+a;
-    return a.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
-  }
+  /* era la que ponia "#13 Manuel" en Armas y direcciones */
+  function ape(n){ return gpApeMostrar(n); }
   function sig(p){return {OUTSIDE:'OH',MIDDLE:'MB',OPPOSITE:'OP',SETTER:'S',LIBERO:'L'}[p]||'';}
 
   // ════ ATAQUE — armas principales con dirección real (sin bloqueos) ════
@@ -3818,8 +3903,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261008-2348"></script>
-<script src="ayuda.js?v=20261008-2348"></script>
+<script src="temporadas_menu.js?v=20261009-1224"></script>
+<script src="ayuda.js?v=20261009-1224"></script>
 </body>
 </html>
 
