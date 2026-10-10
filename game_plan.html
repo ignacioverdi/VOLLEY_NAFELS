@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261010-0155"></script>
-<script src="selector_categoria.js?v=20261010-0155"></script>
-<script src="objetivos_config.js?v=20261010-0155"></script>
+<script src="categorias_club.js?v=20261010-0205"></script>
+<script src="selector_categoria.js?v=20261010-0205"></script>
+<script src="objetivos_config.js?v=20261010-0205"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -358,8 +358,54 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-vbtn:hover{background:#FFB83D}
 .gpn-vacio{font-size:12px;color:#64748b;font-style:italic;padding:14px 2px}
 @media(max-width:700px){.gpn-chip{font-size:11px;padding:3px 7px}}
+/* ── la ficha en grilla ── */
+#jug-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;align-items:start}
+.gpn-card{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);border-radius:16px;
+  overflow:hidden;display:flex;flex-direction:column}
+.gpn-card .gpn-cols{grid-template-columns:1fr;gap:12px}
+.gpn-card .gpn-caja{max-width:none;padding:0}
+.gpn-cab{display:flex;align-items:center;gap:11px;padding:13px 15px 10px}
+.gpn-chapa{width:46px;height:46px;border-radius:12px;background:linear-gradient(145deg,#1A2030,#10141D);
+  border:1px solid rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;flex:none;
+  font-family:Anton,sans-serif;font-size:23px;line-height:1}
+.gpn-nom{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:.08em;color:#E6EDF6;line-height:1}
+.gpn-pos{font-size:10px;color:#5E6B7D;letter-spacing:1.6px;margin-top:4px;text-transform:uppercase}
+.gpn-tabs{display:flex;background:#161C27;border-radius:9px;padding:3px;margin:0 15px 11px}
+.gpn-tab{padding:6px 11px;font-size:13px;font-weight:600;color:#9AA8BA;border-radius:7px;white-space:nowrap;
+  cursor:pointer;border:none;background:transparent;font-family:inherit;flex:1}
+.gpn-tab.off{color:#39424F;cursor:default}
+.gpn-tab.on{background:#F5A524;color:#0A0D14;font-weight:800}
+.gpn-cuerpo{padding:0 15px 12px}
+.gpn-claves{padding:11px 15px;border-top:1px solid rgba(255,255,255,.06)}
+.gpn-clg{font-size:9px;letter-spacing:1.2px;color:#5E6B7D;font-weight:700;margin-top:6px}
+.gpn-cli{display:flex;gap:6px;align-items:flex-start;font-size:12px;color:#C6D2E0;line-height:1.4;margin-top:2px}
+.gpn-cli span:first-child{color:#F5A524;font-size:9px;line-height:1.5}
+.gpn-pie{margin-top:auto;border-top:1px solid rgba(255,255,255,.06);padding:10px 15px 12px;
+  display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.gpn-nota{flex:1;min-width:150px;display:flex;align-items:center;gap:7px;background:#0F141D;
+  border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:7px 10px}
+.gpn-lapiz{color:#F5A524;font-size:12px}
+.gpn-nota input{flex:1;background:transparent;border:none;color:#f8d77a;font-family:inherit;font-size:13px;outline:none;min-width:60px}
+.gpn-blq{display:flex;flex-direction:column;gap:3px}
+.gpn-blq label{font-size:9px;color:#49566A;letter-spacing:1.2px;text-transform:uppercase}
+.gpn-blq select{background:#161C27;color:#C6D2E0;border:1px solid rgba(255,255,255,.09);border-radius:7px;
+  padding:5px 7px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer}
+.gpn-hm{font-size:11px;color:#7C8A9E;text-decoration:none;border:1px solid rgba(255,255,255,.09);
+  border-radius:7px;padding:6px 9px;white-space:nowrap}
+.gpn-hm:hover{color:#E6EDF6;border-color:rgba(255,255,255,.2)}
+/* ── 3 · el plan ── */
+.gpn-plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px}
+.gpn-plan-c{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px}
+.gpn-plan-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.12em;color:#E6EDF6;
+  margin-bottom:12px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.gpn-plan-t span{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:#49566A;text-transform:uppercase}
+.gpn-plan-j{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.gpn-plan-j:last-child{border-bottom:none}
+.gpn-plan-h{display:flex;align-items:baseline;gap:7px;margin-bottom:5px;font-size:15px}
+.gpn-plan-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#5E6B7D;margin-bottom:6px}
+.gpn-plan-dest{background:rgba(240,86,106,.07);border:1px solid rgba(240,86,106,.25);border-radius:12px;padding:13px 15px}
 </style>
-<script src="lang.js?v=20261010-0155" onerror="void 0"></script>
+<script src="lang.js?v=20261010-0205" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -370,7 +416,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261010-0155"></script>
+<script src="datos_seguros.js?v=20261010-0205"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -383,13 +429,13 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261010-0155" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0155"></script>
-<script src="videos.js?v=20261010-0155" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261010-0205" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261010-0205"></script>
+<script src="videos.js?v=20261010-0205" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0155">
+<link rel="stylesheet" href="movil.css?v=20261010-0205">
 </head>
 <body>
 
@@ -413,13 +459,28 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   <!-- ARMADOR -->
   <div style="margin-top:40px;padding-top:28px;border-top:1px solid rgba(255,255,255,.06)">
     <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px">
-      <span data-t="ANÁLISIS DEL ARMADOR RIVAL">ANÁLISIS DEL ARMADOR RIVAL</span>
+      <span data-t="ANÁLISIS DEL ARMADOR RIVAL">1 · DISTRIBUCIÓN DEL ARMADOR</span>
       <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
     </div>
     <div id="seccion-armador"></div>
   </div>
 
 
+
+  <!-- 2 · LOS JUGADORES ─ una tarjeta por jugador, en grilla -->
+  <div style="margin-top:38px;padding-top:26px;border-top:1px solid rgba(255,255,255,.06)" id="seccion-jugadores">
+    <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px">
+      <span>2 · LOS JUGADORES</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
+    </div>
+    <div style="font-size:13px;color:#7C8A9E;line-height:1.5;margin-bottom:14px;max-width:112ch">
+      Cada ficha abre en el fundamento donde más aparece y las otras están a un toque. Tocá una combinación
+      o un tipo de saque para filtrar la cancha, y el filtro <b style="color:#C6D2E0">Resultado</b> para quedarte con una valoración.
+      El botón abre el reproductor con esas acciones: ahí tildás las que querés en el video.
+      En ataque el color es la <b style="color:#C6D2E0">zona de origen</b>; en saque y recepción, el <b style="color:#C6D2E0">tipo de saque</b>.
+    </div>
+    <div id="jug-grid"></div>
+  </div>
 
   <!-- ROTACIONES DEL ARMADOR RIVAL ─────────────────────────────────────
        renderRotaciones() escribe aca. El bloque arranca tapado y se
@@ -443,6 +504,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
         <span data-t="Sin datos de recepción rival cargados">Sin datos de recepción rival cargados</span>
       </div>
     </div>
+  </div>
+
+  <!-- 3 · EL PLAN ─ el resumen de todo lo de arriba, armado con los mismos datos -->
+  <div style="margin-top:38px;padding-top:26px;border-top:1px solid rgba(255,255,255,.06)" id="seccion-plan">
+    <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+      <span>3 · EL PLAN</span>
+      <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
+    </div>
+    <div id="plan-content"></div>
   </div>
 
   <!-- COMO VAMOS A JUGAR -->
@@ -1630,7 +1700,7 @@ function buildCanchita(item,jIdx,i,prefix,W,H,drawFn,color,j){
   return card;
 }
 
-function renderJugador(j,idx){
+function renderJugadorViejo(j,idx){
   var sec=document.createElement('div');
   sec.className='jugador-section';
   sec.id='jug-'+idx;
@@ -2133,6 +2203,178 @@ function gpnPanel(j,cont,tipo){
   }
   dibujar(estado);
 }
+
+/* ══ LA FICHA DEL JUGADOR ════════════════════════════════════════════
+   Antes cada jugador era una franja de ancho completo que se desplegaba
+   al tocarla: con diez jugadores la pantalla no se podia abarcar y habia
+   que ir abriendo y cerrando. Ahora es una tarjeta en grilla, siempre
+   abierta, con las tres solapas arriba —y solo las que el jugador
+   tiene—. Las claves automaticas y el heatmap siguen donde estaban, al
+   pie. */
+function gpnTieneDatos(num,tipo){
+  var td=GP_TD||{}, ns=String(num);
+  if(tipo==='ataque')    return !!(td.atk&&td.atk[ns]&&td.atk[ns].a&&td.atk[ns].a.length);
+  if(tipo==='saque')     return !!(td.srv&&td.srv[ns]&&td.srv[ns].s&&td.srv[ns].s.length);
+  return !!(td.rec&&td.rec[ns]&&td.rec[ns].r&&td.rec[ns].r.length);
+}
+function gpnCuenta(num,tipo){
+  var td=GP_TD||{}, ns=String(num);
+  if(tipo==='ataque')    return ((td.atk||{})[ns]||{a:[]}).a.length;
+  if(tipo==='saque')     return ((td.srv||{})[ns]||{s:[]}).s.length;
+  return ((td.rec||{})[ns]||{r:[]}).r.length;
+}
+
+function gpnFichaJugador(j,idx){
+  var card=document.createElement('div');
+  card.className='gpn-card'; card.id='jug-'+idx;
+  var col=j.color||'#F5A524';
+
+  var cab=document.createElement('div'); cab.className='gpn-cab';
+  cab.innerHTML='<div class="gpn-chapa" style="color:'+col+'">'+j.num+'</div>'
+    +'<div style="flex:1;min-width:0">'
+    +'<div class="gpn-nom">'+gpnEsc(gpApeMostrar(j.nombre)||j.nombre)+'</div>'
+    +'<div class="gpn-pos">'+gpnEsc(GP_POS_LABEL[j.pos]||j.pos)+'</div></div>';
+  card.appendChild(cab);
+
+  var tabs=document.createElement('div'); tabs.className='gpn-tabs';
+  var cuerpo=document.createElement('div'); cuerpo.className='gpn-cuerpo';
+  var ETQ={ataque:'Ataque',saque:'Saque',recepcion:'Recepción'};
+  var disponibles=['ataque','saque','recepcion'].filter(function(t){ return gpnTieneDatos(j.num,t); });
+  /* abre en el fundamento donde mas aparece */
+  var activo=disponibles.slice().sort(function(a,b){ return gpnCuenta(j.num,b)-gpnCuenta(j.num,a); })[0];
+  if(j.pos==='LIBERO' && disponibles.indexOf('recepcion')>=0) activo='recepcion';
+
+  ['ataque','saque','recepcion'].forEach(function(t){
+    var n=gpnCuenta(j.num,t);
+    var b=document.createElement(n?'button':'span');
+    b.className='gpn-tab'+(n?'':' off')+(t===activo?' on':'');
+    b.textContent=ETQ[t]+' '+(n||'—');
+    if(n){ b.type='button'; b.onclick=function(ev){ ev.stopPropagation();
+      [].forEach.call(tabs.children,function(x){x.classList.remove('on');});
+      b.classList.add('on'); pintar(t); }; }
+    tabs.appendChild(b);
+  });
+  card.appendChild(tabs); card.appendChild(cuerpo);
+
+  function pintar(t){ try{ gpnPanel(j,cuerpo,t); }catch(e){ try{console.warn('[gpn] ficha',e);}catch(_){}
+    cuerpo.innerHTML='<div class="gpn-vacio">No se pudo dibujar este fundamento.</div>'; } }
+  if(activo) pintar(activo); else cuerpo.innerHTML='<div class="gpn-vacio">Sin acciones registradas.</div>';
+
+  /* ── claves automaticas: lo mismo que mostraba la franja de antes ── */
+  var ana={ataque:[],saque:[],recepcion:[]};
+  try{ ana=gpAnalizarJugador(j)||ana; }catch(e){}
+  var hay=(ana.ataque||[]).length+(ana.saque||[]).length+(ana.recepcion||[]).length;
+  if(hay){
+    var cl=document.createElement('div'); cl.className='gpn-claves';
+    var h='<div class="gpn-sub" style="margin-bottom:6px">Claves del jugador</div>';
+    [['ataque','ATAQUE'],['saque','SAQUE'],['recepcion','RECEPCIÓN']].forEach(function(g){
+      var L=ana[g[0]]||[]; if(!L.length) return;
+      h+='<div class="gpn-clg">'+g[1]+'</div>';
+      L.forEach(function(p){ h+='<div class="gpn-cli"><span>▸</span><span>'+p+'</span></div>'; });
+    });
+    cl.innerHTML=h; card.appendChild(cl);
+  }
+
+  /* ── pie: la nota del CT, el bloqueo y el heatmap ── */
+  var pie=document.createElement('div'); pie.className='gpn-pie';
+  var notaKey='vb_jug_'+GP_RIVAL_SLUG+'_'+j.num+'_nota_ct';
+  var nw=document.createElement('div'); nw.className='gpn-nota';
+  var inp=document.createElement('input'); inp.type='text'; inp.placeholder='La clave de este jugador…';
+  try{ var sv=localStorage.getItem(notaKey); if(sv!==null) inp.value=sv; }catch(e){}
+  inp.addEventListener('input',function(){ try{localStorage.setItem(notaKey,this.value);}catch(e){} });
+  nw.innerHTML='<span class="gpn-lapiz">✎</span>'; nw.appendChild(inp);
+
+  var bq=document.createElement('div'); bq.className='gpn-blq';
+  var blqKey='vb_gp_blqjug_'+GP_RIVAL_SLUG+'_'+j.num;
+  var sel=document.createElement('select');
+  [['','— sin definir —'],['read','🖐️ Read'],['call1','☝️ Call 1'],['call2','✌️ Call 2'],
+   ['commit','✊️ Commit'],['pin','🤘️ Pin & pin']].forEach(function(o){
+    var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; sel.appendChild(op); });
+  try{ sel.value=localStorage.getItem(blqKey)||''; }catch(e){}
+  sel.addEventListener('change',function(){ try{localStorage.setItem(blqKey,this.value);}catch(e){} });
+  bq.innerHTML='<label>Bloqueo</label>'; bq.appendChild(sel);
+
+  var hm=document.createElement('a');
+  hm.href='hm_ataque.html?equipo='+GP_RIVAL_SLUG; hm.target='_blank';
+  hm.className='gpn-hm'; hm.textContent='Heatmap ↗';
+
+  pie.appendChild(nw); pie.appendChild(bq); pie.appendChild(hm);
+  card.appendChild(pie);
+  return card;
+}
+
+/* ══ 3 · EL PLAN ═════════════════════════════════════════════════════
+   El resumen de todo lo de arriba: por donde atacan y a quien sacarle.
+   Se arma con los mismos datos, no hay nada escrito a mano. */
+function gpnPlan(cont){
+  if(!cont) return;
+  var td=GP_TD||{};
+  /* --- como atacan: los tres de mas volumen --- */
+  var ats=Object.keys(td.atk||{}).map(function(ns){
+    return {num:+ns, n:((td.atk[ns].a)||[]).length};
+  }).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;}).slice(0,3);
+  var h1='';
+  ats.forEach(function(x){
+    var acc=gpnClips(x.num,'ataque','all',null);
+    var ori={}; acc.forEach(function(c){ if(c.orig) ori[c.orig]=1; });
+    var cmap=gpnColores(Object.keys(ori).map(Number));
+    h1+='<div class="gpn-plan-j"><div class="gpn-plan-h">'
+      +'<b style="font-family:Anton,sans-serif;color:#F5A524">#'+x.num+'</b> '
+      +'<span style="color:#E6EDF6;font-weight:600">'+gpnEsc(gpApellido(x.num)||'')+'</span> '
+      +'<span style="color:#5E6B7D;font-size:11px;letter-spacing:1px">'+gpnEsc(GP_POS_LABEL[(td.roster||{})[String(x.num)]]||'')+'</span>'
+      +'<span style="margin-left:auto;color:#5E6B7D;font-size:13px"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+x.n+'</b> remates</span>'
+      +'</div>'+gpnDirs(acc,cmap,'DESDE')+'</div>';
+  });
+  /* --- a quien sacarle: el receptor con menos positivas --- */
+  var recs=Object.keys(td.rec||{}).map(function(ns){
+    var acc=gpnClips(+ns,'recepcion','all',null);
+    if(acc.length<5) return null;
+    var pos=acc.filter(function(c){return c.ev==='#'||c.ev==='+';}).length;
+    var porTipo={};
+    acc.forEach(function(c){ var t=porTipo[c.combo]=porTipo[c.combo]||{n:0,p:0};
+      t.n++; if(c.ev==='#'||c.ev==='+') t.p++; });
+    return {num:+ns, n:acc.length, pct:Math.round(pos/acc.length*100), tipos:porTipo};
+  }).filter(Boolean).sort(function(a,b){return a.pct-b.pct;});
+  var h2='';
+  if(recs.length){
+    var peor=recs[0];
+    var lineas='';
+    Object.keys(peor.tipos).forEach(function(t){
+      var v=peor.tipos[t], p=Math.round(v.p/v.n*100), c=GPN_TIPO[t]||GPN_CAT[0];
+      lineas+='<div class="gpn-dir"><span class="gpn-dot" style="background:rgba('+c[0]+',.9)"></span>'
+        +'<span style="color:'+c[1]+'">'+t+'</span><span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+v.n+'</b> rec.</span>'
+        +'<span style="color:#3D4857">→</span><b style="font-family:Anton,sans-serif;color:'+(p<30?'#FF8A99':(p>=50?'#8FDCF8':'#C6D2E0'))+'">'+p+'%</b>'
+        +'<span style="color:#5E6B7D">positiva</span></div>';
+    });
+    h2='<div class="gpn-plan-dest"><div class="gpn-plan-lbl">A quién sacarle</div>'
+      +'<div style="font-size:17px;color:#E6EDF6;line-height:1.4">El <b style="font-family:Anton,sans-serif;color:#F5A524">#'+peor.num+'</b> '
+      +gpnEsc(gpApellido(peor.num)||'')+' recibe <b style="font-family:Anton,sans-serif">'+peor.n+'</b> pelotas con '
+      +'<b style="font-family:Anton,sans-serif;color:#FF8A99">'+peor.pct+'%</b> de positivas: es el más barato del equipo.</div>'
+      +'<div style="display:flex;flex-direction:column;gap:5px;margin-top:9px">'+lineas+'</div></div>';
+    if(recs.length>1){
+      h2+='<div class="gpn-plan-lbl" style="margin-top:13px">El resto</div><div style="display:flex;flex-direction:column;gap:5px">';
+      recs.slice(1).forEach(function(r){
+        h2+='<div class="gpn-dir"><span style="color:#C6D2E0">#'+r.num+' '+gpnEsc(gpApellido(r.num)||'')+'</span>'
+          +'<span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+r.n+'</b> rec.</span>'
+          +'<span style="color:#3D4857">→</span><b style="font-family:Anton,sans-serif;color:'+(r.pct<30?'#FF8A99':(r.pct>=50?'#8FDCF8':'#C6D2E0'))+'">'+r.pct+'%</b></div>';
+      });
+      h2+='</div>';
+    }
+  } else h2='<div class="gpn-vacio">Sin datos de recepción rival.</div>';
+
+  cont.innerHTML=
+    '<div class="gpn-plan">'
+    +'<div class="gpn-plan-c"><div class="gpn-plan-t">Cómo atacan ellos<span>un color por zona de origen</span></div>'+h1+'</div>'
+    +'<div class="gpn-plan-c"><div class="gpn-plan-t">A quién sacarle<span>un color por tipo de saque</span></div>'+h2+'</div>'
+    +'</div>';
+}
+/* La franja de ancho completo paso a tarjeta en grilla. La version de antes
+   queda como renderJugadorViejo por si hay que volver. */
+function renderJugador(j,idx){
+  try{ return gpnFichaJugador(j,idx); }
+  catch(e){ try{console.warn('[gpn] ficha',e);}catch(_){} return renderJugadorViejo(j,idx); }
+}
+
 /* Los tres paneles de la ficha ahora los dibuja gpnPanel. Las versiones de
    canvas quedan arriba como renderPanel*Viejo y se usan de red: si algo falla,
    o si el jugador no tiene acciones con segundo de video, se vuelve a ellas.
@@ -2350,7 +2592,7 @@ var main=document.getElementById('main-content');
 var dots=document.getElementById('nav-dots');
 
 JUGADORES.forEach(function(j,i){
-  main.appendChild(renderJugador(j,i));
+  (document.getElementById('jug-grid')||main).appendChild(renderJugador(j,i));
   var dot=document.createElement('div');
   dot.className='nav-dot'+(i===0?' on':'');
   dot.addEventListener('click',function(){
@@ -2361,19 +2603,21 @@ JUGADORES.forEach(function(j,i){
   dots.appendChild(dot);
 });
 
-// Abrir primero por defecto
+// Las tarjetas ya nacen abiertas: solo queda dibujar el bloque 3.
 setTimeout(function(){
   var first=document.getElementById('jug-0');
-  if(first){
+  if(first && first.classList.contains('jugador-section')){   // por si se volvio a la franja
     first.classList.add('open');
     var wrap=first.querySelector('.canchitas-wrap');
-    if(!wrap.dataset.rendered){
+    if(wrap && !wrap.dataset.rendered){
       wrap.dataset.rendered='1';
       renderPanelAtaque(JUGADORES[0],0,first.querySelector('[data-panel="ataque"] .canchitas-grid'));
       renderPanelSaque(JUGADORES[0],0,first.querySelector('[data-panel="saque"] .canchitas-grid'));
       renderPanelRecepcion(JUGADORES[0],first.querySelector('[data-panel="recepcion"]'));
     }
   }
+  try{ gpnPlan(document.getElementById('plan-content')); }
+  catch(e){ try{console.warn('[gpn] plan',e);}catch(_){} }
 },100);
 
 // Nav dots con IntersectionObserver
@@ -4255,8 +4499,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261010-0155"></script>
-<script src="ayuda.js?v=20261010-0155"></script>
+<script src="temporadas_menu.js?v=20261010-0205"></script>
+<script src="ayuda.js?v=20261010-0205"></script>
 </body>
 </html>
 
