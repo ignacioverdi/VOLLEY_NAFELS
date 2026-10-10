@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261010-0221"></script>
-<script src="selector_categoria.js?v=20261010-0221"></script>
-<script src="objetivos_config.js?v=20261010-0221"></script>
+<script src="categorias_club.js?v=20261010-0236"></script>
+<script src="selector_categoria.js?v=20261010-0236"></script>
+<script src="objetivos_config.js?v=20261010-0236"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -439,8 +439,11 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-ddall button{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
   border-radius:6px;color:#9AA8BA;font-family:inherit;font-size:11px;font-weight:700;padding:4px;cursor:pointer}
 .gpn-ddall button:hover{color:#E6EDF6;border-color:rgba(255,255,255,.25)}
+/* ── la fila de filtros, ahora en una sola linea ── */
+.gpn-flt .gpn-row{gap:8px}
+#jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261010-0221" onerror="void 0"></script>
+<script src="lang.js?v=20261010-0236" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -451,7 +454,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261010-0221"></script>
+<script src="datos_seguros.js?v=20261010-0236"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -464,13 +467,13 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261010-0221" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0221"></script>
-<script src="videos.js?v=20261010-0221" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261010-0236" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261010-0236"></script>
+<script src="videos.js?v=20261010-0236" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0221">
+<link rel="stylesheet" href="movil.css?v=20261010-0236">
 </head>
 <body>
 
@@ -507,6 +510,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
     <div style="font-size:10px;color:#475569;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px">
       <span>2 · LOS JUGADORES</span>
       <div style="flex:1;height:1px;background:rgba(255,255,255,.06)"></div>
+      <div id="jug-filtro"></div>
     </div>
     <div style="font-size:13px;color:#7C8A9E;line-height:1.5;margin-bottom:14px;max-width:112ch">
       Cada ficha abre en el fundamento donde más aparece y las otras están a un toque. Tocá una combinación
@@ -2052,7 +2056,10 @@ function gpnClips(num,tipo,cat,evFiltro){
   var out=[], ns=String(num);
   function push(cod,ev,orig,dest,gi,t){
     if(!t) return;
-    if(cat && cat!=='all' && cod!==cat) return;
+    if(cat && cat!=='all'){
+      if(typeof cat==='string'){ if(cod!==cat) return; }
+      else if(cat.length && cat.indexOf(cod)<0) return;
+    }
     if(evFiltro){
       if(typeof evFiltro==='string'){ if(ev!==evFiltro) return; }
       else if(evFiltro.length && evFiltro.indexOf(ev)<0) return;
@@ -2082,10 +2089,12 @@ function gpnVideo(num,tipo,cat,ev){
   if(!clips.length){ alert('No hay acciones con video para ese filtro.'); return; }
   gpVidDom();
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
-  gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(cat||'all')+(evTxt?('_'+evTxt.replace(/[^#+!\-\/=]/g,'')):'');
+  var catTxt=(!cat||cat==='all'||!cat.length)?'':(typeof cat==='string'?cat:cat.join('+'));
+  gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(catTxt||'all')+(evTxt?('_'+evTxt.replace(/[^#+!\-\/=]/g,'')):'');
   var ape=gpApellido(num)||('#'+num);
-  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(cat&&cat!=='all'?(' · '+cat):'')+(evTxt?(' · '+evTxt):'')+' — '+clips.length+' acciones';
+  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(catTxt?(' · '+catTxt):'')+(evTxt?(' · '+evTxt):'')+' — '+clips.length+' acciones';
   document.getElementById('gpVidOverlay').style.display='flex';
+  try{ gpnTiempos(); }catch(e){}
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; c._sel=true; });
   gpV.readonly=false;
   gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
@@ -2094,88 +2103,95 @@ function gpnVideo(num,tipo,cat,ev){
 }
 
 /* ── los filtros, con la misma escala que plan de partido ── */
-function gpnFiltros(cont,num,tipo,cats,escala,onPick){
-  var acc=gpnClips(num,tipo,'all',null);
-  var cuentaCat={},cuentaEv={};
-  acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
-  var estado={cat:'all',ev:[]};
-  var barra=document.createElement('div'); barra.className='gpn-flt';
-  var rowC=document.createElement('div'); rowC.className='gpn-row';
-  var rowE=document.createElement('div'); rowE.className='gpn-row';
-
-  cats.forEach(function(c){
-    var b=document.createElement('button'); b.type='button'; b.className='gpn-chip'; b.dataset.cat=c.k;
-    b.innerHTML=c.html+' <i class="gpn-n">'+(c.k==='all'?acc.length:(cuentaCat[c.k]||0))+'</i>';
-    b.onclick=function(e){ e.stopPropagation(); estado.cat=c.k;
-      [].forEach.call(rowC.querySelectorAll('button'),function(x){ x.classList.toggle('on',x.dataset.cat===estado.cat); });
-      onPick(estado); };
-    rowC.appendChild(b);
-  });
-  [].forEach.call(rowC.querySelectorAll('button'),function(x){ x.classList.toggle('on',x.dataset.cat==='all'); });
-
-  /* Varias valoraciones a la vez: en vez de botones sueltos, un desplegable
-     con casillas. Sin marcar nada valen todas. */
-  var lbl=document.createElement('span'); lbl.className='gpn-lbl'; lbl.textContent='Resultado';
+/* Un desplegable con casillas. Sirve igual para el tipo (combinacion o
+   potencia/flotado) que para la valoracion: sin nada marcado valen todas,
+   y asi las dos filas de botones sueltos pasan a dos botones. */
+function gpnDesplegable(opts){
+  var sel=[];
   var dd=document.createElement('div'); dd.className='gpn-dd';
   var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
   var menu=document.createElement('div'); menu.className='gpn-ddm';
-  var ETQ={}; escala.forEach(function(p){ ETQ[p[0]]=p[1]; });
-
   function texto(){
-    if(!estado.ev.length){ bt.innerHTML='Todas <i class="gpn-n">'+acc.length+'</i> <span class="car">\u25be</span>'; bt.classList.remove('act'); return; }
-    var n=gpnClips(num,tipo,estado.cat,estado.ev).length;
-    var sim=estado.ev.map(function(e){ return '<b style="color:'+GPN_EVCOL[e]+'">'+e+'</b>'; }).join(' ');
-    bt.innerHTML=sim+' <i class="gpn-n">'+n+'</i> <span class="car">\u25be</span>';
-    bt.classList.add('act');
+    if(!sel.length){ bt.innerHTML=opts.vacio+' <i class="gpn-n">'+opts.total()+'</i> <span class="car">\u25be</span>'; bt.classList.remove('act'); }
+    else { bt.innerHTML=sel.map(opts.chip).join(' ')+' <i class="gpn-n">'+opts.total(sel)+'</i> <span class="car">\u25be</span>'; bt.classList.add('act'); }
   }
-  escala.forEach(function(pz){
-    var ev=pz[0]; if(!cuentaEv[ev]) return;
-    var it=document.createElement('label'); it.className='gpn-ddi';
-    it.innerHTML='<input type="checkbox"><span class="ev" style="color:'+GPN_EVCOL[ev]+'">'+ev+'</span>'
-      +'<span>'+pz[1]+'</span><span class="nn">'+cuentaEv[ev]+'</span>';
-    it.querySelector('input').onchange=function(){
-      if(this.checked){ if(estado.ev.indexOf(ev)<0) estado.ev.push(ev); }
-      else { var i=estado.ev.indexOf(ev); if(i>=0) estado.ev.splice(i,1); }
-      texto(); onPick(estado);
+  opts.items.forEach(function(it){
+    var row=document.createElement('label'); row.className='gpn-ddi';
+    row.innerHTML='<input type="checkbox">'+it.html+'<span class="nn">'+it.n+'</span>';
+    row.querySelector('input').onchange=function(){
+      if(this.checked){ if(sel.indexOf(it.k)<0) sel.push(it.k); }
+      else { var i=sel.indexOf(it.k); if(i>=0) sel.splice(i,1); }
+      texto(); opts.onChange(sel);
     };
-    it.onclick=function(e){ e.stopPropagation(); };
-    menu.appendChild(it);
+    row.onclick=function(e){ e.stopPropagation(); };
+    row.dataset.k=it.k;
+    menu.appendChild(row);
   });
   var sep=document.createElement('div'); sep.className='gpn-ddsep'; menu.appendChild(sep);
-  var acc2=document.createElement('div'); acc2.className='gpn-ddall';
-  var bTodas=document.createElement('button'); bTodas.type='button'; bTodas.textContent='Todas';
-  var bNada=document.createElement('button'); bNada.type='button'; bNada.textContent='Limpiar';
+  var pie=document.createElement('div'); pie.className='gpn-ddall';
+  var b1=document.createElement('button'); b1.type='button'; b1.textContent='Todas';
+  var b2=document.createElement('button'); b2.type='button'; b2.textContent='Limpiar';
   function setAll(on){
-    estado.ev=[];
-    [].forEach.call(menu.querySelectorAll('input'),function(c,i){
-      c.checked=on; if(on){ var ev=c.parentElement.querySelector('.ev').textContent; estado.ev.push(ev); } });
-    if(on) estado.ev=estado.ev.slice();
-    texto(); onPick(estado);
+    sel=[];
+    [].forEach.call(menu.querySelectorAll('input'),function(c){
+      c.checked=on; if(on) sel.push(c.parentElement.dataset.k); });
+    texto(); opts.onChange(sel);
   }
-  bTodas.onclick=function(e){ e.stopPropagation(); setAll(true); };
-  bNada.onclick=function(e){ e.stopPropagation(); setAll(false); };
-  acc2.appendChild(bTodas); acc2.appendChild(bNada); menu.appendChild(acc2);
-
+  b1.onclick=function(e){ e.stopPropagation(); setAll(true); };
+  b2.onclick=function(e){ e.stopPropagation(); setAll(false); };
+  pie.appendChild(b1); pie.appendChild(b2); menu.appendChild(pie);
   bt.onclick=function(e){ e.stopPropagation();
     var ab=dd.classList.contains('open');
     [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');});
     if(!ab) dd.classList.add('open'); };
   if(!window.__gpnDDcerrar){ window.__gpnDDcerrar=1;
     document.addEventListener('click',function(){ [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');}); }); }
+  dd.appendChild(bt); dd.appendChild(menu); texto();
+  return {el:dd, sel:function(){return sel;}};
+}
 
-  dd.appendChild(bt); dd.appendChild(menu);
-  rowE.appendChild(lbl); rowE.appendChild(dd);
-  texto();
-  barra.appendChild(rowC); barra.appendChild(rowE);
+function gpnFiltros(cont,num,tipo,cats,escala,onPick){
+  var acc=gpnClips(num,tipo,'all',null);
+  var cuentaCat={},cuentaEv={};
+  acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
+  var estado={cat:[],ev:[]};
+  var barra=document.createElement('div'); barra.className='gpn-flt';
+  var fila=document.createElement('div'); fila.className='gpn-row';
+
+  var lblC=document.createElement('span'); lblC.className='gpn-lbl';
+  lblC.textContent=(tipo==='ataque')?'Combinación':'Tipo';
+  var ddC=gpnDesplegable({
+    vacio:'Todas',
+    total:function(s){ return gpnClips(num,tipo,(s&&s.length)?s:'all',estado.ev.length?estado.ev:null).length; },
+    chip:function(k){ return '<b style="color:#E6EDF6">'+k+'</b>'; },
+    items:cats.filter(function(c){return c.k!=='all';}).map(function(c){
+      return {k:c.k, n:cuentaCat[c.k]||0, html:'<span>'+c.html+'</span>'}; }),
+    onChange:function(s){ estado.cat=s.slice(); onPick(estado); }
+  });
+
+  var lblE=document.createElement('span'); lblE.className='gpn-lbl'; lblE.textContent='Resultado';
+  var ddE=gpnDesplegable({
+    vacio:'Todas',
+    total:function(s){ return gpnClips(num,tipo,estado.cat.length?estado.cat:'all',(s&&s.length)?s:null).length; },
+    chip:function(k){ return '<b style="color:'+GPN_EVCOL[k]+'">'+k+'</b>'; },
+    items:escala.filter(function(p){return cuentaEv[p[0]];}).map(function(p){
+      return {k:p[0], n:cuentaEv[p[0]],
+              html:'<span class="ev" style="color:'+GPN_EVCOL[p[0]]+'">'+p[0]+'</span><span>'+p[1]+'</span>'}; }),
+    onChange:function(s){ estado.ev=s.slice(); onPick(estado); }
+  });
+
+  fila.appendChild(lblC); fila.appendChild(ddC.el);
+  fila.appendChild(lblE); fila.appendChild(ddE.el);
+  barra.appendChild(fila);
   cont.appendChild(barra);
   return estado;
 }
 
 function gpnBotonVideo(cont,num,tipo,estado){
   var b=document.createElement('button'); b.type='button'; b.className='gpn-vbtn';
-  function txt(){ b.innerHTML='▶ Ver video — '+gpnClips(num,tipo,estado.cat,estado.ev).length+' acciones'; }
+  function txt(){ b.innerHTML='▶ Ver video — '+gpnClips(num,tipo,estado.cat.length?estado.cat:'all',estado.ev.length?estado.ev:null).length+' acciones'; }
   txt(); b._txt=txt;
-  b.onclick=function(e){ e.stopPropagation(); gpnVideo(num,tipo,estado.cat,estado.ev); };
+  b.onclick=function(e){ e.stopPropagation(); gpnVideo(num,tipo,estado.cat.length?estado.cat:'all',estado.ev.length?estado.ev:null); };
   cont.appendChild(b);
   return b;
 }
@@ -2258,7 +2274,7 @@ function gpnPanel(j,cont,tipo){
   btn=gpnBotonVideo(lado,num,tipo,estado);
 
   function dibujar(st){
-    var acc=gpnClips(num,tipo,st.cat,st.ev);
+    var acc=gpnClips(num,tipo,st.cat.length?st.cat:'all',st.ev.length?st.ev:null);
     if(!acc.length){ zona.innerHTML='<div class="gpn-vacio">Ninguna acción con ese filtro.</div>'; return; }
     var m=gpnMapa(acc,tipo), ocol;
     if(tipo==='ataque'){ ocol=gpnColores(Object.keys(m.orig).map(Number)); }
@@ -2488,6 +2504,106 @@ function gpnArmGrid(distObj,blqData,rot,sidx){
     h='<div class="gpn-armred">'+p+'<em>RED</em></div>'+h;
   }
   return h;
+}
+
+/* ══ QUE JUGADORES ENTRAN AL GAME PLAN ═══════════════════════════════
+   Son diez fichas y para un partido no hacen falta todas. Se eligen una
+   vez y queda guardado por rival en este navegador. */
+function gpnFiltroJugadores(cont){
+  if(!cont) return;
+  var cards=[].slice.call(document.querySelectorAll('#jug-grid .gpn-card'));
+  if(!cards.length) return;
+  var clave='vb_gp_jugsel_'+GP_RIVAL_SLUG;
+  var guardado=null;
+  try{ var s=localStorage.getItem(clave); if(s) guardado=JSON.parse(s); }catch(e){}
+  var items=cards.map(function(c){
+    var num=(c.id||'').replace('jug-','');
+    var dorsal=(c.querySelector('.gpn-chapa')||{}).textContent||'';
+    var nom=(c.querySelector('.gpn-nom')||{}).textContent||'';
+    return {card:c, k:dorsal, nom:nom};
+  });
+  function visible(k){ return !guardado || guardado.indexOf(k)>=0; }
+  function aplicar(){
+    var n=0;
+    items.forEach(function(it){ var v=visible(it.k); it.card.style.display=v?'':'none'; if(v) n++; });
+    bt.innerHTML='Jugadores <i class="gpn-n">'+n+' de '+items.length+'</i> <span class="car">▾</span>';
+    bt.classList.toggle('act', !!guardado && n<items.length);
+  }
+  function guardar(){
+    try{ if(guardado) localStorage.setItem(clave, JSON.stringify(guardado));
+         else localStorage.removeItem(clave); }catch(e){}
+  }
+  var dd=document.createElement('div'); dd.className='gpn-dd';
+  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+  var menu=document.createElement('div'); menu.className='gpn-ddm';
+  items.forEach(function(it){
+    var row=document.createElement('label'); row.className='gpn-ddi';
+    row.innerHTML='<input type="checkbox"'+(visible(it.k)?' checked':'')+'>'
+      +'<span class="ev" style="color:#F5A524">'+it.k+'</span><span>'+it.nom+'</span>';
+    row.onclick=function(e){ e.stopPropagation(); };
+    row.querySelector('input').onchange=function(){
+      if(!guardado) guardado=items.map(function(x){return x.k;});
+      if(this.checked){ if(guardado.indexOf(it.k)<0) guardado.push(it.k); }
+      else { var i=guardado.indexOf(it.k); if(i>=0) guardado.splice(i,1); }
+      guardar(); aplicar();
+    };
+    menu.appendChild(row);
+  });
+  var sep=document.createElement('div'); sep.className='gpn-ddsep'; menu.appendChild(sep);
+  var pie=document.createElement('div'); pie.className='gpn-ddall';
+  var b1=document.createElement('button'); b1.type='button'; b1.textContent='Todos';
+  var b2=document.createElement('button'); b2.type='button'; b2.textContent='Ninguno';
+  b1.onclick=function(e){ e.stopPropagation(); guardado=null;
+    [].forEach.call(menu.querySelectorAll('input'),function(c){c.checked=true;}); guardar(); aplicar(); };
+  b2.onclick=function(e){ e.stopPropagation(); guardado=[];
+    [].forEach.call(menu.querySelectorAll('input'),function(c){c.checked=false;}); guardar(); aplicar(); };
+  pie.appendChild(b1); pie.appendChild(b2); menu.appendChild(pie);
+  bt.onclick=function(e){ e.stopPropagation();
+    var ab=dd.classList.contains('open');
+    [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');});
+    if(!ab) dd.classList.add('open'); };
+  dd.appendChild(bt); dd.appendChild(menu);
+  cont.innerHTML=''; 
+  var lb=document.createElement('span'); lb.className='gpn-lbl'; lb.textContent='Mostrar';
+  cont.appendChild(lb); cont.appendChild(dd);
+  aplicar();
+}
+
+/* ══ CUANTO ANTES Y CUANTO DESPUES ═══════════════════════════════════
+   Los mismos dos campos que tiene plan de partido. gpV.PRE y gpV.POST ya
+   existian, pero no habia donde tocarlos: estaban fijos en 2 y 4. */
+function gpnTiempos(){
+  /* lo elegido la ultima vez vale siempre, esten o no puestos los campos */
+  try{
+    var a=parseInt(localStorage.getItem('vb_gp_vid_pre'),10); if(a>=0&&a<=30) gpV.PRE=a;
+    var b=parseInt(localStorage.getItem('vb_gp_vid_post'),10); if(b>=0&&b<=30) gpV.POST=b;
+  }catch(e){}
+  var fila=document.getElementById('gpVidPlay');
+  if(!fila) return;
+  var ya=document.getElementById('gpVidPre');
+  if(ya){ ya.value=gpV.PRE; var yb=document.getElementById('gpVidPost'); if(yb) yb.value=gpV.POST; return; }
+  fila=fila.parentElement;
+  var est='width:54px;background:#0d1520;border:1px solid #243044;color:#e2e8f0;border-radius:6px;padding:5px 6px;font-family:inherit;font-size:13px';
+  var w=document.createElement('span');
+  w.style.cssText='display:inline-flex;align-items:center;gap:10px;color:#7689a1;font-size:12px';
+  w.innerHTML='<label title="Segundos de video ANTES de la acción" style="display:inline-flex;align-items:center;gap:5px">'
+    +'Antes <input id="gpVidPre" type="number" min="0" max="30" value="'+gpV.PRE+'" style="'+est+'"><span style="font-size:9px;letter-spacing:.5px">seg</span></label>'
+    +'<label title="Segundos de video DESPUÉS de la acción" style="display:inline-flex;align-items:center;gap:5px">'
+    +'Después <input id="gpVidPost" type="number" min="0" max="30" value="'+gpV.POST+'" style="'+est+'"><span style="font-size:9px;letter-spacing:.5px">seg</span></label>';
+  var now=document.getElementById('gpVidNow');
+  if(now) fila.insertBefore(w, now); else fila.appendChild(w);
+  function enganchar(id, campo, clave, def){
+    var i=document.getElementById(id);
+    i.addEventListener('change',function(){
+      var v=parseInt(this.value,10); if(isNaN(v)||v<0) v=def; if(v>30) v=30;
+      this.value=v; gpV[campo]=v;
+      try{ localStorage.setItem(clave,String(v)); }catch(e){}
+      /* se aplica al toque sobre el clip que esta sonando */
+      if(gpV.idx>=0 && gpV.playing) gpVidPlayAt(gpV.idx);
+    });
+  }
+  enganchar('gpVidPre','PRE','vb_gp_vid_pre',2);
+  enganchar('gpVidPost','POST','vb_gp_vid_post',4);
 }
 /* La franja de ancho completo paso a tarjeta en grilla. La version de antes
    queda como renderJugadorViejo por si hay que volver. */
@@ -2739,6 +2855,8 @@ setTimeout(function(){
   }
   try{ gpnPlan(document.getElementById('plan-content')); }
   catch(e){ try{console.warn('[gpn] plan',e);}catch(_){} }
+  try{ gpnFiltroJugadores(document.getElementById('jug-filtro')); }
+  catch(e){ try{console.warn('[gpn] filtro jugadores',e);}catch(_){} }
 },100);
 
 // Nav dots con IntersectionObserver
@@ -4629,8 +4747,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261010-0221"></script>
-<script src="ayuda.js?v=20261010-0221"></script>
+<script src="temporadas_menu.js?v=20261010-0236"></script>
+<script src="ayuda.js?v=20261010-0236"></script>
 </body>
 </html>
 
