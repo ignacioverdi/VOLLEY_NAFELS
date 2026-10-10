@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261010-0205"></script>
-<script src="selector_categoria.js?v=20261010-0205"></script>
-<script src="objetivos_config.js?v=20261010-0205"></script>
+<script src="categorias_club.js?v=20261010-0216"></script>
+<script src="selector_categoria.js?v=20261010-0216"></script>
+<script src="objetivos_config.js?v=20261010-0216"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -404,8 +404,43 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-plan-h{display:flex;align-items:baseline;gap:7px;margin-bottom:5px;font-size:15px}
 .gpn-plan-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#5E6B7D;margin-bottom:6px}
 .gpn-plan-dest{background:rgba(240,86,106,.07);border:1px solid rgba(240,86,106,.25);border-radius:12px;padding:13px 15px}
+/* ── la cancha del armador, compacta como plan de partido ── */
+.gpn-armcourt{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.gpn-ac{height:48px;border-radius:5px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:1px;background:#171826;border:1px solid rgba(255,255,255,.07);position:relative}
+.gpn-ac.has{cursor:pointer}
+.gpn-ac .gpn-acz{position:absolute;top:3px;left:6px;font-size:9px;font-weight:800;color:#3D4857;letter-spacing:.04em}
+.gpn-ac b{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:.9;color:#f1f5f9;font-weight:400}
+.gpn-ac i{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:600;line-height:1;
+  font-style:normal;color:#cbd5e1;white-space:nowrap}
+.gpn-armred{display:flex;align-items:center;gap:5px;margin-bottom:4px;padding:0 2px}
+.gpn-armred em{font-family:'Barlow Condensed',sans-serif;font-style:normal;font-size:8px;font-weight:800;
+  letter-spacing:1.4px;color:rgba(240,180,41,.75);margin-left:auto}
+.gpn-bp{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.08)}
+/* ── el desplegable de valoraciones (varias a la vez) ── */
+.gpn-dd{position:relative;display:inline-block}
+.gpn-ddb{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.09);border-radius:7px;padding:4px 10px;font-size:12px;font-weight:600;
+  color:#C6D2E0;cursor:pointer;font-family:inherit;line-height:1.3;min-height:28px}
+.gpn-ddb:hover{border-color:rgba(255,255,255,.22)}
+.gpn-ddb.act{background:rgba(245,165,36,.16);border-color:rgba(245,165,36,.5);color:#F5A524}
+.gpn-ddb .car{font-size:9px;opacity:.7}
+.gpn-ddm{display:none;position:absolute;top:100%;left:0;margin-top:4px;z-index:60;min-width:205px;
+  background:#11161f;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:5px;
+  box-shadow:0 10px 30px rgba(0,0,0,.55)}
+.gpn-dd.open .gpn-ddm{display:block}
+.gpn-ddi{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13px;color:#C6D2E0}
+.gpn-ddi:hover{background:rgba(255,255,255,.06)}
+.gpn-ddi input{accent-color:#F5A524;cursor:pointer;flex:none;width:14px;height:14px}
+.gpn-ddi .ev{font-family:Anton,sans-serif;font-size:13px}
+.gpn-ddi .nn{margin-left:auto;font-family:Anton,sans-serif;font-size:12px;color:#5E6B7D}
+.gpn-ddsep{height:1px;background:rgba(255,255,255,.08);margin:4px 2px}
+.gpn-ddall{display:flex;gap:6px;padding:4px 6px 6px}
+.gpn-ddall button{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;color:#9AA8BA;font-family:inherit;font-size:11px;font-weight:700;padding:4px;cursor:pointer}
+.gpn-ddall button:hover{color:#E6EDF6;border-color:rgba(255,255,255,.25)}
 </style>
-<script src="lang.js?v=20261010-0205" onerror="void 0"></script>
+<script src="lang.js?v=20261010-0216" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -416,7 +451,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261010-0205"></script>
+<script src="datos_seguros.js?v=20261010-0216"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -429,13 +464,13 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261010-0205" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0205"></script>
-<script src="videos.js?v=20261010-0205" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261010-0216" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261010-0216"></script>
+<script src="videos.js?v=20261010-0216" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0205">
+<link rel="stylesheet" href="movil.css?v=20261010-0216">
 </head>
 <body>
 
@@ -2018,7 +2053,10 @@ function gpnClips(num,tipo,cat,evFiltro){
   function push(cod,ev,orig,dest,gi,t){
     if(!t) return;
     if(cat && cat!=='all' && cod!==cat) return;
-    if(evFiltro && ev!==evFiltro) return;
+    if(evFiltro){
+      if(typeof evFiltro==='string'){ if(ev!==evFiltro) return; }
+      else if(evFiltro.length && evFiltro.indexOf(ev)<0) return;
+    }
     var mc=M[gi]||null;
     out.push({code:mc?(mc.code||''):'',t_start:Math.max(0,t-6),t_atk:t,ev:ev,combo:cod,
               orig:orig,dest:dest,date:mc?mc.date:'',rival:mc?mc.rival:'',num:num});
@@ -2040,12 +2078,13 @@ function gpnClips(num,tipo,cat,evFiltro){
 /* abre el reproductor que ya existe en esta pantalla */
 function gpnVideo(num,tipo,cat,ev){
   var clips=gpnClips(num,tipo,cat,ev);
+  var evTxt=(!ev||!ev.length)?'':(typeof ev==='string'?ev:ev.join(' '));
   if(!clips.length){ alert('No hay acciones con video para ese filtro.'); return; }
   gpVidDom();
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
-  gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(cat||'all')+(ev?('_'+ev):'');
+  gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(cat||'all')+(evTxt?('_'+evTxt.replace(/[^#+!\-\/=]/g,'')):'');
   var ape=gpApellido(num)||('#'+num);
-  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(cat&&cat!=='all'?(' · '+cat):'')+(ev?(' · '+ev):'')+' — '+clips.length+' acciones';
+  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(cat&&cat!=='all'?(' · '+cat):'')+(evTxt?(' · '+evTxt):'')+' — '+clips.length+' acciones';
   document.getElementById('gpVidOverlay').style.display='flex';
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; c._sel=true; });
   gpV.readonly=false;
@@ -2059,36 +2098,76 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick){
   var acc=gpnClips(num,tipo,'all',null);
   var cuentaCat={},cuentaEv={};
   acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
-  var estado={cat:'all',ev:null};
+  var estado={cat:'all',ev:[]};
   var barra=document.createElement('div'); barra.className='gpn-flt';
   var rowC=document.createElement('div'); rowC.className='gpn-row';
   var rowE=document.createElement('div'); rowE.className='gpn-row';
-  var lblE=document.createElement('span'); lblE.className='gpn-lbl'; lblE.textContent='Resultado';
-  rowE.appendChild(lblE);
-  function pinta(){
-    [].forEach.call(rowC.querySelectorAll('button'),function(b){ b.classList.toggle('on',b.dataset.cat===estado.cat); });
-    [].forEach.call(rowE.querySelectorAll('button'),function(b){ b.classList.toggle('on',(b.dataset.ev||null)===estado.ev); });
-  }
+
   cats.forEach(function(c){
     var b=document.createElement('button'); b.type='button'; b.className='gpn-chip'; b.dataset.cat=c.k;
     b.innerHTML=c.html+' <i class="gpn-n">'+(c.k==='all'?acc.length:(cuentaCat[c.k]||0))+'</i>';
-    b.onclick=function(e){ e.stopPropagation(); estado.cat=c.k; pinta(); onPick(estado); };
+    b.onclick=function(e){ e.stopPropagation(); estado.cat=c.k;
+      [].forEach.call(rowC.querySelectorAll('button'),function(x){ x.classList.toggle('on',x.dataset.cat===estado.cat); });
+      onPick(estado); };
     rowC.appendChild(b);
   });
-  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-chip ev'; bt.dataset.ev='';
-  bt.innerHTML='Todas <i class="gpn-n">'+acc.length+'</i>';
-  bt.onclick=function(e){ e.stopPropagation(); estado.ev=null; pinta(); onPick(estado); };
-  rowE.appendChild(bt);
-  escala.forEach(function(p){
-    if(!cuentaEv[p[0]]) return;
-    var b=document.createElement('button'); b.type='button'; b.className='gpn-chip ev'; b.dataset.ev=p[0];
-    b.innerHTML=p[1]+' <b style="color:'+GPN_EVCOL[p[0]]+'">'+p[0]+'</b> <i class="gpn-n">'+cuentaEv[p[0]]+'</i>';
-    b.onclick=function(e){ e.stopPropagation(); estado.ev=p[0]; pinta(); onPick(estado); };
-    rowE.appendChild(b);
+  [].forEach.call(rowC.querySelectorAll('button'),function(x){ x.classList.toggle('on',x.dataset.cat==='all'); });
+
+  /* Varias valoraciones a la vez: en vez de botones sueltos, un desplegable
+     con casillas. Sin marcar nada valen todas. */
+  var lbl=document.createElement('span'); lbl.className='gpn-lbl'; lbl.textContent='Resultado';
+  var dd=document.createElement('div'); dd.className='gpn-dd';
+  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+  var menu=document.createElement('div'); menu.className='gpn-ddm';
+  var ETQ={}; escala.forEach(function(p){ ETQ[p[0]]=p[1]; });
+
+  function texto(){
+    if(!estado.ev.length){ bt.innerHTML='Todas <i class="gpn-n">'+acc.length+'</i> <span class="car">\u25be</span>'; bt.classList.remove('act'); return; }
+    var n=gpnClips(num,tipo,estado.cat,estado.ev).length;
+    var sim=estado.ev.map(function(e){ return '<b style="color:'+GPN_EVCOL[e]+'">'+e+'</b>'; }).join(' ');
+    bt.innerHTML=sim+' <i class="gpn-n">'+n+'</i> <span class="car">\u25be</span>';
+    bt.classList.add('act');
+  }
+  escala.forEach(function(pz){
+    var ev=pz[0]; if(!cuentaEv[ev]) return;
+    var it=document.createElement('label'); it.className='gpn-ddi';
+    it.innerHTML='<input type="checkbox"><span class="ev" style="color:'+GPN_EVCOL[ev]+'">'+ev+'</span>'
+      +'<span>'+pz[1]+'</span><span class="nn">'+cuentaEv[ev]+'</span>';
+    it.querySelector('input').onchange=function(){
+      if(this.checked){ if(estado.ev.indexOf(ev)<0) estado.ev.push(ev); }
+      else { var i=estado.ev.indexOf(ev); if(i>=0) estado.ev.splice(i,1); }
+      texto(); onPick(estado);
+    };
+    it.onclick=function(e){ e.stopPropagation(); };
+    menu.appendChild(it);
   });
+  var sep=document.createElement('div'); sep.className='gpn-ddsep'; menu.appendChild(sep);
+  var acc2=document.createElement('div'); acc2.className='gpn-ddall';
+  var bTodas=document.createElement('button'); bTodas.type='button'; bTodas.textContent='Todas';
+  var bNada=document.createElement('button'); bNada.type='button'; bNada.textContent='Limpiar';
+  function setAll(on){
+    estado.ev=[];
+    [].forEach.call(menu.querySelectorAll('input'),function(c,i){
+      c.checked=on; if(on){ var ev=c.parentElement.querySelector('.ev').textContent; estado.ev.push(ev); } });
+    if(on) estado.ev=estado.ev.slice();
+    texto(); onPick(estado);
+  }
+  bTodas.onclick=function(e){ e.stopPropagation(); setAll(true); };
+  bNada.onclick=function(e){ e.stopPropagation(); setAll(false); };
+  acc2.appendChild(bTodas); acc2.appendChild(bNada); menu.appendChild(acc2);
+
+  bt.onclick=function(e){ e.stopPropagation();
+    var ab=dd.classList.contains('open');
+    [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');});
+    if(!ab) dd.classList.add('open'); };
+  if(!window.__gpnDDcerrar){ window.__gpnDDcerrar=1;
+    document.addEventListener('click',function(){ [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');}); }); }
+
+  dd.appendChild(bt); dd.appendChild(menu);
+  rowE.appendChild(lbl); rowE.appendChild(dd);
+  texto();
   barra.appendChild(rowC); barra.appendChild(rowE);
   cont.appendChild(barra);
-  pinta();
   return estado;
 }
 
@@ -2367,6 +2446,48 @@ function gpnPlan(cont){
     +'<div class="gpn-plan-c"><div class="gpn-plan-t">Cómo atacan ellos<span>un color por zona de origen</span></div>'+h1+'</div>'
     +'<div class="gpn-plan-c"><div class="gpn-plan-t">A quién sacarle<span>un color por tipo de saque</span></div>'+h2+'</div>'
     +'</div>';
+}
+
+/* ══ LA CANCHA DEL ARMADOR, COMO EN PLAN DE PARTIDO ═══════════════════
+   Era un SVG con viewBox 200x150 estirado al ancho de la celda: 490 px
+   de ancho, y las zonas vacias ocupaban lo mismo que las que importan.
+   Plan de partido lo resuelve con celdas de alto fijo —48 px— y ahi
+   entran las seis rotaciones sin scrollear. Mismos colores por zona
+   (ARM_ZCOL), mismo relleno segun el %, y el mismo renglon: pelotas
+   arriba, abajo % distribucion · % punto. */
+var GPN_ARMZ=['4','3','2','7','8','9'];
+var GPN_ARM_ZCOL={'4':'245,158,11','3':'168,85,247','2':'59,130,246',
+                  '7':'20,184,166','8':'6,182,212','9':'236,72,153'};
+function gpnArmGrid(distObj,blqData,rot,sidx){
+  var dist=(distObj&&distObj.dist)||{};
+  var h='<div class="gpn-armcourt">';
+  GPN_ARMZ.forEach(function(z){
+    var info=dist[z]||dist[+z];
+    var v=info?info.tot:0, pct=info?info.pct:0, kp=info?info.pct_p:0;
+    var rgb=GPN_ARM_ZCOL[z];
+    if(v>0){
+      var op=Math.max(0.18, pct/100*0.6+0.18).toFixed(2);
+      h+='<div class="gpn-ac has" style="background:rgba('+rgb+','+op+');border-color:rgba('+rgb+',.8)"'
+       + (typeof rot!=='undefined' ? ' ondblclick="gpOpenVideo('+rot+','+z+','+(sidx||0)+')" title="Doble clic: ver el video de estos ataques"' : '')
+       + '><span class="gpn-acz" style="color:rgba('+rgb+',.95)">'+z+'</span>'
+       + '<b>'+v+'</b><i>'+pct+'% · '+kp+'%</i></div>';
+    } else {
+      h+='<div class="gpn-ac"><span class="gpn-acz">'+z+'</span></div>';
+    }
+  });
+  h+='</div>';
+  /* los puntos del bloqueo elegido, arriba de la red, como estaban */
+  if(blqData){
+    var bc={'1BLQ':'#22c55e','2BLQ':'#818cf8','CIERRE':'#f97316','LECTURA':'#06b6d4',
+            'CUERNO':'#a855f7','6-5':'#f59e0b','6-1':'#f59e0b'};
+    var p='';
+    ['izq','cen','der'].forEach(function(k){
+      var val=blqData[k];
+      p+='<span class="gpn-bp" style="'+(val?('background:'+(bc[val]||'#94a3b8')):'')+'"></span>';
+    });
+    h='<div class="gpn-armred">'+p+'<em>RED</em></div>'+h;
+  }
+  return h;
 }
 /* La franja de ancho completo paso a tarjeta en grilla. La version de antes
    queda como renderJugadorViejo por si hay que volver. */
@@ -3167,7 +3288,15 @@ function renderArmador(){
         var rh=document.createElement('div');
         rh.style.cssText='padding:7px 11px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer';
         rh.title='Ver la distribución de esta rotación en side-out y en transición';
-        rh.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:17px;color:'+color+'">'+key+'</div><div style="display:flex;align-items:baseline;gap:6px"><div style="font-size:8px;color:#475569">'+dd.total+' acc</div><div style="font-size:8px;color:'+color+';opacity:.75;letter-spacing:.5px">SO/TR &#9656;</div></div>';
+        /* encabezado como el de plan de partido: Rotacion PN a la izquierda y
+           a la derecha cuantos armados y con que eficacia. Los tres numeros
+           que estaban en una fila aparte abajo ahora viven aca. */
+        var _ec=dd.eff>=50?'#8FDCF8':dd.eff>=25?'#fbbf24':dd.eff>=0?'#f97316':'#ef4444';
+        rh.innerHTML='<b style="font-family:Bebas Neue,sans-serif;font-size:19px;letter-spacing:.03em;color:'+color+'">Rotaci\u00f3n '+key+'</b>'
+          +'<div style="display:flex;align-items:baseline;gap:9px;margin-left:auto">'
+          +'<span style="font-size:12px;color:#5b6474">'+dd.total+' armados</span>'
+          +(dd.total?('<span style="font-size:12px;color:'+_ec+'">'+dd.eff+'% ef</span>'):'')
+          +'<span style="font-size:9px;color:'+color+';opacity:.7;letter-spacing:.5px">SO/TR &#9656;</span></div>';
         /* clic en el encabezado: abre abrirModalArmador(), que estaba
            escrita y nunca se llamaba. Va solo en el encabezado para no
            pisar los selectores de bloqueo ni la nota de abajo. */
@@ -3188,9 +3317,9 @@ function renderArmador(){
 
            Se le pone un techo y queda centrada. El dibujo no pierde nada:
            el viewBox es 200x150 y escala solo. */
-        cvW.style.cssText='padding:5px;background:rgba(0,0,0,.2);text-align:center';
+        cvW.style.cssText='padding:7px;background:rgba(0,0,0,.2)';
         cvW.classList.add('gp-cancha-arm');
-        cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos,setterIdx);
+        cvW.innerHTML=gpnArmGrid(dd,blqState[key],pos,setterIdx);
         card.appendChild(cvW);
         var blqRow=document.createElement('div');
         blqRow.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(129,140,248,.08);border-top:1px solid rgba(129,140,248,.12)';
@@ -3203,7 +3332,7 @@ function renderArmador(){
           sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:4px 2px;width:100%;cursor:pointer;text-align:center;text-align-last:center';
           var BLQ_OPTS=[{v:'',l:'— Sin definir —'},{v:'1BLQ',l:'\u261d Opción 1'},{v:'2BLQ',l:'\u270c Opción 2'},{v:'CIERRE',l:'\u270a Colgado'},{v:'LECTURA',l:'\ud83d\udd90 Lectura'},{v:'CUERNO',l:'\ud83e\udd18 Punta y Punta'},{v:'6-5',l:'6-5'},{v:'6-1',l:'6-1'}];
           BLQ_OPTS.forEach(function(op){ var o=document.createElement('option');o.value=op.v;o.textContent=op.l; if(op.v===blqState[key][side.k])o.selected=true; sel.appendChild(o); });
-          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpCourtSVG(dd,blqState[key],pos,setterIdx); });
+          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpnArmGrid(dd,blqState[key],pos,setterIdx); });
           col2.appendChild(sl); col2.appendChild(sel); blqRow.appendChild(col2);
         });
         card.appendChild(blqRow);
@@ -3226,7 +3355,8 @@ function renderArmador(){
           cs.innerHTML='<div style="font-family:Bebas Neue,sans-serif;font-size:13px;color:'+st.c+'">'+st.v+'</div><div style="font-size:6px;color:#475569;letter-spacing:.5px;text-transform:uppercase">'+st.l+'</div>';
           stRow.appendChild(cs);
         });
-        card.appendChild(stRow);
+        /* la fila EFF/TOT/#% se fue al encabezado: ocupaba una franja entera
+           por rotacion para repetir numeros que ya estan arriba. */
         rotGrid.appendChild(card);
       });
     }
@@ -4499,8 +4629,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261010-0205"></script>
-<script src="ayuda.js?v=20261010-0205"></script>
+<script src="temporadas_menu.js?v=20261010-0216"></script>
+<script src="ayuda.js?v=20261010-0216"></script>
 </body>
 </html>
 
