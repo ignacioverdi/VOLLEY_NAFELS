@@ -698,6 +698,16 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* ══ GAME PLAN Y DETALLE POR ACCIONES · 10-10-2026 ══════════════
+       La pestaña que antes decia "Plan de Partido" quedaba al lado del
+       Game Plan y se confundian: ahora dice "Detalle por acciones".
+       Estas cuatro frases las dibuja el JavaScript -el hub y la pantalla
+       del jugador-, asi que van aca y no en el diccionario de claves.
+       La de {0} es una plantilla: el nombre del rival se deja como esta. */
+    "Detalle por acciones": { en:"Action by action", de:"Aktion für Aktion" },
+    "Todas mis acciones, zona por zona": { en:"All my actions, zone by zone", de:"Alle meine Aktionen, Zone für Zone" },
+    "Cómo juega el próximo rival": { en:"How the next opponent plays", de:"Wie der nächste Gegner spielt" },
+    "Cómo juega {0}, el próximo rival": { en:"How {0} plays, the next opponent", de:"Wie {0} spielt, der nächste Gegner" },
     /* ══ PANTALLA DE ACTIVIDAD · 05-10-2026 ════════════════════════════════
        "Quién entra y qué mira". Van acá arriba, igual que el bloque de abajo:
        si alguna de estas frases ya existiera más abajo, gana la de abajo. */
