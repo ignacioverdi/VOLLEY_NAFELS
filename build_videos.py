@@ -12,7 +12,7 @@ Genera:
 
 Subir ambos al repo junto al game_plan.html y el index.html.
 """
-import sys, json, datetime
+import sys, json, datetime, os
 from openpyxl import load_workbook
 
 def slugify(name):
@@ -71,6 +71,20 @@ def build_fixture(wb):
     if not proximo and partidos:
         proximo = partidos[-1]  # si ya pasaron todos, el último
     data = {'proximo':proximo,'fixture':partidos}
+    # ── EL CALENDARIO MANDA, NO EL EXCEL ─────────────────────────────────
+    # Antes esto PISABA proximo_rival.js en cada vuelta con la solapa
+    # FIXTURE del Excel. Si el Excel quedaba viejo -y queda viejo solo- la
+    # app anunciaba un rival de hace meses, aunque el calendario estuviera
+    # perfecto. Peor: cuando ya se habian jugado todos los partidos del
+    # Excel, tomaba el ULTIMO, o sea una fecha pasada.
+    #
+    # Ahora el proximo rival sale del CALENDARIO de la app: fixture_auto.js
+    # lo lee en cada pantalla. Este archivo quedo solo como red de
+    # emergencia para cuando no hay senal, asi que no se vuelve a escribir
+    # si ya existe: se respeta lo que haya.
+    if os.path.exists('proximo_rival.js'):
+        print('  proximo_rival.js: lo dejo como esta (manda el calendario de la app)')
+        return proximo
     with open('proximo_rival.js','w',encoding='utf-8') as f:
         f.write('window.FIXTURE_DATA = ' + json.dumps(data, ensure_ascii=False) + ';\n')
     if proximo:

@@ -303,7 +303,11 @@ function vbRanking(t,lang){
 }
 
 function vbNextRival(lang){
-  var f=DATA.fixture&&DATA.fixture.proximo;
+  /* window.FIXTURE_DATA es el proximo rival del CALENDARIO (fixture_auto.js);
+     DATA.fixture es el archivo, que es la red de emergencia. Manda el
+     calendario, que es lo que esta al dia. */
+  var _FX=(window.FIXTURE_DATA&&window.FIXTURE_DATA.proximo)?window.FIXTURE_DATA:DATA.fixture;
+  var f=_FX&&_FX.proximo;
   if(!f)return {es:'No tengo el próximo rival cargado todavía.',en:'No next rival loaded yet.',de:'Noch kein nächster Gegner geladen.'}[lang];
   var c=f.cond||'';
   return {es:'📅 Próximo partido: vs '+f.rival+' ('+c+'), el '+f.fecha+'.\nPara prepararlo, entrá a Scouting Rival y al Game Plan de '+f.rival+'.',
