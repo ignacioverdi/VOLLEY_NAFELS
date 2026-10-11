@@ -1,0 +1,171 @@
+================================================================================
+  REDISEÑO DE LA APP — DIAGNOSTICO MEDIDO
+  10/10/2026 · antes de tocar un solo archivo
+================================================================================
+
+COMO LO MEDI
+  Levante una copia entera de la app en un servidor local, con tus .dvw
+  reprocesados, y la recorri con un navegador de verdad: las 68 pantallas,
+  dos veces, en telefono (432 px) y en escritorio (1440 px). De cada una
+  anote desborde, errores, tipografias realmente pintadas, tamaños de texto,
+  tamaño de los botones y tiempo de carga.
+  No es opinion. Son mediciones, y abajo estan los numeros.
+
+
+--------------------------------------------------------------------------------
+LO PRIMERO: LO QUE *NO* ESTA ROTO
+--------------------------------------------------------------------------------
+  · CERO pantallas desbordan a lo ancho. Ni en telefono ni en escritorio.
+    Las 68 entran. Eso es mucho mas de lo que tiene la mayoria de las apps
+    hechas pagina por pagina, y es merito de movil.css.
+  · CERO pantallas no cargan.
+  · La app ya comparte el fondo con la web comercial: volley-stats.com declara
+    theme-color #07080F, que es exactamente el negro de la app.
+    O sea: la distancia entre los dos productos es MUCHO menor de lo que
+    parece. No hay que rehacer la app para que se parezcan.
+
+  Esto importa porque el plan que te pasaron arranca de la premisa contraria
+  (que hay que auditar y rehacer todo). La medicion dice otra cosa.
+
+
+--------------------------------------------------------------------------------
+LOS CUATRO PROBLEMAS REALES, EN ORDEN DE IMPACTO
+--------------------------------------------------------------------------------
+
+1 · DIEZ TIPOGRAFIAS DISTINTAS CONVIVIENDO
+    Contadas sobre texto realmente pintado en pantalla:
+
+        Barlow Condensed   2378 usos
+        Inter               380
+        system-ui           311   <- elementos sin tipografia asignada
+        Barlow              276
+        Bebas Neue          228
+        Archivo             181
+        Rajdhani            101
+        JetBrains Mono       67
+        Bricolage Grotesque  59
+        ui-monospace         35   <- sin asignar
+
+    Ese es EL problema de identidad. No es que falte diseño: es que hay diez
+    voces hablando al mismo tiempo. Y 346 usos ni siquiera tienen tipografia
+    puesta: usan la del sistema, que es distinta en Windows, en iPhone y en
+    Android. La misma pantalla no se ve igual en dos telefonos del plantel.
+
+2 · TEXTO POR DEBAJO DE 11 px EN 41 PANTALLAS (43 en escritorio)
+    Ocho o mas casos por pantalla en Analisis, Armadores, Calendario,
+    Cortes, Dashboard, Baggerone. Son las pantallas de tablas, justo donde
+    el entrenador mira numeros. 11 px en un telefono al sol en un gimnasio
+    no se lee.
+
+3 · 62 PANTALLAS CON BOTONES DE MENOS DE 32 px
+    El minimo recomendado para el dedo es 44. Hasta seis botones chicos por
+    pantalla. En el banco, con la mano apurada, eso es un toque fallado.
+
+4 · 242 EMOJIS HACIENDO DE ICONOS, EN 44 PANTALLAS
+    Equipo (41), Calendario masculino (27), Dashboard (23), Analisis (16).
+    El emoji lo dibuja el sistema operativo, no vos: el mismo 🏐 es distinto
+    en Windows, en iPhone y en Android. En un producto que le vendes a clubes,
+    es lo que mas rapido lo delata como casero.
+
+  Y uno mas, de velocidad: Dashboard tarda 3,9 s en quedar quieto. Cortes,
+  Plan de partido y Jugador rondan los 3 s. El resto esta bien.
+
+
+--------------------------------------------------------------------------------
+LA REGLA QUE EL PLAN QUE TE PASARON NO PODIA SABER
+--------------------------------------------------------------------------------
+  Dice: "usa el rojo para destacar informacion importante".
+  En esta app el rojo YA significa ERROR. Y lo medi:
+
+      rojo de marca   #E8192C
+      rojo de error   #EF4444   (el que ya usa la app)
+      distancia en OKLab, vision normal:  4,9
+      (por debajo de 15 el ojo no los separa; para daltonismo, 4,2)
+
+  Son el mismo rojo para el ojo humano. Si el rojo de marca entra adentro de
+  un grafico, una cancha o una tabla, el entrenador va a leer "error" donde
+  dice "importante". El rojo de marca va ALREDEDOR del dato — encabezados,
+  botones de accion, bordes activos — nunca adentro.
+  Es la misma conclusion a la que llegamos con los colores del sponsor
+  (ver COLORES_SPONSOR.txt). La regla ya estaba escrita; ahora aplica igual
+  para el rojo propio.
+
+
+--------------------------------------------------------------------------------
+DIRECCION: QUE CAMBIA Y QUE NO
+--------------------------------------------------------------------------------
+  ROJO            #E8192C, el que ya tenes (143 apariciones en el codigo y
+                  todas tus placas publicadas). El logo nuevo hay que bajarlo
+                  a este valor, no al reves.
+  FONDO           #07080F, el que ya comparten la app y la web.
+  TEXTO           blanco roto para titulos, gris medio para secundario.
+
+  TIPOGRAFIA — aca NO estoy de acuerdo con el plan que te pasaron.
+                  Propone Inter / Manrope / Geist. Bebas Neue + Barlow
+                  Condensed ES el lenguaje suizo-deportivo que el mismo plan
+                  pide; cambiarlo a Inter te deja igual a cualquier tablero
+                  SaaS. Lo que hay que hacer es REDUCIR, no reemplazar:
+
+                      Bebas Neue        titulos y numeros grandes
+                      Barlow Condensed  todo lo demas de interfaz
+                      JetBrains Mono    solo numeros en tablas densas
+
+                  Las otras siete (Inter, Archivo, Rajdhani, Bricolage,
+                  Barlow normal, system-ui, ui-monospace) salen.
+                  De diez voces a tres.
+
+  COLOR DEL DATO  intocable. Verde bueno, rojo error, naranja negativo,
+                  violeta bloqueo. Eso es lectura, no estetica.
+
+
+--------------------------------------------------------------------------------
+COMO SE HACE SIN ROMPER NADA
+--------------------------------------------------------------------------------
+  Las 68 paginas tienen su propio <style> adentro. 86.835 lineas de HTML.
+  Armar "un sistema de componentes" pagina por pagina es reescribir la app.
+  No se hace asi.
+
+  Pero el riel ya existe y ya esta probado: movil.css se carga ULTIMO en
+  todas las paginas y usa !important justamente para poder corregirlas desde
+  afuera sin tocarlas. Un segundo archivo en ese mismo riel — marca.css —
+  cambia tipografia, tamaños minimos y areas de toque en las 68 pantallas
+  de una, sin abrir una sola pagina.
+
+  Y se revierte borrando una linea. Riesgo real: casi cero.
+
+
+--------------------------------------------------------------------------------
+EL ORDEN QUE PROPONGO
+--------------------------------------------------------------------------------
+  PASO 1  marca.css        de diez tipografias a tres · piso de 12 px en el
+                           texto chico · piso de 40 px en los botones.
+                           68 pantallas. Cero paginas tocadas. Reversible.
+                           -> antes y despues filmado, vos decidis.
+
+  PASO 2  los iconos       un set propio en SVG que reemplace los 242 emojis.
+                           Empieza por la portada y Equipo, que son 82 de los
+                           242. Aca si hay que tocar paginas, de a una.
+
+  PASO 3  la portada       centro de operaciones: encabezado compacto, el
+                           proximo partido con sus accesos (plan, scouting,
+                           rotaciones), herramientas agrupadas por para-que
+                           en vez de una lista larga. Se arma en copia aparte
+                           y se compara filmada contra la actual.
+
+  PASO 4  las tablas       Analisis, Dashboard, Armadores: jerarquia, tamaño
+                           de numero, cabeceras. Es donde esta el valor del
+                           producto y donde hoy esta el texto mas chico.
+
+  PASO 5  idioma           lo de IDIOMA_PENDIENTE.txt. Barato y muy visible.
+
+  Los pasos 1, 2 y 5 no tocan logica, ni datos, ni cuentas, ni permisos.
+  El 3 y el 4 se arman en copia y se comparan antes de instalar.
+
+
+--------------------------------------------------------------------------------
+LO QUE NO VOY A HACER
+--------------------------------------------------------------------------------
+  · No reescribir pantallas que funcionan.
+  · No tocar firebase.js, los permisos, el scouteo en vivo ni las cuentas.
+  · No cambiar el significado de ningun color de dato.
+  · No instalar nada sin que lo veas antes.

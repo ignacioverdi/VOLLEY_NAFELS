@@ -2,12 +2,12 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ARMAR RUTINAS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261010-0925"></script>
-<script src="selector_categoria.js?v=20261010-0925"></script>
-<script src="firebase.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0925"></script>
-<script src="plantel_nafels.js?v=20261010-0925" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261010-0925"></script>
+<script src="categorias_club.js?v=20261011-0926"></script>
+<script src="selector_categoria.js?v=20261011-0926"></script>
+<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-0926"></script>
+<script src="plantel_nafels.js?v=20261011-0926" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261011-0926"></script>
   <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
 <style>
@@ -46,7 +46,7 @@
   .chip:hover{background:rgba(45,212,191,.14)!important;color:#5eead4!important}
   .fb-card{border:1px solid rgba(45,212,191,.22);background:linear-gradient(180deg,rgba(45,212,191,.05),var(--card))}
   .fb-head{font-size:15px;font-weight:800;font-family:'Barlow Condensed',sans-serif;letter-spacing:.4px;color:var(--txt);margin-bottom:12px;display:flex;flex-wrap:wrap;gap:9px;align-items:center}
-  .fb-badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 10px;border-radius:999px;font-family:'Inter',sans-serif}
+  .fb-badge{font-size:11px;font-weight:700;letter-spacing:.3px;padding:4px 10px;border-radius:999px;font-family:'Barlow Condensed',sans-serif}
   .fb-ok{background:rgba(34,197,94,.13);color:#22c55e;border:1px solid rgba(34,197,94,.25)}
   .fb-warn{background:rgba(245,158,11,.13);color:#f59e0b;border:1px solid rgba(245,158,11,.25)}
   .fb-tag{font-weight:700;color:var(--mut2,#9aa6c0)}
@@ -55,17 +55,17 @@
   .fb-list{display:flex;flex-direction:column;gap:8px}
   .fb-ej{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:9px 12px}
   .fb-ej-nom{font-size:13px;font-weight:700;color:var(--txt);font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px;margin-bottom:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .fb-rm{font-size:11px;font-weight:700;color:#2dd4bf;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.22);border-radius:7px;padding:2px 8px;font-family:'Inter',sans-serif}
+  .fb-rm{font-size:11px;font-weight:700;color:#2dd4bf;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.22);border-radius:7px;padding:2px 8px;font-family:'Barlow Condensed',sans-serif}
   .fb-ej-pesos{display:flex;flex-wrap:wrap;gap:6px}
   .fb-serie{font-size:12px;color:var(--txt);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:7px;padding:3px 9px;font-weight:600}
   .fb-na{font-size:12px;color:var(--mut)}
   .fb-obs{font-size:12.5px;color:#cbd5e1;margin-top:7px;line-height:1.5;font-style:italic}
   .fb-empty{font-size:12.5px;color:var(--mut);text-align:center;padding:6px}
-  .trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif;vertical-align:middle}
+  .trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;vertical-align:middle}
   .trad-btn:hover{background:rgba(45,212,191,.18)}
   .fb-reply{margin:4px 0 12px;padding:11px 12px;background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.16);border-radius:11px}
   .fb-reply-lbl{font-size:10px;color:var(--teal);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:8px}
-  .fb-reply-txt{width:100%;min-height:58px;resize:vertical;background:var(--card2);color:var(--txt);border:1px solid var(--b2);border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
+  .fb-reply-txt{width:100%;min-height:58px;resize:vertical;background:var(--card2);color:var(--txt);border:1px solid var(--b2);border-radius:9px;padding:10px 12px;font-size:13.5px;font-family:'Barlow Condensed',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
   .fb-reply-status{font-size:11px;color:var(--teal);margin-top:6px;min-height:13px}
   .cp-ov{position:fixed;inset:0;z-index:99995;background:rgba(0,0,0,.72);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px}
   .cp-ov.on{display:flex}
@@ -153,7 +153,9 @@
 </style><!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0925">
+<link rel="stylesheet" href="movil.css?v=20261011-0926">
+
+<script src="iconos.js?v=20261011-0926" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -699,9 +701,9 @@ window.addEventListener('beforeunload', function(e){ if(DIRTY){ e.preventDefault
 <script>
 (function(){function a(){try{if(document.getElementById('club-escudo'))return;var a=document.createElement('a');a.id='club-escudo';a.href='index.html';a.title='Inicio · Volley Näfels';a.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block;';var i=document.createElement('img');i.src='escudo.png';i.alt='Volley Näfels';i.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';a.appendChild(i);document.body.appendChild(a);}catch(e){}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',a);else a();})();
 </script>
-<script src="lang.js?v=20261010-0925"></script>
-<script src="volver_inicio.js?v=20261010-0925" onerror="void 0"></script>
-<script src="ayuda.js?v=20261010-0925"></script>
+<script src="lang.js?v=20261011-0926"></script>
+<script src="volver_inicio.js?v=20261011-0926" onerror="void 0"></script>
+<script src="ayuda.js?v=20261011-0926"></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

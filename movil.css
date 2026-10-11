@@ -732,3 +732,77 @@ tr.mi-fila {
   body:not(.ancho-fijo) .hdr-top,
   body:not(.ancho-fijo) #tablero{ max-width: none !important; }
 }
+
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MARCA — una sola voz tipografica          (lo pone UNIFICAR_TIPOGRAFIA.py)
+   ----------------------------------------------------------------------------
+   Cubre los elementos que no tienen tipografia declarada y caian en la del
+   sistema operativo, que es distinta en Windows, en iPhone y en Android.
+   Sin !important a proposito: cualquier pagina que declare lo suyo gana.
+   Para sacarlo: borrar este bloque. No toca nada mas.
+   ════════════════════════════════════════════════════════════════════════════ */
+html{ font-family:'Barlow Condensed', system-ui, sans-serif; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   TERMINACIONES — los detalles que separan "funciona" de "es un producto"
+   ----------------------------------------------------------------------------
+   Lo pone PULIR_DETALLES.py. Ninguna de estas reglas mueve un elemento de
+   lugar ni cambia un numero: son terminaciones.
+   Para sacarlo: borrar este bloque entero. No toca nada mas.
+   ════════════════════════════════════════════════════════════════════════════ */
+
+/* 1 · el texto, mejor dibujado ------------------------------------------- */
+html{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* 2 · la barra de scroll, oscura y fina (antes era la blanca de Windows) -- */
+*{ scrollbar-width:thin; scrollbar-color:#2A2F3E transparent; }
+::-webkit-scrollbar{ width:10px; height:10px; }
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:#262B38; border-radius:99px; border:2px solid transparent; background-clip:content-box; }
+::-webkit-scrollbar-thumb:hover{ background:#39404F; background-clip:content-box; }
+::-webkit-scrollbar-corner{ background:transparent; }
+
+/* 3 · el texto seleccionado, en el rojo de la marca ----------------------- */
+::selection{ background:rgba(232,25,44,.30); color:#fff; }
+::-moz-selection{ background:rgba(232,25,44,.30); color:#fff; }
+
+/* 4 · el foco de teclado: se ve, y se ve bien ----------------------------- */
+:focus-visible{ outline:2px solid #E8192C; outline-offset:2px; border-radius:4px; }
+/* el foco del mouse no deja marca: eso es lo que molestaba y por eso lo
+   apagaban. Con :focus-visible solo aparece cuando se navega con teclado. */
+
+/* 5 · en el telefono: sin el destello azul al tocar, y con respuesta ------ */
+*{ -webkit-tap-highlight-color:transparent; }
+@media (hover:none){
+  a:active, button:active, [role="button"]:active,
+  .card:active, .tab-btn:active, .btn:active{ opacity:.72; }
+}
+
+/* 6 · los controles nativos, en el color de la marca --------------------- */
+input[type="checkbox"], input[type="radio"], input[type="range"],
+progress{ accent-color:#E8192C; }
+
+/* 7 · iPhone: que no haga zoom solo al tocar un campo --------------------
+   Safari agranda la pagina cuando un campo tiene menos de 16px, y despues
+   queda corrida. Solo iOS: en Windows y Android no se toca nada. */
+@supports (-webkit-touch-callout:none){
+  @media (max-width:820px){
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    select, textarea{ font-size:16px; }
+  }
+}
+
+/* 8 · quien pidio menos movimiento, recibe menos movimiento -------------- */
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+}
+
+/* 9 · los dos botones flotantes de abajo a la derecha se tocaban --------- */
+#ayuda-btn{ bottom:70px; }
+
+/* 10 · las imagenes nunca empujan la pantalla a lo ancho ----------------- */
+img{ max-width:100%; }

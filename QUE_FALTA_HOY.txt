@@ -116,3 +116,50 @@ DONDE QUEDO EL TRABAJO DE VOLLEYBRAINS
   modelo, que ejercicios describe, con que choca y que se descarta) estan en el
   chat como archivos. Si alguna vez queres rehacer o ampliar las solapas, ese
   es el material de origen: aprox. 1 MB de notas, mas cuatro sintesis por tema.
+
+
+PENDIENTE — FILTRO "CAIDA DEL BALON" EN EL ARMADOR  (10/10/2026)
+----------------------------------------------------------------
+
+  QUE SE PIDIO
+  En "Detalle por acciones" (ex Plan de Partido), dentro de la distribucion
+  del armador, un filtro nuevo "Caida del balon" con cuatro botones:
+  +4, 3, +2 y BZ. Es decir: ver los armados segun DONDE ATERRIZA la
+  recepcion (zona 4, 3, 2 u 8). No donde se hace la recepcion: donde cae.
+
+  POR QUE QUEDO FRENADO
+  Ese dato NO esta en los .dvw. DataVolley no guarda el destino del pase en
+  ningun campo. Lo verificado:
+
+   - De la recepcion guarda: de donde vino el saque, en que zona se ejecuta
+     el toque, el efecto y el tipo de toque (L izquierda / R derecha /
+     M linea media / O de manos / W baja, que es tecnica, no destino).
+     El manual oficial define ese campo como "la zona donde se ejecuta el
+     toque". Es el ORIGEN.
+   - El unico lugar donde existe el destino es la LLAMADA DEL ARMADOR. La
+     plantilla del club ya las tiene definidas, con la "setting zone"
+     configurada, que es la zona desde donde arma el armador:
+
+         KF  Caida en 4      K8  Caida en 8
+         KB  Caida en 2      K9  Caida en 9
+                             K7  Caida en 7
+
+   - Pero NUNCA SE TIPEAN. En los 9 partidos de la temporada (1.119 armados)
+     las unicas llamadas que aparecen son K1 Corta (652), K2 B (194),
+     KE no primer tiempo (186) y K3 Corta Atras (87).
+
+  QUE HACE FALTA PARA DESTRABARLO
+  Definir con Sebastian como se scoutea la caida. Dos caminos:
+   a) Que empiece a tipear KF / KB / K8 en la recepcion. Sin tocar nada mas,
+      el filtro se puede hacer en un rato y se llena solo.
+   b) Agregarle al panel de scouting en vivo de la app un boton de caida
+      (4/3/2/8) en cada recepcion, para no depender de DataVolley.
+
+  BUG APARTE, TAMBIEN SIN APLICAR
+  La lista de llamadas del motor esta fija en update_db_nafels_FULL.py:
+      CALL_LIST = ['K1','K7','KM','K2','KC','KP','KE','KB','KO','KS']
+  Le faltan K3, K4, K5, K8, K9 y KF. Resultado: los 87 "K3 Corta Atras" de
+  la temporada entran como "sin llamada" y se pierden. El arreglo es agregar
+  los codigos AL FINAL de la lista (el indice viaja adentro de los datos,
+  moverlos de lugar romperia lo ya generado) y volver a correr HACER_TODO.
+  Esta probado y revertido junto con el filtro: hay que rehacerlo.

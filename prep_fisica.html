@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="PREPARACIÓN FÍSICA — Axpo Volley Näfels">PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261010-0925"></script>
-<script src="selector_categoria.js?v=20261010-0925"></script>
-<script src="plantel_nafels.js?v=20261010-0925" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261010-0925"></script>
+<script src="categorias_club.js?v=20261011-0926"></script>
+<script src="selector_categoria.js?v=20261011-0926"></script>
+<script src="plantel_nafels.js?v=20261011-0926" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261011-0926"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0925"></script>
+<script src="lang.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-0926"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -110,12 +110,12 @@ select,select option{color:#111!important;background-color:#fff!important}
 .nota-profe-txt{font-size:12px;color:#fbbf24;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.13);border-radius:9px;padding:9px 12px;line-height:1.5}
 .nota-card{margin:14px 0 4px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px}
 .nota-card-lbl{font-size:10px;color:var(--amber);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px;font-weight:700}
-.nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Inter',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
+.nota-card-txt{width:100%;min-height:70px;resize:vertical;background:#fff;color:#111;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:11px 13px;font-size:14px;font-family:'Barlow Condensed',sans-serif;line-height:1.5;outline:none;box-sizing:border-box}
 .nota-card-status{font-size:11px;color:var(--teal);margin-top:7px;min-height:14px}
 .pf-reply-box{margin-top:12px;padding-top:12px;border-top:1px dashed var(--border)}
 .pf-reply-lbl{font-size:10px;color:var(--teal);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-weight:700;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .pf-reply-txt{font-size:14px;color:#cfeede;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.18);border-radius:10px;padding:11px 13px;line-height:1.55;white-space:pre-wrap}
-.trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Inter',sans-serif}
+.trad-btn{font-size:10px;font-weight:700;letter-spacing:.3px;color:var(--teal);background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);border-radius:7px;padding:3px 9px;cursor:pointer;font-family:'Barlow Condensed',sans-serif}
 .trad-btn:hover{background:rgba(45,212,191,.18)}
 .pesos-section{padding:11px 16px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.012)}
 .pesos-label{font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:9px}
@@ -239,10 +239,12 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0925">
+<link rel="stylesheet" href="movil.css?v=20261011-0926">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261010-0925" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261011-0926" onerror="void 0"></script>
+
+<script src="iconos.js?v=20261011-0926" defer></script>
 </head>
 <body>
 <div class="page-header header">
@@ -1234,8 +1236,8 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20261010-0925"></script>
-<script src="ayuda.js?v=20261010-0925"></script>
+<script src="temporadas_menu.js?v=20261011-0926"></script>
+<script src="ayuda.js?v=20261011-0926"></script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

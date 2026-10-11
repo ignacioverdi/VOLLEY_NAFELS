@@ -1,0 +1,117 @@
+================================================================================
+  LO QUE TENES QUE HACER VOS                                        11/10/2026
+================================================================================
+
+Son tres pasos. El primero ya lo hiciste.
+
+
+--------------------------------------------------------------------------------
+  PASO 1 — LA TIPOGRAFIA          ** YA ESTA HECHO **
+--------------------------------------------------------------------------------
+  Corriste UNIFICAR_TIPOGRAFIA.bat. Quedaron 21 paginas + movil.css.
+  Verificado: cada linea que cambio esta adentro de un font-family, ninguna
+  afuera. La app paso de 10 tipografias distintas a 4.
+
+  (La pagina de venta, volley-stats.html, la deje como estaba: no es la app.)
+
+
+--------------------------------------------------------------------------------
+  PASO 2 — DOBLE CLIC EN  MEJORAR_APP.bat
+--------------------------------------------------------------------------------
+  Hace dos cosas de una:
+
+    ICONOS
+      Cambia los emojis del sistema por 85 iconos propios, dibujados sobre
+      la misma grilla y con el mismo trazo. Medido: la app tenia 1.561
+      emojis pintados en 44 pantallas; quedan 15, y son los que viven
+      adentro de un desplegable, donde un dibujo no se puede mostrar.
+
+    TERMINACIONES
+      Barra de scroll oscura · texto seleccionado en el rojo de la marca ·
+      foco de teclado visible · sin el destello azul al tocar en el telefono ·
+      checkbox y deslizadores en rojo · que el iPhone no haga zoom solo al
+      tocar un campo · respeto por "menos movimiento" · los dos botones
+      flotantes de abajo a la derecha dejan de tocarse.
+
+  COMO ES:
+    1. Doble clic en MEJORAR_APP.bat
+    2. Te muestra la lista de lo que haria. NO escribe nada todavia.
+    3. Si te convence, escribis  s  y Enter. Si no, cualquier otra tecla.
+
+  De cada archivo deja una copia  *.antes_iconos  y  movil.css.antes_pulido
+
+
+--------------------------------------------------------------------------------
+  PASO 3 — MIRALO ANTES DE PUBLICAR
+--------------------------------------------------------------------------------
+  Abri la app y date una vuelta por estas cinco, que son las que mas cambian:
+
+      index.html        la portada
+      analisis.html     Analisis
+      dashboard.html    Dashboard
+      calendario.html   Calendario
+      equipo.html       Equipo
+
+  Mira que los iconos se entiendan y que nada se haya corrido de lugar.
+
+  OJO: Panel en vivo, Panel de voley, Velocidades en vivo y las pantallas de
+  camara y delay NO se tocaron a proposito. Ahi manda la velocidad.
+
+  SI TE GUSTA
+      Borra desde el Explorador todos los archivos que terminan en
+      .antes_tipografia , .antes_iconos  y  movil.css.antes_pulido
+      (no van al repositorio igual: ya estan en el .gitignore)
+      y despues publicas como siempre: PUBLICAR_EN_GITHUB.bat
+
+  SI ALGO NO TE GUSTA
+      Opcion rapida, sin desinstalar nada — apagar solo los iconos:
+          abri la app, F12, pestaña Console, pega esto y Enter:
+              localStorage.setItem('vs_iconos','off')
+          recarga. Vuelven los emojis. Todo lo demas queda.
+
+      Opcion completa — volver atras un archivo:
+          borra el archivo y renombra su copia .antes_iconos
+          (o, mas facil:  git checkout <archivo> )
+
+      Y decime cual pantalla no te gusto, que lo arreglo.
+
+
+--------------------------------------------------------------------------------
+  LO QUE TAMBIEN TE DEJE
+--------------------------------------------------------------------------------
+  TOUR-APP-v2.mp4        en PLACAS REDES\APP CARRUSEL
+    El recorrido de la app filmado otra vez, ya con los iconos y la
+    tipografia nueva. 1080x1920, 65 s, mudo. Listo para Instagram.
+
+  IDIOMA_PENDIENTE.txt
+    Los textos que quedan en castellano con la app en ingles, con archivo y
+    numero de linea. Los dos primeros son dos caracteres y estan en la
+    portada.
+
+  REDISENO_DIAGNOSTICO.txt
+    El diagnostico medido de las 68 pantallas y el plan completo.
+
+
+--------------------------------------------------------------------------------
+  LO QUE NO HICE, Y POR QUE
+--------------------------------------------------------------------------------
+  TEXTO CHICO (41 pantallas con texto por debajo de 11 px)
+    Me puse a hacerlo y lo pare. Fui a buscar los selectores exactos para
+    subirlos sin tocar nada mas: son 142 selectores distintos en 1.507
+    elementos, y muchos son "div" y "span" pelados, imposibles de apuntar sin
+    agarrarse media app por delante. Ademas 60 de esos casos son texto
+    adentro de un SVG — las etiquetas de las canchas y los heatmaps — donde
+    agrandar la letra rompe el dibujo.
+
+    Una regla general ahi es una apuesta, no una mejora. Esto se arregla
+    pantalla por pantalla cuando rehagamos las tablas (Analisis, Dashboard,
+    Armadores), no con un parche.
+
+  AREAS DE TOQUE (62 pantallas con botones de menos de 32 px)
+    Mismo caso: agrandarlos mueve las cosas de lugar. Va junto con el
+    rediseño de cada pantalla.
+
+  LA PORTADA COMO CENTRO DE OPERACIONES
+    Es el paso grande y merece su propia vuelta: se arma en copia aparte y
+    se compara filmada contra la actual antes de tocar nada tuyo.
+================================================================================

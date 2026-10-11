@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261010-0925"></script>
-<script src="selector_categoria.js?v=20261010-0925"></script>
+<script src="categorias_club.js?v=20261011-0926"></script>
+<script src="selector_categoria.js?v=20261011-0926"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261010-0925"></script>
-<script src="firebase.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0925"></script>
-<script src="lang.js?v=20261010-0925"></script>
-<script src="plantel_nafels.js?v=20261010-0925"></script>
+<script src="datos_seguros.js?v=20261011-0926"></script>
+<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-0926"></script>
+<script src="lang.js?v=20261011-0926"></script>
+<script src="plantel_nafels.js?v=20261011-0926"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261010-0925" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261011-0926" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261010-0925" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261011-0926" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -298,7 +298,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style id="skin-camiseta">
   html{background:linear-gradient(165deg,#17110f 0%,#0d0a0c 46%,#140b0c 100%) fixed}
-  body{font-family:'Rajdhani',sans-serif!important;background:radial-gradient(1100px 560px at 50% -10%,rgba(220,60,80,.26),transparent 58%),radial-gradient(900px 620px at 100% 104%,rgba(240,180,80,.16),transparent 56%),radial-gradient(760px 520px at 0% 60%,rgba(200,40,52,.13),transparent 60%)!important}
+  body{font-family:'Barlow Condensed',sans-serif!important;background:radial-gradient(1100px 560px at 50% -10%,rgba(220,60,80,.26),transparent 58%),radial-gradient(900px 620px at 100% 104%,rgba(240,180,80,.16),transparent 56%),radial-gradient(760px 520px at 0% 60%,rgba(200,40,52,.13),transparent 60%)!important}
   #fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   #fx .grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1.4px);background-size:26px 26px;-webkit-mask-image:radial-gradient(ellipse at 50% 26%,#000 28%,transparent 76%);mask-image:radial-gradient(ellipse at 50% 26%,#000 28%,transparent 76%)}
   #fx .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 52%,rgba(0,0,0,.62) 100%)}
@@ -320,10 +320,10 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   .section{margin:0!important}
   .sec-head{display:flex;align-items:center;gap:13px;margin:38px 0 16px}
   .sec-ic{font-size:20px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.05);border:1px solid rgba(230,167,67,.22);border-radius:14px;flex:0 0 auto}
-  .sec-title{font-family:'Rajdhani';font-weight:700;font-size:26px;letter-spacing:.5px;color:#f3ede4;display:flex;align-items:center;gap:10px}
+  .sec-title{font-family:'Barlow Condensed';font-weight:700;font-size:26px;letter-spacing:.5px;color:#f3ede4;display:flex;align-items:center;gap:10px}
   .sec-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(230,167,67,.3),transparent);margin-left:6px}
-  .sec-sub{font-family:'Rajdhani';font-weight:500;font-size:13.5px;color:#a99e92}
-  .dt-pill{font-family:'Rajdhani';font-weight:600;font-size:10px;letter-spacing:1px;color:#e6a743;border:1px solid rgba(230,167,67,.4);background:rgba(230,167,67,.1);border-radius:20px;padding:2px 9px}
+  .sec-sub{font-family:'Barlow Condensed';font-weight:500;font-size:13.5px;color:#a99e92}
+  .dt-pill{font-family:'Barlow Condensed';font-weight:600;font-size:10px;letter-spacing:1px;color:#e6a743;border:1px solid rgba(230,167,67,.4);background:rgba(230,167,67,.1);border-radius:20px;padding:2px 9px}
   .dt-sec{margin-top:28px!important;padding:26px 24px 12px!important;border:1px dashed rgba(230,167,67,.28)!important;border-radius:24px!important;background:rgba(230,167,67,.03)!important}
   .cards-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))!important;gap:16px!important}
   .card{position:relative;border:1px solid rgba(255,255,255,.08)!important;background:rgba(18,13,15,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(130%);backdrop-filter:blur(16px) saturate(130%);overflow:hidden;transition:transform .18s,box-shadow .26s,border-color .26s}
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0925">
+<link rel="stylesheet" href="movil.css?v=20261011-0926">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -449,12 +449,12 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 a.tb-box:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
 .tb-lbl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#64748b;
   margin-bottom:7px;display:flex;align-items:center;gap:6px;
-  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:700}
+  font-family:'Barlow Condensed',sans-serif;font-weight:700}
 .tb-big{font-family:'Bebas Neue',sans-serif;font-size:27px;line-height:1;letter-spacing:1px}
 .tb-sub{font-size:12px;color:#94a3b8;letter-spacing:.3px;margin-top:4px;
-  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:600}
+  font-family:'Barlow Condensed',sans-serif;font-weight:600}
 .tb-mut{font-size:11px;color:#64748b;letter-spacing:.3px;margin-top:3px;
-  font-family:'Rajdhani','Barlow Condensed',sans-serif}
+  font-family:'Barlow Condensed',sans-serif}
 .tb-cuenta{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:1px;
   padding:2px 8px;border-radius:20px;background:rgba(232,25,44,.12);color:#e8192c;
   border:1px solid rgba(232,25,44,.28)}
@@ -499,14 +499,14 @@ a.tb-obj .tb-lbl{color:#22c55e}
    Rajdhani y Bebas. */
 #hb-find{flex:1;min-width:180px;padding:11px 14px;border-radius:11px;
   border:1px solid rgba(255,255,255,.12);background:#0d0e1a;
-  color:#e2e8f0;font-family:'Rajdhani','Barlow Condensed',sans-serif;font-weight:600;
+  color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;font-weight:600;
   font-size:14px;letter-spacing:.3px;outline:none}
 #hb-find:focus{border-color:rgba(230,167,67,.55);box-shadow:0 0 0 3px rgba(230,167,67,.12)}
 #hb-find::placeholder{color:#64748b}
 .hb-cnt{font-size:10px;color:#64748b;letter-spacing:1px;white-space:nowrap}
 .hb-modo{display:flex;gap:4px}
 .hb-mb{padding:9px 13px;border-radius:9px;border:1px solid rgba(255,255,255,.12);
-  background:#0d0e1a;color:#64748b;font-family:'Rajdhani','Barlow Condensed',sans-serif;font-size:12px;
+  background:#0d0e1a;color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;
   font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .15s}
 .hb-mb.on{background:#1a1408;border-color:rgba(230,167,67,.45);color:#e6a743}
 .hb-chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -516,7 +516,7 @@ a.tb-obj .tb-lbl{color:#22c55e}
 .hb-chip{display:flex;align-items:center;gap:7px;padding:7px 13px 7px 10px;border-radius:10px;
   border:1px solid rgba(255,255,255,.12);background:#0d0e1a;
   text-decoration:none;color:#e2e8f0;
-  font-family:'Rajdhani','Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
+  font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;
   letter-spacing:.3px;transition:all .15s}
 .hb-chip:hover{border-color:var(--chip,#e6a743);transform:translateY(-1px)}
 .hb-chip i{font-style:normal;font-size:15px}
@@ -559,7 +559,7 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 .section.hb-plegada .cards-grid{display:none}
 .hb-desplegar{margin-left:auto;padding:5px 12px;border-radius:8px;
   border:1px solid rgba(255,255,255,.1);background:rgba(7,8,15,.6);
-  color:#64748b;font-family:'Rajdhani','Barlow Condensed',sans-serif;
+  color:#64748b;font-family:'Barlow Condensed',sans-serif;
   font-size:11px;font-weight:700;letter-spacing:1.2px;
   text-transform:uppercase;cursor:pointer;flex-shrink:0}
 .hb-desplegar:hover{color:#e2e8f0;border-color:rgba(255,255,255,.2)}
@@ -591,6 +591,8 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
   #tablero .tb-lbl{margin-bottom:5px}
 }
 </style>
+
+<script src="iconos.js?v=20261011-0926" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -1709,9 +1711,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261010-0925"></script>
+<script src="chat_nafels.js?v=20261011-0926"></script>
 
-<script src="proximo_rival.js?v=20261010-0925" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261011-0926" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1777,13 +1779,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261010-0925" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261010-0925"></script>
+<script src="fixture_auto.js?v=20261011-0926" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261011-0926"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261010-0925" defer></script>
+<script src="onesignal_push.js?v=20261011-0926" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2449,7 +2451,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261010-0925"></script>
+<script src="ayuda.js?v=20261011-0926"></script>
 </body>
 </html>
 

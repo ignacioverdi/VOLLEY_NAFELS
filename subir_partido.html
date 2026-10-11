@@ -8,7 +8,7 @@
 :root{--bg:#0d1017;--sur:#141922;--card:#1a2029;--card2:#212936;--b:#2a3441;--b2:#38445a;
       --txt:#e8edf5;--mut:#8b97ab;--dim:#5f6b7f;--ok:#3ddc84;--bad:#ff5f6d;--warn:#e6a743}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Barlow Condensed',-apple-system,'Segoe UI',sans-serif}
 .top{display:flex;align-items:center;gap:12px;padding:14px 20px;background:var(--sur);border-bottom:1px solid var(--b)}
 .top h1{margin:0;font-size:15px;letter-spacing:1.5px;text-transform:uppercase}
 .wrap{max-width:760px;margin:0 auto;padding:30px 20px 70px}
@@ -50,13 +50,15 @@ input[type=file]{display:none}
 </style>
 <!-- Motor de idiomas (ES / EN / DE). Traduce por data-t y ademas por texto,
      asi que alcanza con cargarlo. -->
-<script src="categorias_club.js?v=20261010-0925"></script>
-<script src="selector_categoria.js?v=20261010-0925"></script>
-<script src="lang.js?v=20261010-0925"></script>
+<script src="categorias_club.js?v=20261011-0926"></script>
+<script src="selector_categoria.js?v=20261011-0926"></script>
+<script src="lang.js?v=20261011-0926"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261010-0925">
+<link rel="stylesheet" href="movil.css?v=20261011-0926">
+
+<script src="iconos.js?v=20261011-0926" defer></script>
 </head>
 <body>
 
@@ -94,9 +96,9 @@ input[type=file]{display:none}
 
 </div>
 
-<script src="datos_seguros.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase.js?v=20261010-0925"></script>
-<script src="firebase_por_categoria.js?v=20261010-0925"></script>
+<script src="datos_seguros.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase.js?v=20261011-0926"></script>
+<script src="firebase_por_categoria.js?v=20261011-0926"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    El archivo se deja esperando en la base. Un robot en la nube lo levanta,
@@ -243,7 +245,7 @@ document.getElementById('sel').addEventListener('change', function(ev){
 pintar();
 try{ traerEstado(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20261010-0925" onerror="void 0"></script>
-<script src="ayuda.js?v=20261010-0925"></script>
+<script src="volver_inicio.js?v=20261011-0926" onerror="void 0"></script>
+<script src="ayuda.js?v=20261011-0926"></script>
 </body>
 </html>

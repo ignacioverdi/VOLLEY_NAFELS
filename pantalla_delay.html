@@ -33,7 +33,7 @@
   }
   *{box-sizing:border-box}
   html,body{height:100%;margin:0;background:var(--fondo);color:var(--tinta);
-    font-family:system-ui,-apple-system,'Segoe UI',sans-serif;overflow:hidden}
+    font-family:'Barlow Condensed',-apple-system,'Segoe UI',sans-serif;overflow:hidden}
   #escena{position:fixed;inset:0;background:#000}
   video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
   #vd-live{display:none}
@@ -69,7 +69,7 @@
   .rot{font-family:var(--fc);font-size:14px;font-weight:700;letter-spacing:.2em;
     text-transform:uppercase;color:var(--apagado);white-space:nowrap}
   #vd-estado{font-size:14px;color:var(--apagado);min-height:18px}
-  #vd-diag{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:#5c6b7f;min-height:15px}
+  #vd-diag{font-family:'JetBrains Mono',Menlo,monospace;font-size:11.5px;color:#5c6b7f;min-height:15px}
 
   /* ── el cartel de bienvenida, mientras no hay video ────────────────────── */
   #vacio{position:absolute;inset:0;display:flex;flex-direction:column;
@@ -125,11 +125,11 @@
   </div>
 </div>
 
-<script src="firebase.js?v=20261010-0925" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261010-0925" onerror="void 0"></script>
-<script src="lang.js?v=20261010-0925" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261010-0925" onerror="void 0"></script>
-<script src="video_delay.js?v=20261010-0925" onerror="void 0"></script>
+<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-0926" onerror="void 0"></script>
+<script src="lang.js?v=20261011-0926" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261011-0926" onerror="void 0"></script>
+<script src="video_delay.js?v=20261011-0926" onerror="void 0"></script>
 <script>
 /* ── lo que el motor espera encontrar ─────────────────────────────────────── */
 function $(id){ return document.getElementById(id); }

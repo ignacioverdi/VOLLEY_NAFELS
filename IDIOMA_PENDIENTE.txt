@@ -1,0 +1,70 @@
+IDIOMA — LO QUE QUEDA EN CASTELLANO CUANDO LA APP ESTA EN "EN"
+Encontrado el 10/10/2026 filmando el recorrido de la app con el idioma en EN.
+Todo esto se ve en pantalla en castellano aunque arriba diga EN.
+No toque nada: esta es la lista para que decidas vos.
+
+--------------------------------------------------------------------
+1) index.html  — LA FRASE DE LA FLECHA   ** el mas facil y el mas visible **
+--------------------------------------------------------------------
+   En pantalla dice:  "la flecha compara los ultimos 3 partidos con los anteriores"
+   En lang.js (linea 787) la traduccion esta cargada para:
+                      "la flecha compara los ultimos 2 partidos con los anteriores"
+   Como la clave no coincide palabra por palabra, el traductor nunca la encuentra
+   y la deja en castellano. Son 3 vs 2.
+   Arreglo: que el texto de index.html y la clave de lang.js digan el mismo numero.
+
+--------------------------------------------------------------------
+2) index.html  — LA CUENTA REGRESIVA DEL PROXIMO PARTIDO   (linea 2006)
+--------------------------------------------------------------------
+   var cuenta = d===0 ? 'HOY' : d===1 ? 'MANANA' : (d>0 ? 'EN '+d+' DIAS' : '');
+   Esas tres palabras estan escritas a mano dentro del codigo, no pasan por lang.js.
+   En el video se ve "EN 8 DIAS" al lado de VS LAUSANNE.
+
+--------------------------------------------------------------------
+3) analisis.html
+--------------------------------------------------------------------
+   "ELEGIR SESIONES"  (el boton)
+   "Ultimas 5" , "Este mes" , "Listo"  (los chips de abajo)
+   "-- SAQUE --" y "-- RECEPCION --"  (los titulos adentro de la tabla de jugadores)
+   "TEMPORADA 2026" y "9 SESIONES" en la tarjeta acumulada
+     (OJO: a veces aparece bien en ingles y a veces en castellano -> se pinta
+      antes de que el traductor pase. Es el mismo texto, no dos textos distintos.)
+
+--------------------------------------------------------------------
+4) hm_saque.html / hm_recepcion.html / hm_ataque.html / hm_armador.html
+--------------------------------------------------------------------
+   "VER VIDEO DE ESTAS ACCIONES"   (el boton naranja)
+   "Zona pref." + "32% destinos"   (hm_saque.html linea 446, armado en JS)
+   "Formula oficial"
+   "DURDOS VALENTIN #1 - 118 ACCIONES"  (la palabra ACCIONES)
+   "Mejorando +9%"  (abajo del grafico de evolucion)
+   Las etiquetas de la barra de colores: Vendido / Exclamativo / Positive / Error
+     estan mezcladas: unas en ingles y otras en castellano.
+
+--------------------------------------------------------------------
+5) game_plan.html  /  armadores.html
+--------------------------------------------------------------------
+   "8 rivales analizados"          (game_plan.html linea 1081, armado en JS)
+   "-- Sin definir --"             (todos los desplegables de estrategia)
+   "Anota algo..."
+   "ARMADOR TITULAR"
+   "DONDE CAEN SUS REMATES" , "SUS MEJORES DIRECCIONES" , "CLAVES DEL JUGADOR"
+   "171 ACTIONS (3 SIN DESTINO)"   (mitad y mitad en la misma linea)
+
+--------------------------------------------------------------------
+6) NO ES IDIOMA, ES UN NUMERO QUE FALTA
+--------------------------------------------------------------------
+   analisis.html -> panel "TEAM TARGETS"
+   Muestra siempre la meta ("tgt 42", "tgt 60", ...) pero el valor real sale "—".
+   Probado de las dos formas: eligiendo un partido suelto y eligiendo la tarjeta
+   acumulada de la temporada. En las dos queda en "—".
+   Es el primer panel que ve cualquiera que entra a Analisis.
+
+--------------------------------------------------------------------
+POR QUE IMPORTA
+--------------------------------------------------------------------
+Los puntos 1 y 2 son dos lineas de codigo y estan en la PORTADA, que es la
+pantalla que mas se ve y la que sale en todos los videos y capturas.
+El punto 6 es el que mas barato sale de arreglar en impresion: un panel que
+muestra solo guiones parece que el sistema no tiene datos, justo arriba de
+una pantalla que tiene todos los datos.
