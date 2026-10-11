@@ -53,7 +53,7 @@ def protegido(nombre):
 
 # ── 2 · LO QUE SE VA ───────────────────────────────────────────────────────
 # a) las copias de respaldo de las mejoras (no se chequean: son copias)
-PATRONES_COPIAS = ['*.antes_tipografia', '*.antes_iconos', '*.antes_pulido', '*.antes_contraste']
+PATRONES_COPIAS = ['*.antes_tipografia', '*.antes_iconos', '*.antes_pulido', '*.antes_contraste', '*.antes_tablas']
 
 # b) lo de BORRAR_ESTO.txt (cada uno se chequea antes de borrar)
 SUELTOS = [
@@ -112,7 +112,7 @@ def texto_de_la_carpeta():
         for f in glob.glob(p):
             b = os.path.basename(f)
             if b.lower() == yo: continue
-            if b in SUELTOS or b.endswith(('.antes_tipografia', '.antes_iconos', '.antes_pulido', '.antes_contraste')):
+            if b in SUELTOS or b.endswith(('.antes_tipografia', '.antes_iconos', '.antes_pulido', '.antes_contraste', '.antes_tablas')):
                 continue          # un archivo que se va no vale como testigo
             try:
                 trozos.append(open(f, encoding='utf-8', errors='ignore').read())
@@ -203,5 +203,23 @@ def main():
     print()
 
 
+def esperar_si_hace_falta():
+    """Si lo abriste con doble clic (y no lo llamo el .bat), la ventana se
+       cerraria sola apenas termina. Esto la deja abierta hasta que leas."""
+    if '--desde-bat' in sys.argv:
+        return
+    try:
+        if sys.stdin and sys.stdin.isatty():
+            input('   (Enter para cerrar) ')
+    except Exception:
+        pass
+
+
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print()
+        print('   Se corto por un error:', e)
+        import traceback; traceback.print_exc()
+    esperar_si_hace_falta()
