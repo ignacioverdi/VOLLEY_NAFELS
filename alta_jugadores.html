@@ -100,10 +100,10 @@ textarea:focus{border-color:var(--club)}
 }
 </style>
 <!-- Motor de idiomas (ES / EN / DE). -->
-<script src="lang.js?v=20261011-0926"></script>
-<link rel="stylesheet" href="movil.css?v=20261011-0926">
+<script src="lang.js?v=20261011-1004"></script>
+<link rel="stylesheet" href="movil.css?v=20261011-1004">
 
-<script src="iconos.js?v=20261011-0926" defer></script>
+<script src="iconos.js?v=20261011-1004" defer></script>
 </head>
 <body>
 <div class="hoja">
@@ -125,9 +125,9 @@ textarea:focus{border-color:var(--club)}
   <div class="caja">
     <label class="lbl" for="lista" data-t="Pegá acá tu lista"><span data-t="Pegá acá tu lista"><span data-t="Pegá acá tu lista">Pegá acá tu lista</span></span></label>
 <div id="caja-cat" style="display:none;margin-bottom:14px">
-  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#64748b;margin-bottom:6px" data-t="Categoría"><span data-t="Categoría"><span data-t="Categoría">Categoría</span></span></label>
+  <label style="display:block;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#94a3b8;margin-bottom:6px" data-t="Categoría"><span data-t="Categoría"><span data-t="Categoría">Categoría</span></span></label>
   <select id="sel-cat" style="width:100%;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);font-size:14px"></select>
-  <div style="font-size:11px;color:#64748b;margin-top:6px" data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría.">Los jugadores que cargues quedan en esta categoría.</span></span></div>
+  <div style="font-size:11px;color:#94a3b8;margin-top:6px" data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría."><span data-t="Los jugadores que cargues quedan en esta categoría.">Los jugadores que cargues quedan en esta categoría.</span></span></div>
 </div>
     <!-- ══ CARGA DE A UNO ══════════════════════════════════════════════════
      Cada jugador en su fila, con todos sus datos y la foto al final.
@@ -156,7 +156,7 @@ textarea:focus{border-color:var(--club)}
 </div>
 
 <details style="margin-top:14px">
-  <summary style="cursor:pointer;font-size:12px;color:#64748b" data-t="¿Los tenés en una lista? Pegalos de una vez">
+  <summary style="cursor:pointer;font-size:12px;color:#94a3b8" data-t="¿Los tenés en una lista? Pegalos de una vez">
     <span data-t="¿Los tenés en una lista? Pegalos de una vez"><span data-t="¿Los tenés en una lista? Pegalos de una vez">¿Los tenés en una lista? Pegalos de una vez</span></span>
   </summary>
   <textarea id="lista" spellcheck="false"
@@ -183,11 +183,11 @@ jugador3@gmail.com    9     23/08/2001</div>
 
 </div>
 
-<script src="categorias_club.js?v=20261011-0926"></script>
-<script src="selector_categoria.js?v=20261011-0926"></script>
-<script src="plantel_desde_dvw.js?v=20261011-0926"></script>
-<script src="firebase.js?v=20261011-0926"></script>
-<script src="firebase_por_categoria.js?v=20261011-0926"></script>
+<script src="categorias_club.js?v=20261011-1004"></script>
+<script src="selector_categoria.js?v=20261011-1004"></script>
+<script src="plantel_desde_dvw.js?v=20261011-1004"></script>
+<script src="firebase.js?v=20261011-1004"></script>
+<script src="firebase_por_categoria.js?v=20261011-1004"></script>
 <script>
 /* ============================================================================
    Alta de jugadores — el DT pega su lista y se crean todas las cuentas.
@@ -260,7 +260,7 @@ function pintar(){
           + '<label id="foto' + i + '" title="Elegir foto" style="flex:none;width:34px;height:34px;'
           + 'border-radius:50%;border:1px dashed rgba(255,255,255,.2);display:flex;'
           + 'align-items:center;justify-content:center;cursor:pointer;overflow:hidden;'
-          + 'font-size:15px;color:#64748b">'
+          + 'font-size:15px;color:#94a3b8">'
           + (f.foto ? '<img src="' + f.foto + '" alt="" style="width:34px;height:34px;'
                       + 'border-radius:50%;object-fit:cover">' : '+')
           + '<input type="file" accept="image/*" style="display:none" '
@@ -488,7 +488,7 @@ function filaHTML(i){
     + '<label id="foto' + i + '" title="Agregar foto" style="flex:none;width:38px;height:38px;'
     +   'border-radius:50%;border:1px dashed rgba(255,255,255,.25);display:flex;'
     +   'align-items:center;justify-content:center;cursor:pointer;overflow:hidden;'
-    +   'font-size:17px;color:#64748b">+'
+    +   'font-size:17px;color:#94a3b8">+'
     +   '<input type="file" accept="image/*" style="display:none" '
     +   'onchange="fotoFila(' + i + ', this)"></label>'
     + '<span class="cat-fila" style="flex:none;font-size:10px;font-weight:700;'
@@ -498,7 +498,7 @@ function filaHTML(i){
     +   (window.CAT_ELEGIDA || '') + '</span>'
     + '<button type="button" onclick="borrarFila(' + i + ')" title="Quitar"'
     +   ' style="flex:none;width:30px;height:30px;border-radius:8px;cursor:pointer;'
-    +   'background:transparent;border:1px solid rgba(255,255,255,.1);color:#64748b">×</button>'
+    +   'background:transparent;border:1px solid rgba(255,255,255,.1);color:#94a3b8">×</button>'
     + '</div>';
 }
 
@@ -594,7 +594,7 @@ function leerFormulario(){
   } catch(e){}
 })();
 </script>
-<script src="ayuda.js?v=20261011-0926">
+<script src="ayuda.js?v=20261011-1004">
 
 </script>
 <script>

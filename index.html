@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261011-0926"></script>
-<script src="selector_categoria.js?v=20261011-0926"></script>
+<script src="categorias_club.js?v=20261011-1004"></script>
+<script src="selector_categoria.js?v=20261011-1004"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -29,7 +29,7 @@
   --border:rgba(255,255,255,.06);
   --red:#e8192c;
   --blue:#1a2f5e;
-  --mut:#64748b;
+  --mut:#94a3b8;
   --txt:#e2e8f0;
 }
 body{
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261011-0926"></script>
-<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261011-0926"></script>
-<script src="lang.js?v=20261011-0926"></script>
-<script src="plantel_nafels.js?v=20261011-0926"></script>
+<script src="datos_seguros.js?v=20261011-1004"></script>
+<script src="firebase.js?v=20261011-1004" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-1004"></script>
+<script src="lang.js?v=20261011-1004"></script>
+<script src="plantel_nafels.js?v=20261011-1004"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261011-0926" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261011-1004" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261011-0926" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261011-1004" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261011-0926">
+<link rel="stylesheet" href="movil.css?v=20261011-1004">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -447,13 +447,13 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   border-radius:14px;padding:13px 16px;position:relative;overflow:hidden;
   text-decoration:none;color:inherit;display:block;transition:border-color .18s,transform .18s}
 a.tb-box:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
-.tb-lbl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#64748b;
+.tb-lbl{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#94a3b8;
   margin-bottom:7px;display:flex;align-items:center;gap:6px;
   font-family:'Barlow Condensed',sans-serif;font-weight:700}
 .tb-big{font-family:'Bebas Neue',sans-serif;font-size:27px;line-height:1;letter-spacing:1px}
 .tb-sub{font-size:12px;color:#94a3b8;letter-spacing:.3px;margin-top:4px;
   font-family:'Barlow Condensed',sans-serif;font-weight:600}
-.tb-mut{font-size:11px;color:#64748b;letter-spacing:.3px;margin-top:3px;
+.tb-mut{font-size:11px;color:#94a3b8;letter-spacing:.3px;margin-top:3px;
   font-family:'Barlow Condensed',sans-serif}
 .tb-cuenta{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:1px;
   padding:2px 8px;border-radius:20px;background:rgba(232,25,44,.12);color:#e8192c;
@@ -474,7 +474,7 @@ a.tb-box:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
 a.tb-obj{border-color:rgba(34,197,94,.3)}
 a.tb-obj .tb-lbl{color:#22c55e}
 .tb-obj-n{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;color:#22c55e}
-.tb-obj-n s{text-decoration:none;font-size:.55em;color:#64748b}
+.tb-obj-n s{text-decoration:none;font-size:.55em;color:#94a3b8}
 .tb-obj-n.falta{color:#E8192C}
 .tb-obj-d{font-size:15px;color:#94a3b8;margin-top:3px;line-height:1.35}
 .tb-obj-d b{color:#e2e8f0}
@@ -482,10 +482,10 @@ a.tb-obj .tb-lbl{color:#22c55e}
   color:#22c55e;font-weight:800}
 .tb-3>div{min-width:0}
 .tb-n{font-family:'Bebas Neue',sans-serif;font-size:25px;line-height:1}
-.tb-nl{font-size:9px;color:#64748b;letter-spacing:.8px;text-transform:uppercase;
+.tb-nl{font-size:9px;color:#94a3b8;letter-spacing:.8px;text-transform:uppercase;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tb-fl{font-size:10px;font-weight:800;margin-left:3px;vertical-align:2px}
-.tb-vacio{font-size:11px;color:#64748b;letter-spacing:.3px;padding:4px 0 2px}
+.tb-vacio{font-size:11px;color:#94a3b8;letter-spacing:.3px;padding:4px 0 2px}
 
 /* ── BUSCADOR Y FILA PROPIA ─────────────────────────────────────────────── */
 #hub-top{display:flex;flex-direction:column;gap:12px}
@@ -502,11 +502,11 @@ a.tb-obj .tb-lbl{color:#22c55e}
   color:#e2e8f0;font-family:'Barlow Condensed',sans-serif;font-weight:600;
   font-size:14px;letter-spacing:.3px;outline:none}
 #hb-find:focus{border-color:rgba(230,167,67,.55);box-shadow:0 0 0 3px rgba(230,167,67,.12)}
-#hb-find::placeholder{color:#64748b}
-.hb-cnt{font-size:10px;color:#64748b;letter-spacing:1px;white-space:nowrap}
+#hb-find::placeholder{color:#94a3b8}
+.hb-cnt{font-size:10px;color:#94a3b8;letter-spacing:1px;white-space:nowrap}
 .hb-modo{display:flex;gap:4px}
 .hb-mb{padding:9px 13px;border-radius:9px;border:1px solid rgba(255,255,255,.12);
-  background:#0d0e1a;color:#64748b;font-family:'Barlow Condensed',sans-serif;font-size:12px;
+  background:#0d0e1a;color:#94a3b8;font-family:'Barlow Condensed',sans-serif;font-size:12px;
   font-weight:700;letter-spacing:1.2px;text-transform:uppercase;cursor:pointer;transition:all .15s}
 .hb-mb.on{background:#1a1408;border-color:rgba(230,167,67,.45);color:#e6a743}
 .hb-chips{display:flex;gap:8px;flex-wrap:wrap}
@@ -520,13 +520,13 @@ a.tb-obj .tb-lbl{color:#22c55e}
   letter-spacing:.3px;transition:all .15s}
 .hb-chip:hover{border-color:var(--chip,#e6a743);transform:translateY(-1px)}
 .hb-chip i{font-style:normal;font-size:15px}
-.hb-vacio{font-size:11px;color:#475569;letter-spacing:.3px}
+.hb-vacio{font-size:11px;color:#8395ac;letter-spacing:.3px}
 
 /* ── LA ESTRELLA DE CADA TARJETA ────────────────────────────────────────── */
 .card{position:relative}
 .card-fav{position:absolute;top:8px;right:8px;z-index:3;width:26px;height:26px;
   border-radius:8px;border:1px solid transparent;background:transparent;cursor:pointer;
-  color:#475569;font-size:13px;line-height:1;padding:0;opacity:0;transition:all .15s}
+  color:#8395ac;font-size:13px;line-height:1;padding:0;opacity:0;transition:all .15s}
 .card:hover .card-fav,.card-fav.on{opacity:1}
 .card-fav:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);color:#e6a743}
 .card-fav.on{color:#e6a743}
@@ -559,7 +559,7 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 .section.hb-plegada .cards-grid{display:none}
 .hb-desplegar{margin-left:auto;padding:5px 12px;border-radius:8px;
   border:1px solid rgba(255,255,255,.1);background:rgba(7,8,15,.6);
-  color:#64748b;font-family:'Barlow Condensed',sans-serif;
+  color:#94a3b8;font-family:'Barlow Condensed',sans-serif;
   font-size:11px;font-weight:700;letter-spacing:1.2px;
   text-transform:uppercase;cursor:pointer;flex-shrink:0}
 .hb-desplegar:hover{color:#e2e8f0;border-color:rgba(255,255,255,.2)}
@@ -592,7 +592,7 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261011-0926" defer></script>
+<script src="iconos.js?v=20261011-1004" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -984,14 +984,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">19</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">OCT</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">OCT</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J1</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J1</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> LAUSANNE</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> LAUSANNE</div>
           </div>
         </div>
       </div>
@@ -999,14 +999,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">25</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">OCT</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">OCT</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J2</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J2</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> ST. GALLEN</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> ST. GALLEN</div>
           </div>
         </div>
       </div>
@@ -1014,14 +1014,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">01</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J3</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J3</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
         </div>
       </div>
@@ -1029,14 +1029,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">05</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J4</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J4</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> JONA</div>
           </div>
         </div>
       </div>
@@ -1044,14 +1044,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">08</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J5</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J5</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1059,14 +1059,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">15</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J6</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J6</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SCHONENWERD</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> SCHONENWERD</div>
           </div>
         </div>
       </div>
@@ -1074,14 +1074,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">22</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J7</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J7</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> CHENOIS</div>
           </div>
         </div>
       </div>
@@ -1089,14 +1089,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">29</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">NOV</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J8</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J8</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> JONA</div>
           </div>
         </div>
       </div>
@@ -1104,14 +1104,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">07</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J9</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J9</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> LAUSANNE</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> LAUSANNE</div>
           </div>
         </div>
       </div>
@@ -1119,14 +1119,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">13</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J10</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J10</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> ST. GALLEN</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> ST. GALLEN</div>
           </div>
         </div>
       </div>
@@ -1134,14 +1134,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">20</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">DIC</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J11</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J11</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
         </div>
       </div>
@@ -1149,14 +1149,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">03</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J12</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J12</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1164,14 +1164,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">11</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J13</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J13</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SURSEE</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> SURSEE</div>
           </div>
         </div>
       </div>
@@ -1179,14 +1179,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">17</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J14</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J14</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> SCHONENWERD</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> SCHONENWERD</div>
           </div>
         </div>
       </div>
@@ -1194,14 +1194,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">31</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ENE</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J15</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J15</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> CHENOIS</div>
           </div>
         </div>
       </div>
@@ -1209,14 +1209,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">08</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J16</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J16</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> JONA</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> JONA</div>
           </div>
         </div>
       </div>
@@ -1224,14 +1224,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">14</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J17</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J17</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
         </div>
       </div>
@@ -1239,14 +1239,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">21</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J18</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J18</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
         </div>
       </div>
@@ -1254,14 +1254,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">25</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">FEB</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J19</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J19</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> COLOMBIER</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> COLOMBIER</div>
           </div>
         </div>
       </div>
@@ -1269,14 +1269,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">07</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J20</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J20</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> CHENOIS</div>
           </div>
         </div>
       </div>
@@ -1284,14 +1284,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">14</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J21</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J21</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> CHENOIS</div>
           </div>
         </div>
       </div>
@@ -1299,14 +1299,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">17</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J22</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J22</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> CHENOIS</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> CHENOIS</div>
           </div>
         </div>
       </div>
@@ -1314,14 +1314,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">28</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">MAR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J23</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J23</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1329,14 +1329,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">04</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J24</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J24</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1344,14 +1344,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#818CF8;line-height:1;">09</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J25</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J25</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1359,14 +1359,14 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
         <div style="display:flex;align-items:stretch;">
           <div style="background:rgba(129,140,248,.06);border-right:1px solid var(--border);padding:16px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:64px;gap:2px;">
             <div style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#e8192c;line-height:1;">12</div>
-            <div style="font-size:9px;color:#475569;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
+            <div style="font-size:9px;color:#8395ac;letter-spacing:1.5px;text-transform:uppercase;">ABR</div>
           </div>
           <div style="flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:5px;">
             <div style="display:flex;align-items:center;gap:8px;">
-              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#475569;">J26</span>
-              <span style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
+              <span style="font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:#8395ac;">J26</span>
+              <span style="font-size:9px;color:#8395ac;letter-spacing:1px;text-transform:uppercase" data-t="JUGADO"><span data-t="JUGADO">JUGADO</span></span>
             </div>
-            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#475569;font-size:12px'>vs</span> AMRISWIL</div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;line-height:1.2;">NAFELS <span style='color:#8395ac;font-size:12px'>vs</span> AMRISWIL</div>
           </div>
         </div>
       </div>
@@ -1582,7 +1582,7 @@ function updateResultados(){
     var div = document.createElement('div');
     div.className = 'auto-result';
     div.style.cssText = "font-family:'Bebas Neue',sans-serif;font-size:16px;color:"+color+";letter-spacing:2px;";
-    div.innerHTML = casla+' — '+riv+' <span style="font-size:9px;color:#64748b;letter-spacing:1px;">'+tipo+'</span>';
+    div.innerHTML = casla+' — '+riv+' <span style="font-size:9px;color:#94a3b8;letter-spacing:1px;">'+tipo+'</span>';
     // Insert after the CASLA vs RIVAL line
     var rivalDiv = card.querySelector('[style*="font-size:17px"]');
     if(rivalDiv && rivalDiv.nextSibling){
@@ -1645,7 +1645,7 @@ function highlightNextMatch(){
 .hm-card:hover{transform:translateY(-2px);filter:brightness(1.15)}
 .hm-icon{font-size:28px}
 .hm-lbl{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px}
-.hm-sub{font-size:9px;color:#64748b;text-align:center}
+.hm-sub{font-size:9px;color:#94a3b8;text-align:center}
 
 /* === ENCABEZADO: QUE NO SE ENCIME === */
 /* La barra de arriba es un flex en una sola fila. Cuando el titulo es
@@ -1703,7 +1703,7 @@ function highlightNextMatch(){
       <a class="hm-card" href="hm_armador.html?equipo=nafels"   style="background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.3)"><span class="hm-icon">🎱</span><span class="hm-lbl" style="color:#F59E0B" data-t="ARMADO"><span data-t="ARMADO">ARMADO</span></span><span class="hm-sub" data-t="Llamadas · Pos · EFF"><span data-t="Llamadas · Pos · EFF">Llamadas · Pos · EFF</span></span></a>
       <a class="hm-card" href="hm_defensa.html" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.3)"><span class="hm-icon">🧤</span><span class="hm-lbl" style="color:#EF4444" data-t="DEFENSA"><span data-t="DEFENSA">DEFENSA</span></span><span class="hm-sub" data-t="EFF · Zonas · Por rival"><span data-t="EFF · Zonas · Por rival">EFF · Zonas · Por rival</span></span></a><a class="hm-card" href="hm_bloqueo.html" style="background:rgba(129,140,248,.08);border-color:rgba(129,140,248,.3)"><span class="hm-icon">🧱</span><span class="hm-lbl" style="color:#818CF8" data-t="BLOQUEO"><span data-t="BLOQUEO">BLOQUEO</span></span><span class="hm-sub" data-t="EFF · Zona del ataque · Combos"><span data-t="EFF · Zona del ataque · Combos">EFF · Zona del ataque · Combos</span></span></a>
     </div>
-    <div style="margin-top:14px;font-size:10px;color:#475569;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso"><span data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</span></div>
+    <div style="margin-top:14px;font-size:10px;color:#8395ac;text-align:center" data-t="NLA Suiza 2026/27 · temporada en curso"><span data-t="NLA Suiza 2026/27 · temporada en curso">NLA Suiza 2026/27 · temporada en curso</span></div>
   </div>
 </div>
 <script>
@@ -1711,9 +1711,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261011-0926"></script>
+<script src="chat_nafels.js?v=20261011-1004"></script>
 
-<script src="proximo_rival.js?v=20261011-0926" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261011-1004" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1779,13 +1779,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261011-0926" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261011-0926"></script>
+<script src="fixture_auto.js?v=20261011-1004" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261011-1004"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261011-0926" defer></script>
+<script src="onesignal_push.js?v=20261011-1004" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2019,7 +2019,7 @@ pintarProximo();
     } else {
       h += '<a class="tb-box" href="calendario.html">'
          + '<div class="tb-lbl">Próximo partido</div>'
-         + '<div class="tb-big" style="color:#475569">—</div>'
+         + '<div class="tb-big" style="color:#8395ac">—</div>'
          + '<div class="tb-vacio">No hay partidos futuros en el calendario. '
          + 'Cargalos ahí y esto se completa solo.</div></a>';
     }
@@ -2451,7 +2451,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261011-0926"></script>
+<script src="ayuda.js?v=20261011-1004"></script>
 </body>
 </html>
 

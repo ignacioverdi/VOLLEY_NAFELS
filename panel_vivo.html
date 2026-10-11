@@ -89,7 +89,7 @@
 /* El tiempo de video de cada accion, a la derecha y en gris: se lee
    cuando lo buscas y no molesta mientras scouteas. */
 .crow .tcode{ margin-left:auto; padding-left:10px; font-size:11px;
-  color:#64748b; font-family:'JetBrains Mono',monospace; letter-spacing:.5px; }
+  color:#94a3b8; font-family:'JetBrains Mono',monospace; letter-spacing:.5px; }
 .crow .tcode.sin{ color:#334155; }
 .crow.sel .tcode{ color:#94a3b8; }
 </style>
@@ -568,13 +568,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261011-0926"></script>
-<script src="selector_categoria.js?v=20261011-0926"></script>
-<script src="lang.js?v=20261011-0926"></script>
+<script src="categorias_club.js?v=20261011-1004"></script>
+<script src="selector_categoria.js?v=20261011-1004"></script>
+<script src="lang.js?v=20261011-1004"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261011-0926">
+<link rel="stylesheet" href="movil.css?v=20261011-1004">
 </head>
 <body>
 
@@ -1314,9 +1314,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261011-0926"></script>
-<script src="objetivos.js?v=20261011-0926" onerror="void 0"></script>
+<script src="firebase.js?v=20261011-1004" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-1004"></script>
+<script src="objetivos.js?v=20261011-1004" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1325,14 +1325,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261011-0926" onerror="void 0"></script>
-<script src="video_delay.js?v=20261011-0926" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261011-1004" onerror="void 0"></script>
+<script src="video_delay.js?v=20261011-1004" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261011-0926" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261011-0926"></script>
+<script src="plantel_nafels.js?v=20261011-1004" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261011-1004"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -2777,7 +2777,7 @@ function buscarCodigo(){
     + 'font-family:inherit;min-width:250px';
   caja.innerHTML =
       '<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">'
-    +   '<span style="font-size:10px;letter-spacing:1.4px;color:#64748b;flex:1">BUSCAR CÓDIGO</span>'
+    +   '<span style="font-size:10px;letter-spacing:1.4px;color:#94a3b8;flex:1">BUSCAR CÓDIGO</span>'
     +   '<span onclick="bcCerrar()" style="cursor:pointer;color:#94a3b8;font-size:15px;line-height:1">×</span>'
     + '</div>'
     + '<input id="bc-q" type="text" placeholder="*05  ·  RQ#  ·  14A" '
@@ -2851,9 +2851,9 @@ function bcPintar(){
     return '<div onclick="BC.cur='+n+';bcPintar();bcSaltar()" style="padding:3px 6px;cursor:pointer;'
          + 'display:flex;gap:8px;border-radius:5px;'
          + (n===BC.cur ? 'background:rgba(232,25,44,.18);color:#fff' : 'color:#cbd5e1') + '">'
-         + '<span style="color:#64748b;min-width:34px">#'+(idx+1)+'</span>'
+         + '<span style="color:#94a3b8;min-width:34px">#'+(idx+1)+'</span>'
          + '<span style="font-family:'JetBrains Mono',monospace;flex:1">'+(c.c||'')+'</span>'
-         + '<span style="color:#64748b">set '+(c.set||'-')+'</span></div>';
+         + '<span style="color:#94a3b8">set '+(c.set||'-')+'</span></div>';
   }).join('');
 }
 
@@ -9465,8 +9465,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261011-0926" onerror="void 0"></script>
-<script src="ayuda.js?v=20261011-0926"></script>
+<script src="volver_inicio.js?v=20261011-1004" onerror="void 0"></script>
+<script src="ayuda.js?v=20261011-1004"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -9597,10 +9597,10 @@ function rvPintar(){
           return '<div onclick="rvIr('+i+')" style="padding:5px 7px;cursor:pointer;'
                + 'display:flex;gap:9px;font-size:12.5px;'
                + (i===RV.cur?'background:rgba(232,25,44,.16);color:#fff':'color:#cbd5e1') + '">'
-               + '<span style="color:#64748b;min-width:26px">'+(i+1)+'</span>'
+               + '<span style="color:#94a3b8;min-width:26px">'+(i+1)+'</span>'
                + '<span style="font-family:'JetBrains Mono',monospace;flex:1">'+x.cod+'</span>'
                + '<span style="color:#94a3b8">set '+(x.set||'-')+'</span>'
-               + '<span style="color:#64748b">'+rvHhmmss(x.t)+'</span>'
+               + '<span style="color:#94a3b8">'+rvHhmmss(x.t)+'</span>'
                + '</div>'; }).join('')
     + '</div>';
 }
@@ -10634,11 +10634,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261011-0926" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261011-1004" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261011-0926" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261011-1004" onerror="void 0"></script>
 </body>
 </html>

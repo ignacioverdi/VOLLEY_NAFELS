@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0f1a;--surface:#111827;--border:rgba(255,255,255,.08);--text:#e2e8f0;--muted:#64748b;--accent:#3b82f6;--green:#22c55e;--orange:#f97316;--red:#ef4444;--purple:#818cf8;--yellow:#fbbf24}
+:root{--bg:#0a0f1a;--surface:#111827;--border:rgba(255,255,255,.08);--text:#e2e8f0;--muted:#94a3b8;--accent:#3b82f6;--green:#22c55e;--orange:#f97316;--red:#ef4444;--purple:#818cf8;--yellow:#fbbf24}
 body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh}
 .header{background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .header h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px}
@@ -74,7 +74,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 .pos-MIDDLE{background:rgba(129,140,248,.15);color:#a5b4fc}
 .pos-SETTER{background:rgba(245,158,11,.15);color:#fcd34d}
 .eff-val{font-family:'Bebas Neue',sans-serif;font-size:14px}
-.pos-eff{color:#22c55e}.neg-eff{color:#ef4444}.neu-eff{color:#64748b}
+.pos-eff{color:#22c55e}.neg-eff{color:#ef4444}.neu-eff{color:#94a3b8}
 .no-data{text-align:center;padding:48px;color:var(--muted);font-size:13px;letter-spacing:1px}
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:rgba(255,255,255,.02)}
@@ -92,12 +92,12 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 #teams-table tbody tr.is-nafels:hover{background:rgba(34,197,94,.14)}
 #teams-table tbody tr.is-nafels td{border-top:1px solid rgba(34,197,94,.25);border-bottom:1px solid rgba(34,197,94,.25)}
 .t-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.5px;text-decoration:none}
-.t-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#475569}
+.t-rank{font-family:'Bebas Neue',sans-serif;font-size:20px;color:#8395ac}
 .t-rank.r1{color:#fcd34d}
 .tval{font-family:'Bebas Neue',sans-serif;font-size:21px;line-height:1}
-.ttot{font-size:10px;color:#64748b;margin-left:4px}
-.rank-legend{margin-top:12px;font-size:11px;color:#64748b;letter-spacing:.3px}
-.rank-legend .lg-tot{color:#475569}
+.ttot{font-size:10px;color:#94a3b8;margin-left:4px}
+.rank-legend{margin-top:12px;font-size:11px;color:#94a3b8;letter-spacing:.3px}
+.rank-legend .lg-tot{color:#8395ac}
 /* PLAYERS RANKING (sección 8) */
 .sub-pills{margin-top:-6px;margin-bottom:18px}
 .sub-pills .skill-pill{padding:5px 12px;font-size:11px;border-radius:7px}
@@ -160,14 +160,14 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
 <!-- Puerta de entrada. Esta es la PLANTILLA: la tabla de liga se regenera
      desde aca en cada HACER_TODO, asi que el candado tiene que estar aqui
      o se pierde en la proxima corrida. -->
-<script src="firebase.js?v=20261011-0926" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261011-0926"></script>
+<script src="firebase.js?v=20261011-1004" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261011-1004"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261011-0926">
+<link rel="stylesheet" href="movil.css?v=20261011-1004">
 
-<script src="iconos.js?v=20261011-0926" defer></script>
+<script src="iconos.js?v=20261011-1004" defer></script>
 </head>
 <body>
 <div class="header">
@@ -244,7 +244,7 @@ tbody td.col-group-blk{border-left:1px solid rgba(250,204,21,.08)}
       <tbody id="teams-tbody"></tbody>
     </table>
   </div>
-  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot" data-t="(total de acciones)"><span data-t="(total de acciones)"><span data-t="(total de acciones)">(total de acciones)</span></span></span> · color = ranking en ese fundamento (<span style="color:#22c55e" data-t="verde">verde</span> <span data-t="mejor →"><span data-t="mejor →">mejor →</span></span> <span style="color:#ef4444" data-t="rojo">rojo</span> <span data-t="peor) ·"><span data-t="peor) ·">peor) ·</span></span> <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#475569"></span></div>
+  <div class="rank-legend">Cada celda: <b>EFF%</b> <span class="lg-tot" data-t="(total de acciones)"><span data-t="(total de acciones)"><span data-t="(total de acciones)">(total de acciones)</span></span></span> · color = ranking en ese fundamento (<span style="color:#22c55e" data-t="verde">verde</span> <span data-t="mejor →"><span data-t="mejor →">mejor →</span></span> <span style="color:#ef4444" data-t="rojo">rojo</span> <span data-t="peor) ·"><span data-t="peor) ·">peor) ·</span></span> <span style="color:#22c55e;font-weight:700">Näfels</span> resaltado. <span id="updated-label" style="color:#8395ac"></span></div>
 </div>
 <div class="panel" id="panel-jugadores">
   <div class="section-title" data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO"><span data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO"><span data-t="RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO">RANKING JUGADORES NLA — ELEGÍ UN FUNDAMENTO</span></span></div>
@@ -619,7 +619,7 @@ function renderPlayers(){
     var sec=s.cols.map(function(c){return '<td>'+fmtPct(p[c.k])+'</td>';}).join('');
     return '<tr class="'+(isNaf?'is-nafels':'')+'">'
       +'<td><span class="t-rank'+(i===0?' r1':'')+'">'+rank+'</span></td>'
-      +'<td><span style="font-weight:700;color:#64748b">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
+      +'<td><span style="font-weight:700;color:#94a3b8">#'+p.num+'</span> <span style="color:#e2e8f0">'+p.name+'</span></td>'
       +'<td><a href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'" style="text-decoration:none;display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+tc+'22;color:'+tc+'">'+p.team+'</a><a class="gp-btn" href="game_plan.html?rival='+pslug+'" title="Abrir game plan de '+p.team+'">📋</a></td>'
       +'<td><span class="pos-badge pos-'+p.pos_label+'">'+p.pos_label+'</span></td>'
       +'<td class="active-col"><span class="tval" style="color:'+col+'">'+evs+'</span></td>'
@@ -648,12 +648,12 @@ function loadStats(){
   });
 }
 loadStats();
-</script><script src="lang.js?v=20261011-0926" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261011-0926" onerror="void 0"></script>
+</script><script src="lang.js?v=20261011-1004" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261011-1004" onerror="void 0"></script>
 <!-- El boton de ayuda faltaba solo en esta pantalla: esta en las otras 54.
      El selector de categoria NO va a proposito: esta tabla es de la liga
      entera, no de una categoria del club. -->
-<script src="ayuda.js?v=20261011-0926"></script>
+<script src="ayuda.js?v=20261011-1004"></script>
 <script>
 /* El interruptor: apagado muestra todo tal cual viene, incluidos los
    rivales de copa y los jugadores con pocas acciones. */
