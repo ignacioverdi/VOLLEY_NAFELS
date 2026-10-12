@@ -56,6 +56,9 @@ DATOS = [
     # que se publica cifrado como el resto. Sin esta linea quedaba legible
     # para cualquiera que abriera la direccion.
     'datos_informe.js',
+    # La lectura del partido: sale de los mismos .dvw y tiene el
+    # analisis de cada rival adentro, asi que viaja cifrada igual.
+    'datos_lectura.js',
 ]
 # tambien las bases grandes
 def bases(carpeta):

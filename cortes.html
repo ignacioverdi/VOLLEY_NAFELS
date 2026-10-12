@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261012-0901"></script>
-<script src="selector_categoria.js?v=20261012-0901"></script>
+<script src="categorias_club.js?v=20261012-1233"></script>
+<script src="selector_categoria.js?v=20261012-1233"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261012-0901"></script>
-<script src="filtro_tipo.js?v=20261012-0901" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261012-1233"></script>
+<script src="filtro_tipo.js?v=20261012-1233" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261012-0901" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261012-0901"></script>
+<script src="firebase.js?v=20261012-1233" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261012-1233"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,11 +233,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261012-0901">
+<link rel="stylesheet" href="movil.css?v=20261012-1233">
 
-<script src="iconos.js?v=20261012-0901" defer></script>
+<script src="iconos.js?v=20261012-1233" defer></script>
 
-<script src="nav.js?v=20261012-0901" defer></script>
+<script src="nav.js?v=20261012-1233" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -1227,7 +1227,7 @@ var fTy=[];
     }
     var pClips=Q.get('clips');
     if(pClips){
-      var want=pClips.split(';').map(function(str){var x=str.split('-');return {mc:x[0],t:parseFloat(x[1]),num:x[2]};});
+      var want=pClips.split(';').map(function(str){/* El codigo del partido puede traer guiones adentro (P2026-10-07-20261007AXPV): se lee de DERECHA a IZQUIERDA, que es donde estan el segundo y el dorsal, y lo que queda es el codigo. Para los links viejos, con codigo de 5 o 6 digitos, el resultado es el mismo. */var x=str.split('-');var num=x.pop();var t=x.pop();return {mc:x.join('-'),t:parseFloat(t),num:num};});
       filtered=[];
       want.forEach(function(w){var acts=(VD.matches[w.mc]||{}).actions||[];for(var k=0;k<acts.length;k++){if(acts[k].num===w.num&&Math.abs(acts[k].t-w.t)<0.05){var o={};for(var kk in acts[k])o[kk]=acts[k][kk];o.mc=w.mc;o._vid=ytId(MAP[w.mc]||'');filtered.push(o);break;}}});
       filtered.forEach(function(a){selected[ckey(a)]=1;});
@@ -1255,9 +1255,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261012-0901" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261012-0901" onerror="void 0"></script>
-<script src="ayuda.js?v=20261012-0901"></script>
+<script src="lang.js?v=20261012-1233" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261012-1233" onerror="void 0"></script>
+<script src="ayuda.js?v=20261012-1233"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════

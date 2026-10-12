@@ -51,6 +51,9 @@ DATOS = [
     # la de cifrado, HACER_TODO no lo puede abrir para regenerarlo y el
     # archivo queda congelado en la version del dia que se cifro.
     'datos_informe.js',
+    # La lectura del partido: sale de los mismos .dvw y tiene el
+    # analisis de cada rival adentro, asi que viaja cifrada igual.
+    'datos_lectura.js',
 ]
 # tambien las bases grandes
 def bases(carpeta):

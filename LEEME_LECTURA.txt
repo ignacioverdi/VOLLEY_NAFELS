@@ -1,0 +1,140 @@
+================================================================================
+  LA LECTURA DEL PARTIDO
+================================================================================
+
+QUE ES
+------
+Un bloque nuevo arriba de "Analisis del partido" que contesta, con numeros,
+la pregunta con la que uno abre esa pantalla: QUE PASO.
+
+Antes esa pantalla mostraba ocho tablas y vos tenias que encontrar lo
+importante. Ahora, cuando elegis un partido, arriba de las tablas aparece:
+
+  EL MARGEN   cuanto deberia haber salido el partido, y cuanto salio
+  DONDE       en que set y en que rotacion se fue
+  QUE         que fundamento costo mas puntos, medido EN PUNTOS
+  QUIEN       quien rindio por encima o por debajo de lo suyo
+
+Y en la tarjeta ACUMULADO, lo mismo para toda la temporada.
+
+
+EL MARGEN: la parte que no hace ningun software del mercado
+------------------------------------------------------------
+Todos los puntos de un partido salen de dos canastas:
+
+    puntos propios   = rallies ganados recibiendo (SO) + sacando (BP)
+    puntos del rival = el resto
+
+Y de cada canasta se sabe cuanto DEBERIA haber salido: el cambio de saque
+esperable sale de la calidad con la que recibiste, y el breakpoint esperable
+de la calidad con la que el rival recibio tus saques. Las dos referencias se
+calculan con TODOS los partidos cargados de la temporada, o sea con el nivel
+de esta liga — no con numeros de otro campeonato.
+
+De ahi sale el margen esperable, y la diferencia contra el margen real se
+reparte en dos aportes. La cuenta cierra exacta, no es una estimacion:
+
+    margen real - margen esperable = aporte del ataque + aporte del saque
+
+Ejemplo real, Nafels - Amriswil del 9/10:
+
+    Se perdio 61-90 (-29). El partido daba +0.6.
+    Ataque en cambio de saque   -8.8   (52.3% real contra 57.3% esperable)
+    Saque y bloqueo            -20.8   (23.8% real contra 40.3% esperable)
+
+Traducido: con esa recepcion y con como recibio Amriswil, el partido estaba
+parejo. Se fue casi entero por el breakpoint.
+
+
+CADA CONCLUSION SE PUEDE MIRAR EN VIDEO
+----------------------------------------
+Las conclusiones que tienen jugadas identificables traen un boton
+"ver N jugadas" que abre Cortes de video con esos rallies ya seleccionados.
+El segundo de video sale del propio .dvw (campo 12), el mismo que usa el
+generador de cortes.
+
+
+DE PASO: UN ARREGLO
+-------------------
+Probando los botones de video aparecio un problema que ya estaba y no tenia
+nada que ver con esto: los links de "compartir recorte" de la pantalla de
+Cortes NO FUNCIONABAN en ningun partido tuyo.
+
+El link viaja como  codigo-segundo-dorsal  y del otro lado se partia por el
+primer guion. Eso anda si el codigo del partido es el numero oficial de la
+liga (5 o 6 digitos). Pero tus .dvw se nombran por fecha y no traen ese
+numero, asi que el codigo que arma build_video.py es del tipo
+P2026-10-07-20261007AXPV, con guiones adentro: el link se partia mal y la
+pantalla abria con CERO clips.
+
+Medido con los dos casos:
+    link con codigo de 5 digitos   ->  3 clips   (antes y despues)
+    link con codigo con guiones    ->  0 clips antes  /  4 clips despues
+
+Ahora se lee de derecha a izquierda: el dorsal y el segundo son los dos
+ultimos pedazos y lo que queda es el codigo. Los links viejos siguen
+funcionando igual. Es una sola linea de cortes.html.
+
+
+QUE ARCHIVOS SE AGREGAN
+------------------------
+  gen_lectura.py          calcula la lectura desde los .dvw
+  lectura.js              la dibuja (en espanol, ingles y aleman)
+  PONER_LECTURA.py/.bat   el instalador
+  ACTUALIZAR_LECTURA.bat  genera y cifra los datos sin correr HACER_TODO
+
+QUE ARCHIVOS SE TOCAN (con copia .antes_lectura de cada uno)
+-------------------------------------------------------------
+  analisis.html        2 lineas, antes de abrirDatos()
+  cifrar_datos.py      1 linea: datos_lectura.js entra a la lista
+  descifrar_datos.py   1 linea: lo mismo
+  HACER_TODO.bat       un bloque, despues del informe de equipo
+  cortes.html          1 linea: el arreglo de los links
+
+
+PASO A PASO
+-----------
+  1) PONER_LECTURA.bat        instala (antes muestra lo que va a hacer)
+  2) ACTUALIZAR_LECTURA.bat   genera la lectura de los 9 partidos y la cifra
+  3) VER_LA_APP.bat           miralo antes de publicar
+  4) PUBLICAR_EN_GITHUB.bat
+
+De aca en mas se regenera sola: HACER_TODO.bat ya la incluye.
+
+
+LO QUE SE PROBO ANTES DE MANDARTELO
+------------------------------------
+- Las 69 pantallas abiertas en un navegador de verdad, con la lectura puesta:
+  CERO errores de JavaScript.
+- Los 9 resultados que calcula el motor (0-4, 2-3, 0-3, 0-4, 2-1, 3-2, 2-1,
+  2-2, 4-0) y los parciales de cada set dan EXACTAMENTE lo mismo que tu
+  propio datos_historial.js, que se genera por otro camino.
+- La identidad del libro mayor verificada partido por partido:
+  margen - margen esperable = aporte ataque + aporte saque.
+- El arreglo de los links de recorte, con los dos tipos de codigo.
+- Celular (412px), tablet y PC: sin desborde horizontal en ninguno.
+- El instalador corrido dos veces seguidas: la segunda no hace nada.
+- Los finales de linea de cada archivo tocado quedan como estaban.
+
+
+SI ALGO NO TE GUSTA
+--------------------
+Para apagarlo sin desinstalar nada, en la consola del navegador:
+    localStorage.setItem('vs_lectura','off')
+Para volver a prenderlo:
+    localStorage.removeItem('vs_lectura')
+
+Para volver atras del todo: cada archivo tocado tiene su copia
+<archivo>.antes_lectura al lado.
+
+
+UNA COSA QUE VI Y NO TOQUE
+---------------------------
+En "DVW NAFELS 2027" hay dos veces el mismo partido contra St Gallen:
+el archivo bueno y "&206-09-30 ..." (le falta un 2 en el ano). Adentro el
+equipo figura como PRUEBA, asi que el informe de equipo lo cuenta como un
+noveno equipo de la liga y mete sus numeros en la referencia.
+
+gen_lectura.py lo descarta solo (reconoce el partido repetido por la huella
+del scout), pero gen_informe.py no. Si lo borras, el informe de equipo
+tambien queda limpio. No lo toco porque me pediste no tocar los .dvw.

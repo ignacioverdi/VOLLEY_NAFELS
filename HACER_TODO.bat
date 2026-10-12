@@ -331,6 +331,23 @@ if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 REM ===================================================================
+REM   LA LECTURA DEL PARTIDO
+REM
+REM   El informe de arriba lee la TEMPORADA. Esto lee cada PARTIDO por
+REM   separado, con la misma tabla de referencia de la liga: cuanto
+REM   deberia haber salido el partido, en que set y en que rotacion se
+REM   fue, que fundamento costo mas puntos y quien rindio por encima o
+REM   por debajo de lo suyo. Se dibuja arriba de Analisis del partido.
+REM ===================================================================
+echo  ================= LA LECTURA DEL PARTIDO =================
+echo.
+python gen_lectura.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_lectura.js"
+if errorlevel 1 echo      [aviso] Problema armando la lectura. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema armando la lectura."
+if errorlevel 1 set /a NFALLOS+=1
+echo.
+
+REM ===================================================================
 REM   ESTADISTICAS DE LA LIGA
 REM
 REM   Esto NO se generaba aca: nla_stats.json quedaba con los numeros de
