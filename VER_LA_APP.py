@@ -131,6 +131,16 @@ VISTA = """<script>
 
 RX_HEAD = re.compile(rb'<head[^>]*>', re.I)
 
+# ── LA BARRA NUEVA, SOLO EN LA VISTA PREVIA ────────────────────────────────
+# nav.js existe en la carpeta pero NINGUNA pantalla lo llama: ni un archivo
+# tuyo fue modificado. La vista previa se lo agrega al vuelo, en memoria, para
+# que puedas probarla. Si cerras esta ventana, no queda rastro.
+# Las de tiempo real no la llevan: ahi la barra estorba.
+SIN_BARRA = {'panel_vivo.html', 'panel_voley.html', 'velocidades_vivo.html',
+             'pantalla_delay.html', 'prueba_delay.html', 'camara.html',
+             'pizarron.html', 'modelo_completo.html', 'revisar.html'}
+BARRA = b'<script src="nav.js" defer></script>'
+
 
 class Manejador(SimpleHTTPRequestHandler):
     def __init__(self, *a, **kw):
@@ -159,7 +169,11 @@ class Manejador(SimpleHTTPRequestHandler):
         if not m:
             return None
         trozo = VISTA.replace('@@LLAVE@@', LLAVE).encode('utf-8')
-        return crudo[:m.end()] + b'\n' + trozo + crudo[m.end():]
+        extra = b''
+        hay_barra = os.path.exists(os.path.join(AQUI, 'nav.js'))
+        if hay_barra and os.path.basename(ruta).lower() not in SIN_BARRA and b'nav.js' not in crudo:
+            extra = b'\n' + BARRA
+        return crudo[:m.end()] + b'\n' + trozo + extra + crudo[m.end():]
 
     def do_GET(self):
         cuerpo = self._html_con_vista()
@@ -231,6 +245,11 @@ def main():
         print('     [aviso] No encontre LLAVE.txt, asi que te va a pedir clave,')
         print('     y Firebase la va a rechazar desde 127.0.0.1. Avisame.')
     print()
+    if os.path.exists(os.path.join(AQUI, 'nav.js')):
+        print('     NOVEDAD: estas viendo la BARRA DE NAVEGACION nueva.')
+        print('     Arriba de todo, las 45 pantallas en 8 grupos. Apreta / para buscar.')
+        print('     No se instalo nada: la barra se agrega al vuelo, solo aca.')
+        print()
     print('     Para apagarlo: cerra esta ventana, o Ctrl+C')
     print('  ' + '-' * 64)
     print()
