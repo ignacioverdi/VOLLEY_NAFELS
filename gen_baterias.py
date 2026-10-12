@@ -201,6 +201,17 @@ def _bat_nuevo():
             # cuenta en 'zag' y tambien en 'rp'. Es a proposito: son dos
             # preguntas distintas sobre la misma pelota.
             'zag':na(),
+            # ══ EL ARMADO DE ALTA ════════════════════════════════════════
+            # 'E' es el armado y el tipo H es la pelota alta: la que levanta
+            # el armador cuando la recepcion no deja jugar rapido. Es el unico
+            # armado que se puntua, y es el fundamento de la bateria 'hset'
+            # de objetivos_config.js, que hasta ahora mostraba un guion porque
+            # este motor no contaba la letra E.
+            #
+            # No hace falta ninguna carpeta nueva: los armados de alta estan
+            # en los .dvw que ya se leen —641 en los partidos de la 26/27 y
+            # 2.366 en los entrenamientos—, igual que el saque o el ataque.
+            'E':{'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0},
             'rp':na(),'ri':na(),'rm':na(),'tr':na()}
 
 def _calc_baterias(codes, side):
@@ -255,6 +266,13 @@ def _calc_baterias(codes, side):
         elif skill=='B' and pfx==side:
             Pb=get(num); Pb['B']['T']+=1
             if res in Pb['B']: Pb['B'][res]+=1
+        elif skill=='E' and pfx==side:
+            # Solo la pelota ALTA (tipo H). La rapida (Q) y la tensa (T) son
+            # otra decision del armador y tienen su propia lectura; mezclarlas
+            # esconde las dos.
+            if len(body)>3 and body[3]=='H':
+                Pe=get(num); Pe['E']['T']+=1
+                if res in Pe['E']: Pe['E'][res]+=1
         elif skill=='A' and pfx==side:
             tipo=body[3]  # Q=central · H=alta · T=rápida
             # ══ DE DONDE SALIO EL ATAQUE ════════════════════════════════════
@@ -308,6 +326,9 @@ def _bat_to_pcts(P):
     # abajo, incluido el '!': sin el, el dia que llegue un jugador sin
     # defensa cargada, la cuenta revienta.
     D=P.get('D') or {'#':0,'+':0,'!':0,'-':0,'=':0,'T':0}
+    # El armado de alta. Se lee con .get() como la defensa: un archivo de
+    # baterias viejo no lo trae y la cuenta no tiene que reventar por eso.
+    E=P.get('E') or {'#':0,'+':0,'!':0,'-':0,'/':0,'=':0,'T':0}
     return {
         # El dashboard ya buscaba defT / defPerf / defErr / def: estaba escrito
         # el lector pero nadie generaba el dato.
@@ -432,6 +453,21 @@ def _bat_to_pcts(P):
         'n_atqrm': P['rm']['T'],
         'n_atqtr': P['tr']['T'],
         'n_atqz':  P['zag']['T'],
+        # ══ ARMADO DE ALTA ═══════════════════════════════════════════════════
+        #  La pantalla de High Set puntua cada armado de -2 a +2:
+        #      #  +2     +  +1     !  +0,5     -  -1     /  -1,5     =  -2
+        #  y muestra el promedio por armado. Aca se lleva a la escala 0-100
+        #  del resto de las baterias con (p + 2) / 4 * 100, donde el error
+        #  queda en 0, lo perfecto en 100 y el neutro en 50.
+        #
+        #  Es exactamente la conversion que ya documenta la meta 'hset' de
+        #  objetivos_config.js ("los 70 del objetivo son +0,80 por armado").
+        #  Lo unico que faltaba era que alguien calculara el numero.
+        'hset':   _roundpy(((2*E['#'] + E['+'] + 0.5*E['!'] - E['-']
+                             - 1.5*E['/'] - 2*E['=']) / E['T'] + 2) / 4 * 100) if E['T'] else None,
+        'n_hset': E['T'],
+        'hsetD':  {'p':E['#'], 'o':E['+'], 'n':E['!'], 'm':E['-'],
+                   's':E['/'], 'e':E['='], 't':E['T']},
     }
 
 # ══════════ LECTURA DVW ══════════
