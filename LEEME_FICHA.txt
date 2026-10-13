@@ -1,0 +1,187 @@
+===============================================================================
+  MI JUEGO — la pantalla del jugador
+===============================================================================
+
+  QUE ES
+
+  Una pantalla nueva, mi_juego.html, que le contesta al jugador cuatro cosas
+  que hoy no estan en ningun lado de la app:
+
+     1.  CUANTO APORTO, en puntos y no en una nota.
+     2.  PARTIDO POR PARTIDO, con la tendencia encima.
+     3.  CONTRA LOS DE SU PUESTO EN LA NLA, no contra sus companeros.
+     4.  SU REEL, con el segundo exacto de cada jugada.
+
+  Funciona igual con partidos y con entrenamientos. Y funciona desde hoy,
+  aunque todavia haya poca muestra: donde no alcanza, lo dice y no dibuja.
+
+
+-------------------------------------------------------------------------------
+  1 · EL APORTE
+-------------------------------------------------------------------------------
+
+  El numero grande de arriba son RALLIES, no una nota del 1 al 10.
+
+  Es la misma cuenta del informe de equipo, mirada jugador por jugador:
+
+     en recepcion   cuantos rallies gano con sus pases, contra los que se
+                    ganan en ESTA liga con esa misma calidad de pase
+     en ataque      su eficacia contra el promedio de los de su puesto
+     en saque       sus aces y sus errores contra los de su puesto
+
+  Todo en la misma unidad, por eso se puede sumar. "-12.1" quiere decir que
+  el equipo gano doce rallies menos de los que le correspondian por lo que
+  hizo el. No es una opinion ni una escala inventada: son puntos.
+
+  BLOQUEO Y DEFENSA NO ENTRAN A PROPOSITO. Con dos o tres por partido,
+  cualquier numero seria ruido. Van como cuenta, que es lo que son.
+
+
+-------------------------------------------------------------------------------
+  2 · PARTIDO POR PARTIDO
+-------------------------------------------------------------------------------
+
+  Barras arriba y abajo del cero, una por partido. Tocando una barra se abre
+  el detalle: cuanto puso la recepcion, cuanto el ataque, cuanto el saque.
+
+  Encima corre una linea: el promedio de los ultimos tres partidos. Esa es la
+  tendencia. Esta en las MISMAS unidades y en el MISMO eje que las barras —un
+  segundo eje seria otra cosa, y de las que mienten.
+
+  Debajo, "Ver la tabla" abre los mismos numeros escritos, para el que
+  prefiere leerlos.
+
+
+-------------------------------------------------------------------------------
+  3 · CONTRA SU PUESTO EN LA LIGA
+-------------------------------------------------------------------------------
+
+  Esta es la comparacion que faltaba. Un central comparado con un punta no
+  dice nada; comparado con los otros centrales de la NLA, dice todo.
+
+  Cada fila es un riel que va de lo PEOR a lo MEJOR que hace ese puesto en la
+  liga, con los dos numeros escritos en las puntas. La raya gris es el
+  promedio. El punto de color es el jugador. Al lado del nombre, el lugar:
+  "4o de 5".
+
+  SE COMPARA COLUMNA CONTRA COLUMNA. Suena obvio y es donde se rompen estas
+  pantallas: la tabla de la liga tiene una columna de EFICACIA de bloqueo y
+  otra de bloqueos PUNTO, y son numeros distintos. Mezclarlas le ponia a un
+  central "11.7%, 5o de 5, la liga en 43.2" cuando la liga en lo que el mide
+  esta en 16.1. Aca cada fila se compara contra la columna que mide lo mismo.
+
+  Donde no hay con quien compararse —porque la liga todavia no tiene tres
+  jugadores de ese puesto con muestra— la fila lo dice y no inventa un lugar.
+
+
+-------------------------------------------------------------------------------
+  4 · EL REEL
+-------------------------------------------------------------------------------
+
+  Sus jugadas, repartidas entre lo que de verdad hace: ataques punto,
+  bloqueos punto, aces y recepciones perfectas. Con el filtro de arriba se
+  elige, y el boton de abajo las pone todas seguidas.
+
+  Cada clip lleva SU segundo de video, leido de su propia linea del .dvw —no
+  el del rally—, asi que el link cae clavado. Y lleva su modo: las de
+  entrenamiento abren el video de entrenamiento y las de partido el del
+  partido, que son dos archivos distintos. Probado: 290 de 290 clips abren.
+
+
+-------------------------------------------------------------------------------
+  QUIEN VE QUE
+-------------------------------------------------------------------------------
+
+  JUGADOR      ve su ficha y nada mas. No hay selector y los numeros de sus
+               companeros no se dibujan en ningun lado de la pagina.
+  CUERPO TECNICO  ve el plantel completo, con el selector de arriba.
+
+  Es la misma regla del resto de la app (vb_role), no una nueva.
+
+
+-------------------------------------------------------------------------------
+  COMO SE PONE
+-------------------------------------------------------------------------------
+
+  1)  Copiar a la carpeta del club:
+
+          gen_ficha.py
+          ficha.js
+          mi_juego.html
+          PONER_FICHA.py        PONER_FICHA.bat
+          ACTUALIZAR_FICHA.bat
+          LEEME_FICHA.txt       (este archivo)
+
+  2)  Doble clic en  PONER_FICHA.bat
+
+      Avisa todo lo que va a hacer y deja una copia .antes_ficha de cada
+      archivo que toca. Se puede correr dos veces sin romper nada.
+
+  3)  Doble clic en  ACTUALIZAR_FICHA.bat     (arma los datos y los cifra)
+
+  4)  VER_LA_APP.bat    para mirarlo antes de publicar
+
+  5)  PUBLICAR_EN_GITHUB.bat
+
+  De ahi en mas no hay que hacer nada especial: HACER_TODO.bat ya lo rehace
+  en cada corrida, junto con el resto.
+
+
+-------------------------------------------------------------------------------
+  QUE ARCHIVOS TOCA (y por que)
+-------------------------------------------------------------------------------
+
+  cifrar_datos.py       agrega 'datos_ficha.js' a la lista. Sin esto, el
+  descifrar_datos.py    rendimiento de cada jugador se publicaria EN CLARO
+                        en un repositorio publico. Va en las DOS listas: si
+                        solo esta en la de cifrar, HACER_TODO no lo puede
+                        volver a abrir y los datos quedan congelados.
+
+  HACER_TODO.bat        corre gen_ficha.py DESPUES de las estadisticas de la
+                        liga: la referencia por puesto sale de ese paso.
+                        Corrido antes, la comparacion saldria vacia.
+
+  jugador.html          un cartel arriba que lleva a la pantalla nueva.
+  index.html            una tarjeta al lado de "Mi Perfil", para el jugador.
+  nav.js                la pantalla nueva en el menu, en el grupo Plantel.
+  LIMPIAR_AHORA.py      aprende a borrar las copias .antes_ficha.
+
+  Los siete son AGREGADOS: no cambian una linea de lo que ya funcionaba.
+
+
+-------------------------------------------------------------------------------
+  QUE SE PROBO ANTES DE MANDARLO
+-------------------------------------------------------------------------------
+
+  ·  Las 70 pantallas de la app abiertas en un navegador de verdad:
+     0 errores de JavaScript.
+  ·  La pantalla nueva en 5 anchos (360, 390, 768, 1024, 1440) x 3 idiomas
+     x los 13 jugadores del plantel = 195 combinaciones: 0 errores, sin
+     desborde horizontal en ninguna.
+  ·  Los 290 clips del reel cruzados uno por uno contra el archivo de video:
+     290 encuentran su accion. Y dos abiertos de punta a punta en
+     cortes.html, uno de partido y uno de entrenamiento: los dos abren.
+  ·  El cambio de idioma en caliente (ES/EN/DE) sin recargar la pagina.
+  ·  El modo jugador: con vb_role='player' no aparece el selector y no se
+     dibuja ni un numero de otro companero.
+  ·  Los colores, medidos y no mirados: verde y rojo quedan a 8.9 de
+     distancia bajo deuteranopia (el piso es 8) y nunca van solos —cada
+     numero lleva su signo y cada barra esta de un lado del cero—. El gris
+     de la liga y el rojo quedan a 4.5 bajo protanopia, por eso la liga es
+     una RAYA y el jugador un PUNTO: formas distintas, no solo colores.
+  ·  El rojo de la marca no se usa como dato en ninguna parte. Si el rojo
+     significara "la marca" y tambien "estuviste mal", dejaria de ser dato.
+
+
+-------------------------------------------------------------------------------
+  SI ALGO MOLESTA
+-------------------------------------------------------------------------------
+
+  La pantalla es nueva y suelta: borrando mi_juego.html y ficha.js, la app
+  queda exactamente como estaba. Los carteles de jugador.html e index.html
+  se apagan solos si el archivo no esta.
+
+  Y si hace falta volver atras del todo, cada archivo tocado tiene su copia
+  .antes_ficha al lado.
+
+===============================================================================

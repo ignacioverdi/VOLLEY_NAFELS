@@ -53,7 +53,7 @@ def protegido(nombre):
 
 # ── 2 · LO QUE SE VA ───────────────────────────────────────────────────────
 # a) las copias de respaldo de las mejoras (no se chequean: son copias)
-PATRONES_COPIAS = ['*.antes_tipografia', '*.antes_iconos', '*.antes_pulido', '*.antes_contraste', '*.antes_tablas', '*.antes_barra', '*.antes_comillas', '*.antes_lectura']
+PATRONES_COPIAS = ['*.antes_tipografia', '*.antes_iconos', '*.antes_pulido', '*.antes_contraste', '*.antes_tablas', '*.antes_barra', '*.antes_comillas', '*.antes_lectura', '*.antes_ficha', '*.antes_lectura']
 
 # b) lo de BORRAR_ESTO.txt (cada uno se chequea antes de borrar)
 SUELTOS = [
@@ -112,7 +112,7 @@ def texto_de_la_carpeta():
         for f in glob.glob(p):
             b = os.path.basename(f)
             if b.lower() == yo: continue
-            if b in SUELTOS or b.endswith(('.antes_tipografia', '.antes_iconos', '.antes_pulido', '.antes_contraste', '.antes_tablas', '.antes_barra', '.antes_comillas', '.antes_lectura')):
+            if b in SUELTOS or b.endswith(('.antes_tipografia', '.antes_iconos', '.antes_pulido', '.antes_contraste', '.antes_tablas', '.antes_barra', '.antes_comillas', '.antes_lectura', '.antes_ficha', '.antes_lectura')):
                 continue          # un archivo que se va no vale como testigo
             try:
                 trozos.append(open(f, encoding='utf-8', errors='ignore').read())

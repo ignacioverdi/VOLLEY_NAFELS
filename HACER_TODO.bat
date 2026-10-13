@@ -365,6 +365,27 @@ if errorlevel 1 set "FALLOS=!FALLOS!|Problema con las estadisticas de la liga."
 if errorlevel 1 set /a NFALLOS+=1
 echo.
 
+REM ===================================================================
+REM   MI JUEGO  (la pantalla del jugador)
+REM
+REM   Va DESPUES de las estadisticas de la liga a proposito: la
+REM   referencia por puesto (cuanto rinde un punta, un central o un
+REM   armador en la NLA) sale de nla_full_stats.json, que lo escribe
+REM   el paso de arriba. Corrido antes, la comparacion contra la liga
+REM   saldria vacia y nadie se enteraria.
+REM ===================================================================
+echo  ==================== MI JUEGO ====================
+echo.
+if "!ENT_DIR!"=="" (
+    python gen_ficha.py --dvw_dir "!DVW_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_ficha.js"
+) else (
+    python gen_ficha.py --dvw_dir "!DVW_DIR!" --ent_dir "!ENT_DIR!" --temporada "!TEMPORADA_ACTUAL!" --out "datos_ficha.js"
+)
+if errorlevel 1 echo      [aviso] Problema armando Mi juego. Sigo igual.
+if errorlevel 1 set "FALLOS=!FALLOS!|Problema armando Mi juego."
+if errorlevel 1 set /a NFALLOS+=1
+echo.
+
 echo  ==================================================
 echo      VERIFICACION (archivos clave):
 if exist "datos_partidos.js"     (echo      OK  datos_partidos.js)            else (echo      --  falta datos_partidos.js)

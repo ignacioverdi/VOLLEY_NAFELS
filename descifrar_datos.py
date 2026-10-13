@@ -54,6 +54,9 @@ DATOS = [
     # La lectura del partido: sale de los mismos .dvw y tiene el
     # analisis de cada rival adentro, asi que viaja cifrada igual.
     'datos_lectura.js',
+    # Mi juego: el rendimiento de cada jugador del plantel,
+    # partido por partido. Viaja cifrado como el resto.
+    'datos_ficha.js',
 ]
 # tambien las bases grandes
 def bases(carpeta):

@@ -7,21 +7,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Datos (cada uno se carga si existe; si no, el onerror lo deja en null) -->
-<script src="categorias_club.js?v=20261012-1314"></script>
-<script src="selector_categoria.js?v=20261012-1314"></script>
-<script src="game_plans.js?v=20261012-1314" onerror="void 0"></script>
-<script src="proximo_rival.js?v=20261012-1314" onerror="void 0"></script>
-<script src="fixture_auto.js?v=20261012-1314" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261012-1314" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261012-1314" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261013-0847"></script>
+<script src="selector_categoria.js?v=20261013-0847"></script>
+<script src="game_plans.js?v=20261013-0847" onerror="void 0"></script>
+<script src="proximo_rival.js?v=20261013-0847" onerror="void 0"></script>
+<script src="fixture_auto.js?v=20261013-0847" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261013-0847" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261013-0847" onerror="void 0"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261012-1314"></script>
-<script src="filtro_tipo.js?v=20261012-1314" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261013-0847"></script>
+<script src="filtro_tipo.js?v=20261013-0847" onerror="void 0"></script>
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -31,10 +31,10 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_video_ent_28-29.js.enc" onerror="void 0"></script>
   <script src="datos_partidos.js.enc" onerror="void 0"></script>
 <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
-<script src="firebase.js?v=20261012-1314" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261012-1314"></script>
-<script src="lang.js?v=20261012-1314" onerror="void 0"></script>
-<script src="datos_historial.js?v=20261012-1314" onerror="window.HISTORIAL_DATA=null"></script>
+<script src="firebase.js?v=20261013-0847" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-0847"></script>
+<script src="lang.js?v=20261013-0847" onerror="void 0"></script>
+<script src="datos_historial.js?v=20261013-0847" onerror="window.HISTORIAL_DATA=null"></script>
 <script src="datos_gameplan.js.enc" onerror="window.GAMEPLAN_DATA=null"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <!-- El ejercicio de ARMADO DE ALTA, para el objetivo semanal de armadores y
@@ -268,14 +268,14 @@ select option{color:#111 !important;background-color:#fff !important;}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261012-1314">
+<link rel="stylesheet" href="movil.css?v=20261013-0847">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261012-1314" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261013-0847" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261012-1314" defer></script>
+<script src="iconos.js?v=20261013-0847" defer></script>
 
-<script src="nav.js?v=20261012-1314" defer></script>
+<script src="nav.js?v=20261013-0847" defer></script>
 </head>
 <body>
 <div class="page-header">
@@ -294,6 +294,35 @@ select option{color:#111 !important;background-color:#fff !important;}
 </div>
 
 <div class="qs-bar" id="quick-stats" style="display:none;"></div>
+<!-- MI JUEGO: el link a la pantalla nueva. Se dibuja solo si existe el
+     archivo; si alguien borra mi_juego.html, el cartel no aparece y
+     jugador.html sigue funcionando igual que antes. -->
+<a id="ir-mi-juego" href="mi_juego.html" style="display:none;align-items:center;gap:12px;
+   margin:10px 14px 0;padding:13px 15px;border-radius:13px;text-decoration:none;
+   border:1px solid rgba(232,25,44,.34);background:linear-gradient(90deg,rgba(232,25,44,.13),rgba(232,25,44,.03));
+   color:#E9ECF3">
+  <span style="font-size:21px;line-height:1">📊</span>
+  <span style="flex:1;min-width:0">
+    <b style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:16px;
+       font-weight:700;letter-spacing:.4px" data-t="MI JUEGO">MI JUEGO</b>
+    <s style="display:block;text-decoration:none;font-size:12px;color:#8A94A6;margin-top:2px"
+       data-t="Tu aporte partido a partido y contra la liga">Tu aporte partido a partido y contra la liga</s>
+  </span>
+  <span style="color:#E8192C;font-size:17px">→</span>
+</a>
+<script>
+(function(){
+  /* El dorsal viaja en el link para que la pantalla abra directo en el
+     jugador que se esta mirando. Si no hay dorsal, abre con el selector. */
+  try{
+    var a=document.getElementById('ir-mi-juego'); if(!a) return;
+    var n=(new URLSearchParams(location.search)).get('num');
+    if(!n){ try{ n=localStorage.getItem('vb_player_num')||''; }catch(e){} }
+    if(n) a.href='mi_juego.html?num='+encodeURIComponent(n);
+    a.style.display='flex';
+  }catch(e){}
+})();
+</script>
 
 <div class="main" id="main-content" style="display:none;">
   <div id="next-match-wrap"></div>
@@ -1517,6 +1546,6 @@ try{
   else window.addEventListener('load', function(){ setTimeout(poner, 400); });
 })();
 </script>
-<script src="ayuda.js?v=20261012-1314"></script>
+<script src="ayuda.js?v=20261013-0847"></script>
 </body>
 </html>

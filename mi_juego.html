@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title data-t="Mi juego — NAFELS Voley">Mi juego — NAFELS Voley</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="categorias_club.js?v=20261013-0847"></script>
+<script src="selector_categoria.js?v=20261013-0847"></script>
+<script src="datos_seguros.js?v=20261013-0847"></script>
+  <script src="datos_ficha.js.enc" onerror="void 0"></script>
+  <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
+  <script>abrirDatos();</script>
+<script src="plantel_nafels.js?v=20261013-0847" onerror="void 0"></script>
+<script src="firebase.js?v=20261013-0847"></script>
+<style>
+/* ══════════════════════════════════════════════════════════════════════════
+   MI JUEGO — la pantalla del jugador
+   --------------------------------------------------------------------------
+   LOS COLORES. Tres marcas y nada mas:
+
+     #6EE7A0  por encima de lo esperable
+     #FF7C89  por debajo
+     #8A94A6  la referencia (la liga, el cero): contexto, nunca protagonista
+
+   El ROJO DE LA MARCA no se usa como dato en ninguna parte. Queda en el
+   borde de arriba y en los titulitos. Si el rojo significara "la marca" y
+   tambien "estuviste mal", el color dejaria de ser dato.
+
+   Verde y rojo estan a 8.9 de distancia bajo deuteranopia (el piso es 8) y a
+   30.7 en vision normal; sobre el panel dan 12.2:1 y 7.6:1 de contraste. Y
+   ademas NUNCA van solos: cada numero lleva su signo y cada barra esta de un
+   lado del cero, asi que el color es la tercera pista, no la unica.
+
+   LAS MARCAS. Barras de 20px como maximo, con la punta redondeada de 4px del
+   lado del dato y recta sobre el cero. Lineas de 2px. Puntos de 9px con un
+   anillo del color del fondo para que se vean cuando se cruzan. Las rejillas,
+   de un paso del fondo. Etiqueta directa solo en el mejor y en el peor: un
+   numero sobre cada barra no se lee.
+   ══════════════════════════════════════════════════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07080F; --card:#0D1020; --card2:#121629;
+  --b:rgba(255,255,255,.07); --b2:rgba(255,255,255,.14);
+  --txt:#E9ECF3; --txt2:#C3CAD8; --mut:#8A94A6;
+  --red:#E8192C;
+  --up:#6EE7A0; --dn:#FF7C89; --ref:#8A94A6; --trend:#6B7BF5;
+  --disp:'Bebas Neue',Impact,sans-serif;
+  --head:'Barlow Condensed',system-ui,sans-serif;
+  --body:'Barlow',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+html,body{background:var(--bg);color:var(--txt);font-family:var(--body);
+  -webkit-font-smoothing:antialiased;min-height:100vh}
+body{padding-bottom:40px}
+a{color:inherit}
+.w{max-width:960px;margin:0 auto;padding:0 14px}
+
+/* ── la barra de arriba ─────────────────────────────────────────────────── */
+.top{position:sticky;top:0;z-index:60;background:rgba(7,8,15,.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--b)}
+.top .w{display:flex;align-items:center;gap:10px;padding-top:9px;padding-bottom:9px}
+.volver{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--b2);border-radius:9px;
+  padding:7px 11px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--mut);
+  text-decoration:none;min-height:34px}
+.volver:hover{color:#fff;border-color:rgba(255,255,255,.26)}
+#selJug{margin-left:auto;background:var(--card);border:1px solid var(--b2);border-radius:9px;
+  color:var(--txt);font-family:var(--head);font-size:14px;font-weight:600;padding:8px 11px;min-height:34px}
+
+/* ── el encabezado del jugador ──────────────────────────────────────────── */
+.hero{position:relative;overflow:hidden;background:
+  radial-gradient(130% 160% at 86% -10%,rgba(232,25,44,.13),transparent 56%),var(--card);
+  border:1px solid var(--b);border-top:2px solid var(--red);border-radius:0 0 16px 16px;
+  padding:18px 16px 16px;margin-top:14px}
+/* El dorsal gigante de fondo es el mismo recurso que ya usa jugador.html: la
+   pantalla nueva no inventa un idioma, habla el de la app. */
+.dorsal{position:absolute;right:16px;top:-26px;font-family:var(--disp);font-size:200px;
+  line-height:1;letter-spacing:-9px;pointer-events:none;user-select:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.012));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:659px){.dorsal{font-size:150px;right:4px;top:-18px}}
+.hero-id{position:relative;display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.foto{width:62px;height:80px;border-radius:12px;flex:none;overflow:hidden;
+  background:linear-gradient(160deg,#1A2140,#0E1226);border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center}
+.foto span{font-family:var(--disp);font-size:34px;color:rgba(255,255,255,.3);line-height:1}
+.foto img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.foto.con{border-color:rgba(232,25,44,.45);box-shadow:0 5px 18px rgba(0,0,0,.5)}
+.quien{min-width:0;flex:1}
+.quien h1{font-family:var(--disp);font-size:clamp(30px,8vw,40px);line-height:.95;margin:0;
+  letter-spacing:.5px;font-weight:400}
+.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:5px}
+.meta em{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.15em;
+  text-transform:uppercase;color:#fff;background:rgba(232,25,44,.22);
+  border:1px solid rgba(232,25,44,.5);border-radius:5px;padding:3px 7px}
+.meta i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--mut)}
+.escudo{width:46px;height:46px;object-fit:contain;flex:none;opacity:1;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+
+/* ── el titular: lo primero que se lee es una frase, no un numero ───────── */
+.tits{display:grid;gap:8px;margin-bottom:18px}
+.tit{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;
+  border-radius:11px;padding:12px 13px;border:1px solid var(--b2);
+  background:rgba(255,255,255,.025)}
+.tit b{font-family:var(--head);font-size:clamp(16px,4.4vw,19px);font-weight:600;line-height:1.25;
+  flex:1;min-width:0}
+.tit.mal{border-color:rgba(255,124,137,.34);background:linear-gradient(90deg,rgba(255,124,137,.1),transparent 70%)}
+.tit.bien{border-color:rgba(110,231,160,.3);background:linear-gradient(90deg,rgba(110,231,160,.085),transparent 70%)}
+.tit .tv{display:inline-flex;align-items:center;gap:6px;flex:none;font-family:var(--mono);
+  font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--txt2);
+  border:1px solid var(--b2);border-radius:20px;padding:6px 11px;white-space:nowrap}
+.tit .tv svg{width:9px;height:9px;fill:currentColor}
+.tit:hover .tv{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.3)}
+.tit.sinvideo{cursor:default}
+
+.hero-g{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:end}
+@media(min-width:660px){.hero-g{grid-template-columns:minmax(0,1fr) minmax(220px,340px)}}
+.cifra b{display:block;font-family:var(--disp);font-size:clamp(58px,17vw,84px);line-height:.84;
+  letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.cifra i{display:block;font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.17em;
+  color:var(--mut);text-transform:uppercase;margin-bottom:9px}
+.cifra em{display:block;font-style:normal;font-size:12.5px;color:var(--txt2);margin-top:9px;
+  max-width:40ch;line-height:1.5}
+.curva{min-width:0}
+.curva u{display:block;text-decoration:none;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.14em;color:var(--mut);text-transform:uppercase;margin-bottom:4px}
+.acum{display:block;width:100%;height:92px}
+.cpie{display:block;font-family:var(--mono);font-size:10px;color:var(--mut);margin-top:5px}
+.cpie b{font-size:12px;font-variant-numeric:tabular-nums}
+.mini{display:flex;flex-wrap:wrap;gap:2px 0;margin-top:18px;padding-top:14px;
+  border-top:1px solid var(--b)}
+.mini span{flex:1 1 auto;min-width:78px;padding-right:12px}
+@media(max-width:619px){.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 8px}
+  .mini span{min-width:0;padding:0}}
+.mini b{display:block;font-family:var(--disp);font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
+.mini s{display:block;text-decoration:none;font-family:var(--mono);font-size:8px;letter-spacing:.12em;
+  color:var(--mut);text-transform:uppercase;margin-top:3px;line-height:1.3}
+
+/* ── el boton de video, que va en todos lados ──────────────────────────── */
+.ver{display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;
+  color:#7FD8E8;border:1px solid rgba(6,182,212,.34);background:rgba(6,182,212,.06);
+  border-radius:20px;padding:4px 9px;white-space:nowrap;line-height:1.3}
+.ver svg{width:8px;height:8px;fill:currentColor;flex:none}
+.ver:hover{background:rgba(6,182,212,.15);border-color:rgba(6,182,212,.6);color:#A6E7F3}
+.cht .hitl{cursor:pointer}
+
+/* ── la entrada ────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion:no-preference){
+  .entrando .cht .b,.entrando .ddbar{animation:crece .55s cubic-bezier(.22,1,.36,1) both}
+  .entrando .cht .ln{stroke-dasharray:1600;stroke-dashoffset:1600;animation:dibuja .9s .25s ease-out forwards}
+  .entrando .acLin{stroke-dasharray:900;stroke-dashoffset:900;animation:dibuja .9s .15s ease-out forwards}
+  .entrando .acArea,.entrando .acPt{animation:aparece .5s .7s both}
+  .entrando .tit{animation:sube .45s cubic-bezier(.22,1,.36,1) both}
+  .entrando .tit:nth-child(2){animation-delay:.07s}
+  .entrando .track .pt{animation:aparece .4s .3s both}
+}
+@keyframes crece{from{transform:scaleY(.001);opacity:.2}to{transform:scaleY(1);opacity:1}}
+@keyframes dibuja{to{stroke-dashoffset:0}}
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+@keyframes sube{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.cht .b{transform-box:fill-box;transform-origin:center}
+.ddbar{transform-origin:left center}
+
+/* ── secciones ──────────────────────────────────────────────────────────── */
+.sec{margin:26px 0 0}
+.sec-h{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.sec-h h2{font-family:var(--disp);font-size:19px;letter-spacing:1.3px;font-weight:400}
+.sec-h h2:before{content:"";display:inline-block;width:3px;height:12px;background:var(--red);
+  border-radius:2px;margin-right:8px;vertical-align:1px}
+.sec-h span{font-family:var(--mono);font-size:9.5px;letter-spacing:.11em;color:var(--mut)}
+.sec-p{font-size:12.5px;color:var(--mut);line-height:1.5;margin:0 0 12px;max-width:72ch}
+.panel{background:var(--card);border:1px solid var(--b);border-radius:13px;padding:15px}
+
+/* ── el grafico: aporte partido a partido ──────────────────────────────── */
+.cht{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+.cht .hit{fill:transparent;cursor:pointer;outline:none}
+.cht .hit:focus-visible{fill:rgba(255,255,255,.055)}
+.cht text{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.cht .ax{font-size:8.5px;fill:var(--mut)}
+.cht .zn{font-size:8px;fill:rgba(138,148,166,.6);letter-spacing:.17em}
+.cht .et{font-size:11px;font-weight:700}
+.cht .gr{stroke:rgba(255,255,255,.05);stroke-width:1}
+.cht .g0{stroke:rgba(255,255,255,.26);stroke-width:1}
+.cht .net{stroke:#F2F5FA;stroke-width:2;stroke-linecap:round}
+.cht .ln{fill:none;stroke:#8A6FD8;stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.leg{display:flex;gap:9px 16px;flex-wrap:wrap;margin:14px 0 0;font-size:11px;color:var(--mut)}
+.leg span{display:inline-flex;align-items:center;gap:6px}
+.leg i{width:11px;height:11px;border-radius:3px;flex:none}
+.leg u{width:16px;height:2px;border-radius:1px;flex:none;text-decoration:none}
+.leg u.uneto{background:#F2F5FA;height:2px;width:14px}
+.leg i.uvos{width:11px;height:11px;border-radius:50%;background:var(--up);
+  box-shadow:0 0 0 2px var(--card),0 0 9px rgba(110,231,160,.5)}
+.leg u.uliga{width:2px;height:13px;border-radius:0;background:var(--ref)}
+.leg u.ucaja{width:17px;height:11px;border-radius:3px;background:rgba(255,255,255,.085);
+  border:1px solid rgba(255,255,255,.1)}
+.leg u.uotro{width:1px;height:11px;border-radius:0;background:rgba(255,255,255,.3)}
+.extremos{display:flex;gap:7px 20px;flex-wrap:wrap;margin-top:12px;font-size:12px;color:var(--txt2)}
+.extremos b{font-family:var(--mono);font-variant-numeric:tabular-nums;margin-right:5px}
+.vacio{padding:26px 10px;text-align:center;color:var(--mut);font-size:13px;line-height:1.5}
+
+/* ── de donde sale: la temporada por fundamento ────────────────────────── */
+.dd{display:grid;gap:2px}
+.ddrow{display:grid;grid-template-columns:minmax(0,1fr);gap:6px;padding:12px 2px;
+  border-top:1px solid var(--b)}
+.ddrow:first-child{border-top:0}
+@media(min-width:620px){.ddrow{grid-template-columns:132px minmax(0,1fr);gap:18px;align-items:center}}
+.ddrow>b{font-family:var(--head);font-size:15.5px;font-weight:600}
+.ddrow>b s{display:block;text-decoration:none;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.07em;color:var(--mut);margin-top:3px}
+.ddrow>b .ver{margin-top:7px}
+.ddt{position:relative;height:30px}
+.ddcero{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,.22)}
+.ddbar{position:absolute;top:7px;height:16px;min-width:2px}
+.ddval{position:absolute;top:6px;font-family:var(--mono);font-size:13.5px;font-weight:700;
+  font-variant-numeric:tabular-nums;line-height:18px;white-space:nowrap}
+.ddval.adentro{box-sizing:border-box}
+.ddpie{font-size:11px;color:var(--mut);margin-top:12px;padding-top:11px;border-top:1px solid var(--b)}
+
+/* ── contra el puesto en la liga ───────────────────────────────────────── */
+.liga{display:grid;gap:2px}
+.lrow{display:grid;grid-template-columns:minmax(0,1fr);gap:4px;
+  padding:15px 2px;border-top:1px solid var(--b)}
+.lrow:first-child{border-top:0}
+@media(min-width:680px){.lrow{grid-template-columns:168px minmax(0,1fr);gap:22px;align-items:center}}
+.lcab{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.lcab b{font-family:var(--head);font-size:16px;font-weight:600;color:var(--txt);line-height:1.1}
+.lcab s{text-decoration:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.07em;
+  color:var(--mut);white-space:nowrap}
+.lrank{font-family:var(--mono);font-size:11px;color:var(--mut);white-space:nowrap;margin-left:auto}
+.lrank i{font-style:normal;font-weight:700;font-size:13px;color:var(--txt)}
+.lcab .ver{margin-top:8px}
+@media(max-width:679px){.lcab .ver{margin-top:6px}}
+@media(min-width:680px){.lcab{display:block}
+  .lcab s{display:block;margin-top:4px}
+  .lrank{display:block;margin:7px 0 0;font-size:11.5px}}
+.track{position:relative;height:56px;margin-top:4px}
+.track .riel{position:absolute;left:0;right:0;top:27px;height:2px;border-radius:1px;
+  background:rgba(255,255,255,.09)}
+.track .caja{position:absolute;top:18px;height:20px;border-radius:5px;
+  background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13)}
+.track .otro{position:absolute;top:22px;width:1px;height:12px;margin-left:-.5px;
+  background:rgba(255,255,255,.26)}
+.track .cap{position:absolute;top:23px;width:1px;height:10px;background:rgba(255,255,255,.13)}
+.track .ext{position:absolute;top:39px;font-family:var(--mono);font-size:9px;color:rgba(138,148,166,.72)}
+/* El promedio de la liga tiene que distinguirse de las marquitas de los demas
+   SIN usar otro color: es mas alto que la caja y lleva una cabecita arriba y
+   otra abajo. Forma, no color — el gris y el rojo del punto quedan a 4.5 bajo
+   protanopia, asi que por color no se distinguirian igual. */
+.track .tick{position:absolute;top:14px;width:2px;height:28px;background:var(--ref);margin-left:-1px}
+.track .tick:before,.track .tick:after{content:"";position:absolute;left:-2px;width:6px;height:2px;
+  background:var(--ref);border-radius:1px}
+.track .tick:before{top:0}
+.track .tick:after{bottom:0}
+.track .tick s{position:absolute;top:30px;left:50%;text-decoration:none;
+  font-family:var(--mono);font-size:9px;color:var(--ref);white-space:nowrap}
+.track .pt{position:absolute;top:22px;width:12px;height:12px;border-radius:50%;margin-left:-6px}
+.track .pv{position:absolute;top:0;font-family:var(--mono);
+  font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.falta{font-size:11.5px;color:var(--mut);font-style:italic;padding:9px 0}
+.falta b{font-family:var(--mono);font-style:normal;color:var(--txt2);font-size:13px;margin-right:8px}
+
+/* ── fuertes y flojos ───────────────────────────────────────────────────── */
+.perf{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+@media(min-width:680px){.perf{grid-template-columns:1fr 1fr}}
+.pcol{background:var(--card);border:1px solid var(--b);border-radius:13px;padding:15px 16px 6px}
+.pcol h3{font-family:var(--mono);font-size:9px;letter-spacing:.17em;text-transform:uppercase;
+  color:var(--mut);margin-bottom:4px;padding-bottom:11px;position:relative}
+.pcol h3:after{content:"";position:absolute;left:0;bottom:0;width:26px;height:2px;
+  border-radius:1px;background:var(--ac)}
+.prow{display:flex;align-items:baseline;gap:10px;padding:13px 0;border-top:1px solid var(--b);
+  font-size:15px;line-height:1.3;flex-wrap:wrap}
+.prow u{width:8px;height:8px;border-radius:50%;flex:none;transform:translateY(-1px)}
+.prow b{font-family:var(--head);font-weight:600}
+.prow em{font-style:normal;font-family:var(--mono);font-size:13.5px;font-weight:700;
+  font-variant-numeric:tabular-nums}
+.prow s{text-decoration:none;margin-left:auto;font-family:var(--mono);font-size:11px;
+  color:var(--mut);white-space:nowrap}
+.pnada{padding:13px 0 16px;border-top:1px solid var(--b);font-size:12.5px;color:var(--mut);line-height:1.5}
+.pnota{font-size:11px;color:var(--mut);line-height:1.55;margin:11px 0 0}
+
+/* ── el reel ────────────────────────────────────────────────────────────── */
+.reelbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.reelbar button{background:transparent;border:1px solid var(--b2);border-radius:9px;color:var(--mut);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  padding:7px 11px;cursor:pointer;line-height:1}
+.reelbar button:hover{color:var(--txt);border-color:rgba(255,255,255,.3)}
+.reelbar button.on{background:rgba(232,25,44,.1);border-color:rgba(232,25,44,.45);color:#fff}
+.reelbar button em{font-style:normal;opacity:.6;margin-left:5px}
+.reel{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(156px,1fr);gap:9px;
+  overflow-x:auto;padding-bottom:9px;scroll-snap-type:x proximity;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.18) transparent}
+.reel::-webkit-scrollbar{height:6px}
+.reel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+@media(min-width:680px){.reel{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));
+  overflow:visible;padding-bottom:0}}
+.clip{display:flex;flex-direction:column;gap:3px;scroll-snap-align:start;text-decoration:none;
+  background:var(--card);border:1px solid var(--b);border-radius:12px;padding:12px;min-height:94px}
+.clip:hover{border-color:rgba(255,255,255,.2);background:var(--card2)}
+.clip u{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8.5px;
+  letter-spacing:.12em;color:var(--mut);text-transform:uppercase;text-decoration:none}
+.clip u i{width:7px;height:7px;border-radius:2px;flex:none}
+.clip b{font-family:var(--head);font-size:15px;font-weight:600;line-height:1.2;margin-top:auto}
+.clip s{text-decoration:none;font-size:11px;color:var(--mut)}
+.verFila{display:flex;gap:9px;flex-wrap:wrap}
+.verTodo{display:inline-flex;align-items:center;gap:7px;margin-top:12px;border:1px solid rgba(6,182,212,.4);
+  background:rgba(6,182,212,.07);color:#7FD8E8;border-radius:10px;padding:9px 14px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-decoration:none;text-transform:uppercase}
+.verTodo:hover{background:rgba(6,182,212,.12)}
+/* ── el globito ─────────────────────────────────────────────────────────── */
+#tip{position:fixed;z-index:200;pointer-events:none;opacity:0;transition:opacity .11s;
+  background:#161B2E;border:1px solid var(--b2);border-radius:10px;padding:10px 12px;
+  box-shadow:0 14px 40px rgba(0,0,0,.6);max-width:240px}
+#tip.on{opacity:1}
+#tip .tv{font-family:var(--mono);font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+#tip .tk{font-family:var(--mono);font-size:9px;letter-spacing:.11em;color:var(--mut);text-transform:uppercase;margin-bottom:5px}
+#tip .tr{display:flex;align-items:center;gap:7px;font-size:12px;margin-top:6px;color:var(--txt2)}
+#tip .tr em{width:12px;height:2px;border-radius:1px;flex:none;font-style:normal}
+#tip .tr b{margin-left:auto;font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+.pie{font-size:11px;color:var(--mut);line-height:1.6;margin:22px 0 0;max-width:94ch}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:10px}
+.tabla{width:auto;border-collapse:collapse;font-size:12px}
+.tabla th,.tabla td{padding:5px 11px;text-align:right;border-bottom:1px solid var(--b);
+  font-variant-numeric:tabular-nums}
+.tabla th{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--mut);text-transform:uppercase}
+.tabla th:first-child,.tabla td:first-child{text-align:left}
+details>summary{cursor:pointer;color:var(--mut);font-size:11px;font-family:var(--mono);
+  letter-spacing:.08em;margin-top:12px;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary:before{content:"▸ ";}
+details[open]>summary:before{content:"▾ ";}
+@media print{.top,.reelbar,.verTodo{display:none}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="w">
+  <a class="volver" href="jugador.html">← <span data-t="MI PERFIL">MI PERFIL</span></a>
+  <select id="selJug" aria-label="Jugador"></select>
+</div></div>
+
+<div class="w" id="ficha"></div>
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script src="lang.js?v=20261013-0847" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261013-0847" onerror="void 0"></script>
+<script src="ayuda.js?v=20261013-0847" onerror="void 0"></script>
+<script src="ficha.js?v=20261013-0847"></script>
+</body>
+</html>
