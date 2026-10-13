@@ -4173,6 +4173,15 @@
     "En cancha":{en:"On court",de:"Auf dem Feld"},
     "Qué son estos porcentajes":{en:"What these percentages are",de:"Was diese Prozentwerte sind"},
     "Muestra chica":{en:"Small sample",de:"Kleine Stichprobe"},
+    // ===== DONDE CAYO LA RECEPCION (la canchita del plan de partido) =====
+    "Armó desde":{en:"Set from",de:"Zuspiel aus"},
+    "Dónde cayó el saque: la banda de la zona de recepción":{en:"Where the serve landed: the reception zone band",de:"Wo der Aufschlag landete: das Band der Annahmezone"},
+    "Sin marcar":{en:"Not marked",de:"Nicht markiert"},
+    "{0} de {1} armados tienen la zona marcada":{en:"{0} of {1} sets have the zone marked",de:"{0} von {1} Zuspielen haben die Zone markiert"},
+    "{0} elegidas":{en:"{0} selected",de:"{0} gewählt"},
+    "Toda la zona {0}":{en:"The whole zone {0}",de:"Die ganze Zone {0}"},
+    "Zona {0}, cuarto {1}":{en:"Zone {0}, quarter {1}",de:"Zone {0}, Viertel {1}"},
+    "Dónde cayó la recepción: la zona desde la que el armador tocó la pelota":{en:"Where the reception landed: the zone the setter played the ball from",de:"Wo die Annahme landete: die Zone, aus der der Zuspieler gespielt hat"},
     // las dos valoraciones de recepcion que quedaban en castellano
     "Justa":{en:"Fair",de:"Mäßig"},
     "Pasada":{en:"Overpass",de:"Überball"},

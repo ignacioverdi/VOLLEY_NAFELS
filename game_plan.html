@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261013-1359"></script>
-<script src="selector_categoria.js?v=20261013-1359"></script>
-<script src="objetivos_config.js?v=20261013-1359"></script>
+<script src="categorias_club.js?v=20261013-1705"></script>
+<script src="selector_categoria.js?v=20261013-1705"></script>
+<script src="objetivos_config.js?v=20261013-1705"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -443,7 +443,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261013-1359" onerror="void 0"></script>
+<script src="lang.js?v=20261013-1705" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -454,7 +454,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261013-1359"></script>
+<script src="datos_seguros.js?v=20261013-1705"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -467,15 +467,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261013-1359" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1359"></script>
-<script src="videos.js?v=20261013-1359" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261013-1705" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-1705"></script>
+<script src="videos.js?v=20261013-1705" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1359">
+<link rel="stylesheet" href="movil.css?v=20261013-1705">
 
-<script src="iconos.js?v=20261013-1359" defer></script>
+<script src="iconos.js?v=20261013-1705" defer></script>
 </head>
 <body>
 
@@ -3007,6 +3007,76 @@ function gpOcBase(setterObj){
 }
 var GP_ARM_SYNCS=[];     // funciones de re-render de cada panel de armador
 function gpArmSyncAll(){ GP_ARM_SYNCS.forEach(function(f){ try{f();}catch(e){} }); }
+/* == DESDE QUE ZONA ARMO: DONDE CAYO LA RECEPCION =======================
+   En la linea del armado, el .dvw trae la zona —y el cuarto A/B/C/D— desde
+   la que el armador toco la pelota. Eso es, exactamente, donde cayo el pase:
+
+       *04ET+K1F~3B   ->   armo desde la zona 3, cuarto B
+
+   No es lo mismo que "Recep. desde", que dice donde cayo el SAQUE —donde
+   estaba parado el que recibio—. Esto dice donde TERMINO la pelota, que es
+   lo que decide si el armador pudo elegir o tuvo que salvarla.
+
+   Desde el esquema 9 viaja en r[20] de cada armado, como texto: '3B', o '3'
+   si el scout marco la zona y no el cuarto, o '' si no marco nada.
+
+   La seleccion es una lista de claves: '3' (la zona entera), '3B' (solo ese
+   cuarto) o '-' (los que no tienen marca). Vacia = sin filtro.             */
+var GP_ARM_SETZ=[];
+var GP_SZ_FILAS=[[4,3,2],[7,8,9],[5,6,1]];   /* la cancha vista desde la red */
+var GP_SZ_CUARTOS=['A','B','D','C'];         /* A B / D C, como los numera DataVolley */
+function gpSzActivo(){ return GP_ARM_SETZ.length>0; }
+function gpSzRow(r){
+  if(!gpSzActivo()) return true;
+  var v=r[20]||'';
+  for(var i=0;i<GP_ARM_SETZ.length;i++){
+    var k=GP_ARM_SETZ[i];
+    if(k==='-'){ if(!v) return true; }
+    else if(k.length===1){ if(v && v.charAt(0)===k) return true; }
+    else if(v===k) return true;
+  }
+  return false;
+}
+function gpSzPuesta(k){ return GP_ARM_SETZ.indexOf(k)>=0; }
+function gpSzTocar(k){
+  var i=GP_ARM_SETZ.indexOf(k);
+  if(i>=0){ GP_ARM_SETZ.splice(i,1); return; }
+  /* la zona entera y sus cuartos no conviven: elegir uno limpia el otro */
+  if(k.length===1){ GP_ARM_SETZ=GP_ARM_SETZ.filter(function(x){ return x==='-' || x.charAt(0)!==k; }); }
+  else { var z=k.charAt(0); GP_ARM_SETZ=GP_ARM_SETZ.filter(function(x){ return x!==z; }); }
+  GP_ARM_SETZ.push(k);
+}
+function gpSzPintada(k){
+  /* un cuarto se ve elegido tambien cuando esta elegida su zona entera */
+  return gpSzPuesta(k) || (k.length>1 && gpSzPuesta(k.charAt(0)));
+}
+function gpSzEtiqueta(){
+  if(!gpSzActivo()) return 'todas';
+  if(GP_ARM_SETZ.length>3) return GP_ARM_SETZ.length+' elegidas';
+  return GP_ARM_SETZ.map(function(k){ return k==='-'?'—':('Z'+k); }).join(' ');
+}
+function gpSzClave(){ return gpSzActivo()?('_p'+GP_ARM_SETZ.slice().sort().join('.')):''; }
+function gpSzHayDato(setterObj){
+  var s=(setterObj&&setterObj.s)||[];
+  for(var i=0;i<s.length;i++){ if(s[i].length>20) return true; }
+  return false;
+}
+/* Las filas que pasan todos los otros filtros: el universo sobre el que se
+   cuenta cuantas pelotas cayeron en cada cuarto. */
+function gpSzBase(setterObj){
+  return ((setterObj&&setterObj.s)||[]).filter(function(r){
+    var at=r[4];
+    if(GP_ARM_PHASE==='SO'&&at!==0) return false;
+    if(GP_ARM_PHASE==='TR'&&at!==1) return false;
+    if(GP_ARM_PHASE==='SO'&&!gpRecqTodas()){ if(GP_ARM_RECQ.indexOf(r[7])<0) return false; }
+    if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return false; }
+    if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
+    if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return false; }
+    if(GP_ARM_SERVETYPE&&GP_ARM_PHASE==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return false; }
+    if(!gpOcRow(r)) return false;
+    return true;
+  });
+}
 /* == UN DESPLEGABLE DE UNA SOLA OPCION ==================================
    La barra del armador tenia tres grupos de botones sueltos (Fase, Recep.
    desde, Saque) y tres desplegables. Con ocho filtros la fila se partia en
@@ -3079,6 +3149,7 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return false; }
     if(GP_ARM_SERVETYPE&&phase==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return false; }
     if(!gpOcRow(r)) return false;
+    if(!gpSzRow(r)) return false;
     return true;
   });
   var linked=[],kills=0,errs=0;
@@ -3179,6 +3250,7 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
     if(GP_ARM_SERVETYPE&&phase==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return ; }
     if(!gpOcRow(r)) return;
+    if(!gpSzRow(r)) return;
     var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
     if(z!==zone) return;
     var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
@@ -3238,7 +3310,7 @@ function gpOpenVideo(rot,zone,sidx){
   var rec=GP_ARM_PHASE==='SO'?GP_ARM_REC:null;
   var clips=gpZoneClips(_st,rot,GP_ARM_PHASE,rec,zone);
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
-  gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+gpOcClave()+'_z'+zone;
+  gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+gpOcClave()+gpSzClave()+'_z'+zone;
   var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+gpRecqEtiqueta()):'Transición';  /* el titulo del reproductor dice tambien con quien en la cancha: si no, dos secuencias distintas se llaman igual */
   if(gpOcActivo()) faseLbl+=' · en cancha '+gpOcEtiqueta();
   document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+clips.length+' ataques';
@@ -3322,7 +3394,7 @@ function renderArmador(){
   var sec=document.getElementById('seccion-armador');
   if(!sec||!ARMADOR_DATA) return;
   sec.innerHTML='';
-  GP_ARM_SYNCS=[]; GP_ARM_RECZONE=null; GP_ARM_RECNUM=null; GP_ARM_SERVETYPE=null; GP_ARM_OC_IN=[]; GP_ARM_OC_OUT=[];
+  GP_ARM_SYNCS=[]; GP_ARM_RECZONE=null; GP_ARM_RECNUM=null; GP_ARM_SERVETYPE=null; GP_ARM_OC_IN=[]; GP_ARM_OC_OUT=[]; GP_ARM_SETZ=[];
   var tipos=['titular','suplente'];
   var tabsEl=document.createElement('div');
   tabsEl.style.cssText='display:flex;gap:2px;margin-bottom:0';
@@ -3528,6 +3600,9 @@ function renderArmador(){
     var rzDD=gpArmUno([['','Todas'],['r1','Z1'],['r6','Z6'],['r5','Z5']], '#06b6d4',
       function(){ return GP_ARM_RECZONE||''; },
       function(v){ GP_ARM_RECZONE=v||null; });
+    /* los dos filtros suenan parecido y son cosas distintas: este dice donde
+       cayo el SAQUE, y "Armo desde" donde cayo la RECEPCION. */
+    rzDD.dd.querySelector('.gpn-ddb').title='Dónde cayó el saque: la banda de la zona de recepción';
     // ── Tipo de saque recibido (Flotado RM / Potencia RQ) — solo side-out ──
     var stLbl=document.createElement('span'); stLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; stLbl.textContent='Saque';
     var stDD=gpArmUno([['','Todas'],['M','Flotado'],['Q','Potencia']], '#f59e0b',
@@ -3638,6 +3713,129 @@ function renderArmador(){
         if(!ab){ dd.classList.add('open'); ocPinta(); } };
       dd.appendChild(bt); dd.appendChild(menu); ocWrap.appendChild(dd); ocPinta();
     })(); }
+    /* == LA CANCHITA DE DONDE CAYO LA RECEPCION ===========================
+       Un desplegable con la cancha vista desde la red. Cada zona esta
+       partida en sus cuatro cuartos —A B arriba, D C abajo, como los numera
+       DataVolley— y cada cuarto dice cuantas pelotas cayeron ahi dentro de
+       lo que se este mirando.
+
+       Clic en el numero de la zona  -> la zona entera
+       Clic en un cuarto            -> solo ese cuarto
+       Clic en "sin marcar"         -> los armados que el scout no marco
+
+       Lo de "sin marcar" esta a la vista a proposito: el scout pone la zona
+       a mano y no siempre la pone. Un filtro que lo escondiera haria creer
+       que el rival armo doce veces desde la 3 cuando en realidad son doce
+       de las que se marcaron y hay cuarenta sin marcar. */
+    var szLbl=document.createElement('span'); szLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; szLbl.textContent='Armó desde';
+    var szWrap=document.createElement('div'); szWrap.style.cssText='display:inline-flex';
+    var szPinta=function(){};
+    var szHay=gpSzHayDato(setterRaw);
+    if(szHay){ (function(){
+      var dd=document.createElement('div'); dd.className='gpn-dd';
+      var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+      bt.title='Dónde cayó la recepción: la zona desde la que el armador tocó la pelota';
+      var menu=document.createElement('div'); menu.className='gpn-ddm'; menu.style.minWidth='256px';
+      var cab=document.createElement('div');
+      cab.style.cssText='padding:4px 8px 7px;font-size:10px;color:#7689a1;line-height:1.5';
+      menu.appendChild(cab);
+      /* la red arriba: sin eso, nueve numeros sueltos no dicen de que lado
+         esta mirando la cancha */
+      var redRow=document.createElement('div');
+      redRow.style.cssText='display:flex;align-items:center;gap:6px;padding:0 8px 4px';
+      var redLin=document.createElement('div');
+      redLin.style.cssText='flex:1;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.34) 0 3px,transparent 3px 6px)';
+      var redTxt=document.createElement('span');
+      redTxt.style.cssText='font-size:8px;letter-spacing:2px;color:#5E6B7D;text-transform:uppercase';
+      redTxt.textContent='Red';
+      redRow.appendChild(redLin); redRow.appendChild(redTxt);
+      menu.appendChild(redRow);
+      var grilla=document.createElement('div');
+      grilla.className='gp-sz-grid';
+      grilla.style.cssText='display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 8px';
+      menu.appendChild(grilla);
+      var celdas={};
+      GP_SZ_FILAS.forEach(function(fila){
+        fila.forEach(function(z){
+          var zk=String(z);
+          var cel=document.createElement('div');
+          cel.style.cssText='border:1px solid rgba(255,255,255,.08);border-radius:6px;overflow:hidden;background:rgba(255,255,255,.015)';
+          var enc=document.createElement('div');
+          enc.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:2px 5px;cursor:pointer;font-size:10px';
+          enc.title='Toda la zona '+zk;
+          var zn=document.createElement('b'); zn.style.cssText='font-family:Anton,sans-serif;font-size:11px'; zn.textContent=zk;
+          var zt=document.createElement('span'); zt.style.cssText='font-size:9px';
+          enc.appendChild(zn); enc.appendChild(zt);
+          enc.onclick=function(e){ e.stopPropagation(); gpSzTocar(zk); szPinta(); gpArmSyncAll(); };
+          var sub=document.createElement('div');
+          sub.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.05)';
+          var cu={};
+          GP_SZ_CUARTOS.forEach(function(q){
+            var c=document.createElement('div');
+            c.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:2px;padding:3px 4px;cursor:pointer;font-size:9px;line-height:1';
+            c.title='Zona '+zk+', cuarto '+q;
+            var ql=document.createElement('span'); ql.textContent=q; ql.style.cssText='font-family:Anton,sans-serif';
+            var qn=document.createElement('span'); qn.style.cssText='font-size:9px';
+            c.appendChild(ql); c.appendChild(qn);
+            c.onclick=function(e){ e.stopPropagation(); gpSzTocar(zk+q); szPinta(); gpArmSyncAll(); };
+            sub.appendChild(c); cu[q]={cel:c,lab:ql,num:qn};
+          });
+          cel.appendChild(enc); cel.appendChild(sub);
+          grilla.appendChild(cel);
+          celdas[zk]={enc:enc,zn:zn,zt:zt,cu:cu};
+        });
+      });
+      var sep=document.createElement('div'); sep.className='gpn-ddsep'; menu.appendChild(sep);
+      var sinFila=document.createElement('div'); sinFila.className='gpn-ddi';
+      var sinMk=document.createElement('span');
+      sinMk.style.cssText='flex:none;width:12px;height:12px;border-radius:3px;border:1px solid rgba(255,255,255,.28)';
+      var sinTx=document.createElement('span'); sinTx.textContent='Sin marcar';
+      var sinNn=document.createElement('span'); sinNn.className='nn';
+      sinFila.appendChild(sinMk); sinFila.appendChild(sinTx); sinFila.appendChild(sinNn);
+      sinFila.onclick=function(e){ e.stopPropagation(); gpSzTocar('-'); szPinta(); gpArmSyncAll(); };
+      menu.appendChild(sinFila);
+      var pie=document.createElement('div'); pie.className='gpn-ddall';
+      var pb=document.createElement('button'); pb.type='button'; pb.textContent='Sin filtro';
+      pb.onclick=function(e){ e.stopPropagation(); GP_ARM_SETZ=[]; szPinta(); gpArmSyncAll(); };
+      pie.appendChild(pb); menu.appendChild(pie);
+      szPinta=function(){
+        bt.innerHTML='<i class="gpn-n" style="font-style:normal">'+gpSzEtiqueta()+'</i> <span class="car">▾</span>';
+        bt.classList.toggle('act', gpSzActivo());
+        var base=gpSzBase(setterRaw), exact={}, porZona={}, sin=0, marcadas=0;
+        base.forEach(function(r){
+          var v=r[20]||'';
+          if(!v){ sin++; return; }
+          marcadas++;
+          exact[v]=(exact[v]||0)+1;
+          var z=v.charAt(0); porZona[z]=(porZona[z]||0)+1;
+        });
+        cab.textContent=marcadas+' de '+base.length+' armados tienen la zona marcada';
+        Object.keys(celdas).forEach(function(zk){
+          var c=celdas[zk], n=porZona[zk]||0, on=gpSzPuesta(zk);
+          c.zt.textContent=n||'';
+          c.zn.style.color=on?'#0a0e15':(n?'#C6D2E0':'#445062');
+          c.zt.style.color=on?'#0a0e15':'#7689a1';
+          c.enc.style.background=on?'#38bdf8':'rgba(255,255,255,.04)';
+          GP_SZ_CUARTOS.forEach(function(q){
+            var k=zk+q, m=exact[k]||0, lit=gpSzPintada(k);
+            var o=c.cu[q];
+            o.num.textContent=m||'';
+            o.cel.style.background=lit?'rgba(56,189,248,.30)':(m?'rgba(56,189,248,.09)':'rgba(255,255,255,.015)');
+            o.lab.style.color=lit?'#e8f6ff':(m?'#9AA8BA':'#3d4858');
+            o.num.style.color=lit?'#e8f6ff':'#7689a1';
+          });
+        });
+        sinMk.style.background=gpSzPuesta('-')?'#38bdf8':'transparent';
+        sinMk.style.borderColor=gpSzPuesta('-')?'#38bdf8':'rgba(255,255,255,.28)';
+        sinNn.textContent=sin;
+      };
+      menu.addEventListener('click',function(e){ e.stopPropagation(); });
+      bt.onclick=function(e){ e.stopPropagation();
+        var ab=dd.classList.contains('open');
+        [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){ x.classList.remove('open'); });
+        if(!ab){ dd.classList.add('open'); szPinta(); } };
+      dd.appendChild(bt); dd.appendChild(menu); szWrap.appendChild(dd); szPinta();
+    })(); }
     function gpPaintFilters(){
       var so=GP_ARM_PHASE==='SO';
       phaseDD.pinta(); rzDD.pinta(); stDD.pinta();
@@ -3653,6 +3851,7 @@ function renderArmador(){
       var _has=false; for(var _i=0;_i<rnSel.options.length;_i++){ if(rnSel.options[_i].value===String(GP_ARM_RECNUM||'')) _has=true; }
       if(!_has) GP_ARM_RECNUM=null; rnSel.value=GP_ARM_RECNUM?String(GP_ARM_RECNUM):'';
       if(ocPinta) ocPinta();
+      if(szPinta) szPinta();
     }
     // ── Selector de partidos (multiselect) ──
     var gpMatches=(GP_TD.matches||[]);
@@ -3717,6 +3916,7 @@ function renderArmador(){
     fbar.appendChild(gpArmGrupo(stLbl, stDD.dd));
     fbar.appendChild(gpArmGrupo(rnLbl, rnSel));
     if(ocHay) fbar.appendChild(gpArmGrupo(ocLbl, ocWrap));
+    if(szHay) fbar.appendChild(gpArmGrupo(szLbl, szWrap));
     if(matchLbl) fbar.appendChild(gpArmGrupo(matchLbl, matchBox));
     panel.appendChild(fbar);
 
@@ -5082,8 +5282,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261013-1359"></script>
-<script src="ayuda.js?v=20261013-1359"></script>
+<script src="temporadas_menu.js?v=20261013-1705"></script>
+<script src="ayuda.js?v=20261013-1705"></script>
 </body>
 </html>
 

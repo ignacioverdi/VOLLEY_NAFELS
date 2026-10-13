@@ -1068,7 +1068,10 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    cancha en ese momento (campos 14-25 de la linea del scout). Sin
     #    eso no se podia filtrar la distribucion del armador por quienes
     #    estaban jugando. Al subir el numero la base se rehace sola.
-    _ESQUEMA = 8          # subir este numero cuando el parser lea algo nuevo
+    # 9: cada armado guarda ademas la zona (y el cuarto A/B/C/D) desde la
+    #    que el armador toco la pelota, que es donde cayo la recepcion. El
+    #    dato estaba en el .dvw desde siempre y se tiraba.
+    _ESQUEMA = 9          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
@@ -1498,13 +1501,33 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             last_rq = effect; last_skill = 'R'; last_rec_t = vt; last_rec_num = pnum
             last_rec_type = code[3].upper() if len(code) > 3 else ''
         elif skill == 'E' and pnum == setter_num:
+            # == DESDE QUE ZONA ARMO (o sea: DONDE CAYO EL PASE) ==============
+            # El codigo del armado es, posicion por posicion:
+            #     *04 E T +  K1 F  ~ 3 B
+            #      |  | | |  |  |  | | +-- el cuarto de la zona (A/B/C/D)
+            #      |  | | |  |  |  | +---- ZONA desde donde toco el armador
+            #      |  | | |  |  |  +------ zona de inicio (nadie la marca)
+            #      |  | | |  |  +--------- hacia donde armo (F adelante, B atras)
+            #      |  | | |  +------------ la llamada (K1, K2, ...)
+            #      |  | | +--------------- valoracion
+            #      |  | +----------------- tipo (T tensa, H alta, Q rapida)
+            #      |  +------------------- E = armado
+            #      +---------------------- equipo y dorsal
+            # Esa zona es donde el armador toco la pelota: o sea DONDE CAYO LA
+            # RECEPCION. Es otra cosa que rec_zone, que es donde cayo el SAQUE.
+            # El scout la marca a mano y no siempre, asi que se guarda tal cual
+            # y la pantalla avisa sobre cuantos armados esta hecha la cuenta.
+            _z = rest[4] if len(rest) > 4 else ''
+            _sb = rest[5].upper() if len(rest) > 5 else ''
+            setz = (_z if (_z.isdigit() and _z != '0') else '')
+            if setz and _sb in ('A', 'B', 'C', 'D'): setz += _sb
             if pending: rallies.append(pending)
             rq = last_rq if last_skill == 'R' else '?'
             raw = tp[0] if tp else ''; call = raw[:2] if len(raw) >= 2 else raw
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
                        'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
-                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type,
+                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type, 'set_zone': setz,
                        'on_court': onc}
             last_skill = 'E'
         elif skill == 'A':
@@ -1701,7 +1724,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if str(sn) not in td:
                 continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type',''),(r.get('on_court') or [])] for r in rl]
+            arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type',''),(r.get('on_court') or []),r.get('set_zone','')] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
