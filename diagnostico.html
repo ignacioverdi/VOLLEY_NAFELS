@@ -28,9 +28,11 @@
           font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;margin-top:8px}
 </style>
 
-<script src="iconos.js?v=20261013-2109" defer></script>
+<script src="iconos.js?v=20261013-2224" defer></script>
 
-<script src="nav.js?v=20261013-2109" defer></script>
+<script src="nav.js?v=20261013-2224" defer></script>
+<!-- El traductor: sin esto la pantalla quedaba siempre en castellano. -->
+<script src="lang.js?v=20261013-2224" onerror="void 0"></script>
 </head>
 <body>
 
@@ -49,21 +51,21 @@
 <!-- Los datos del club estan cifrados: el archivo se llama .enc y hace falta
      abrirlo. Se cargan las dos formas —cifrada y sin cifrar— porque no todos
      los clubes cifran, y despues se abre lo que haya. -->
-<script src="categorias_club.js?v=20261013-2109"></script>
-<script src="selector_categoria.js?v=20261013-2109"></script>
+<script src="categorias_club.js?v=20261013-2224"></script>
+<script src="selector_categoria.js?v=20261013-2224"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
   <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
   <script src="plan_partido_data.js.enc" onerror="void 0"></script>
   <script src="datos_bloqueo.js.enc" onerror="void 0"></script>
   <script src="datos_equipo.js.enc" onerror="void 0"></script>
-  <script src="plan_partido_vivo.js?v=20261013-2109" onerror="void 0"></script>
+  <script src="plan_partido_vivo.js?v=20261013-2224" onerror="void 0"></script>
   <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261013-2109" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261013-2224" onerror="void 0"></script>
 <script src="liga_data.js.enc" onerror="void 0"></script>
 <script src="liga_data.js.enc" onerror="void 0"></script>
 <script src="plan_partido_data.js.enc" onerror="void 0"></script>
@@ -74,7 +76,7 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="datos_equipo.js.enc" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
 <script src="datos_baterias.js.enc" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261013-2109" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261013-2224" onerror="void 0"></script>
 <script>try{ if(typeof abrirDatos==='function') abrirDatos(); }catch(e){}</script>
 
 <script>
@@ -114,8 +116,11 @@ setTimeout(function(){
     if (o === undefined) { fila('t-arch', v[1], 'NO LLEGÓ', 'no'); return; }
     var n = tam(o);
     var det = '';
-    if (v[0] === 'LIGA_DATA') det = Object.keys((o.teams) || {}).length + ' equipos';
-    if (v[0] === 'PP_DATA')   det = Object.keys(o).length + ' equipos';
+    /* la palabra suelta esta en el diccionario; el texto pegado no */
+    function _tr(s){ try{ return (typeof translateString==='function')
+        ? translateString(s,(typeof getLang==='function'?getLang():'es')) : s; }catch(e){ return s; } }
+    if (v[0] === 'LIGA_DATA') det = Object.keys((o.teams) || {}).length + ' ' + _tr('equipos');
+    if (v[0] === 'PP_DATA')   det = Object.keys(o).length + ' ' + _tr('equipos');
     if (v[0] === 'EQUIPO_DATA') det = ((o.jugadores) || []).length + ' jugadores';
     if (v[0] === 'BAT_PARTIDOS') det = (o.total || 0) + ' partidos';
     fila('t-arch', v[1], (n > 200 ? 'ok' : 'VACÍO') + '  ·  ' + det + '  ·  ' +
@@ -207,7 +212,7 @@ function copiar(){
   });
 }
 </script>
-<script src="volver_inicio.js?v=20261013-2109" onerror="void 0"></script>
-<script src="ayuda.js?v=20261013-2109"></script>
+<script src="volver_inicio.js?v=20261013-2224" onerror="void 0"></script>
+<script src="ayuda.js?v=20261013-2224"></script>
 </body>
 </html>

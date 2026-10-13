@@ -4180,6 +4180,242 @@
     // ===== cargar videos: la lista agrupada por mes =====
     "Desplegar todo":{en:"Expand all",de:"Alle aufklappen"},
     "Plegar todo":{en:"Collapse all",de:"Alle zuklappen"},
+    "Tu aporte partido a partido y contra la liga":{en:"Your contribution match by match and against the league",de:"Dein Beitrag Spiel für Spiel und im Ligavergleich"},
+    "VER VIDEO DE ESTOS BLOQUEOS":{en:"WATCH VIDEO OF THESE BLOCKS",de:"VIDEO DIESER BLOCKS ANSEHEN"},
+    "Bajar TODO en un archivo":{en:"Download EVERYTHING in one file",de:"ALLES in einer Datei herunterladen"},
+    "VER VIDEO DE ESTOS ATAQUES":{en:"WATCH VIDEO OF THESE ATTACKS",de:"VIDEO DIESER ANGRIFFE ANSEHEN"},
+    "VER VIDEO DE ESTOS SAQUES":{en:"WATCH VIDEO OF THESE SERVES",de:"VIDEO DIESER AUFSCHLÄGE ANSEHEN"},
+    "VER VIDEO DE ESTAS RECEPCIONES":{en:"WATCH VIDEO OF THESE RECEPTIONS",de:"VIDEO DIESER ANNAHMEN ANSEHEN"},
+    "VER VIDEO DE ESTAS DEFENSAS":{en:"WATCH VIDEO OF THESE DIGS",de:"VIDEO DIESER ABWEHREN ANSEHEN"},
+    // --- BIENVENIDA: la guia de instalacion del jugador ---
+    "del":{en:"of the",de:"des"},
+    "Todo en un solo lugar: los horarios, el calendario, tus estadísticas, tus rutinas del gimnasio y los videos. Se instala una vez y después la abrís como cualquier otra app.":{en:"Everything in one place: the schedule, the calendar, your stats, your gym routines and the videos. You install it once and then open it like any other app.",de:"Alles an einem Ort: Trainingszeiten, Spielplan, deine Statistiken, deine Kraftpläne und die Videos. Einmal installieren und dann wie jede andere App öffnen."},
+    "Cómo entrar":{en:"How to sign in",de:"So meldest du dich an"},
+    "Tu dirección de mail":{en:"Your e-mail address",de:"Deine E-Mail-Adresse"},
+    "Tu fecha de nacimiento, sin puntos ni barras":{en:"Your date of birth, with no dots or slashes",de:"Dein Geburtsdatum, ohne Punkte und Schrägstriche"},
+    "Si naciste el 01.01.1990, tu clave es":{en:"If you were born on 01.01.1990, your code is",de:"Wenn du am 01.01.1990 geboren bist, lautet dein Code"},
+    "Son 6 u 8 números según cuándo te dieron de alta. Si uno no entra, probá el otro — o pediselo al cuerpo técnico.":{en:"It is 6 or 8 digits depending on when you were registered. If one does not work, try the other — or ask the coaching staff.",de:"Es sind 6 oder 8 Ziffern, je nachdem, wann du angemeldet wurdest. Geht die eine nicht, probiere die andere — oder frag das Trainerteam."},
+    "Qué vas a encontrar":{en:"What you will find",de:"Was dich erwartet"},
+    "Tu perfil":{en:"Your profile",de:"Dein Profil"},
+    "Cómo venís en saque, recepción, ataque y bloqueo. Partido por partido, o el acumulado de la temporada.":{en:"How you are doing in serve, reception, attack and block. Match by match, or the season total.",de:"Wie du in Aufschlag, Annahme, Angriff und Block dastehst. Spiel für Spiel oder als Saisonsumme."},
+    "Tu rutina del día con tus pesos. Los vas cargando vos y quedan guardados. En el gimnasio, la misma rutina se ve en la pantalla grande.":{en:"Your routine for the day with your weights. You enter them yourself and they stay saved. In the gym, the same routine shows on the big screen.",de:"Dein Tagesplan mit deinen Gewichten. Du trägst sie selbst ein und sie bleiben gespeichert. Im Kraftraum läuft derselbe Plan auf dem grossen Bildschirm."},
+    "Cómo llegás cada día: sueño, cansancio, dolores. Son 30 segundos y nos sirve muchísimo para saber cómo armar la práctica.":{en:"How you arrive each day: sleep, tiredness, aches. It takes 30 seconds and it helps us a lot to plan the session.",de:"Wie du jeden Tag ankommst: Schlaf, Müdigkeit, Beschwerden. 30 Sekunden, und es hilft uns sehr bei der Trainingsplanung."},
+    "Horarios de entrenamiento y calendario de partidos, siempre al día. Si algo cambia, se actualiza solo.":{en:"Training times and match calendar, always up to date. If something changes, it updates by itself.",de:"Trainingszeiten und Spielplan, immer aktuell. Ändert sich etwas, aktualisiert es sich von selbst."},
+    "Los cortes de tus acciones, filtrados por lo que quieras ver. Para mirar tranquilo lo que hablamos en el entrenamiento.":{en:"The clips of your actions, filtered by whatever you want to see. To watch calmly what we talked about in training.",de:"Die Clips deiner Aktionen, gefiltert nach dem, was du sehen willst. Um in Ruhe anzuschauen, was wir im Training besprochen haben."},
+    "Activá las notificaciones.":{en:"Turn on notifications.",de:"Schalte die Benachrichtigungen ein."},
+    "Los cambios de horario y los avisos de partido llegan por la app. Si no las activás, te los vas a perder. Abajo están los pasos.":{en:"Schedule changes and match notices arrive through the app. If you do not turn them on, you will miss them. The steps are below.",de:"Zeitänderungen und Spielinfos kommen über die App. Ohne Benachrichtigungen verpasst du sie. Die Schritte stehen unten."},
+    "Seguí la columna de tu teléfono. Es una sola vez y lleva 2 minutos. Una vez instalada funciona":{en:"Follow the column for your phone. It is a one-off and takes 2 minutes. Once installed it works",de:"Folge der Spalte für dein Handy. Einmalig, dauert 2 Minuten. Einmal installiert, läuft sie"},
+    "sin internet":{en:"without internet",de:"ohne Internet"},
+    ": en el gimnasio sin wifi abre igual.":{en:": in the gym with no wifi it still opens.",de:": auch in der Halle ohne WLAN öffnet sie."},
+    "(iOS 16.4 o más nuevo)":{en:"(iOS 16.4 or newer)",de:"(iOS 16.4 oder neuer)"},
+    "(tiene que ser Safari, no Chrome).":{en:"(it has to be Safari, not Chrome).",de:"(es muss Safari sein, nicht Chrome)."},
+    "Tocá el botón":{en:"Tap the button",de:"Tippe auf die Schaltfläche"},
+    "— el cuadradito con la flecha hacia arriba, abajo en el centro.":{en:"— the little square with the arrow pointing up, at the bottom centre.",de:"— das kleine Quadrat mit dem Pfeil nach oben, unten in der Mitte."},
+    "Deslizá hacia abajo y tocá":{en:"Scroll down and tap",de:"Scrolle nach unten und tippe auf"},
+    "Tocá":{en:"Tap",de:"Tippe auf"},
+    ", arriba a la derecha.":{en:", at the top right.",de:", oben rechts."},
+    "Abrí la app desde el ícono nuevo en tu pantalla.":{en:"Open the app from the new icon on your screen.",de:"Öffne die App über das neue Symbol auf deinem Bildschirm."},
+    "Entrá con tu mail y tu clave.":{en:"Sign in with your e-mail and your code.",de:"Melde dich mit E-Mail und Code an."},
+    "Tocá el botón rojo":{en:"Tap the red button",de:"Tippe auf die rote Schaltfläche"},
+    ", abajo a la izquierda.":{en:", at the bottom left.",de:", unten links."},
+    ". ¡Listo!":{en:". Done!",de:". Fertig!"},
+    "Tocá los":{en:"Tap the",de:"Tippe auf die"},
+    "Confirmá":{en:"Confirm",de:"Bestätige"},
+    "Abrí la app desde el ícono nuevo.":{en:"Open the app from the new icon.",de:"Öffne die App über das neue Symbol."},
+    "Si no la agregás a la pantalla de inicio (pasos 1 a 5),":{en:"If you do not add it to the home screen (steps 1 to 5),",de:"Wenn du sie nicht zum Startbildschirm hinzufügst (Schritte 1 bis 5),"},
+    "te van a llegar los avisos. Es una regla de Apple, no del club.":{en:"the notices will reach you. That is an Apple rule, not the club's.",de:"kommen die Hinweise an. Das ist eine Apple-Regel, nicht die des Clubs."},
+    "una sola vez por dispositivo":{en:"once per device",de:"einmal pro Gerät"},
+    ". Si usás el celular y la computadora, tenés que entrar en cada uno; después queda abierto y no te lo vuelve a pedir.":{en:". If you use the phone and the computer, you have to sign in on each one; after that it stays open and does not ask again.",de:". Wenn du Handy und Computer nutzt, musst du dich auf beiden anmelden; danach bleibt sie offen und fragt nicht mehr."},
+    "La app está en español, inglés y alemán. Se cambia con los botones de arriba a la derecha, en cualquier momento.":{en:"The app is in Spanish, English and German. You switch with the buttons at the top right, at any time.",de:"Die App gibt es auf Spanisch, Englisch und Deutsch. Umschalten jederzeit über die Schaltflächen oben rechts."},
+    "Si no podés entrar o algo no funciona, escribile al cuerpo técnico.":{en:"If you cannot sign in or something does not work, write to the coaching staff.",de:"Wenn du dich nicht anmelden kannst oder etwas nicht funktioniert, schreib dem Trainerteam."},
+    "Volver al inicio":{en:"Back to home",de:"Zurück zum Start"},
+    "Inicio · Volley Näfels":{en:"Home · Volley Näfels",de:"Start · Volley Näfels"},
+    "Atrás":{en:"Back",de:"Zurück"},
+    "División de Honor 2026":{en:"División de Honor 2026",de:"División de Honor 2026"},
+    "{0}: {1}% ({2}) · antes: {3}% ({4})":{en:"{0}: {1}% ({2}) · before: {3}% ({4})",de:"{0}: {1}% ({2}) · vorher: {3}% ({4})"},
+    ": el corrimiento se calcula solo y se aplica a los {0}.":{en:": the offset is worked out on its own and applied to all {0}.",de:": der Versatz wird selbst berechnet und auf alle {0} angewendet."},
+    "— {0} m hasta la red, {1} m de lado, baja {2} m.":{en:"— {0} m to the net, {1} m sideways, drops {2} m.",de:"— {0} m bis zum Netz, {1} m zur Seite, fällt {2} m."},
+    ". A {0} m pesa 5% menos que al nivel del mar, y eso mueve la cuenta casi 1 km/h.":{en:". At {0} m the air is 5% lighter than at sea level, and that moves the result by almost 1 km/h.",de:". Auf {0} m ist die Luft 5% leichter als auf Meereshöhe, das verschiebt das Ergebnis um fast 1 km/h."},
+    "2025 10 22 03 28 636595  https://youtu.be/aaaa\n636588  https://youtu.be/bbbb\nhttps://youtu.be/cccc  (sin código → va por orden)":{en:"2025 10 22 03 28 636595  https://youtu.be/aaaa\n636588  https://youtu.be/bbbb\nhttps://youtu.be/cccc  (no code → goes in order)",de:"2025 10 22 03 28 636595  https://youtu.be/aaaa\n636588  https://youtu.be/bbbb\nhttps://youtu.be/cccc  (ohne Code → der Reihe nach)"},
+    // --- lo que se arma pegando pedazos ---
+    "▶ Ver video — {0} acciones":{en:"▶ Watch video — {0} actions",de:"▶ Video ansehen — {0} Aktionen"},
+    "Doble clic: ver video de estos ataques":{en:"Double click: watch the video of these attacks",de:"Doppelklick: Video dieser Angriffe ansehen"},
+    "los últimos {0} partidos":{en:"the last {0} matches",de:"die letzten {0} Spiele"},
+    "las últimas {0} sesiones":{en:"the last {0} sessions",de:"die letzten {0} Einheiten"},
+    "{0} arm. · {1}% del total":{en:"{0} sets · {1}% of the total",de:"{0} Zuspiele · {1}% des Gesamten"},
+    "RECUPERAR SCOUTS":{en:"RECOVER SCOUTINGS",de:"SCOUTINGS WIEDERHERSTELLEN"},
+    "Recuperar scouts":{en:"Recover scoutings",de:"Scoutings wiederherstellen"},
+    "Ej: Vélez Sarsfield":{en:"E.g. Vélez Sarsfield",de:"z. B. Vélez Sarsfield"},
+    // ══ BARRIDO EXHAUSTIVO 2026-10-13 — lo que quedaba en castellano ══
+    // --- radar de saque ---
+    "← Volver":{en:"← Back",de:"← Zurück"},
+    "RADAR DE SAQUE":{en:"SERVE RADAR",de:"AUFSCHLAG-RADAR"},
+    "Cámara en vivo (con delay)":{en:"Live camera (with delay)",de:"Live-Kamera (mit Verzögerung)"},
+    "Elegí el video del partido.":{en:"Choose the match video.",de:"Wähle das Spielvideo."},
+    "No se sube a ningún lado: se abre desde tu disco y se queda en tu computadora.":{en:"Nothing is uploaded: it opens from your disk and stays on your computer.",de:"Nichts wird hochgeladen: es wird von deiner Festplatte geöffnet und bleibt auf deinem Computer."},
+    "Abrir video…":{en:"Open video…",de:"Video öffnen…"},
+    "Prender cámara":{en:"Turn on camera",de:"Kamera einschalten"},
+    "⏸ Congelar para medir":{en:"⏸ Freeze to measure",de:"⏸ Einfrieren zum Messen"},
+    "▶ Volver al vivo":{en:"▶ Back to live",de:"▶ Zurück zum Live-Bild"},
+    "sin marcar":{en:"not marked",de:"nicht markiert"},
+    "guarda la medición":{en:"saves the measurement",de:"speichert die Messung"},
+    "media del vuelo":{en:"flight average",de:"Flugmittel"},
+    "— sin jugador —":{en:"— no player —",de:"— kein Spieler —"},
+    "Guardar medición":{en:"Save measurement",de:"Messung speichern"},
+    "Medición en tanda":{en:"Batch measurement",de:"Messung in Serie"},
+    "Cargar mapa de saques (.json)":{en:"Load serve map (.json)",de:"Aufschlagkarte laden (.json)"},
+    "Saques de":{en:"Serves by",de:"Aufschläge von"},
+    "Los dos":{en:"Both",de:"Beide"},
+    "◀ anterior":{en:"◀ previous",de:"◀ zurück"},
+    "siguiente ▶":{en:"next ▶",de:"weiter ▶"},
+    "Abrí el video del partido para empezar.":{en:"Open the match video to start.",de:"Öffne das Spielvideo, um zu beginnen."},
+    "Desfase del video":{en:"Video offset",de:"Video-Versatz"},
+    "Ajustar con el saque actual":{en:"Adjust with the current serve",de:"Mit dem aktuellen Aufschlag anpassen"},
+    "Los segundos vienen del .dvw. Si el archivo que bajaste de YouTube arranca en otro lado, todos los saltos caen corridos lo mismo. Marcá el golpe del primer saque y apretá":{en:"The seconds come from the .dvw. If the file you downloaded from YouTube starts somewhere else, every jump lands shifted by the same amount. Mark the contact of the first serve and press",de:"Die Sekunden kommen aus der .dvw. Wenn die von YouTube geladene Datei woanders beginnt, sind alle Sprünge um denselben Betrag verschoben. Markiere den Kontakt des ersten Aufschlags und drücke"},
+    "Dónde pegó y dónde cruzó":{en:"Where it landed and where it crossed",de:"Wo er aufkam und wo er übersetzte"},
+    "Tocá la cancha para cambiarlo.":{en:"Tap the court to change it.",de:"Tippe auf das Feld, um es zu ändern."},
+    "Altura del contacto":{en:"Contact height",de:"Kontakthöhe"},
+    "Pasa sobre la red por":{en:"Clears the net by",de:"Überquert das Netz um"},
+    "Cuadros por segundo":{en:"Frames per second",de:"Bilder pro Sekunde"},
+    "Del video":{en:"From the video",de:"Aus dem Video"},
+    "Todavía no hay video.":{en:"No video yet.",de:"Noch kein Video."},
+    "Rozamiento del aire":{en:"Air drag",de:"Luftwiderstand"},
+    "Tipo de saque":{en:"Serve type",de:"Aufschlagart"},
+    "Flotante (sin rotación)":{en:"Float (no spin)",de:"Flatter (ohne Rotation)"},
+    "Con rotación (potencia)":{en:"With spin (power)",de:"Mit Rotation (Sprungaufschlag)"},
+    "Altitud del gimnasio":{en:"Gym altitude",de:"Höhe der Halle"},
+    "Calibrar con un radar de verdad":{en:"Calibrate with a real radar",de:"Mit einem echten Radar kalibrieren"},
+    "El radar marcó":{en:"The radar read",de:"Das Radar zeigte"},
+    "Ajustar el Cd con este saque":{en:"Adjust Cd with this serve",de:"Cd mit diesem Aufschlag anpassen"},
+    "Medí un saque acá y con el radar al mismo tiempo. Con ese par, el Cd se despeja solo y todas las mediciones siguientes quedan atadas a tu gimnasio y a tu pelota.":{en:"Measure one serve here and with the radar at the same time. With that pair, Cd solves itself and every later measurement is tied to your gym and your ball.",de:"Miss einen Aufschlag hier und gleichzeitig mit dem Radar. Mit diesem Paar löst sich Cd von selbst und alle weiteren Messungen sind an deine Halle und deinen Ball gebunden."},
+    "Todavía no guardaste ninguno.":{en:"You have not saved any yet.",de:"Du hast noch keine gespeichert."},
+    "Máx":{en:"Max",de:"Max"},
+    // --- diagnostico ---
+    "DIAGNÓSTICO":{en:"DIAGNOSTICS",de:"DIAGNOSE"},
+    "Qué está cargando el navegador en esta carpeta, ahora mismo.":{en:"What the browser is loading in this folder, right now.",de:"Was der Browser in diesem Ordner gerade lädt."},
+    "Dónde estoy":{en:"Where I am",de:"Wo ich bin"},
+    "dirección":{en:"address",de:"Adresse"},
+    "Los archivos de datos":{en:"The data files",de:"Die Datendateien"},
+    "la liga (equipos y armadores)":{en:"the league (teams and setters)",de:"die Liga (Mannschaften und Zuspieler)"},
+    "el plan de partido":{en:"the game plan",de:"der Spielplan"},
+    "NO LLEGÓ":{en:"DID NOT ARRIVE",de:"NICHT ANGEKOMMEN"},
+    "el bloqueo":{en:"the block",de:"der Block"},
+    "el plantel":{en:"the squad",de:"der Kader"},
+    "las baterías":{en:"the drills",de:"die Übungsreihen"},
+    "El equipo y sus jugadores":{en:"The team and its players",de:"Die Mannschaft und ihre Spieler"},
+    "equipos en el plan":{en:"teams in the plan",de:"Mannschaften im Plan"},
+    "equipo elegido":{en:"selected team",de:"gewählte Mannschaft"},
+    "¿existe?":{en:"does it exist?",de:"existiert sie?"},
+    "NO — por eso sale vacío":{en:"NO — that is why it comes out empty",de:"NEIN — deshalb bleibt es leer"},
+    "El armador":{en:"The setter",de:"Der Zuspieler"},
+    "equipos en la liga":{en:"teams in the league",de:"Mannschaften in der Liga"},
+    "¿está el mío?":{en:"is mine there?",de:"ist meine dabei?"},
+    "NO — la solapa de armado sale vacía":{en:"NO — the setting tab comes out empty",de:"NEIN — der Zuspiel-Reiter bleibt leer"},
+    "Copiar todo para mandar":{en:"Copy everything to send",de:"Alles zum Senden kopieren"},
+    // --- plantillas con numeros adentro ---
+    "su promedio: {0}%":{en:"their average: {0}%",de:"sein Schnitt: {0}%"},
+    "{0} saques":{en:"{0} serves",de:"{0} Aufschläge"},
+    "{0} ataques":{en:"{0} attacks",de:"{0} Angriffe"},
+    "{0} bloqueos":{en:"{0} blocks",de:"{0} Blocks"},
+    "{0} bloqueo":{en:"{0} block",de:"{0} Block"},
+    "{0} acciones":{en:"{0} actions",de:"{0} Aktionen"},
+    "{0} equipos":{en:"{0} teams",de:"{0} Mannschaften"},
+    "{0} arm.":{en:"{0} sets",de:"{0} Zuspiele"},
+    "{0}% del total":{en:"{0}% of the total",de:"{0}% des Gesamten"},
+    "Abrir game plan de {0}":{en:"Open the game plan of {0}",de:"Spielplan von {0} öffnen"},
+    "Saque en salto · {0} m":{en:"Jump serve · {0} m",de:"Sprungaufschlag · {0} m"},
+    // --- ficha del jugador ---
+    "Un punto por partido, en orden de fecha · la línea punteada es su promedio · punto hueco = menos de 5 acciones en esa sesión · el ▲▼ compara los últimos 3 partidos con lo anterior, y solo aparece si hay al menos 10 acciones de cada lado · tocá un punto para ver de qué sesión es":{en:"One dot per match, in date order · the dotted line is their average · a hollow dot means fewer than 5 actions in that session · the ▲▼ compares the last 3 matches with what came before, and only shows up with at least 10 actions on each side · tap a dot to see which session it is",de:"Ein Punkt pro Spiel, nach Datum · die gestrichelte Linie ist sein Schnitt · ein hohler Punkt bedeutet weniger als 5 Aktionen in dieser Einheit · das ▲▼ vergleicht die letzten 3 Spiele mit davor und erscheint erst ab 10 Aktionen auf jeder Seite · tippe auf einen Punkt, um die Einheit zu sehen"},
+    // --- recuperar scouts ---
+    "Todo lo que se scouteó en":{en:"Everything scouted on",de:"Alles, was auf"},
+    "esta computadora":{en:"this computer",de:"diesem Computer"},
+    "queda guardado en el navegador, aunque no se haya exportado. Acá se ve y se puede bajar. No se modifica nada: esta página sólo lee.":{en:"stays saved in the browser, even if it was never exported. Here you can see it and download it. Nothing is changed: this page only reads.",de:"gescoutet wurde, bleibt im Browser gespeichert, auch ohne Export. Hier siehst du es und kannst es herunterladen. Nichts wird verändert: diese Seite liest nur."},
+    "ANTES QUE NADA:":{en:"FIRST OF ALL:",de:"ZUERST:"},
+    "no abras el Scout en Vivo hasta bajar todo de acá. El panel guarda automáticamente y puede pisar lo que quedó del último trabajo. Bajá primero, revisá después.":{en:"do not open Live Scout until you have downloaded everything from here. The panel saves automatically and can overwrite what was left from the last session. Download first, check afterwards.",de:"öffne das Live-Scouting erst, wenn du hier alles heruntergeladen hast. Das Panel speichert automatisch und kann die letzte Arbeit überschreiben. Erst herunterladen, dann prüfen."},
+    "Tiene que abrirse en la":{en:"It has to be opened on the",de:"Es muss auf dem"},
+    "donde se scouteó. Lo que guarda un navegador no lo ve otro, ni siquiera en la misma máquina.":{en:"where the scouting was done. What one browser saves, another cannot see, not even on the same machine.",de:"Computer geöffnet werden, auf dem gescoutet wurde. Was ein Browser speichert, sieht ein anderer nicht, auch nicht auf demselben Gerät."},
+    "⬇ Bajar TODO en un archivo":{en:"⬇ Download EVERYTHING in one file",de:"⬇ ALLES in einer Datei herunterladen"},
+    "Un solo archivo con absolutamente todo lo que hay guardado. Es lo más seguro: no hay que elegir nada.":{en:"A single file with absolutely everything that is saved. It is the safest option: nothing to choose.",de:"Eine einzige Datei mit absolut allem Gespeicherten. Das Sicherste: nichts auszuwählen."},
+    "No encontré ningún scout guardado en este navegador.":{en:"I found no scouting saved in this browser.",de:"Ich habe kein Scouting in diesem Browser gefunden."},
+    "Puede ser que no sea la computadora donde se scouteó, que sea otro navegador, o que se hayan borrado los datos del sitio.":{en:"It may not be the computer where the scouting was done, it may be another browser, or the site data may have been cleared.",de:"Vielleicht ist es nicht der Computer, auf dem gescoutet wurde, ein anderer Browser, oder die Website-Daten wurden gelöscht."},
+    // --- plan de partido ---
+    "— Sin definir —":{en:"— Not set —",de:"— Nicht festgelegt —"},
+    "— sin definir —":{en:"— not set —",de:"— nicht festgelegt —"},
+    "☝ Opción 1":{en:"☝ Option 1",de:"☝ Option 1"},
+    "✌ Opción 2":{en:"✌ Option 2",de:"✌ Option 2"},
+    "ARMADOR SUPLENTE":{en:"BACKUP SETTER",de:"ERSATZ-ZUSPIELER"},
+    "Mostrar":{en:"Show",de:"Anzeigen"},
+    "Cada ficha abre en el fundamento donde más aparece y las otras están a un toque. Tocá una combinación o un tipo de saque para filtrar la cancha, y el filtro":{en:"Each card opens on the skill where the player shows up most, and the others are one tap away. Tap a combination or a serve type to filter the court, and the filter",de:"Jede Karte öffnet sich bei dem Element, in dem der Spieler am häufigsten vorkommt; die anderen sind einen Tipp entfernt. Tippe auf eine Kombination oder eine Aufschlagart, um das Feld zu filtern, und der Filter"},
+    "para quedarte con una valoración. El botón abre el reproductor con esas acciones: ahí tildás las que querés en el video. En ataque el color es la":{en:"to keep a single evaluation. The button opens the player with those actions: there you tick the ones you want in the video. In attack the colour is the",de:"um bei einer Bewertung zu bleiben. Die Schaltfläche öffnet den Player mit diesen Aktionen: dort hakst du die an, die ins Video sollen. Im Angriff ist die Farbe die"},
+    "Doble clic: ver video de estos attacks":{en:"Double click: watch the video of these attacks",de:"Doppelklick: Video dieser Angriffe ansehen"},
+    // --- scout en vivo ---
+    "Los segundos que el programa deja entre una acción y la siguiente cuando alineás un rally entero de una. El manual trae 3 / 3,2 / 3; estos son los que usa el DataVolley con el que scouteamos.":{en:"The seconds the program leaves between one action and the next when you line up a whole rally at once. The manual says 3 / 3.2 / 3; these are the ones used by the DataVolley we scout with.",de:"Die Sekunden, die das Programm zwischen zwei Aktionen lässt, wenn du einen ganzen Ballwechsel auf einmal ausrichtest. Das Handbuch nennt 3 / 3,2 / 3; dies sind die Werte des DataVolley, mit dem wir scouten."},
+    "saque → ataque":{en:"serve → attack",de:"Aufschlag → Angriff"},
+    "ataque → ataque":{en:"attack → attack",de:"Angriff → Angriff"},
+    "último golpe → fin":{en:"last contact → end",de:"letzter Kontakt → Ende"},
+    "— Android: tres puntos → Agregar a pantalla principal. iPhone: compartir → Agregar a inicio.":{en:"— Android: three dots → Add to home screen. iPhone: share → Add to Home Screen.",de:"— Android: drei Punkte → Zum Startbildschirm hinzufügen. iPhone: Teilen → Zum Home-Bildschirm."},
+    "Deshace el punto (Ctrl+Shift+Z)":{en:"Undoes the point (Ctrl+Shift+Z)",de:"Macht den Punkt rückgängig (Strg+Umschalt+Z)"},
+    "Cambiar de equipo":{en:"Switch team",de:"Mannschaft wechseln"},
+    "Achicá el video a un costado para tipear y verlo a la vez":{en:"Shrink the video to one side so you can type and watch at the same time",de:"Verkleinere das Video an den Rand, um gleichzeitig zu tippen und zu schauen"},
+    "Achicá el video a un costado para poder tipear y ver el video a la vez":{en:"Shrink the video to one side so you can type and watch the video at the same time",de:"Verkleinere das Video an den Rand, um gleichzeitig zu tippen und das Video zu sehen"},
+    "Base de equipos":{en:"Team database",de:"Mannschafts-Datenbank"},
+    "Borrar los scouts tildados":{en:"Delete the ticked scoutings",de:"Markierte Scoutings löschen"},
+    "Abre el video solo, en su propia ventana, para arrastrarla al televisor. Vos seguís scouteando acá.":{en:"Opens the video on its own, in its own window, so you can drag it to the TV. You keep scouting here.",de:"Öffnet das Video allein in einem eigenen Fenster, das du auf den Fernseher ziehen kannst. Du scoutest hier weiter."},
+    "…o pegá una URL":{en:"…or paste a URL",de:"…oder eine URL einfügen"},
+    // --- revisar el telefono / delay / camara ---
+    "Revisión del teléfono":{en:"Phone check",de:"Handy-Check"},
+    "Sacale una foto a esta pantalla y mandásela a Ignacio.":{en:"Take a photo of this screen and send it to Ignacio.",de:"Mach ein Foto von diesem Bildschirm und schick es an Ignacio."},
+    "Puede guardar (local)":{en:"Can save (local)",de:"Kann speichern (lokal)"},
+    "Puede guardar (sesión)":{en:"Can save (session)",de:"Kann speichern (Sitzung)"},
+    "Puede guardar (cookie)":{en:"Can save (cookie)",de:"Kann speichern (Cookie)"},
+    "Sesión guardada":{en:"Session saved",de:"Sitzung gespeichert"},
+    "No hay ninguna sesión guardada.":{en:"There is no saved session.",de:"Es ist keine Sitzung gespeichert."},
+    "Entrá una vez con tu mail y clave, y volvé a esta página.":{en:"Sign in once with your e-mail and code, then come back to this page.",de:"Melde dich einmal mit E-Mail und Code an und komm auf diese Seite zurück."},
+    "Volver a revisar":{en:"Check again",de:"Erneut prüfen"},
+    "Usa la cámara de este aparato · el mismo motor que el video de la cancha":{en:"Uses this device's camera · the same engine as the court video",de:"Nutzt die Kamera dieses Geräts · dieselbe Technik wie das Hallenvideo"},
+    "Este navegador no puede hacer el delay continuo.":{en:"This browser cannot do the continuous delay.",de:"Dieser Browser kann die fortlaufende Verzögerung nicht."},
+    "Le falta MediaSource o el formato de grabación. En ese caso la app sigue funcionando con el método anterior, el de clips.":{en:"It is missing MediaSource or the recording format. In that case the app keeps working with the older method, the one with clips.",de:"Ihm fehlt MediaSource oder das Aufnahmeformat. In dem Fall arbeitet die App mit der älteren Methode über Clips weiter."},
+    "🏐 Marcar punto":{en:"🏐 Mark point",de:"🏐 Punkt markieren"},
+    "Cómo saber si anda bien.":{en:"How to tell if it is working.",de:"Woran du merkst, dass es läuft."},
+    "Poné 8 segundos y saludá a la cámara: tenés que verte saludar 8 segundos después. Movés la barra y el retraso cambia en el momento, sin cortes. La velocidad se va a mover entre 0,95 y 1,05: eso es normal, es la corrección fina para que el retraso no se vaya desviando.":{en:"Set 8 seconds and wave at the camera: you should see yourself wave 8 seconds later. Move the slider and the delay changes right away, without cuts. The speed will move between 0.95 and 1.05: that is normal, it is the fine correction that keeps the delay from drifting.",de:"Stell 8 Sekunden ein und winke in die Kamera: du musst dich 8 Sekunden später winken sehen. Bewegst du den Regler, ändert sich die Verzögerung sofort, ohne Schnitte. Die Geschwindigkeit pendelt zwischen 0,95 und 1,05: das ist normal, die Feinkorrektur gegen das Abdriften."},
+    "Pantalla con delay":{en:"Screen with delay",de:"Bildschirm mit Verzögerung"},
+    "Elegí abajo de dónde sale el video: una cámara enchufada a esta computadora, o el celular que ya está transmitiendo. Después poné esta ventana en pantalla completa y arrastrala al televisor.":{en:"Choose below where the video comes from: a camera plugged into this computer, or the phone that is already streaming. Then put this window in full screen and drag it to the TV.",de:"Wähle unten, woher das Video kommt: eine an diesen Computer angeschlossene Kamera oder das Handy, das bereits überträgt. Dann dieses Fenster auf Vollbild stellen und auf den Fernseher ziehen."},
+    "Buscá las cámaras":{en:"Find the cameras",de:"Kameras suchen"},
+    "Soltar cámara":{en:"Release camera",de:"Kamera freigeben"},
+    "SIN TRANSMITIR":{en:"NOT STREAMING",de:"KEINE ÜBERTRAGUNG"},
+    // --- cargar y unir videos ---
+    "Grabaste hoy y todavia no subiste el .dvw?":{en:"Recorded today and have not uploaded the .dvw yet?",de:"Heute aufgenommen und die .dvw noch nicht hochgeladen?"},
+    "Guarda el link igual. Queda reservado para esa fecha, y en cuanto subas el .dvw y la sesion aparezca en la lista de abajo, el link ya va a estar puesto.":{en:"Save the link anyway. It is reserved for that date, and as soon as you upload the .dvw and the session shows up in the list below, the link will already be in place.",de:"Speichere den Link trotzdem. Er ist für dieses Datum reserviert, und sobald du die .dvw hochlädst und die Einheit unten erscheint, ist der Link schon gesetzt."},
+    "Sin turno":{en:"No session time",de:"Ohne Zeitangabe"},
+    "A YouTube como \"No listado\", o a donde uses. El link va en":{en:"To YouTube as \"Unlisted\", or wherever you use. The link goes in",de:"Zu YouTube als \"Nicht gelistet\" oder wohin du willst. Der Link kommt in"},
+    ": quedan como estaban.":{en:": they stay as they were.",de:": sie bleiben, wie sie waren."},
+    "—lo normal cuando es una grabación cortada— se pegan sin volver a comprimir: tarda segundos y no se pierde nada de calidad. Si vienen de cámaras distintas hay que unificarlas y eso tarda más; el programa te avisa antes de empezar.":{en:"—the normal case for a recording that was cut— they are joined without re-encoding: it takes seconds and no quality is lost. If they come from different cameras they have to be unified and that takes longer; the program warns you before it starts.",de:"—der Normalfall bei einer unterbrochenen Aufnahme— werden sie ohne Neukodierung zusammengefügt: das dauert Sekunden und kostet keine Qualität. Kommen sie von verschiedenen Kameras, müssen sie vereinheitlicht werden, was länger dauert; das Programm warnt dich vorher."},
+    "Unir video exige cargarlo entero en memoria. Un partido son varios gigas y el navegador tiene un límite de unos 2 GB: no entra, y lo peor es que no falla con un error — se queda intentando para siempre.":{en:"Joining video requires loading all of it into memory. A match is several gigabytes and the browser has a limit of about 2 GB: it does not fit, and the worst part is that it does not fail with an error — it just keeps trying forever.",de:"Das Zusammenfügen lädt das ganze Video in den Speicher. Ein Spiel hat mehrere Gigabyte, der Browser hat ein Limit von etwa 2 GB: es passt nicht, und das Schlimmste ist, dass kein Fehler kommt — er versucht es endlos weiter."},
+    // --- varias pantallas ---
+    "Saque flotado — por zona de origen":{en:"Float serve — by origin zone",de:"Flatteraufschlag — nach Ausgangszone"},
+    "Saque potencia — por zona de origen":{en:"Power serve — by origin zone",de:"Sprungaufschlag — nach Ausgangszone"},
+    "Desde Z5":{en:"From Z5",de:"Aus Z5"},
+    "Desde Z6":{en:"From Z6",de:"Aus Z6"},
+    "Desde Z1":{en:"From Z1",de:"Aus Z1"},
+    "Objetivos de la semana":{en:"Goals of the week",de:"Ziele der Woche"},
+    "Ver mis objetivos →":{en:"See my goals →",de:"Meine Ziele ansehen →"},
+    "Fijar arriba":{en:"Pin to top",de:"Oben anheften"},
+    "+ otra":{en:"+ another",de:"+ eine weitere"},
+    "Quitar la asociación":{en:"Remove the link",de:"Zuordnung entfernen"},
+    "Usar la tabla de otro archivo .dvw":{en:"Use the table from another .dvw file",de:"Die Tabelle einer anderen .dvw-Datei verwenden"},
+    "— Jugador —":{en:"— Player —",de:"— Spieler —"},
+    "Elegí quién vino y reparte según la tabla: 1º, 3º, 5º… al A · 2º, 4º, 6º… al B":{en:"Pick who turned up and it splits them by the table: 1st, 3rd, 5th… to A · 2nd, 4th, 6th… to B",de:"Wähle, wer da ist, und es verteilt nach Tabelle: 1., 3., 5.… zu A · 2., 4., 6.… zu B"},
+    "NÄFELS VOLEY — Análisis":{en:"NÄFELS VOLEY — Analysis",de:"NÄFELS VOLEY — Analyse"},
+    "Últimas 5":{en:"Last 5",de:"Letzte 5"},
+    "Este mes":{en:"This month",de:"Diesen Monat"},
+    "Todavía no hay datos cargados.":{en:"No data loaded yet.",de:"Noch keine Daten geladen."},
+    "Promedio por partido · eficacia":{en:"Average per match · efficiency",de:"Schnitt pro Spiel · Effizienz"},
+    "Promedio por partido · Blq #+":{en:"Average per match · Blk #+",de:"Schnitt pro Spiel · Blk #+"},
+    "VER":{en:"WATCH",de:"ANSEHEN"},
+    "VER VIDEO DE ESTAS ACCIONES":{en:"WATCH VIDEO OF THESE ACTIONS",de:"VIDEO DIESER AKTIONEN ANSEHEN"},
+    "Sincronizado con Firebase":{en:"Synced with Firebase",de:"Mit Firebase synchronisiert"},
+    "📅 MOVER DE MES…":{en:"📅 MOVE TO ANOTHER MONTH…",de:"📅 IN ANDEREN MONAT VERSCHIEBEN…"},
+    "Todavía no subiste ningún partido en esta sesión.":{en:"You have not uploaded any match in this session yet.",de:"Du hast in dieser Sitzung noch kein Spiel hochgeladen."},
     "Sin fecha":{en:"No date",de:"Ohne Datum"},
     "Pretemporada":{en:"Pre-season",de:"Vorbereitung"},
     "Los amistosos no entran en ningún número de esta pantalla":{en:"Friendlies are left out of every number on this screen",de:"Testspiele fließen in keine Zahl auf diesem Bildschirm ein"},
@@ -5389,6 +5625,30 @@
       if (_r !== _llano) return _r;
     }
 
+    /* ══ LOS SALTOS DE LINEA DEL CODIGO FUENTE ════════════════════════════
+       Un parrafo escrito en el HTML en tres renglones llega aca con sus
+       saltos de linea y su sangria adentro: "...navegador,\n  aunque no...".
+       El diccionario lo tiene escrito en un solo renglon, con un espacio
+       simple, asi que no coincidian NUNCA y parrafos enteros quedaban en
+       castellano aunque estuvieran traducidos. Medido: 9 parrafos largos de
+       radar de saque, recuperar scouts, unir video y pantalla con delay.
+
+       Se prueba una sola vez con los espacios normalizados. El texto que se
+       devuelve ya viene del diccionario, y los saltos del fuente no se
+       extranan: el navegador los colapsa igual al dibujar.                */
+    if (/\s{2,}|[\n\r\t]/.test(text)){
+      /* el espacio de los bordes se conserva: si el nodo empezaba con uno y
+         la traduccion no, las palabras se pegan con el <b> de al lado
+         ("scouted onthis computerstays saved"). */
+      var _ini = (text.match(/^\s+/) || [''])[0] ? ' ' : '';
+      var _fin = (text.match(/\s+$/) || [''])[0] ? ' ' : '';
+      var _uno = text.replace(/\s+/g, ' ').trim();
+      if (_uno !== text){
+        var _r2 = translateString(_uno, lang);
+        if (_r2 !== _uno) return _ini + _r2 + _fin;
+      }
+    }
+
     var exact=trPhrase(text.trim(),lang);
     if(exact!==null) return text.replace(text.trim(), exact);
 
@@ -5511,7 +5771,8 @@
   }
   function translateAttrs(lang){
     if(!document.body) return;
-    ['title','placeholder'].forEach(function(a){
+    /* aria-label se quedaba afuera y es lo que lee el lector de pantalla */
+    ['title','placeholder','aria-label'].forEach(function(a){
       var els = document.querySelectorAll('['+a+']');
       for (var i=0; i<els.length; i++){
         var el = els[i];
