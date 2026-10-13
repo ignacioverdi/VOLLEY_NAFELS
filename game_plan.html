@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261013-1707"></script>
-<script src="selector_categoria.js?v=20261013-1707"></script>
-<script src="objetivos_config.js?v=20261013-1707"></script>
+<script src="categorias_club.js?v=20261013-1738"></script>
+<script src="selector_categoria.js?v=20261013-1738"></script>
+<script src="objetivos_config.js?v=20261013-1738"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -443,7 +443,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261013-1707" onerror="void 0"></script>
+<script src="lang.js?v=20261013-1738" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -454,7 +454,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261013-1707"></script>
+<script src="datos_seguros.js?v=20261013-1738"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -467,15 +467,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261013-1707" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1707"></script>
-<script src="videos.js?v=20261013-1707" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261013-1738" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-1738"></script>
+<script src="videos.js?v=20261013-1738" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1707">
+<link rel="stylesheet" href="movil.css?v=20261013-1738">
 
-<script src="iconos.js?v=20261013-1707" defer></script>
+<script src="iconos.js?v=20261013-1738" defer></script>
 </head>
 <body>
 
@@ -766,6 +766,77 @@ var GP_TD_VACIO = { name:'—', rivals:[], matches:[], roster:[],
                     setters:[], setter:null, atk:[], srv:[], rec:[] };
 var GP_TD = GP_L.teams[GP_RIVAL_SLUG] || GP_TD_VACIO;
 var GP_COMBOS = GP_L.combos || {};
+/* == PRETEMPORADA Y COMPETENCIA OFICIAL ================================
+   Los amistosos de preparacion viven en la misma carpeta que los partidos
+   que cuentan —y esta bien que asi sea, nadie quiere andar moviendo
+   archivos— pero mezclados ensucian cualquier promedio: cuatro amistosos
+   contra equipos de otra categoria mueven la eficacia de la liga entera.
+
+   El motor marca cada partido por fecha (fases_temporada.json):
+       'PRE' amistoso de pretemporada
+       'SC'  Supercopa   |   'OF' competencia oficial
+   Aca se decide cuales entran, y el filtro se aplica UNA sola vez sobre
+   GP_TD: todo lo que la pantalla dibuja despues —jugadores, armador,
+   rotaciones, recepcion, video— sale de ahi, asi que ninguna seccion
+   tiene que enterarse de que existe la pretemporada.
+
+   Si la temporada no tiene ningun partido marcado 'PRE' —porque no esta
+   en fases_temporada.json, o porque ya arranco todo— no se filtra nada y
+   la barra ni aparece: identico a como funcionaba antes.                */
+var GP_COMP_GUARDADO='vb_gp_comp';
+var GP_COMP_PRE=false;        // true = la pretemporada ENTRA
+var GP_COMP_OFI=true;         // true = lo oficial ENTRA
+var GP_COMP_CUENTA={PRE:0,OFI:0};
+(function(){
+  var juegos=(GP_TD&&GP_TD.games)||[];
+  juegos.forEach(function(g){
+    if((g&&g.fase)==='PRE') GP_COMP_CUENTA.PRE++; else GP_COMP_CUENTA.OFI++;
+  });
+  if(!GP_COMP_CUENTA.PRE){ GP_COMP_PRE=true; return; }   /* nada que separar */
+  var g=null;
+  try{ g=localStorage.getItem(GP_COMP_GUARDADO); }catch(e){}
+  if(g==='pre'){ GP_COMP_PRE=true;  GP_COMP_OFI=false; }
+  else if(g==='todo'){ GP_COMP_PRE=true;  GP_COMP_OFI=true; }
+  else if(g==='ofi'){ GP_COMP_PRE=false; GP_COMP_OFI=true; }
+  else {
+    /* Por defecto, solo lo oficial. Pero si todavia NO hay un solo partido
+       oficial —como ahora, antes de la Supercopa— dejar solo lo oficial
+       seria dejar la pantalla en blanco: ahi entra la pretemporada. */
+    GP_COMP_PRE=!GP_COMP_CUENTA.OFI; GP_COMP_OFI=true;
+  }
+  if(!GP_COMP_CUENTA.OFI && !GP_COMP_PRE){ GP_COMP_PRE=true; }
+})();
+function gpCompOk(fase){ return (fase==='PRE') ? GP_COMP_PRE : GP_COMP_OFI; }
+function gpCompFiltra(td){
+  if(!td) return td;
+  if(!GP_COMP_CUENTA.PRE) return td;
+  if(GP_COMP_PRE && GP_COMP_OFI) return td;
+  var juegos=td.games||[], malos={}, hayMalos=false;
+  juegos.forEach(function(g,k){ if(!gpCompOk(g&&g.fase)){ malos[k]=1; hayMalos=true; } });
+  if(!hayMalos) return td;
+  function filas(rows){ return (rows||[]).filter(function(r){ return !malos[r[1]]; }); }
+  function porJug(m,campo){
+    var o={};
+    Object.keys(m||{}).forEach(function(k){
+      var p=m[k], f=filas(p[campo]);
+      if(f.length){ var c={}; for(var x in p) c[x]=p[x]; c[campo]=f; o[k]=c; }
+    });
+    return o;
+  }
+  var nt={}; for(var k in td) nt[k]=td[k];
+  nt.atk=porJug(td.atk,'a'); nt.srv=porJug(td.srv,'s');
+  nt.rec=porJug(td.rec,'r'); nt.dig=porJug(td.dig,'d');
+  nt.setters=(td.setters||[]).map(function(s){
+      var c={}; for(var x in s) c[x]=s[x];
+      c.s=filas(s.s); c.total=c.s.length; return c;
+    }).filter(function(s){ return s.s.length; })
+      .sort(function(a,b){ return b.total-a.total; });
+  nt.setter=nt.setters[0]||null;
+  nt.matches=(td.matches||[]).filter(function(m){ return gpCompOk(m&&m.fase); });
+  /* games se deja entero: las filas lo indexan por POSICION */
+  return nt;
+}
+GP_TD = gpCompFiltra(GP_TD);
 
 /* ══ EL APELLIDO DE CADA JUGADOR ═══════════════════════════════════════════
    Los nombres llegan del generador como "APELLIDO Nombre": "Balagué Manuel",
@@ -2844,6 +2915,70 @@ document.getElementById('rival-nombre').textContent=RIVAL.nombre;
   };
 })();
 document.getElementById('match-info').textContent=RIVAL.info;
+/* == LA BARRA DE COMPETENCIA ==========================================
+   Va ARRIBA DE TODO y no escondida en un desplegable, porque no filtra un
+   grafico: cambia el significado de todos los numeros de la pantalla. Si
+   la pretemporada esta adentro, hay que verlo sin buscarlo.
+   Cambiarla recarga la pagina, igual que cambiar de rival: la pantalla se
+   arma entera una sola vez al cargar. */
+(function(){
+  if(!GP_COMP_CUENTA.PRE) return;          /* no hay amistosos: no hay nada que elegir */
+  var main=document.getElementById('main-content'); if(!main) return;
+  var barra=document.createElement('div');
+  barra.style.cssText='display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:9px 13px;border:1px solid rgba(255,255,255,.08);border-radius:11px;background:rgba(255,255,255,.02)';
+  var lbl=document.createElement('span');
+  lbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase';
+  lbl.textContent='Competencia';
+  barra.appendChild(lbl);
+  function chip(texto, n, activo, color, onclick){
+    /* con cero partidos el chip no se puede elegir: pintarlo prendido
+       haria creer que se esta mirando algo que no existe. */
+    if(!n) activo=false;
+    var b=document.createElement('button'); b.type='button';
+    b.style.cssText='display:inline-flex;align-items:center;gap:6px;border-radius:8px;padding:5px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1.3;'
+      +(activo?('background:'+gpTinte(color)+';border:1px solid '+color+';color:'+color)
+              :'background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);color:#7689a1')
+      +(n?'':';opacity:.45;cursor:default');
+    var t=document.createElement('span'); t.textContent=texto;
+    var c=document.createElement('i');
+    c.style.cssText='font-style:normal;font-family:Anton,sans-serif;font-size:12px;opacity:.85';
+    c.textContent=n;
+    b.appendChild(t); b.appendChild(c);
+    b.onclick=onclick;
+    return b;
+  }
+  function elegir(v){
+    return function(){ try{ localStorage.setItem(GP_COMP_GUARDADO, v); }catch(e){}
+                       location.reload(); };
+  }
+  /* Cada chip prende y apaga lo suyo. Las dos apagadas dejarian la
+     pantalla en blanco, asi que apagar la ultima prende la otra. */
+  var hayOfi=GP_COMP_CUENTA.OFI>0;
+  function destino(ofi,pre){
+    if(!ofi&&!pre) return null;
+    if(ofi&&pre) return 'todo';
+    return ofi?'ofi':'pre';
+  }
+  function tocar(cual){
+    var ofi=GP_COMP_OFI, pre=GP_COMP_PRE;
+    if(cual==='ofi'){ ofi=!ofi; if(!ofi&&!pre) pre=true; }
+    else { pre=!pre; if(!ofi&&!pre) ofi=true; }
+    if(!hayOfi){ ofi=false; pre=true; }
+    var v=destino(ofi,pre); if(v) elegir(v)();
+  }
+  barra.appendChild(chip('Oficiales', GP_COMP_CUENTA.OFI, GP_COMP_OFI, '#22c55e',
+    hayOfi ? function(){ tocar('ofi'); } : function(){}));
+  barra.appendChild(chip('Pretemporada', GP_COMP_CUENTA.PRE, GP_COMP_PRE, '#f59e0b',
+    function(){ tocar('pre'); }));
+  var nota=document.createElement('span');
+  nota.style.cssText='font-size:11px;color:#7689a1;margin-left:auto';
+  nota.textContent = GP_COMP_PRE
+      ? (GP_COMP_OFI ? 'Los amistosos están entrando en todos los números'
+                     : 'Estás viendo solo amistosos de pretemporada')
+      : 'Los amistosos no entran en ningún número de esta pantalla';
+  barra.appendChild(nota);
+  main.insertBefore(barra, main.firstChild);
+})();
 var main=document.getElementById('main-content');
 var dots=document.getElementById('nav-dots');
 
@@ -3024,7 +3159,8 @@ function gpArmSyncAll(){ GP_ARM_SYNCS.forEach(function(f){ try{f();}catch(e){} }
    cuarto) o '-' (los que no tienen marca). Vacia = sin filtro.             */
 var GP_ARM_SETZ=[];
 var GP_SZ_FILAS=[[4,3,2],[7,8,9],[5,6,1]];   /* la cancha vista desde la red */
-var GP_SZ_CUARTOS=['A','B','D','C'];         /* A B / D C, como los numera DataVolley */
+var GP_SZ_CUARTOS=['C','B','D','A'];         /* el orden real de los cuartos:  C B
+                                                                               D A  */
 function gpSzActivo(){ return GP_ARM_SETZ.length>0; }
 function gpSzRow(r){
   if(!gpSzActivo()) return true;
@@ -3898,6 +4034,10 @@ function renderArmador(){
            en la etiqueta quedaban dos filas identicas y no se sabia cual tildar. */
         if(m.turno==='M') lab+=' (ma&ntilde;ana)'; else if(m.turno==='T') lab+=' (tarde)';
         var txt=document.createElement('span'); txt.innerHTML=lab+' <span style="color:#64748b">vs</span> '+m.rival;
+        /* con la pretemporada adentro, la lista mezcla amistosos y partidos
+           que cuentan: el cartelito dice cual es cual. */
+        if(m.fase==='PRE'&&GP_COMP_PRE&&GP_COMP_OFI){
+          txt.innerHTML+=' <b style="font-size:9px;letter-spacing:1px;color:#f59e0b;border:1px solid rgba(245,158,11,.45);border-radius:4px;padding:0 4px">PRE</b>'; }
         row.appendChild(ck); row.appendChild(txt); matchPanel.appendChild(row);
       });
       matchBtn.addEventListener('click',function(e){ e.stopPropagation(); matchPanel.style.display=(matchPanel.style.display==='none'?'block':'none'); });
@@ -5282,8 +5422,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261013-1707"></script>
-<script src="ayuda.js?v=20261013-1707"></script>
+<script src="temporadas_menu.js?v=20261013-1738"></script>
+<script src="ayuda.js?v=20261013-1738"></script>
 </body>
 </html>
 

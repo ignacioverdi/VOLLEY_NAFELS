@@ -1,0 +1,23 @@
+{
+  "_leeme": [
+    "QUE PARTIDOS SON DE PRETEMPORADA Y CUALES CUENTAN DE VERDAD.",
+    "",
+    "Por temporada hay una sola fecha que importa: 'oficial_desde'.",
+    "  - Todo partido ANTERIOR a esa fecha es PRETEMPORADA (amistoso).",
+    "  - Desde esa fecha en adelante, el partido es OFICIAL.",
+    "'supercopa' son las fechas de la Supercopa. Cuentan como oficial;",
+    "quedan marcadas aparte por si algun dia se quieren separar.",
+    "",
+    "Si una temporada NO figura aca, todos sus partidos cuentan como",
+    "oficiales y el filtro de competencia ni aparece. O sea: no agregar",
+    "nada es exactamente como funcionaba antes.",
+    "",
+    "Las fechas van en formato 2026-10-18 (ano-mes-dia).",
+    "Para la temporada que viene se agrega un bloque nuevo y listo."
+  ],
+  "2026/27": {
+    "oficial_desde": "2026-10-17",
+    "supercopa": ["2026-10-17"],
+    "_nota": "Todo lo subido hasta el viernes 16/10 a las 23:59 es pretemporada. El sabado 17 es la Supercopa y el domingo 18 arranca la liga."
+  }
+}

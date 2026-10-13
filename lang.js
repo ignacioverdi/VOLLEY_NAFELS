@@ -4175,6 +4175,13 @@
     "Muestra chica":{en:"Small sample",de:"Kleine Stichprobe"},
     // ===== DONDE CAYO LA RECEPCION (la canchita del plan de partido) =====
     "Armó desde":{en:"Set from",de:"Zuspiel aus"},
+    // ===== PRETEMPORADA / COMPETENCIA OFICIAL =====
+    "Competencia":{en:"Competition",de:"Wettbewerb"},
+    "Oficiales":{en:"Official",de:"Offiziell"},
+    "Pretemporada":{en:"Pre-season",de:"Vorbereitung"},
+    "Los amistosos no entran en ningún número de esta pantalla":{en:"Friendlies are left out of every number on this screen",de:"Testspiele fließen in keine Zahl auf diesem Bildschirm ein"},
+    "Los amistosos están entrando en todos los números":{en:"Friendlies are included in every number",de:"Testspiele fließen in alle Zahlen ein"},
+    "Estás viendo solo amistosos de pretemporada":{en:"You are seeing pre-season friendlies only",de:"Du siehst nur Testspiele der Vorbereitung"},
     "Dónde cayó el saque: la banda de la zona de recepción":{en:"Where the serve landed: the reception zone band",de:"Wo der Aufschlag landete: das Band der Annahmezone"},
     "Sin marcar":{en:"Not marked",de:"Nicht markiert"},
     "{0} de {1} armados tienen la zona marcada":{en:"{0} of {1} sets have the zone marked",de:"{0} von {1} Zuspielen haben die Zone markiert"},

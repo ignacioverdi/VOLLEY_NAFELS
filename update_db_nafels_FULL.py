@@ -971,6 +971,48 @@ def _temp_filtro_de_argv():
 
 _TEMP_FILTRO = _temp_filtro_de_argv()
 
+# == PRETEMPORADA Y COMPETENCIA OFICIAL ==================================
+# Los amistosos de preparacion estan en la MISMA carpeta que los partidos
+# que cuentan, y mezclados ensucian cualquier promedio: cuatro amistosos
+# contra equipos de otra categoria mueven la eficacia de la liga entera.
+#
+# Separarlos por carpeta obligaba a reorganizar todo y a acordarse de
+# mover cada archivo. Se separan por FECHA, que ya esta en el .dvw:
+# fases_temporada.json dice desde cuando empieza lo oficial y el resto
+# se deduce solo. Un archivo de una linea por temporada, y nada mas.
+#
+# Lo que devuelve _fase_de():
+#     'PRE'  amistoso de pretemporada
+#     'SC'   Supercopa (cuenta como oficial, marcada aparte)
+#     'OF'   competencia oficial
+# Si la temporada no figura en el archivo, TODO es 'OF': o sea, igual que
+# antes de que esto existiera.
+_FASES_ARCHIVO = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                              'fases_temporada.json')
+_FASES_CFG = None
+def _fases_cfg():
+    global _FASES_CFG
+    if _FASES_CFG is None:
+        try:
+            with open(_FASES_ARCHIVO, encoding='utf-8') as f:
+                _FASES_CFG = json.load(f)
+        except Exception:
+            _FASES_CFG = {}
+    return _FASES_CFG
+_TEMP_FASES = None          # la temporada que se esta procesando
+def _fase_de(fecha):
+    """'PRE' | 'SC' | 'OF' para una fecha 'AAAA-MM-DD'."""
+    if not fecha: return 'OF'
+    cfg = _fases_cfg().get(str(_TEMP_FASES or ''), None)
+    if not isinstance(cfg, dict): return 'OF'
+    desde = str(cfg.get('oficial_desde') or '')
+    if not desde: return 'OF'
+    f = str(fecha)[:10]
+    if f < desde: return 'PRE'
+    if f in [str(x)[:10] for x in (cfg.get('supercopa') or [])]: return 'SC'
+    return 'OF'
+
+
 
 def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # Load existing DB
@@ -1661,7 +1703,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         _gseen=sorted(set((a.get('date',''),a.get('rival','')) for pd in td.values() for sk in ['atk','srv','rec'] for a in pd.get(sk,[]) if a.get('rival')))
         _gidx={dk:i for i,dk in enumerate(_gseen)}
         _games_list=[{'i':i,'date':d,'rival':rv,'r':_res_for(d,team,rv),
-                      'code':_code_for(d,team,rv)} for i,(d,rv) in enumerate(_gseen)]
+                      'code':_code_for(d,team,rv),'fase':_fase_de(d)} for i,(d,rv) in enumerate(_gseen)]
         def _gi(a): return _gidx.get((a.get('date',''),a.get('rival','')),0)
         # dig_p: la DEFENSA. No se guardaba, y por eso el mapa de calor de
         # defensa era el unico que necesitaba el video cargado —los demas leen
@@ -1696,7 +1738,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
         match_idx = {dk: i for i, dk in enumerate(_seen)}
         _code_map = {(r.get('date',''), r.get('rival','')): r.get('code','') for r in _all_rl}
-        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), '')} for i, (d, rv) in enumerate(_seen)]
+        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), ''), 'fase': _fase_de(d)} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         # ══ Los dorsales que cambiaron ══════════════════════════════════
         # Los armadores se detectan leyendo el .dvw, donde la jugadora tiene
@@ -2902,6 +2944,9 @@ if __name__ == '__main__':
 
     # Step 1: Update DB
     print("1. Parsing DVW files...")
+    # la temporada que se esta procesando: la usa _fase_de() para saber
+    # que partidos son de pretemporada
+    _TEMP_FASES = args.filter_temporada or args.temporada
     teams_data, games_log = update_database(args.dvw_dir, args.temporada, args.db_path)
 
     # ── FILTRO POR TEMPORADA: deja SOLO la temporada que se muestra en la web ──
