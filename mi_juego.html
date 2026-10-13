@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title data-t="Mi juego — NAFELS Voley">Mi juego — NAFELS Voley</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261013-0908"></script>
-<script src="selector_categoria.js?v=20261013-0908"></script>
-<script src="datos_seguros.js?v=20261013-0908"></script>
+<script src="categorias_club.js?v=20261013-0917"></script>
+<script src="selector_categoria.js?v=20261013-0917"></script>
+<script src="datos_seguros.js?v=20261013-0917"></script>
   <script src="datos_ficha.js.enc" onerror="void 0"></script>
   <script src="datos_equipo.js.enc" onerror="window.EQUIPO_DATA=null"></script>
   <script src="datos_fotos.js.enc" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plantel_nafels.js?v=20261013-0908" onerror="void 0"></script>
-<script src="firebase.js?v=20261013-0908"></script>
+<script src="plantel_nafels.js?v=20261013-0917" onerror="void 0"></script>
+<script src="firebase.js?v=20261013-0917"></script>
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    MI JUEGO — la pantalla del jugador
@@ -309,6 +309,25 @@ a{color:inherit}
   background:rgba(6,182,212,.07);color:#7FD8E8;border-radius:10px;padding:9px 14px;
   font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-decoration:none;text-transform:uppercase}
 .verTodo:hover{background:rgba(6,182,212,.12)}
+/* ── de donde sale este numero ──────────────────────────────────────────── */
+.como{margin-top:14px;padding-top:13px;border-top:1px solid var(--b)}
+.como>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mut);border:1px solid var(--b2);border-radius:20px;padding:6px 12px}
+.como>summary::-webkit-details-marker{display:none}
+.como>summary:before{content:"?";display:inline-flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.1);
+  font-weight:700;font-size:9px;flex:none}
+.como>summary:hover{color:var(--txt);border-color:rgba(255,255,255,.32)}
+.como[open]>summary{color:var(--txt);border-color:rgba(255,255,255,.32);margin-bottom:12px}
+.comoc{font-size:12.5px;color:var(--txt2);line-height:1.6;max-width:78ch}
+.comoc p{margin:0 0 9px}
+.comoc p:last-child{margin-bottom:0}
+.comoc .eqn{font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--mut);
+  background:rgba(255,255,255,.028);border-left:2px solid var(--b2);border-radius:0 7px 7px 0;
+  padding:9px 12px;margin-bottom:7px;overflow-wrap:anywhere}
+.comoc .eqn b{color:var(--txt);font-size:12.5px}
+
 /* ── el globito ─────────────────────────────────────────────────────────── */
 #tip{position:fixed;z-index:200;pointer-events:none;opacity:0;transition:opacity .11s;
   background:#161B2E;border:1px solid var(--b2);border-radius:10px;padding:10px 12px;
@@ -345,9 +364,9 @@ details[open]>summary:before{content:"▾ ";}
 <div class="w" id="ficha"></div>
 <div id="tip" role="status" aria-live="polite"></div>
 
-<script src="lang.js?v=20261013-0908" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261013-0908" onerror="void 0"></script>
-<script src="ayuda.js?v=20261013-0908" onerror="void 0"></script>
-<script src="ficha.js?v=20261013-0908"></script>
+<script src="lang.js?v=20261013-0917" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261013-0917" onerror="void 0"></script>
+<script src="ayuda.js?v=20261013-0917" onerror="void 0"></script>
+<script src="ficha.js?v=20261013-0917"></script>
 </body>
 </html>

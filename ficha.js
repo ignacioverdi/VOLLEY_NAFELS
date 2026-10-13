@@ -22,6 +22,26 @@ var UP='#6EE7A0', DN='#FF7C89', REF='#8A94A6';
 
 var T={
  es:{ perfil:'MI PERFIL',
+  comoQ:'¿de dónde sale este número?',
+  comoTot1:'De sumar lo que pusiste en cada fundamento durante toda la temporada:',
+  comoTot2:'Y el de cada fundamento, de sumar partido por partido. La cuenta de un partido está abajo, en el gráfico.',
+  comoPar1:'Tomemos el {fecha} contra {rival}, que es el que más pesó. Son tres cuentas:',
+  comoRec:'RECEPCIÓN · {n} pases · ganaste el {real}% de esos rallies · con esa misma calidad de pase, en esta liga se gana el {esp}% → {n} × ({real} − {esp}) ÷ 100 = <b>{ap}</b>',
+  comoAtk:'ATAQUE · {n} ataques · {eff}% de eficacia · los de tu puesto en la NLA están en {liga}% → {n} × ({eff} − {liga}) ÷ 100 = <b>{ap}</b>',
+  comoSrv:'SAQUE · {n} saques · {a} aces ({ap_}%) y {e} errores ({ep}%) · tu puesto en la NLA: {la}% de aces y {le}% de errores → {n} × (({ap_} − {la}) + ({le} − {ep})) ÷ 100 = <b>{ap}</b>',
+  comoPar2:'Sumadas: {ap} en ese partido.',
+  comoPar3:'La unidad es el RALLY. Por eso las tres se pueden sumar, y por eso el total son puntos y no una nota.',
+  comoF1:'Cada barra es la suma de ese fundamento en todos los partidos. Lo “esperable” no es un objetivo que puso nadie: sale de los datos de esta liga.',
+  comoF2:'RECEPCIÓN · se mira qué calidad tuvo cada pase tuyo y cuántos rallies se ganan EN ESTA LIGA con esa calidad. Si ganaste más de los que se ganan, suma.',
+  comoF3:'ATAQUE y SAQUE · se comparan contra el promedio de los jugadores de TU PUESTO en la NLA, no contra tu equipo ni contra todos.',
+  comoF4:'BLOQUEO y DEFENSA no entran a propósito: con dos o tres por partido, cualquier número sería ruido. Van como cuenta, que es lo que son.',
+  comoL1:'Te comparamos contra los {pos} de la NLA que tienen muestra suficiente, columna contra columna de la tabla oficial de la liga.',
+  comoL2:'{lbl} · vos {v}% · el mejor de tu puesto {hi} y el peor {lo} · te deja {p}º de {de}.',
+  comoL3:'El puesto es un conteo, no un percentil: con cuatro o siete jugadores por puesto, un percentil daría una precisión que no existe.',
+  comoR1:'De tus {n} acciones con video de la temporada: {b} salieron bien y {m} salieron mal.',
+  comoR2:'El reel de acá abajo muestra las BUENAS, repartidas por rondas entre lo que de verdad jugaste —un ataque, un bloqueo, un ace, una recepción, y otra vuelta— y dentro de cada una, primero las más recientes. Por eso un líbero ve recepciones y un central no.',
+  comoR3:'Las que salieron mal no están acá: se abren desde los botones ▶ de arriba, al lado del número que las está contando.',
+  comoR4:'Cada jugada lleva su segundo exacto, leído de la línea del .dvw. No las corta nadie a mano.',
   titMal:'Tu {f} te costó {n} puntos esta temporada.',
   titBien:'Tu {f} le puso {n} puntos al equipo.', verN:'ver las {n}', verPart:'las {n} de este partido',
   verFund:'tus {n} de este fundamento', verMal:'ver los {n} errores', verBien:'ver las {n} buenas',
@@ -61,6 +81,26 @@ var T={
   tabla:'Ver la tabla', tfecha:'Fecha', trival:'Rival', tap:'Aporte',
   pie:'Lo <i>esperable</i> no es un objetivo ni una opinión: en recepción es el porcentaje de rallies que se gana en esta liga con cada calidad de pase; en ataque y saque, el promedio de los jugadores de tu puesto en la NLA. Bloqueo y defensa no entran en el aporte a propósito: con dos o tres por partido, cualquier número sería ruido — van como cuenta, que es lo que son.' },
  en:{ perfil:'MY PROFILE',
+  comoQ:'where does this number come from?',
+  comoTot1:'From adding up what each skill put in across the whole season:',
+  comoTot2:'And each skill, from adding up match by match. One match’s arithmetic is below, in the chart.',
+  comoPar1:'Take {fecha} against {rival}, the one that weighed most. Three sums:',
+  comoRec:'RECEPTION · {n} passes · you won {real}% of those rallies · with that same pass quality, this league wins {esp}% → {n} × ({real} − {esp}) ÷ 100 = <b>{ap}</b>',
+  comoAtk:'ATTACK · {n} attacks · {eff}% efficiency · your position in the NLA sits at {liga}% → {n} × ({eff} − {liga}) ÷ 100 = <b>{ap}</b>',
+  comoSrv:'SERVE · {n} serves · {a} aces ({ap_}%) and {e} errors ({ep}%) · your position in the NLA: {la}% aces and {le}% errors → {n} × (({ap_} − {la}) + ({le} − {ep})) ÷ 100 = <b>{ap}</b>',
+  comoPar2:'Added up: {ap} in that match.',
+  comoPar3:'The unit is the RALLY. That is why the three can be added, and why the total is points and not a rating.',
+  comoF1:'Each bar is that skill summed over every match. “Expected” is not a target someone set: it comes out of this league’s own data.',
+  comoF2:'RECEPTION · we look at the quality of each of your passes and how many rallies are won IN THIS LEAGUE with that quality. Win more than that, and it adds.',
+  comoF3:'ATTACK and SERVE · compared against the average of the players in YOUR POSITION in the NLA, not against your team and not against everyone.',
+  comoF4:'BLOCK and DEFENCE are deliberately left out: at two or three per match any number would be noise. They go as a count, which is what they are.',
+  comoL1:'You are compared against the NLA {pos} with enough sample, column against column of the league’s own table.',
+  comoL2:'{lbl} · you {v}% · the best in your position {hi} and the worst {lo} · that puts you {p}th of {de}.',
+  comoL3:'The rank is a count, not a percentile: with four to seven players per position, a percentile would claim a precision that isn’t there.',
+  comoR1:'Of your {n} actions on video this season: {b} went well and {m} went badly.',
+  comoR2:'The reel below shows the GOOD ones, dealt out in rounds across what you actually played — an attack, a block, an ace, a reception, and round again — and within each, the most recent first. That is why a libero sees receptions and a middle does not.',
+  comoR3:'The ones that went badly are not here: they open from the ▶ buttons above, next to the number that is counting them.',
+  comoR4:'Each play carries its exact second, read from the .dvw line. Nobody cuts them by hand.',
   titMal:'Your {f} cost {n} points this season.',
   titBien:'Your {f} put {n} points on the board.', verN:'watch the {n}', verPart:'the {n} from this match',
   verFund:'your {n} in this skill', verMal:'watch the {n} errors', verBien:'watch the {n} good ones',
@@ -100,6 +140,26 @@ var T={
   tabla:'See the table', tfecha:'Date', trival:'Opponent', tap:'Contribution',
   pie:'<i>Expected</i> is not a target or an opinion: in reception it is the share of rallies won in this league with each pass quality; in attack and serve, the average of the players in your position in the NLA. Block and defence are deliberately left out of the contribution: at two or three per match any number would be noise — they go as a count, which is what they are.' },
  de:{ perfil:'MEIN PROFIL',
+  comoQ:'woher kommt diese Zahl?',
+  comoTot1:'Aus der Summe dessen, was jedes Element über die ganze Saison beigetragen hat:',
+  comoTot2:'Und jedes Element aus der Summe Spiel für Spiel. Die Rechnung eines Spiels steht unten, bei der Grafik.',
+  comoPar1:'Nehmen wir den {fecha} gegen {rival}, das Spiel mit dem größten Gewicht. Drei Rechnungen:',
+  comoRec:'ANNAHME · {n} Pässe · du hast {real}% dieser Ballwechsel gewonnen · mit derselben Passqualität gewinnt man in dieser Liga {esp}% → {n} × ({real} − {esp}) ÷ 100 = <b>{ap}</b>',
+  comoAtk:'ANGRIFF · {n} Angriffe · {eff}% Effizienz · deine Position in der NLA liegt bei {liga}% → {n} × ({eff} − {liga}) ÷ 100 = <b>{ap}</b>',
+  comoSrv:'AUFSCHLAG · {n} Aufschläge · {a} Asse ({ap_}%) und {e} Fehler ({ep}%) · deine Position in der NLA: {la}% Asse und {le}% Fehler → {n} × (({ap_} − {la}) + ({le} − {ep})) ÷ 100 = <b>{ap}</b>',
+  comoPar2:'Zusammen: {ap} in diesem Spiel.',
+  comoPar3:'Die Einheit ist der BALLWECHSEL. Deshalb lassen sich die drei addieren, und deshalb ist das Ergebnis Punkte und keine Note.',
+  comoF1:'Jeder Balken ist dieses Element über alle Spiele summiert. „Erwartbar“ ist kein Ziel, das jemand gesetzt hat: es kommt aus den Daten dieser Liga.',
+  comoF2:'ANNAHME · wir schauen die Qualität jedes deiner Pässe an und wie viele Ballwechsel IN DIESER LIGA mit dieser Qualität gewonnen werden. Gewinnst du mehr, zählt es positiv.',
+  comoF3:'ANGRIFF und AUFSCHLAG · verglichen mit dem Schnitt der Spieler DEINER POSITION in der NLA, nicht mit deinem Team und nicht mit allen.',
+  comoF4:'BLOCK und ABWEHR bleiben bewusst draußen: bei zwei oder drei pro Spiel wäre jede Zahl Rauschen. Sie stehen als Anzahl da.',
+  comoL1:'Verglichen wirst du mit den {pos} der NLA mit ausreichender Stichprobe, Spalte gegen Spalte der offiziellen Liga-Tabelle.',
+  comoL2:'{lbl} · du {v}% · der Beste deiner Position {hi} und der Schlechteste {lo} · das ergibt Platz {p} von {de}.',
+  comoL3:'Der Platz ist eine Zählung, kein Perzentil: bei vier bis sieben Spielern pro Position würde ein Perzentil eine Genauigkeit behaupten, die es nicht gibt.',
+  comoR1:'Von deinen {n} Aktionen mit Video in dieser Saison: {b} gelungen und {m} misslungen.',
+  comoR2:'Das Reel unten zeigt die GELUNGENEN, rundenweise verteilt über das, was du wirklich gespielt hast — ein Angriff, ein Block, ein Ass, eine Annahme, und wieder von vorn — und darin die neuesten zuerst. Deshalb sieht ein Libero Annahmen und ein Mittelblocker nicht.',
+  comoR3:'Die misslungenen stehen nicht hier: sie öffnen sich über die ▶ Knöpfe oben, neben der Zahl, die sie zählt.',
+  comoR4:'Jede Aktion trägt ihre exakte Sekunde, gelesen aus der .dvw-Zeile. Niemand schneidet sie von Hand.',
   titMal:'Dein {f} hat dich diese Saison {n} Punkte gekostet.',
   titBien:'Dein {f} hat dem Team {n} Punkte gebracht.', verN:'die {n} ansehen', verPart:'die {n} aus diesem Spiel',
   verFund:'deine {n} in diesem Element', verMal:'die {n} Fehler ansehen', verBien:'die {n} guten ansehen',
@@ -319,7 +379,7 @@ function hero(j){
     +(curva?'<div class="curva"><u>'+t.curva+'</u>'+curva
       +'<span class="cpie">'+f(t.cDesde,{n:(j.partidos||[]).length})
       +' <b style="color:'+col(ap)+'">'+sig(ap)+'</b></span></div>':'<div></div>')
-    +'</div><div class="mini">'+m.join('')+'</div></div>';
+    +'</div>'+comoTotal(j)+'<div class="mini">'+m.join('')+'</div></div>';
 }
 
 /* La foto, por orden de preferencia:
@@ -513,7 +573,7 @@ function barras(j){
         +sig(p.aporte)+'</td></tr>'; }).join('')
    +'</tbody></table></div></details>';
 
-  return '<div class="panel">'+s+leyenda+extremos+tabla+'</div>';
+  return '<div class="panel">'+s+leyenda+extremos+comoPartido(j)+tabla+'</div>';
 }
 function corto(r){
   /* "VOLLEY AMRISWIL 2026/27" en una tarjeta de 150px entra en tres lineas y
@@ -582,7 +642,7 @@ function deDonde(j){
       +'<div class="ddt"><div class="ddcero"></div>'
       +'<div class="ddbar" style="'+est+';background:'+c+'"></div>'
       +'<div class="ddval'+(dentro?' adentro':'')+'" style="'+lab+'">'+sig(v)+'</div></div></div>';
-  }).join('')+'</div><div class="ddpie">'+esc(t.h5pie)+'</div></div>';
+  }).join('')+'</div><div class="ddpie">'+esc(t.h5pie)+'</div>'+comoFund(j)+'</div>';
 }
 
 /* ══ 3 · CONTRA EL PUESTO EN LA LIGA ═════════════════════════════════════
@@ -642,7 +702,7 @@ function filasLiga(j){
       h+='<div class="lrow">'+cab+'<div class="falta"><b>'+(r.v==null?'–':r.v+'%')+'</b>'+esc(nota)+'</div></div>';
     }
   });
-  return h+'</div></div>';
+  return h+'</div>'+comoLiga(j)+'</div>';
 }
 
 /* ══ 4 · FUERTES Y FLOJOS ════════════════════════════════════════════════
@@ -681,14 +741,18 @@ function reel(j){
   ['atk','blk','srv','rec'].forEach(function(k){ if(cuenta[k]) botones.push([k,nom[k],cuenta[k]]); });
   if(cuenta['entrenamiento'] && cuenta['partido']) botones.push(['entrenamiento',t.fEnt,cuenta['entrenamiento']]);
   var V=R.filter(function(c){ return filtro==='todos'||c.sk===filtro||c.tipo===filtro; });
-  var h='<div class="reelbar">'+botones.map(function(b){
+  var h=comoReel(j)+'<div class="reelbar">'+botones.map(function(b){
       return '<button type="button" data-f="'+b[0]+'" class="'+(filtro===b[0]?'on':'')+'">'
         +esc(b[1])+'<em>'+b[2]+'</em></button>'; }).join('')+'</div>';
   var VV=V.slice(0,12);
-  h+='<div class="reel">'+VV.map(function(c){
+  /* Tocar una tarjeta abre la lista ENTERA arrancando por esa jugada, no
+     esa sola. Antes abria un clip y el video duraba cuatro segundos: parecia
+     roto. Ahora la tarjeta es "desde aca para adelante". */
+  h+='<div class="reel">'+VV.map(function(c,iv){
+      var desde=V.slice(V.indexOf(c)).concat(V.slice(0,V.indexOf(c)));
       var ref=(c.tipo==='partido') ? (t.vs+' '+corto(c.rival)) : t.ent;
       var fe=(c.fecha||'').split('-').reverse().slice(0,2).join('/');
-      return '<a class="clip" href="'+esc(link([c]))+'">'
+      return '<a class="clip" href="'+esc(link(desde))+'">'
         +'<u><i style="background:'+(SKCOL[c.sk]||REF)+'"></i>'+esc(nom[c.sk]||'')+'</u>'
         +'<b>'+esc(ref)+'</b><s>'+esc(fe)+' · '+t.setL+' '+c.set+'</s></a>'; }).join('')+'</div>';
   /* El boton de "verlas seguidas" va por separado para partido y para
@@ -706,6 +770,88 @@ function reel(j){
   return h;
 }
 function link(cl){ return linkClips(cl) || '#'; }
+
+/* ══ ¿DE DONDE SALE ESTE NUMERO? ═════════════════════════════════════════
+   Debajo de cada numero hay un desplegable con la cuenta hecha, con SUS
+   numeros y no con un ejemplo inventado. No es una ayuda al costado: es
+   parte del dato. Un numero que el jugador no puede rastrear hasta una
+   accion que recuerda no es un dato, es una nota que le pusieron.          */
+function como(t, lineas){
+  return '<details class="como"><summary>'+esc(t)+'</summary><div class="comoc">'
+    + lineas.filter(Boolean).join('') + '</div></details>';
+}
+function eq(txt){ return '<p class="eqn">'+txt+'</p>'; }
+function pp(txt){ return '<p>'+txt+'</p>'; }
+function num(v,d){ var x=Number(v)||0; return (x<0?'−':'')+Math.abs(x).toFixed(d==null?1:d); }
+
+function peorPartido(j){
+  var P=(j.partidos||[]).filter(function(p){ return p.rec||p.atk||p.srv; });
+  if(!P.length) return null;
+  return P.reduce(function(a,b){ return Math.abs(b.aporte)>Math.abs(a.aporte)?b:a; });
+}
+function sumaFund(j){
+  var su={rec:0,atk:0,srv:0}, hay={rec:0,atk:0,srv:0};
+  (j.partidos||[]).forEach(function(p){ ['rec','atk','srv'].forEach(function(k){
+    if(p[k]&&p[k].ap!=null){ su[k]+=p[k].ap; hay[k]++; } }); });
+  return {su:su, hay:hay};
+}
+
+/* el de la cifra grande: la suma por fundamento */
+function comoTotal(j){
+  var t=L(), S=sumaFund(j), ks=['rec','atk','srv'].filter(function(k){ return S.hay[k]; });
+  if(!ks.length || j.aporte_total===null) return '';
+  var piezas=ks.map(function(k){ return sig(S.su[k])+' '+nomFund(k).toLowerCase(); }).join('   ');
+  return como(t.comoQ, [
+    pp(t.comoTot1),
+    eq(piezas+'  =  <b>'+sig(j.aporte_total)+'</b>'),
+    pp(t.comoTot2)
+  ]);
+}
+
+/* el del grafico de partidos: la cuenta de UN partido, el mas grueso */
+function comoPartido(j){
+  var t=L(), p=peorPartido(j);
+  if(!p) return '';
+  var L1=null,L2=null,L3=null;
+  if(p.rec) L1=eq(f(t.comoRec,{n:p.rec.n, real:num(p.rec.real), esp:num(p.rec.esp), ap:sig(p.rec.ap)}));
+  if(p.atk&&p.atk.ap!=null) L2=eq(f(t.comoAtk,{n:p.atk.n, eff:num(p.atk.eff), liga:num(p.atk.liga), ap:sig(p.atk.ap)}));
+  if(p.srv&&p.srv.ap!=null) L3=eq(f(t.comoSrv,{n:p.srv.n, a:p.srv.ace, ap_:num(p.srv.ace_pct), la:num(p.srv.liga_ace),
+                                               e:p.srv.err, ep:num(p.srv.err_pct), le:num(p.srv.liga_err), ap:sig(p.srv.ap)}));
+  return como(t.comoQ, [
+    pp(f(t.comoPar1,{fecha:esc(p.fecha_app), rival:esc(corto(p.rival))})),
+    L1, L2, L3,
+    eq('<b>'+f(t.comoPar2,{ap:sig(p.aporte)})+'</b>'),
+    pp(t.comoPar3)
+  ]);
+}
+
+/* el de "de donde sale": que quiere decir esperable en cada fundamento */
+function comoFund(j){
+  var t=L();
+  return como(t.comoQ, [
+    pp(t.comoF1), pp(t.comoF2), pp(t.comoF3), pp(t.comoF4)
+  ]);
+}
+
+/* el de la liga: contra quien y como sale el puesto */
+function comoLiga(j){
+  var t=L(), F=(j.liga||[]).filter(function(r){ return r.puesto; });
+  var ej=F[0];
+  return como(t.comoQ, [
+    pp(f(t.comoL1,{pos:pos2(j.pos)})),
+    ej?eq(f(t.comoL2,{lbl:etq(ej.k,ej.lbl), v:ej.v, p:ej.puesto, de:ej.de, lo:ej.lo, hi:ej.hi})):null,
+    pp(t.comoL3)
+  ]);
+}
+
+/* el del reel: como se eligen las jugadas */
+function comoReel(j){
+  var t=L();
+  return como(t.comoQ, [
+    pp(f(t.comoR1,{n:(j.clips||[]).length, b:j.n_clips, m:j.n_mal})),
+    pp(t.comoR2), pp(t.comoR3), pp(t.comoR4)
+  ]);
+}
 
 /* ══ LA ENTRADA ══════════════════════════════════════════════════════════
    Una sola animacion orquestada y no efectos sueltos: el numero grande se
