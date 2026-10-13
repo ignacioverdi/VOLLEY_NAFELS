@@ -4169,6 +4169,14 @@
     "Potencia":{en:"Power",de:"Kraft"},
     "Flotado":{en:"Float",de:"Flatteraufschlag"},
     "Doble-click":{en:"Double-click",de:"Doppelklick"},
+    // ===== EL FILTRO DE QUIEN ESTABA EN LA CANCHA (plan de partido) =====
+    "En cancha":{en:"On court",de:"Auf dem Feld"},
+    "Sin filtro":{en:"No filter",de:"Kein Filter"},
+    "Un clic: tiene que estar":{en:"One click: must be on court",de:"Ein Klick: muss auf dem Feld sein"},
+    "Dos clics: no tiene que estar":{en:"Two clicks: must not be on court",de:"Zwei Klicks: darf nicht auf dem Feld sein"},
+    "Tres clics: indistinto":{en:"Three clicks: either way",de:"Drei Klicks: egal"},
+    "A la derecha, los armados con cada uno en cancha":{en:"On the right, the sets with each of them on court",de:"Rechts: die Zuspiele mit jedem auf dem Feld"},
+    "Elegí quiénes estaban en la cancha en ese armado":{en:"Pick who was on court for that set",de:"Wähle, wer bei diesem Zuspiel auf dem Feld war"},
     // ===== BARRIDO COMPLETO (analisis, scouting, prep, etc.) =====
     "EQUIPO — Axpo Volley Näfels":{en:"TEAM — Axpo Volley Näfels",de:"TEAM — Axpo Volley Näfels"},
     "PIZARRÓN — Axpo Volley Näfels":{en:"WHITEBOARD — Axpo Volley Näfels",de:"TAKTIKTAFEL — Axpo Volley Näfels"},

@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261013-1246"></script>
-<script src="selector_categoria.js?v=20261013-1246"></script>
-<script src="objetivos_config.js?v=20261013-1246"></script>
+<script src="categorias_club.js?v=20261013-1337"></script>
+<script src="selector_categoria.js?v=20261013-1337"></script>
+<script src="objetivos_config.js?v=20261013-1337"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -443,7 +443,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261013-1246" onerror="void 0"></script>
+<script src="lang.js?v=20261013-1337" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -454,7 +454,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261013-1246"></script>
+<script src="datos_seguros.js?v=20261013-1337"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -467,15 +467,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261013-1246" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1246"></script>
-<script src="videos.js?v=20261013-1246" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261013-1337" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-1337"></script>
+<script src="videos.js?v=20261013-1337" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1246">
+<link rel="stylesheet" href="movil.css?v=20261013-1337">
 
-<script src="iconos.js?v=20261013-1246" defer></script>
+<script src="iconos.js?v=20261013-1337" defer></script>
 </head>
 <body>
 
@@ -2943,6 +2943,68 @@ var GP_ARM_RECZONE=null; // null = todas ; 'r1'|'r6'|'r5' = banda de zona de rec
 var GP_ARM_RECNUM=null;  // null = todos ; número = filtrar por receptor
 var GP_ARM_SERVETYPE=null; // null = todas ; 'M'=flotado | 'Q'=potencia (solo side-out)
 var GP_RECBANDS={r1:[1,9,2],r6:[6,8,3],r5:[5,7,4]};
+/* == QUIENES ESTABAN EN LA CANCHA =======================================
+   DataVolley guarda en CADA linea del scout los seis dorsales que estaban
+   adentro en ese momento. Desde el esquema 8 ese sexteto viaja en r[19] de
+   cada armado, y con eso se puede preguntar lo que antes no se podia: como
+   distribuye el armador cuando esta tal jugador en la cancha, o cuando no
+   esta.
+
+   Dos listas, porque son dos preguntas distintas y las dos sirven:
+       GP_ARM_OC_IN   dorsales que TIENEN que estar  (todos, no alguno)
+       GP_ARM_OC_OUT  dorsales que NO tienen que estar
+   Las dos vacias = sin filtro. El armador siempre esta en su propio
+   sexteto, asi que su dorsal no entra a la lista: no separaria nada.      */
+var GP_ARM_OC_IN=[], GP_ARM_OC_OUT=[];
+function gpOcActivo(){ return GP_ARM_OC_IN.length>0 || GP_ARM_OC_OUT.length>0; }
+function gpOcRow(r){
+  if(!gpOcActivo()) return true;
+  var oc=r[19];
+  /* Base vieja (19 campos, sin el sexteto): no filtra nada en vez de dejar
+     la pantalla en cero. Se rehace sola al correr HACER_TODO. */
+  if(!oc||!oc.length) return true;
+  for(var i=0;i<GP_ARM_OC_IN.length;i++){ if(oc.indexOf(GP_ARM_OC_IN[i])<0) return false; }
+  for(var j=0;j<GP_ARM_OC_OUT.length;j++){ if(oc.indexOf(GP_ARM_OC_OUT[j])>=0) return false; }
+  return true;
+}
+function gpOcEstado(n){ return GP_ARM_OC_IN.indexOf(n)>=0?1:(GP_ARM_OC_OUT.indexOf(n)>=0?-1:0); }
+function gpOcPoner(n,st){
+  var i=GP_ARM_OC_IN.indexOf(n); if(i>=0) GP_ARM_OC_IN.splice(i,1);
+  var j=GP_ARM_OC_OUT.indexOf(n); if(j>=0) GP_ARM_OC_OUT.splice(j,1);
+  if(st===1) GP_ARM_OC_IN.push(n); else if(st===-1) GP_ARM_OC_OUT.push(n);
+}
+function gpOcOrden(a){ return a.slice().sort(function(x,y){ return x-y; }); }
+function gpOcEtiqueta(){
+  if(!gpOcActivo()) return 'todos';
+  return gpOcOrden(GP_ARM_OC_IN).map(function(n){ return '#'+n; })
+   .concat(gpOcOrden(GP_ARM_OC_OUT).map(function(n){ return '✕'+n; })).join(' ');
+}
+function gpOcClave(){
+  if(!gpOcActivo()) return '';
+  return '_c'+gpOcOrden(GP_ARM_OC_IN).join('.')+'_x'+gpOcOrden(GP_ARM_OC_OUT).join('.');
+}
+function gpOcHayDato(setterObj){
+  var s=(setterObj&&setterObj.s)||[];
+  for(var i=0;i<s.length;i++){ if(s[i][19]&&s[i][19].length) return true; }
+  return false;
+}
+/* Las filas que pasan TODOS los otros filtros menos el de en-cancha: es el
+   universo sobre el que se cuenta cuantos armados aporta cada jugador, asi
+   el desplegable dice el tamano de la muestra ANTES de tildar y no hay que
+   descubrir a ciegas que una combinacion deja todo en cero. */
+function gpOcBase(setterObj){
+  return ((setterObj&&setterObj.s)||[]).filter(function(r){
+    var at=r[4];
+    if(GP_ARM_PHASE==='SO'&&at!==0) return false;
+    if(GP_ARM_PHASE==='TR'&&at!==1) return false;
+    if(GP_ARM_PHASE==='SO'&&!gpRecqTodas()){ if(GP_ARM_RECQ.indexOf(r[7])<0) return false; }
+    if(GP_ARM_MATCHES&&GP_ARM_MATCHES.size){ if(r.length<13||!GP_ARM_MATCHES.has(r[12])) return false; }
+    if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
+    if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return false; }
+    if(GP_ARM_SERVETYPE&&GP_ARM_PHASE==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return false; }
+    return true;
+  });
+}
 var GP_ARM_SYNCS=[];     // funciones de re-render de cada panel de armador
 function gpArmSyncAll(){ GP_ARM_SYNCS.forEach(function(f){ try{f();}catch(e){} }); }
 function gpComputeRotDist(setterObj,pos,phase,rec){
@@ -2960,6 +3022,7 @@ function gpComputeRotDist(setterObj,pos,phase,rec){
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return false; }
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return false; }
     if(GP_ARM_SERVETYPE&&phase==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return false; }
+    if(!gpOcRow(r)) return false;
     return true;
   });
   var linked=[],kills=0,errs=0;
@@ -3059,6 +3122,7 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     if(GP_ARM_RECZONE){ var _b=GP_RECBANDS[GP_ARM_RECZONE]; if(!_b||_b.indexOf(r[15])<0) return ; }
     if(GP_ARM_RECNUM!=null){ if(r[16]!==GP_ARM_RECNUM) return ; }
     if(GP_ARM_SERVETYPE&&phase==='SO'){ if((r[18]||'')!==GP_ARM_SERVETYPE) return ; }
+    if(!gpOcRow(r)) return;
     var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
     if(z!==zone) return;
     var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
@@ -3118,8 +3182,9 @@ function gpOpenVideo(rot,zone,sidx){
   var rec=GP_ARM_PHASE==='SO'?GP_ARM_REC:null;
   var clips=gpZoneClips(_st,rot,GP_ARM_PHASE,rec,zone);
   gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
-  gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+'_z'+zone;
-  var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+gpRecqEtiqueta()):'Transición';
+  gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+gpOcClave()+'_z'+zone;
+  var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+gpRecqEtiqueta()):'Transición';  /* el titulo del reproductor dice tambien con quien en la cancha: si no, dos secuencias distintas se llaman igual */
+  if(gpOcActivo()) faseLbl+=' · en cancha '+gpOcEtiqueta();
   document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+clips.length+' ataques';
   document.getElementById('gpVidOverlay').style.display='flex';
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
@@ -3201,7 +3266,7 @@ function renderArmador(){
   var sec=document.getElementById('seccion-armador');
   if(!sec||!ARMADOR_DATA) return;
   sec.innerHTML='';
-  GP_ARM_SYNCS=[]; GP_ARM_RECZONE=null; GP_ARM_RECNUM=null; GP_ARM_SERVETYPE=null;
+  GP_ARM_SYNCS=[]; GP_ARM_RECZONE=null; GP_ARM_RECNUM=null; GP_ARM_SERVETYPE=null; GP_ARM_OC_IN=[]; GP_ARM_OC_OUT=[];
   var tipos=['titular','suplente'];
   var tabsEl=document.createElement('div');
   tabsEl.style.cssText='display:flex;gap:2px;margin-bottom:0';
@@ -3397,6 +3462,96 @@ function renderArmador(){
       nums.forEach(function(n){ var o=document.createElement('option'); o.value=n; var ap=gpApellido(n); o.textContent='#'+n+(ap?' '+ap:'')+' ('+recv[n]+')'; rnSel.appendChild(o); });
       rnSel.addEventListener('change',function(){ GP_ARM_RECNUM=this.value?parseInt(this.value,10):null; gpArmSyncAll(); });
     })();
+    /* == EL DESPLEGABLE DE QUIEN ESTABA EN LA CANCHA ======================
+       Tres estados por jugador, porque "cuando esta el 9" y "cuando NO esta
+       el 9" son las dos preguntas que se hacen en el video, y con solo un
+       tilde se podia hacer una sola:
+           un clic  -> tiene que estar      (verde, tilde)
+           dos      -> no tiene que estar   (rojo, cruz)
+           tres     -> indistinto           (vacio)
+       Al lado de cada nombre va cuantos armados quedan en la muestra actual,
+       para no elegir una combinacion que deja las seis canchitas en cero.
+       Mismas clases gpn-dd que los otros desplegables de la barra.        */
+    var ocLbl=document.createElement('span'); ocLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; ocLbl.textContent='En cancha';
+    var ocWrap=document.createElement('div'); ocWrap.style.cssText='display:inline-flex;margin-left:5px';
+    var ocPinta=function(){};
+    var ocHay=gpOcHayDato(setterRaw);
+    if(ocHay){ (function(){
+      var dd=document.createElement('div'); dd.className='gpn-dd';
+      var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+      var menu=document.createElement('div'); menu.className='gpn-ddm'; menu.style.minWidth='268px';
+      bt.title='Elegí quiénes estaban en la cancha en ese armado';
+      /* La leyenda va en renglones enteros y con la misma marca que las
+         filas: cada frase es un texto suelto, asi la traduce el diccionario
+         como el resto de la pantalla. */
+      var ayuda=document.createElement('div');
+      ayuda.style.cssText='padding:3px 8px 5px;font-size:10px;color:#7689a1;line-height:1.75';
+      [['✓','#22c55e','Un clic: tiene que estar'],
+       ['✕','#ef4444','Dos clics: no tiene que estar'],
+       ['','rgba(255,255,255,.25)','Tres clics: indistinto']].forEach(function(o){
+        var f=document.createElement('div'); f.style.cssText='display:flex;align-items:center;gap:7px';
+        var mm=document.createElement('span');
+        mm.style.cssText='flex:none;width:14px;height:14px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;line-height:1;color:#0a0e15;'
+          +(o[0]?('background:'+o[1]+';border:1px solid '+o[1]):('border:1px solid '+o[1]));
+        mm.textContent=o[0];
+        var tt=document.createElement('span'); tt.textContent=o[2];
+        f.appendChild(mm); f.appendChild(tt); ayuda.appendChild(f);
+      });
+      var ayuda2=document.createElement('div');
+      ayuda2.style.cssText='padding:2px 8px 6px;font-size:10px;color:#5E6B7D';
+      ayuda2.textContent='A la derecha, los armados con cada uno en cancha';
+      menu.appendChild(ayuda); menu.appendChild(ayuda2);
+      var sep0=document.createElement('div'); sep0.className='gpn-ddsep'; menu.appendChild(sep0);
+      var setterNum=setterRaw?parseInt(setterRaw.num,10):0;
+      /* La lista sale de los propios armados: entra todo el que haya estado
+         en la cancha con este armador, sin inventar un plantel aparte. */
+      var vistos={};
+      ((setterRaw&&setterRaw.s)||[]).forEach(function(r){ var oc=r[19]||[]; for(var k=0;k<oc.length;k++) vistos[oc[k]]=true; });
+      var lista=Object.keys(vistos).map(Number).filter(function(n){ return n!==setterNum; }).sort(function(a,b){ return a-b; });
+      var filas={};
+      lista.forEach(function(n){
+        var row=document.createElement('div'); row.className='gpn-ddi';
+        var mk=document.createElement('span');
+        mk.style.cssText='flex:none;width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,.25);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;line-height:1';
+        var tx=document.createElement('span');
+        var ap=gpApellido(n);
+        tx.innerHTML='<b style="font-family:Anton,sans-serif">#'+n+'</b>'+(ap?' '+ap:'');
+        var nn=document.createElement('span'); nn.className='nn';
+        row.appendChild(mk); row.appendChild(tx); row.appendChild(nn);
+        row.onclick=function(e){ e.stopPropagation();
+          var st=gpOcEstado(n);
+          gpOcPoner(n, st===0?1:(st===1?-1:0));
+          ocPinta(); gpArmSyncAll(); };
+        filas[n]={mk:mk,nn:nn,row:row};
+        menu.appendChild(row);
+      });
+      var sep=document.createElement('div'); sep.className='gpn-ddsep'; menu.appendChild(sep);
+      var pie=document.createElement('div'); pie.className='gpn-ddall';
+      var b0=document.createElement('button'); b0.type='button'; b0.textContent='Sin filtro';
+      b0.onclick=function(e){ e.stopPropagation(); GP_ARM_OC_IN=[]; GP_ARM_OC_OUT=[]; ocPinta(); gpArmSyncAll(); };
+      pie.appendChild(b0); menu.appendChild(pie);
+      ocPinta=function(){
+        bt.innerHTML='<i class="gpn-n" style="font-style:normal">'+gpOcEtiqueta()+'</i> <span class="car">▾</span>';
+        bt.classList.toggle('act', gpOcActivo());
+        var base=gpOcBase(setterRaw), cnt={};
+        base.forEach(function(r){ var oc=r[19]||[]; for(var k=0;k<oc.length;k++) cnt[oc[k]]=(cnt[oc[k]]||0)+1; });
+        lista.forEach(function(n){
+          var f=filas[n], st=gpOcEstado(n), c=cnt[n]||0;
+          f.mk.textContent = st===1?'✓':(st===-1?'✕':'');
+          f.mk.style.background = st===1?'#22c55e':(st===-1?'#ef4444':'transparent');
+          f.mk.style.borderColor = st===1?'#22c55e':(st===-1?'#ef4444':'rgba(255,255,255,.25)');
+          f.mk.style.color = st===0?'transparent':'#0a0e15';
+          f.nn.textContent = c;
+          f.row.style.opacity = c?'1':'.42';
+        });
+      };
+      menu.addEventListener('click',function(e){ e.stopPropagation(); });
+      bt.onclick=function(e){ e.stopPropagation();
+        var ab=dd.classList.contains('open');
+        [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){ x.classList.remove('open'); });
+        if(!ab){ dd.classList.add('open'); ocPinta(); } };
+      dd.appendChild(bt); dd.appendChild(menu); ocWrap.appendChild(dd); ocPinta();
+    })(); }
     function gpPaintFilters(){
       gpStyleBtn(phaseBtns.SO, GP_ARM_PHASE==='SO', '#3b82f6');
       gpStyleBtn(phaseBtns.TR, GP_ARM_PHASE==='TR', '#a855f7');
@@ -3411,6 +3566,7 @@ function renderArmador(){
       Object.keys(stBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_SERVETYPE)||(k===GP_ARM_SERVETYPE); gpStyleBtn(stBtns[k], so&&on, '#f59e0b'); });
       var _has=false; for(var _i=0;_i<rnSel.options.length;_i++){ if(rnSel.options[_i].value===String(GP_ARM_RECNUM||'')) _has=true; }
       if(!_has) GP_ARM_RECNUM=null; rnSel.value=GP_ARM_RECNUM?String(GP_ARM_RECNUM):'';
+      if(ocPinta) ocPinta();
     }
     // ── Selector de partidos (multiselect) ──
     var gpMatches=(GP_TD.matches||[]);
@@ -3466,6 +3622,7 @@ function renderArmador(){
 
     fbar.appendChild(phaseLbl); fbar.appendChild(phaseWrap); fbar.appendChild(recLbl); fbar.appendChild(recWrap);
     fbar.appendChild(rzLbl); fbar.appendChild(rzWrap); fbar.appendChild(stLbl); fbar.appendChild(stWrap); fbar.appendChild(rnLbl); fbar.appendChild(rnSel);
+    if(ocHay){ fbar.appendChild(ocLbl); fbar.appendChild(ocWrap); }
     if(matchLbl){ fbar.appendChild(matchLbl); fbar.appendChild(matchBox); }
     panel.appendChild(fbar);
 
@@ -4831,8 +4988,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261013-1246"></script>
-<script src="ayuda.js?v=20261013-1246"></script>
+<script src="temporadas_menu.js?v=20261013-1337"></script>
+<script src="ayuda.js?v=20261013-1337"></script>
 </body>
 </html>
 

@@ -1064,7 +1064,11 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    filtro puesto tienen esos partidos guardados sin el #8 y, como "ya
     #    estaban cargados", no se volvian a leer. Al subir el numero se
     #    rehacen solas, una sola vez.
-    _ESQUEMA = 7          # subir este numero cuando el parser lea algo nuevo
+    # 8: cada armado guarda ahora los seis dorsales que estaban en la
+    #    cancha en ese momento (campos 14-25 de la linea del scout). Sin
+    #    eso no se podia filtrar la distribucion del armador por quienes
+    #    estaban jugando. Al subir el numero la base se rehace sola.
+    _ESQUEMA = 8          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
@@ -1468,6 +1472,22 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
         except: setn = 1
         try: vt = int(sc[12].strip()) if len(sc) > 12 and sc[12].strip().isdigit() else 0
         except: vt = 0
+        # == QUIENES ESTABAN EN LA CANCHA ==================================
+        # DataVolley anota en CADA linea del scout los seis dorsales que
+        # estaban adentro: campos 14-19 el equipo de casa, 20-25 el visitante.
+        # Es el dato que permite preguntar como distribuye el armador cuando
+        # esta tal jugador en la cancha (o cuando no esta). Se leia y se
+        # tiraba a la basura.
+        try:
+            _seis = sc[14:20] if is_home else sc[20:26]
+            onc = []
+            for _x in _seis:
+                _x = _x.strip()
+                if _x.isdigit():
+                    _n = int(_x)
+                    if _n > 0 and _n not in onc: onc.append(_n)
+            onc.sort()
+        except: onc = []
         if skill == 'S':
             if pending: rallies.append(pending); pending = None
             last_skill = ''; last_rq = '?'; atype = 0 if t == rival_pfx else 1
@@ -1484,7 +1504,8 @@ def parse_setter_rallies(content, pfx, rival_pfx, is_home, setter_num, date, riv
             pending = {'setter_pos': spos, 'set_num': setn, 'call': call, 'rec_quality': rq, 'atype': (0 if last_skill == 'R' else 1),
                        'atk_combo': '', 'atk_result': '', 'atk_dest': 0, 'atk_orig': 0, 'date': date, 'rival': rival,
                        'code': mcode, 't_start': (last_serve_t or last_rec_t or vt), 't_atk': 0,
-                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type}
+                       'rec_zone': last_rec_zone, 'rec_num': last_rec_num, 'atk_num': 0, 'rec_type': last_rec_type,
+                       'on_court': onc}
             last_skill = 'E'
         elif skill == 'A':
             if pending:
@@ -1680,7 +1701,7 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
             if str(sn) not in td:
                 continue
             sname = td.get(str(sn),{}).get('info',{}).get('name',f'#{sn}')
-            arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type','')] for r in rl]
+            arm = [[ridx.get(r['rival'],0),_gidx.get((r.get('date',''),r.get('rival','')),0),r.get('set_num',1),1,r['atype'],CALL_IDX.get(r['call'],-1),r['setter_pos'],RES_IDX.get(r.get('rec_quality','?'),9),COMBO_IDX.get(r['atk_combo'],-1),RES_IDX.get(r['atk_result'],4),r['atk_dest'],r['atk_orig'],match_idx.get((r.get('date',''),r.get('rival','')),-1),r.get('t_start',0),r.get('t_atk',0),r.get('rec_zone',0),r.get('rec_num',0),r.get('atk_num',0),r.get('rec_type',''),(r.get('on_court') or [])] for r in rl]
             setters_list.append({'num':sn,'name':sname,'s':arm,'total':len(rl)})
         setters_list.sort(key=lambda x:-x['total'])
         # Roster de posiciones — jerarquía: setter→libero→central→outside/opposite
