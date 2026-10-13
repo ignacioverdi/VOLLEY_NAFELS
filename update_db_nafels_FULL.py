@@ -776,8 +776,23 @@ def parse_dvw_both(fpath, temporada):
             #  fuera de una jugadora real y ensuciaba las tablas y las
             #  baterias con un numero que no existe en el plantel.
             #
-            #  Ahora no entra en ninguno.
-            if _es_maquina(pnum): continue
+            #  ══ Y POR QUE ACA NO SE APLICA ═══════════════════════════════
+            #  Porque este programa lee PARTIDOS, nunca entrenamientos: lo
+            #  corre HACER_TODO.bat con la carpeta de los .dvw de la liga, y
+            #  no tiene modo entrenamiento. La maquina de saque solo existe
+            #  en las practicas de Nafels.
+            #
+            #  O sea que aca el filtro no tapaba ninguna maquina: borraba
+            #  JUGADORES DE VERDAD que usan la camiseta 8. Medido sobre la
+            #  temporada 26/27: 176 acciones de seis equipos distintos
+            #  —Jona, Colombier, Rottenburg, Freiburg, VCS y Amriswil—
+            #  desaparecian del sistema. En el Game Plan de Amriswil, el #8
+            #  Benit Panzo no figuraba en la lista de jugadores: no es que
+            #  no hubiera jugado, es que nadie lo estaba contando.
+            #
+            #  La regla sigue viva donde corresponde: en
+            #  update_db_entrenamientos_nafels.py y, para las practicas, en
+            #  gen_baterias.py.
 
             if   skill=='A': atk[pnum].append(action)
             elif skill=='S': srv[pnum].append(action)
@@ -1041,7 +1056,15 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    partido "ya estaba cargado" no se volvian a leer: el campo aparecia
     #    en liga_data pero siempre en cero, y el reproductor no tenia donde
     #    saltar. Al subir el numero se rehacen solas, una sola vez.
-    _ESQUEMA = 6          # subir este numero cuando el parser lea algo nuevo
+    # 7: el parser dejaba afuera a TODOS los jugadores con la camiseta 8. La
+    #    regla existia para la maquina de saque de los entrenamientos de
+    #    Nafels, pero este programa solo lee partidos, asi que ahi no habia
+    #    ninguna maquina que tapar: borraba jugadores de verdad. Eran 176
+    #    acciones de seis equipos de la liga. Las bases que se armaron con el
+    #    filtro puesto tienen esos partidos guardados sin el #8 y, como "ya
+    #    estaban cargados", no se volvian a leer. Al subir el numero se
+    #    rehacen solas, una sola vez.
+    _ESQUEMA = 7          # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
