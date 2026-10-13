@@ -38,6 +38,24 @@
   .icell input:focus{outline:none;border-color:var(--naf)}
   .icell .vlink{font-size:11px;color:var(--naf);text-decoration:none;display:inline-block;margin-top:3px}
   .dot{font-size:15px;justify-self:center}
+  /* == LOS MESES ===================================================
+     Una temporada entera son cien filas largas y los entrenamientos
+     son tres por semana: encontrar el que falta era imposible. Las
+     filas siguen siendo las mismas y en el mismo orden —el pegado
+     masivo y el generador leen igual que antes—, solo que ahora
+     viven adentro del mes que les toca. */
+  .mes{margin-bottom:10px}
+  .mes-h{display:flex;align-items:center;gap:9px;padding:8px 13px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid var(--border);cursor:pointer;user-select:none}
+  .mes-h:hover{background:rgba(255,255,255,.06)}
+  .mes-h b{font-size:13px;letter-spacing:1.5px;text-transform:uppercase}
+  .mes-n{margin-left:auto;font-size:12px;font-weight:700}
+  .mes-fl{font-size:10px;color:var(--muted);transition:transform .15s}
+  .mes.plegado .mes-fl{transform:rotate(-90deg)}
+  .mes.plegado .mes-b{display:none}
+  .mes-b{padding-top:8px}
+  .mes-bar{display:flex;gap:7px;align-items:center;margin:0 0 10px}
+  .mes-bar button{background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:700;padding:5px 11px;border-radius:7px;cursor:pointer}
+  .mes-bar button:hover{color:#e2e8f0}
   .vtabs{display:flex;gap:8px;margin:0 0 14px}
   .vtab{flex:1;background:var(--card);border:1px solid var(--border);color:var(--muted);font-family:inherit;font-weight:800;font-size:14px;letter-spacing:.5px;padding:10px 12px;border-radius:9px;cursor:pointer}
   .vtab.on{background:var(--naf);color:#1a1206;border-color:var(--naf)}
@@ -45,18 +63,18 @@
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20261013-1738"></script>
-<script src="selector_categoria.js?v=20261013-1738"></script>
-<script src="firebase.js?v=20261013-1738" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1738"></script>
+<script src="categorias_club.js?v=20261013-2108"></script>
+<script src="selector_categoria.js?v=20261013-2108"></script>
+<script src="firebase.js?v=20261013-2108" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-2108"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1738">
+<link rel="stylesheet" href="movil.css?v=20261013-2108">
 
-<script src="iconos.js?v=20261013-1738" defer></script>
+<script src="iconos.js?v=20261013-2108" defer></script>
 
-<script src="nav.js?v=20261013-1738" defer></script>
+<script src="nav.js?v=20261013-2108" defer></script>
 </head>
 <body>
   <h1 data-t="🎬 Cargar videos de los partidos"><span data-t="🎬 Cargar videos de los partidos">🎬 Cargar videos de los partidos</span></h1>
@@ -128,6 +146,10 @@
   <div id="sinpublicar" style="display:none;margin:0 0 14px;padding:12px 14px;border-radius:10px;
        background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.45);
        color:#f6c667;font-size:13px;line-height:1.5"></div>
+  <div class="mes-bar">
+    <button type="button" onclick="mesTodos(false)" data-t="Desplegar todo">Desplegar todo</button>
+    <button type="button" onclick="mesTodos(true)" data-t="Plegar todo">Plegar todo</button>
+  </div>
   <div id="list"></div>
 
   <script>
@@ -135,7 +157,7 @@
    Con los datos abriendose en segundo plano, se dibujaba vacia. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261013-1738"></script>
+<script src="datos_seguros.js?v=20261013-2108"></script>
   <!-- datos_video_25-26.js.enc: se carga SOLO si se pide esa temporada. Ver _cargarTemporada() -->
   <!-- Los datos del club se publican CIFRADOS: el archivo real se llama
        datos_video_ent_25-26.js.enc. Estas lineas pedian el .js pelado, que
@@ -175,6 +197,50 @@ window.__DESCIFRAR_SINCRONO = true;
     }
     function cleanUrl(url){ var id=ytId(url); return id?('https://youtu.be/'+id):''; }
 
+    /* == AGRUPADO POR MES =============================================
+       Las filas no cambian ni cambian de orden: cada una entra en la caja
+       del mes que le toca. Todo lo que lee la pantalla despues —el
+       contador, el pegado masivo, el generador— busca con
+       list.querySelectorAll(), que encuentra igual las filas plegadas.
+       Los meses que ya tienen TODOS los links arrancan plegados: lo que
+       queda a la vista es lo que falta. */
+    var MES_NOMBRE=['','enero','febrero','marzo','abril','mayo','junio','julio',
+                    'agosto','septiembre','octubre','noviembre','diciembre'];
+    var _meses={}, _mesOrden=[];
+    function mesClave(d){ return String(d||'').slice(0,7) || 'sin-fecha'; }
+    function mesTitulo(k){
+      if(k==='sin-fecha') return 'Sin fecha';
+      var p=k.split('-');
+      return (MES_NOMBRE[parseInt(p[1],10)]||k)+' '+p[0];
+    }
+    function mesCaja(k){
+      if(_meses[k]) return _meses[k];
+      var caja=document.createElement('div'); caja.className='mes';
+      var h=document.createElement('div'); h.className='mes-h';
+      var fl=document.createElement('span'); fl.className='mes-fl'; fl.textContent='\u25be';
+      var t=document.createElement('b'); t.textContent=mesTitulo(k);
+      var n=document.createElement('span'); n.className='mes-n';
+      h.appendChild(fl); h.appendChild(t); h.appendChild(n);
+      var b=document.createElement('div'); b.className='mes-b';
+      h.onclick=function(){ caja.classList.toggle('plegado'); };
+      caja.appendChild(h); caja.appendChild(b); list.appendChild(caja);
+      _meses[k]={caja:caja, cuerpo:b, num:n}; _mesOrden.push(k);
+      return _meses[k];
+    }
+    function mesContar(primeraVez){
+      _mesOrden.forEach(function(k){
+        var o=_meses[k];
+        var ins=o.cuerpo.querySelectorAll('input'), con=0;
+        Array.prototype.forEach.call(ins,function(i){ if(ytId(i.value.trim())) con++; });
+        var completo=(ins.length>0 && con===ins.length);
+        o.num.textContent=con+' / '+ins.length;
+        o.num.style.color = completo ? '#22c55e' : (con ? '#f6c667' : '#94a3b8');
+        if(primeraVez && completo) o.caja.classList.add('plegado');
+      });
+    }
+    window.mesTodos=function(plegar){
+      _mesOrden.forEach(function(k){ _meses[k].caja.classList.toggle('plegado', !!plegar); });
+    };
     codes.forEach(function(c){
       var m = VD[c];
       var cur = (draft[c]!==undefined ? draft[c] : (MAP[c]||''));
@@ -187,9 +253,11 @@ window.__DESCIFRAR_SINCRONO = true;
           "<small>c\u00f3d "+c+" \u00b7 "+(m.actions?m.actions.length:0)+" acciones</small></div>"+
         "<div class='icell'><input data-code='"+c+"' placeholder='Peg\u00e1 el link de YouTube\u2026' value=\""+String(cur).replace(/"/g,'')+"\"><div class='vshow'></div></div>"+
         "<div class='dot'></div>";
-      list.appendChild(row);
+      mesCaja(mesClave(m.date)).cuerpo.appendChild(row);
       renderRow(row);
     });
+    /* la primera vez tambien pliega los meses ya completos */
+    try{ mesContar(true); }catch(e){}
 
     function renderRow(row){
       var inp = row.querySelector('input');
@@ -321,6 +389,7 @@ window.__DESCIFRAR_SINCRONO = true;
       inputs.forEach(function(i){ if(ytId(i.value.trim())) n++; });
       document.getElementById('nok').textContent = n;
       document.getElementById('progbar').style.width = (inputs.length? Math.round(n/inputs.length*100):0)+'%';
+      try{ mesContar(false); }catch(e){}
       avisarSinPublicar();
       try{ pdLista(); }catch(e){}
     }
@@ -407,9 +476,9 @@ window.__DESCIFRAR_SINCRONO = true;
     };
   })();
   </script>
-<script src="lang.js?v=20261013-1738" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261013-1738" onerror="void 0"></script>
-<script src="ayuda.js?v=20261013-1738"></script>
+<script src="lang.js?v=20261013-2108" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261013-2108" onerror="void 0"></script>
+<script src="ayuda.js?v=20261013-2108"></script>
 <script>
 /* La fecha arranca en hoy: es el caso normal, se reserva el mismo dia. */
 document.addEventListener('DOMContentLoaded', function(){

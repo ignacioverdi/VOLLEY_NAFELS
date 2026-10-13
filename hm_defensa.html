@@ -118,18 +118,18 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20261013-1738"></script>
-<script src="selector_categoria.js?v=20261013-1738"></script>
-<script src="firebase.js?v=20261013-1738" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1738"></script>
+<script src="categorias_club.js?v=20261013-2108"></script>
+<script src="selector_categoria.js?v=20261013-2108"></script>
+<script src="firebase.js?v=20261013-2108" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-2108"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1738">
+<link rel="stylesheet" href="movil.css?v=20261013-2108">
 
-<script src="iconos.js?v=20261013-1738" defer></script>
+<script src="iconos.js?v=20261013-2108" defer></script>
 
-<script src="nav.js?v=20261013-1738" defer></script>
+<script src="nav.js?v=20261013-2108" defer></script>
 </head>
 <body>
 <div class="hdr">
@@ -169,13 +169,13 @@ html,body{background:var(--bg);color:var(--text);font-family:"Barlow Condensed",
   <div class="content" id="content"><div class="nodata" data-t="Elegí un jugador para ver su defensa"><span data-t="Elegí un jugador para ver su defensa">Elegí un jugador para ver su defensa</span></div></div>
 </div>
 
-<script src="objetivos_config.js?v=20261013-1738"></script>
+<script src="objetivos_config.js?v=20261013-2108"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261013-1738"></script>
+<script src="datos_seguros.js?v=20261013-2108"></script>
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
@@ -341,8 +341,8 @@ function __defensaMain(){
      A/B/C/D que parte esa zona en cuatro. La marca el scout a mano y no
      siempre la marca, asi que cada cancha dice sobre cuantas defensas esta
      hecho el dibujo, y si son pocas no se parte nada.
-         A B
-         D C   (como las numera DataVolley mirando desde la red)          */
+         C B
+         D A   (como las numera DataVolley mirando desde la red)          */
   var SUB_ON = false;
   try{ SUB_ON = localStorage.getItem('hm_subzona') === '1'; }catch(e){}
   var SUB_MIN = 8;
@@ -366,7 +366,7 @@ function __defensaMain(){
     if(!d || d.n < SUB_MIN) return '';
     var mx = Math.max(d.A,d.B,d.C,d.D) || 1;
     var w = (CW-4)/2, h = (CH-4)/2, out = '';
-    [['A',0,0],['B',1,0],['D',0,1],['C',1,1]].forEach(function(q){
+    [['C',0,0],['B',1,0],['D',0,1],['A',1,1]].forEach(function(q){
       var k=q[0], cx=x+2+q[1]*w, cy=y+2+q[2]*h, v=d[k]||0;
       var op = v ? (0.12 + (v/mx)*0.74) : 0.03;
       out += "<rect x='"+(cx+0.4)+"' y='"+(cy+0.4)+"' width='"+(w-0.8)+"' height='"+(h-0.8)
@@ -517,7 +517,7 @@ function __defensaMain(){
   document.addEventListener('DOMContentLoaded', __arrancarDefensa);
 })();
 </script>
-<script src="lang.js?v=20261013-1738" onerror="void 0">
+<script src="lang.js?v=20261013-2108" onerror="void 0">
 /* ══════════════════════════════════════════════════════════════════════════
    LOS CORTES DE VIDEO, DE LAS DOS FUENTES
    --------------------------------------------------------------------------
@@ -536,7 +536,7 @@ function _videoTodo(){
   return VD;
 }
 </script>
-<script src="ayuda.js?v=20261013-1738"></script>
+<script src="ayuda.js?v=20261013-2108"></script>
 
 <script>
 /* setModoDef() estaba escrita y NADIE la llamaba: no habia ni un boton. Por eso

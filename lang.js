@@ -4176,8 +4176,11 @@
     // ===== DONDE CAYO LA RECEPCION (la canchita del plan de partido) =====
     "Armó desde":{en:"Set from",de:"Zuspiel aus"},
     // ===== PRETEMPORADA / COMPETENCIA OFICIAL =====
-    "Competencia":{en:"Competition",de:"Wettbewerb"},
     "Oficiales":{en:"Official",de:"Offiziell"},
+    // ===== cargar videos: la lista agrupada por mes =====
+    "Desplegar todo":{en:"Expand all",de:"Alle aufklappen"},
+    "Plegar todo":{en:"Collapse all",de:"Alle zuklappen"},
+    "Sin fecha":{en:"No date",de:"Ohne Datum"},
     "Pretemporada":{en:"Pre-season",de:"Vorbereitung"},
     "Los amistosos no entran en ningún número de esta pantalla":{en:"Friendlies are left out of every number on this screen",de:"Testspiele fließen in keine Zahl auf diesem Bildschirm ein"},
     "Los amistosos están entrando en todos los números":{en:"Friendlies are included in every number",de:"Testspiele fließen in alle Zahlen ein"},

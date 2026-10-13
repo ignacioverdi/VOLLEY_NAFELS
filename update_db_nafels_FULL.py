@@ -1738,7 +1738,12 @@ def build_liga_data(teams_data, combos, output_dir='.', setters=None, rallies=No
         _seen = sorted(set((r.get('date',''), r.get('rival','')) for r in _all_rl))
         match_idx = {dk: i for i, dk in enumerate(_seen)}
         _code_map = {(r.get('date',''), r.get('rival','')): r.get('code','') for r in _all_rl}
-        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), ''), 'fase': _fase_de(d)} for i, (d, rv) in enumerate(_seen)]
+        # El RESULTADO viaja con cada partido: la lista del plan de partido
+        # mostraba solo la fecha y el rival, y asi '07 oct vs Nafels' no dice
+        # si ese dia ganaron 3-0 o perdieron 0-3. Es el mismo dato que ya
+        # estaba en 'games', leido del [3SET] del .dvw.
+        matches = [{'i': i, 'date': d, 'rival': rv, 'code': _code_map.get((d, rv), ''),
+                    'fase': _fase_de(d), 'r': _res_for(d, team, rv)} for i, (d, rv) in enumerate(_seen)]
         setters_list = []
         # ══ Los dorsales que cambiaron ══════════════════════════════════
         # Los armadores se detectan leyendo el .dvw, donde la jugadora tiene
