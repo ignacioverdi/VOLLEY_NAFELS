@@ -4171,6 +4171,16 @@
     "Doble-click":{en:"Double-click",de:"Doppelklick"},
     // ===== EL FILTRO DE QUIEN ESTABA EN LA CANCHA (plan de partido) =====
     "En cancha":{en:"On court",de:"Auf dem Feld"},
+    "Qué son estos porcentajes":{en:"What these percentages are",de:"Was diese Prozentwerte sind"},
+    "Muestra chica":{en:"Small sample",de:"Kleine Stichprobe"},
+    // las dos valoraciones de recepcion que quedaban en castellano
+    "Justa":{en:"Fair",de:"Mäßig"},
+    "Pasada":{en:"Overpass",de:"Überball"},
+    "P1 a P2: la eficacia de ataque del equipo con el armador en esa rotación, en side-out y solo tras recepción perfecta o buena.":{en:"P1 to P2: the team's attack efficiency with the setter in that rotation, in side-out and only after a perfect or good reception.",de:"P1 bis P2: Angriffseffizienz des Teams mit dem Zuspieler in dieser Rotation, im Side-out und nur nach perfekter oder guter Annahme."},
+    "SO y TR: la misma cuenta, pero sobre todo el side-out y toda la transición, sin filtrar la recepción. Por eso no suman lo de arriba.":{en:"SO and TR: the same calculation, but over the whole side-out and the whole transition, with no reception filter. That is why they do not add up to the ones above.",de:"SO und TR: dieselbe Rechnung, aber über das gesamte Side-out und die gesamte Transition, ohne Annahmefilter. Deshalb ergeben sie nicht die Werte oben."},
+    "Eficacia = puntos menos bloqueados menos errores, dividido los ataques. Abajo de cada uno, los ataques que entraron en la cuenta.":{en:"Efficiency = kills minus blocked minus errors, divided by attacks. Under each one, the attacks counted.",de:"Effizienz = Punkte minus geblockt minus Fehler, geteilt durch Angriffe. Darunter die gezählten Angriffe."},
+    "En gris, los que tienen menos de diez ataques: con esa muestra el número no dice nada.":{en:"In grey, the ones with fewer than ten attacks: at that sample size the number means nothing.",de:"Grau: weniger als zehn Angriffe — bei dieser Stichprobe sagt die Zahl nichts aus."},
+    "Estos ocho no siguen los filtros de abajo: son la temporada entera del armador.":{en:"These eight do not follow the filters below: they are the setter's whole season.",de:"Diese acht folgen nicht den Filtern unten: sie zeigen die ganze Saison des Zuspielers."},
     "Sin filtro":{en:"No filter",de:"Kein Filter"},
     "Un clic: tiene que estar":{en:"One click: must be on court",de:"Ein Klick: muss auf dem Feld sein"},
     "Dos clics: no tiene que estar":{en:"Two clicks: must not be on court",de:"Zwei Klicks: darf nicht auf dem Feld sein"},

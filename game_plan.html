@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261013-1337"></script>
-<script src="selector_categoria.js?v=20261013-1337"></script>
-<script src="objetivos_config.js?v=20261013-1337"></script>
+<script src="categorias_club.js?v=20261013-1359"></script>
+<script src="selector_categoria.js?v=20261013-1359"></script>
+<script src="objetivos_config.js?v=20261013-1359"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -443,7 +443,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261013-1337" onerror="void 0"></script>
+<script src="lang.js?v=20261013-1359" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -454,7 +454,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261013-1337"></script>
+<script src="datos_seguros.js?v=20261013-1359"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -467,15 +467,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261013-1337" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261013-1337"></script>
-<script src="videos.js?v=20261013-1337" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261013-1359" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261013-1359"></script>
+<script src="videos.js?v=20261013-1359" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261013-1337">
+<link rel="stylesheet" href="movil.css?v=20261013-1359">
 
-<script src="iconos.js?v=20261013-1337" defer></script>
+<script src="iconos.js?v=20261013-1359" defer></script>
 </head>
 <body>
 
@@ -3007,6 +3007,62 @@ function gpOcBase(setterObj){
 }
 var GP_ARM_SYNCS=[];     // funciones de re-render de cada panel de armador
 function gpArmSyncAll(){ GP_ARM_SYNCS.forEach(function(f){ try{f();}catch(e){} }); }
+/* == UN DESPLEGABLE DE UNA SOLA OPCION ==================================
+   La barra del armador tenia tres grupos de botones sueltos (Fase, Recep.
+   desde, Saque) y tres desplegables. Con ocho filtros la fila se partia en
+   dos renglones y costaba encontrar donde habia quedado cada cosa. Ahora
+   los ocho son el mismo control: un boton que dice lo elegido y un menu.
+
+   opts: [[valor,'Etiqueta'], ...] — el primero es el neutro ("todas").
+   color: un color, o una funcion que lo devuelve segun el valor elegido.  */
+function gpTinte(hex){
+  var h=String(hex).replace('#','');
+  if(h.length===3) h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+',.16)';
+}
+function gpArmUno(opts, color, leer, poner, siempreColor){
+  function col(v){ return (typeof color==='function')?color(v):color; }
+  var dd=document.createElement('div'); dd.className='gpn-dd';
+  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+  var menu=document.createElement('div'); menu.className='gpn-ddm'; menu.style.minWidth='150px';
+  var marcas={};
+  opts.forEach(function(o){
+    var row=document.createElement('div'); row.className='gpn-ddi';
+    var mk=document.createElement('span');
+    mk.style.cssText='flex:none;width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,.28)';
+    var tx=document.createElement('span'); tx.textContent=o[1];
+    row.appendChild(mk); row.appendChild(tx);
+    row.onclick=function(e){ e.stopPropagation(); dd.classList.remove('open'); poner(o[0]); gpArmSyncAll(); };
+    marcas[o[0]]=mk; menu.appendChild(row);
+  });
+  function pinta(){
+    var v=leer(), lab='';
+    opts.forEach(function(o){
+      var on=(o[0]===v); if(on) lab=o[1];
+      marcas[o[0]].style.background=on?col(o[0]):'transparent';
+      marcas[o[0]].style.borderColor=on?col(o[0]):'rgba(255,255,255,.28)';
+    });
+    bt.innerHTML='<i class="gpn-n" style="font-style:normal">'+lab+'</i> <span class="car">▾</span>';
+    var fuerte=!!siempreColor || (v!==opts[0][0]);
+    bt.style.background=fuerte?gpTinte(col(v)):'';
+    bt.style.borderColor=fuerte?col(v):'';
+    bt.style.color=fuerte?col(v):'';
+  }
+  bt.onclick=function(e){ e.stopPropagation();
+    var ab=dd.classList.contains('open');
+    [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){ x.classList.remove('open'); });
+    if(!ab) dd.classList.add('open'); };
+  menu.addEventListener('click',function(e){ e.stopPropagation(); });
+  dd.appendChild(bt); dd.appendChild(menu);
+  return {dd:dd, pinta:pinta};
+}
+/* Una etiqueta y su control, pegados: asi el rotulo no se despega de lo que
+   nombra cuando la fila se acomoda sola. */
+function gpArmGrupo(lbl, ctrl){
+  var g=document.createElement('div');
+  g.style.cssText='display:inline-flex;align-items:center;gap:7px';
+  g.appendChild(lbl); g.appendChild(ctrl); return g;
+}
 function gpComputeRotDist(setterObj,pos,phase,rec){
   var RES=['#','/','+','!','=','-'];
   if(!setterObj||!setterObj.s) return {total:0,dist:{},eff:0,pts_pct:0};
@@ -3314,8 +3370,41 @@ function renderArmador(){
     // Pills P1-P6 + SO + TR
     var pillsWrap=document.createElement('div');
     pillsWrap.style.cssText='margin-left:auto;display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end';
+    /* == QUE SON ESTOS PORCENTAJES =======================================
+       Eran ocho numeros sueltos sin una sola linea que dijera de donde
+       salen, y encima dos cosas distintas mezcladas en la misma fila:
+
+         P1..P2  eficacia de ATAQUE del equipo con el armador en esa
+                 rotacion, en side-out y SOLO tras recepcion # o +
+         SO / TR la misma eficacia pero de TODO el side-out y de TODA la
+                 transicion, sin filtrar la recepcion
+
+       Por eso los seis primeros no suman lo que dice SO. Y como la cuenta
+       es una division, con un ataque da 100% o -100%: eso no es un dato,
+       es ruido. Debajo de diez ataques el numero va en gris para que no se
+       lea como un veredicto, y el signo de pregunta abre la explicacion.  */
+    var POCA_MUESTRA=10;
+    var qPills=document.createElement('button'); qPills.type='button'; qPills.textContent='?';
+    qPills.title='Qué son estos porcentajes';
+    qPills.style.cssText='flex:none;align-self:center;width:21px;height:21px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:transparent;color:#8FA0B4;font-family:inherit;font-size:11px;font-weight:800;line-height:1;cursor:pointer;padding:0';
+    var ayudaPills=document.createElement('div');
+    ayudaPills.style.cssText='display:none;width:100%;margin-top:9px;padding:11px 13px;border:1px solid rgba(255,255,255,.08);border-radius:10px;background:rgba(255,255,255,.02);font-size:11px;color:#8FA0B4;line-height:1.7';
+    ['P1 a P2: la eficacia de ataque del equipo con el armador en esa rotación, en side-out y solo tras recepción perfecta o buena.',
+     'SO y TR: la misma cuenta, pero sobre todo el side-out y toda la transición, sin filtrar la recepción. Por eso no suman lo de arriba.',
+     'Eficacia = puntos menos bloqueados menos errores, dividido los ataques. Abajo de cada uno, los ataques que entraron en la cuenta.',
+     'En gris, los que tienen menos de diez ataques: con esa muestra el número no dice nada.',
+     'Estos ocho no siguen los filtros de abajo: son la temporada entera del armador.'].forEach(function(t){
+      var d=document.createElement('div'); d.textContent=t; ayudaPills.appendChild(d);
+    });
+    qPills.onclick=function(e){ e.stopPropagation();
+      var v=(ayudaPills.style.display==='none');
+      ayudaPills.style.display=v?'block':'none';
+      qPills.style.borderColor=v?color:'rgba(255,255,255,.18)';
+      qPills.style.color=v?color:'#8FA0B4'; };
+    pillsWrap.appendChild(qPills);
     if(arm.pills) arm.pills.forEach(function(p){
-      var effC=p.eff===null||p.eff===undefined?'#475569':p.eff>=50?'#22c55e':p.eff>=25?'#fbbf24':p.eff>=0?'#f97316':'#ef4444';
+      var _poca=(p.tot||0)>0 && (p.tot||0)<POCA_MUESTRA;
+      var effC=p.eff===null||p.eff===undefined?'#475569':_poca?'#5E6B7D':p.eff>=50?'#22c55e':p.eff>=25?'#fbbf24':p.eff>=0?'#f97316':'#ef4444';
       var pill=document.createElement('div');
       pill.style.cssText='display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 7px;border-radius:7px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);min-width:38px';
       var lv=document.createElement('div');
@@ -3328,6 +3417,7 @@ function renderArmador(){
       tv.style.cssText='font-size:7px;color:#475569';
       tv.textContent=(p.tot||0)+' acc';
       pill.appendChild(lv); pill.appendChild(ev); pill.appendChild(tv);
+      if(_poca) pill.title='Muestra chica';
       // SO y TR: doble click abre modal con distribución por rotación
       if(p.label==='SO'||p.label==='TR'){
         pill.style.cursor='pointer';
@@ -3346,6 +3436,7 @@ function renderArmador(){
       pillsWrap.appendChild(pill);
     });
     hdr.appendChild(pillsWrap);
+    hdr.appendChild(ayudaPills);
     panel.appendChild(hdr);
 
     // EFF por recepción
@@ -3379,17 +3470,17 @@ function renderArmador(){
     var fbar=document.createElement('div');
     fbar.style.cssText='display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:12px 18px 2px';
     var phaseLbl=document.createElement('span'); phaseLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; phaseLbl.textContent='Fase';
-    var phaseWrap=document.createElement('div'); phaseWrap.style.cssText='display:inline-flex;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:2px;gap:2px;margin-left:5px';
     var recLbl=document.createElement('span'); recLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; recLbl.textContent='Recepción';
     var recWrap=document.createElement('div'); recWrap.style.cssText='display:inline-flex';
-    var phaseBtns={}, recBtns={};
-    function gpStyleBtn(b,on,col){ b.style.background=on?col:'transparent'; b.style.color=on?'#0a0e15':'#94a3b8'; }
-    [['SO','Side-out'],['TR','Transición']].forEach(function(o){
-      var b=document.createElement('button'); b.textContent=o[1];
-      b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 13px;border-radius:6px;cursor:pointer;text-transform:uppercase';
-      b.addEventListener('click',function(){ GP_ARM_PHASE=o[0]; gpArmSyncAll(); });
-      phaseWrap.appendChild(b); phaseBtns[o[0]]=b;
-    });
+    var recBtns={};
+    /* FASE: antes eran dos botones sueltos; ahora un desplegable como el resto.
+       Side-out y transicion no son 'una u otra opcion mas': son las dos mitades
+       del juego, asi que el boton siempre va pintado con el color de la que
+       este elegida —azul el side-out, violeta la transicion—. */
+    var phaseDD=gpArmUno([['SO','Side-out'],['TR','Transición']],
+      function(v){ return v==='TR'?'#a855f7':'#3b82f6'; },
+      function(){ return GP_ARM_PHASE; },
+      function(v){ GP_ARM_PHASE=v; }, true);
     /* ══ EL DESPLEGABLE DE LA RECEPCION PREVIA ═══════════════════════════
        Mismo aspecto que el de "Mostrar jugadores" —las mismas clases gpn-dd—
        para que la barra de filtros no hable dos idiomas distintos. */
@@ -3434,27 +3525,22 @@ function renderArmador(){
     })();
     // ── Recepción desde (banda de zona: Z1=1+9+2 / Z6=6+8+3 / Z5=5+7+4) ──
     var rzLbl=document.createElement('span'); rzLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; rzLbl.textContent='Recep. desde';
-    var rzWrap=document.createElement('div'); rzWrap.style.cssText='display:inline-flex;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:2px;gap:2px;margin-left:5px';
-    var rzBtns={};
-    [['','Todas'],['r1','Z1'],['r6','Z6'],['r5','Z5']].forEach(function(o){
-      var b=document.createElement('button'); b.textContent=o[1];
-      b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 11px;border-radius:6px;cursor:pointer';
-      b.addEventListener('click',function(){ GP_ARM_RECZONE=o[0]||null; gpArmSyncAll(); });
-      rzWrap.appendChild(b); rzBtns[o[0]||'all']=b;
-    });
+    var rzDD=gpArmUno([['','Todas'],['r1','Z1'],['r6','Z6'],['r5','Z5']], '#06b6d4',
+      function(){ return GP_ARM_RECZONE||''; },
+      function(v){ GP_ARM_RECZONE=v||null; });
     // ── Tipo de saque recibido (Flotado RM / Potencia RQ) — solo side-out ──
     var stLbl=document.createElement('span'); stLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; stLbl.textContent='Saque';
-    var stWrap=document.createElement('div'); stWrap.style.cssText='display:inline-flex;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:2px;gap:2px;margin-left:5px';
-    var stBtns={};
-    [['','Todas'],['M','Flotado'],['Q','Potencia']].forEach(function(o){
-      var b=document.createElement('button'); b.textContent=o[1];
-      b.style.cssText='border:none;background:transparent;color:#94a3b8;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:1px;padding:5px 11px;border-radius:6px;cursor:pointer';
-      b.addEventListener('click',function(){ if(GP_ARM_PHASE!=='SO')return; GP_ARM_SERVETYPE=o[0]||null; gpArmSyncAll(); });
-      stWrap.appendChild(b); stBtns[o[0]||'all']=b;
-    });
+    var stDD=gpArmUno([['','Todas'],['M','Flotado'],['Q','Potencia']], '#f59e0b',
+      function(){ return GP_ARM_SERVETYPE||''; },
+      function(v){ if(GP_ARM_PHASE!=='SO') return; GP_ARM_SERVETYPE=v||null; });
     // ── Receptor (jugador que recibe) ──
     var rnLbl=document.createElement('span'); rnLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; rnLbl.textContent='Receptor';
-    var rnSel=document.createElement('select'); rnSel.style.cssText='margin-left:5px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:#cbd5e1;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:6px 10px;border-radius:8px;cursor:pointer';
+    var rnSel=document.createElement('select'); rnSel.className='gpn-ddb';
+    /* mismo aspecto que los desplegables; sigue siendo un <select> nativo,
+       que en el celular abre la rueda del sistema y es mas comodo. */
+    /* con ancho libre el <select> se estiraba al nombre mas largo y se comia
+       media barra; el nombre completo igual se ve al desplegarlo. */
+    rnSel.style.cssText='appearance:auto;padding-right:6px;max-width:132px'; rnSel.title='Receptor';
     (function(){
       var recv={}; ((setterRaw&&setterRaw.s)||[]).forEach(function(r){ if(r[16]>0) recv[r[16]]=(recv[r[16]]||0)+1; });
       var nums=Object.keys(recv).map(Number).sort(function(a,b){return recv[b]-recv[a];});
@@ -3553,17 +3639,17 @@ function renderArmador(){
       dd.appendChild(bt); dd.appendChild(menu); ocWrap.appendChild(dd); ocPinta();
     })(); }
     function gpPaintFilters(){
-      gpStyleBtn(phaseBtns.SO, GP_ARM_PHASE==='SO', '#3b82f6');
-      gpStyleBtn(phaseBtns.TR, GP_ARM_PHASE==='TR', '#a855f7');
       var so=GP_ARM_PHASE==='SO';
-      recWrap.style.opacity=so?'1':'.35'; recWrap.style.pointerEvents=so?'auto':'none'; recLbl.style.opacity=so?'1':'.35';
-      /* El desplegable se pinta solo; en transición no filtra nada */
-      if(recBtns.dd){ recBtns.dd.style.opacity = so?'1':'.45';
-        recBtns.dd.style.pointerEvents = so?'':'none';
+      phaseDD.pinta(); rzDD.pinta(); stDD.pinta();
+      /* en transicion no hubo recepcion: los dos filtros que dependen de ella
+         quedan apagados, igual que antes. */
+      recLbl.style.opacity=so?'1':'.35';
+      recWrap.style.opacity=so?'1':'.35'; recWrap.style.pointerEvents=so?'auto':'none';
+      if(recBtns.dd){ recBtns.dd.style.opacity=so?'1':'.45';
+        recBtns.dd.style.pointerEvents=so?'':'none';
         if(recBtns.pinta) recBtns.pinta(); }
-      Object.keys(rzBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_RECZONE)||(k===GP_ARM_RECZONE); gpStyleBtn(rzBtns[k], on, '#06b6d4'); });
-      stWrap.style.opacity=so?'1':'.35'; stWrap.style.pointerEvents=so?'auto':'none'; stLbl.style.opacity=so?'1':'.35';
-      Object.keys(stBtns).forEach(function(k){ var on=(k==='all'&&!GP_ARM_SERVETYPE)||(k===GP_ARM_SERVETYPE); gpStyleBtn(stBtns[k], so&&on, '#f59e0b'); });
+      stLbl.style.opacity=so?'1':'.35';
+      stDD.dd.style.opacity=so?'1':'.45'; stDD.dd.style.pointerEvents=so?'':'none';
       var _has=false; for(var _i=0;_i<rnSel.options.length;_i++){ if(rnSel.options[_i].value===String(GP_ARM_RECNUM||'')) _has=true; }
       if(!_has) GP_ARM_RECNUM=null; rnSel.value=GP_ARM_RECNUM?String(GP_ARM_RECNUM):'';
       if(ocPinta) ocPinta();
@@ -3576,14 +3662,15 @@ function renderArmador(){
       matchLbl=document.createElement('span'); matchLbl.style.cssText='font-size:9px;color:#475569;letter-spacing:2px;text-transform:uppercase'; matchLbl.textContent='Partidos';
       matchBox=document.createElement('div'); matchBox.style.cssText='position:relative;margin-left:5px;display:inline-block';
       var matchBtn=document.createElement('button');
-      matchBtn.style.cssText='border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#cbd5e1;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;padding:6px 13px;border-radius:8px;cursor:pointer;white-space:nowrap';
+      matchBtn.className='gpn-ddb'; matchBtn.type='button';
       var matchPanel=document.createElement('div');
-      matchPanel.style.cssText='position:absolute;top:100%;left:0;margin-top:4px;z-index:50;background:#0d1117;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:8px;min-width:230px;max-height:300px;overflow:auto;display:none;box-shadow:0 12px 32px rgba(0,0,0,.5)';
+      matchPanel.style.cssText='position:absolute;top:100%;left:0;margin-top:4px;z-index:60;background:#11161f;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:5px;min-width:230px;max-height:300px;overflow:auto;display:none;box-shadow:0 10px 30px rgba(0,0,0,.55)';
       var gpChecks={};
       paintMatchUI=function(){
         var n=GP_ARM_MATCHES?GP_ARM_MATCHES.size:gpMatches.length;
         matchBtn.textContent='📋 '+(GP_ARM_MATCHES?(n+' de '+gpMatches.length):'Todos ('+gpMatches.length+')')+' ▾';
         gpMatches.forEach(function(m){ if(gpChecks[m.i]) gpChecks[m.i].checked=GP_ARM_MATCHES?GP_ARM_MATCHES.has(m.i):true; });
+        matchBtn.classList.toggle('act', !!GP_ARM_MATCHES);
       };
       function gpRecompMatches(){
         var sel=new Set();
@@ -3620,10 +3707,17 @@ function renderArmador(){
       matchBox.appendChild(matchBtn); matchBox.appendChild(matchPanel);
     }
 
-    fbar.appendChild(phaseLbl); fbar.appendChild(phaseWrap); fbar.appendChild(recLbl); fbar.appendChild(recWrap);
-    fbar.appendChild(rzLbl); fbar.appendChild(rzWrap); fbar.appendChild(stLbl); fbar.appendChild(stWrap); fbar.appendChild(rnLbl); fbar.appendChild(rnSel);
-    if(ocHay){ fbar.appendChild(ocLbl); fbar.appendChild(ocWrap); }
-    if(matchLbl){ fbar.appendChild(matchLbl); fbar.appendChild(matchBox); }
+    /* Cada rotulo pegado a su control, y la fila con menos aire: con ocho
+       filtros se partia en dos renglones y habia que buscar donde quedo cada
+       cosa. */
+    fbar.style.gap='13px';
+    fbar.appendChild(gpArmGrupo(phaseLbl, phaseDD.dd));
+    fbar.appendChild(gpArmGrupo(recLbl, recWrap));
+    fbar.appendChild(gpArmGrupo(rzLbl, rzDD.dd));
+    fbar.appendChild(gpArmGrupo(stLbl, stDD.dd));
+    fbar.appendChild(gpArmGrupo(rnLbl, rnSel));
+    if(ocHay) fbar.appendChild(gpArmGrupo(ocLbl, ocWrap));
+    if(matchLbl) fbar.appendChild(gpArmGrupo(matchLbl, matchBox));
     panel.appendChild(fbar);
 
     var rotLbl=document.createElement('div');
@@ -4988,8 +5082,8 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261013-1337"></script>
-<script src="ayuda.js?v=20261013-1337"></script>
+<script src="temporadas_menu.js?v=20261013-1359"></script>
+<script src="ayuda.js?v=20261013-1359"></script>
 </body>
 </html>
 
