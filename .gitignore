@@ -164,3 +164,14 @@ datos_plantel.js
 # si algo hiciera falta, se vuelve a sacar. Al repositorio no va.
 _PARA_BORRAR/
 _workflows_nuevos/
+
+# ══ LAS FOTOS ORIGINALES DEL PLANTEL ════════════════════════════════════
+# Son quince caras del plantel a 900 KB cada una. El repositorio es
+# publico y PUBLICAR_EN_GITHUB.bat hace "git add -A", asi que sin estas
+# lineas se suben solas la proxima vez y quedan ahi para cualquiera.
+#
+# Las caras SI llegan a la app, pero por el otro camino: FOTOS_JUGADORES.py
+# las achica y las mete en datos_fotos.js, que viaja cifrado como el resto
+# de los datos del club y solo lo abre quien inicio sesion.
+NAFELS PLAYERS*/
+FOTOS JUGADORES*/

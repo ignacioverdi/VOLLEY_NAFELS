@@ -131,3 +131,8 @@ LLAVE_DONDE_ESTA.txt
 # Van al repositorio a proposito (son la red de seguridad), pero no son
 # paginas: a la web no tienen nada que hacer.
 respaldos/
+
+# Las fotos originales del plantel: 12 MB que no hacen falta en el servidor.
+# Las caras van adentro de datos_fotos.js.enc, achicadas y cifradas.
+NAFELS PLAYERS*/
+FOTOS JUGADORES*/

@@ -366,6 +366,23 @@ if errorlevel 1 set /a NFALLOS+=1
 echo.
 
 REM ===================================================================
+REM   LAS CARAS DEL PLANTEL
+REM
+REM   Lee las fotos oficiales de la carpeta del club, las recorta a cabeza
+REM   y hombros y las deja adentro de datos_fotos.js. Nadie carga una foto
+REM   a mano en ningun lado: si manana entra un jugador, se tira su foto
+REM   con el dorsal adelante del nombre y a la proxima corrida ya esta.
+REM
+REM   Va ANTES de Mi juego porque esa pantalla es la que las muestra.
+REM   Si falta Pillow el paso avisa y sigue: la app anda igual, sin caras.
+REM ===================================================================
+echo  ================= LAS CARAS DEL PLANTEL =================
+echo.
+python FOTOS_JUGADORES.py --desde-bat
+if errorlevel 1 echo      [aviso] No se armaron las fotos. Sigo igual.
+echo.
+
+REM ===================================================================
 REM   MI JUEGO  (la pantalla del jugador)
 REM
 REM   Va DESPUES de las estadisticas de la liga a proposito: la

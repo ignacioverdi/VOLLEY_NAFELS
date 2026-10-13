@@ -12,3 +12,7 @@
 # Lee y escribe planillas de Excel.
 # Lo usan: generar_datos_entrenamientos.py, actualizar_gameplan.py, build_videos.py
 openpyxl
+
+# Abre y recorta las fotos de los jugadores.
+# Lo usa: FOTOS_JUGADORES.py
+Pillow

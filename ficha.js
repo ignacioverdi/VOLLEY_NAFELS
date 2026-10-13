@@ -322,23 +322,31 @@ function hero(j){
     +'</div><div class="mini">'+m.join('')+'</div></div>';
 }
 
-/* La foto sale de donde ya salia en jugador.html: del alta, por Firebase. Si
-   no hay, queda el dorsal, que es lo que habia antes. */
+/* La foto, por orden de preferencia:
+     1. datos_fotos.js, que FOTOS_JUGADORES.py arma solo desde las fotos
+        oficiales del club. Nadie carga nada: estan ahi desde el dia que las
+        mando el fotografo.
+     2. la del alta, por Firebase, que es de donde salia en jugador.html y
+        sigue mandando si alguien cargo una a mano.
+     3. el dorsal, que es lo que habia antes.
+   Primero la 1 porque es instantanea —ya vino con la pagina— y Firebase
+   tarda. Si despues llega una del alta, pisa a la automatica: el que se
+   tomo el trabajo de subir una tiene razon por sobre el automatismo. */
 function ponerFoto(){
   var caja=document.getElementById('foto-jug');
-  if(!caja || typeof fbGet!=='function') return;
+  if(!caja) return;
   var num=caja.getAttribute('data-num'), nn=('0'+num).slice(-2);
+  function pone(v){
+    if(typeof v!=='string' || v.indexOf('data:image')!==0) return;
+    caja.innerHTML='<img src="'+v+'" alt="">';
+    caja.classList.add('con');
+  }
+  try{ pone((window.FOTOS_JUGADORES||{})[nn]); }catch(e){}
+  if(typeof fbGet!=='function') return;
   var cat='Primera';
   try{ cat=(window.categoriaActual&&window.categoriaActual())||((window.CATEGORIAS_CLUB||[])[0])||'Primera'; }catch(e){}
   var listo=false;
-  function pone(v){
-    if(listo) return; listo=true;
-    if(typeof v==='string' && v.indexOf('data:image')===0){
-      caja.innerHTML='<img src="'+v+'" alt="">';
-      caja.classList.add('con');
-    }
-  }
-  try{ fbGet('jugador_foto/'+cat+'/'+nn, pone); }catch(e){}
+  try{ fbGet('jugador_foto/'+cat+'/'+nn, function(v){ if(!listo){ listo=true; pone(v); } }); }catch(e){}
   setTimeout(function(){ listo=true; }, 4000);
 }
 
