@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261015-1635"></script>
-<script src="selector_categoria.js?v=20261015-1635"></script>
-<script src="objetivos_config.js?v=20261015-1635"></script>
+<script src="categorias_club.js?v=20261015-1651"></script>
+<script src="selector_categoria.js?v=20261015-1651"></script>
+<script src="objetivos_config.js?v=20261015-1651"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -377,6 +377,8 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-tab.on{background:#F5A524;color:#0A0D14;font-weight:800}
 .gpn-cuerpo{padding:0 15px 12px}
 .gpn-claves{padding:11px 15px;border-top:1px solid rgba(255,255,255,.06)}
+.gpn-cle{outline:none;border-radius:4px;padding:1px 3px;margin:-1px -3px;transition:background .15s;cursor:text}
+.gpn-cle:hover{background:rgba(255,255,255,.04)}
 .gpn-clg{font-size:9px;letter-spacing:1.2px;color:#5E6B7D;font-weight:700;margin-top:6px}
 .gpn-cli{display:flex;gap:6px;align-items:flex-start;font-size:12px;color:#C6D2E0;line-height:1.4;margin-top:2px}
 .gpn-cli span:first-child{color:#F5A524;font-size:9px;line-height:1.5}
@@ -443,7 +445,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261015-1635" onerror="void 0"></script>
+<script src="lang.js?v=20261015-1651" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -454,7 +456,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261015-1635"></script>
+<script src="datos_seguros.js?v=20261015-1651"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -467,15 +469,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261015-1635" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261015-1635"></script>
-<script src="videos.js?v=20261015-1635" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261015-1651" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261015-1651"></script>
+<script src="videos.js?v=20261015-1651" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261015-1635">
+<link rel="stylesheet" href="movil.css?v=20261015-1651">
 
-<script src="iconos.js?v=20261015-1635" defer></script>
+<script src="iconos.js?v=20261015-1651" defer></script>
 </head>
 <body>
 
@@ -837,6 +839,63 @@ function gpCompFiltra(td){
   return nt;
 }
 GP_TD = gpCompFiltra(GP_TD);
+
+/* ══ LO QUE ESCRIBE EL CUERPO TECNICO, PARA TODOS ═══════════════════════
+   Todo lo que se corrige a mano en esta pantalla —la clave de cada
+   jugador, la opcion de bloqueo de cada rotacion, las lineas del scouting,
+   las notas— se guardaba en el navegador del que lo escribia. El asistente
+   abria la misma pantalla y no veia nada, y al recargar se perdia: cada
+   uno tenia su copia y nadie lo sabia.
+
+   Ahora va a Firebase, al mismo lugar donde ya se guardan las secuencias
+   de video. Las reglas del club ya dicen quien puede que:
+       cuerpo tecnico -> escribe       jugadores -> leen, no tocan
+   No hubo que cambiar ni una regla.
+
+   TODO JUNTO, NO UNO POR UNO
+   Una ficha tiene ocho claves y hay diez jugadores: pedir cada texto por
+   separado eran ochenta pedidos para abrir una pantalla. Se baja UN solo
+   paquete por rival y de ahi sale todo.
+
+   MIENTRAS TANTO, LO DE ANTES
+   Se dibuja al toque con la copia local —lo ultimo que se bajo— y cuando
+   llega el paquete se repinta. Sin internet se sigue viendo y escribiendo
+   igual que antes; se sincroniza al volver. Lo que se esta tipeando en ese
+   momento no se pisa.                                                     */
+var GP_ED={}, GP_ED_LISTO=false, GP_ED_REG=[];
+function gpEdSlug(k){ return String(k).replace(/[^a-zA-Z0-9_]/g,'_'); }
+function gpEdRuta(){ return 'gp_edit/'+gpEdSlug(GP_RIVAL_SLUG||'rival'); }
+function gpEdGuardar(k,v){
+  v=String(v==null?'':v);
+  try{ localStorage.setItem(k,v); }catch(e){}
+  var s=gpEdSlug(k); GP_ED[s]=v;
+  try{ if(typeof fbSet==='function') fbSet(gpEdRuta()+'/'+s,v); }catch(e){}
+}
+function gpEdLeer(k,aplicar,el){
+  var s=gpEdSlug(k), v=null;
+  if(GP_ED_LISTO && GP_ED[s]!==undefined && GP_ED[s]!==null) v=String(GP_ED[s]);
+  if(v===null){ try{ v=localStorage.getItem(k); }catch(e){} }
+  if(v!==null){ try{ aplicar(v); }catch(e){} }
+  GP_ED_REG.push({k:s,aplicar:aplicar,el:el});
+}
+function gpEdCargar(){
+  if(typeof fbGet!=='function') return;
+  try{
+    fbGet(gpEdRuta(),function(d){
+      GP_ED=(d&&typeof d==='object')?d:{};
+      GP_ED_LISTO=true;
+      GP_ED_REG.forEach(function(r){
+        var v=GP_ED[r.k];
+        if(v===undefined||v===null) return;
+        if(r.el&&document.activeElement===r.el) return;   /* lo esta escribiendo */
+        try{ r.aplicar(String(v)); }catch(e){}
+      });
+    });
+  }catch(e){}
+}
+try{ gpEdCargar(); }catch(e){}
+/* el texto tal cual, para meterlo en un atributo */
+function gpEdAttr(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
 
 /* ══ EL APELLIDO DE CADA JUGADOR ═══════════════════════════════════════════
    Los nombres llegan del generador como "APELLIDO Nombre": "Balagué Manuel",
@@ -1913,9 +1972,9 @@ function renderJugadorViejo(j,idx){
   var inp=document.createElement('input');inp.type='text';
   inp.placeholder='Agregá tu observación...';
   inp.style.cssText='flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(245,158,11,.35);color:#f8d77a;font-family:inherit;font-size:12px;outline:none;padding:3px 0;cursor:text;';
-  var saved=localStorage.getItem(storageKey);
-  if(saved!==null) inp.value=saved;
-  inp.addEventListener('input',function(){localStorage.setItem(storageKey,this.value);});
+  gpEdLeer(storageKey,function(v){ inp.value=v; },inp);
+  inp.addEventListener('change',function(){ gpEdGuardar(storageKey,this.value); });
+  inp.addEventListener('blur',function(){ gpEdGuardar(storageKey,this.value); });
   inp.addEventListener('click',function(e){e.stopPropagation();});
   libreWrap.appendChild(lapiz);libreWrap.appendChild(inp);
   tac.appendChild(libreWrap);
@@ -2072,7 +2131,8 @@ function gpnEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 
 /* cfg: {cells:{zona:valor}, origins:{zona:peso}, flows:[[oz,dz,peso,rgb]],
         ocol:{zona:[rgb,txt,ink]}, cellCol:{zona:rgb}, cellInk:{zona:hex},
-        focus:'bottom'|'top', fmt, labelIn:{zona:txt}, ramp:{zona:v}, hideVal:[zonas]} */
+        focus:'bottom'|'top', fmt, labelIn:{zona:txt}, ramp:{zona:v}, hideVal:[zonas],
+        cuenta:{zona:n} -> cuantas acciones hay detras del % de esa celda} */
 function gpnCancha(cfg){
   var W=400,ROW=76,PAD=6,GAP=7;
   var down=(cfg.focus!=='top');
@@ -2135,6 +2195,12 @@ function gpnCancha(cfg){
     var lbl=(hide.indexOf(z)>=0)?'·':(v?((cfg.fmt||'%d%')).replace('%d',v):'·');
     S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD/2+9).toFixed(1)+'" text-anchor="middle" font-family="Anton,sans-serif" font-size="25" fill="'+(strong?ink:(v?'#C6D2E0':'#2F3845'))+'">'+lbl+'</text>');
     if(cfg.labelIn&&cfg.labelIn[z]) S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD-10).toFixed(1)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="600" fill="'+(strong?ink:'#C6D2E0')+'">'+gpnEsc(cfg.labelIn[z])+'</text>');
+    /* == CUANTAS ACCIONES SON ESE PORCENTAJE ==============================
+       El numero grande del medio es el % y solo con eso no se sabe sobre
+       cuantas pelotas esta hecho: 44% de 9 remates no es 44% de 60.
+       La cuenta va en la esquina de ABAJO A LA DERECHA, la opuesta a la del
+       numero de zona, asi no se confunde una con la otra. */
+    if(cfg.cuenta&&cfg.cuenta[z]) S.push('<text x="'+(x+cw-9).toFixed(1)+'" y="'+(y+rhD-9).toFixed(1)+'" text-anchor="end" font-family="Barlow Condensed,sans-serif" font-size="12" font-weight="700" fill="'+(strong?ink:'#8494A8')+'" opacity="'+(strong?'.85':'1')+'">'+cfg.cuenta[z]+' acc</text>');
   });});
   S.push('</svg>');
   return S.join('');
@@ -2386,6 +2452,7 @@ function gpnPanel(j,cont,tipo){
     var flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
     var rot={ataque:'Dónde caen sus remates',saque:'Dónde pone sus saques',recepcion:'Dónde se para y de dónde le sacan'}[tipo];
     var svg=gpnCancha({cells:m.cells,origins:m.orig,flows:flows,ocol:ocol,cellSrc:m.src,
+                       cuenta:m.crudo,
                        cellCol:cellCol,cellInk:cellInk,focus:(tipo==='recepcion'?'top':'bottom')});
     zona.innerHTML='<div class="gpn-rot">'+rot+' · <b>'+acc.length+'</b> acciones'
       +(m.conDest<acc.length?(' <span style="color:#5E6B7D">('+(acc.length-m.conDest)+' sin destino)</span>'):'')
@@ -2458,13 +2525,35 @@ function gpnFichaJugador(j,idx){
   var hay=(ana.ataque||[]).length+(ana.saque||[]).length+(ana.recepcion||[]).length;
   if(hay){
     var cl=document.createElement('div'); cl.className='gpn-claves';
-    var h='<div class="gpn-sub" style="margin-bottom:6px">Claves del jugador</div>';
+    var h='<div class="gpn-sub" style="margin-bottom:6px">Claves del jugador <span style="color:#5E6B7D;font-weight:400;letter-spacing:0;text-transform:none">\u00b7 tocá una línea para corregirla</span></div>';
     [['ataque','ATAQUE'],['saque','SAQUE'],['recepcion','RECEPCIÓN']].forEach(function(g){
       var L=ana[g[0]]||[]; if(!L.length) return;
       h+='<div class="gpn-clg">'+g[1]+'</div>';
-      L.forEach(function(p){ h+='<div class="gpn-cli"><span>▸</span><span>'+p+'</span></div>'; });
+      L.forEach(function(p,i){
+        h+='<div class="gpn-cli"><span>▸</span><span class="gpn-cle" contenteditable="true" spellcheck="false"'
+          +' data-k="vb_gp_clave_'+GP_RIVAL_SLUG+'_'+j.num+'_'+g[0]+'_'+i+'"'
+          +' data-auto="'+gpEdAttr(p)+'">'+p+'</span></div>'; });
     });
     cl.innerHTML=h; card.appendChild(cl);
+    /* ══ LAS CLAVES SE PUEDEN CORREGIR ════════════════════════════════
+       El texto lo arma el motor con los numeros, pero el que vio el
+       partido es el entrenador: si una linea no dice lo que tiene que
+       decir, la cambia y lo escrito a mano le gana a lo automatico —para
+       todo el cuerpo tecnico, no solo para el que la escribio.
+
+       Si se borra del todo, vuelve lo automatico: asi no hay forma de
+       quedarse sin la linea por error. */
+    [].forEach.call(cl.querySelectorAll('.gpn-cle'),function(sp){
+      var k=sp.getAttribute('data-k'), auto=sp.getAttribute('data-auto');
+      gpEdLeer(k,function(v){ if(v!=='') sp.innerHTML=v; },sp);
+      sp.addEventListener('focus',function(){ this.style.background='rgba(255,255,255,.06)'; });
+      sp.addEventListener('blur',function(){
+        this.style.background='transparent';
+        var txt=(this.textContent||'').trim();
+        if(!txt){ this.innerHTML=auto; gpEdGuardar(k,''); return; }
+        gpEdGuardar(k,(this.innerHTML===auto)?'':this.innerHTML);
+      });
+    });
   }
 
   /* ── pie: la nota del CT, el bloqueo y el heatmap ── */
@@ -2472,8 +2561,9 @@ function gpnFichaJugador(j,idx){
   var notaKey='vb_jug_'+GP_RIVAL_SLUG+'_'+j.num+'_nota_ct';
   var nw=document.createElement('div'); nw.className='gpn-nota';
   var inp=document.createElement('input'); inp.type='text'; inp.placeholder='La clave de este jugador…';
-  try{ var sv=localStorage.getItem(notaKey); if(sv!==null) inp.value=sv; }catch(e){}
-  inp.addEventListener('input',function(){ try{localStorage.setItem(notaKey,this.value);}catch(e){} });
+  gpEdLeer(notaKey,function(v){ inp.value=v; },inp);
+  inp.addEventListener('change',function(){ gpEdGuardar(notaKey,this.value); });
+  inp.addEventListener('blur',function(){ gpEdGuardar(notaKey,this.value); });
   nw.innerHTML='<span class="gpn-lapiz">✎</span>'; nw.appendChild(inp);
 
   var bq=document.createElement('div'); bq.className='gpn-blq';
@@ -2482,8 +2572,8 @@ function gpnFichaJugador(j,idx){
   [['','— sin definir —'],['read','🖐️ Read'],['call1','☝️ Call 1'],['call2','✌️ Call 2'],
    ['commit','✊️ Commit'],['pin','🤘️ Pin & pin']].forEach(function(o){
     var op=document.createElement('option'); op.value=o[0]; op.textContent=o[1]; sel.appendChild(op); });
-  try{ sel.value=localStorage.getItem(blqKey)||''; }catch(e){}
-  sel.addEventListener('change',function(){ try{localStorage.setItem(blqKey,this.value);}catch(e){} });
+  gpEdLeer(blqKey,function(v){ sel.value=v||''; },sel);
+  sel.addEventListener('change',function(){ gpEdGuardar(blqKey,this.value); });
   bq.innerHTML='<label>Bloqueo</label>'; bq.appendChild(sel);
 
   var hm=document.createElement('a');
@@ -3359,7 +3449,41 @@ function gpCourtSVG(distObj,blqData,rot,sidx){
 // ════════════════ VIDEO: doble clic en zona → reproductor embebido ════════════════
 var GP_ARM_CURSETTER=null;                 // setter actual (lo setea renderRotGrid)
 var GP_VID_FALLBACK={'751238':'1hi9AA9sHKs'}; // links de prueba mientras se completa mapa_videos.js
-var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null,key:'',coach:true,readonly:false,PRE:2,POST:4};
+var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null,key:'',coach:true,readonly:false,PRE:2,POST:4,
+         /* speed: la velocidad elegida · manual: se esta mirando a mano con + y -
+            · fin: el segundo en que termina el clip que se esta viendo */
+         speed:1,manual:false,fin:0};
+
+/* == LA VELOCIDAD DE REPRODUCCION ======================================
+   La misma que tiene plan de partido. El reproductor se vuelve a crear en
+   cada clip y YouTube arranca siempre en 1x, asi que la velocidad elegida
+   se guarda y se vuelve a poner cada vez que el video queda listo. Queda
+   guardada en el telefono para no tener que elegirla de nuevo. */
+function gpVidPonerVel(){
+  try{ if(gpV.player&&gpV.player.setPlaybackRate) gpV.player.setPlaybackRate(gpV.speed); }catch(e){}
+}
+function gpVidSetVel(v){
+  var n=parseFloat(v); if(!(n>0)) n=1;
+  gpV.speed=n;
+  try{ localStorage.setItem('vb_gp_vid_vel',String(n)); }catch(e){}
+  gpVidPonerVel();
+}
+
+/* == MOVER EL VIDEO CON + Y - ==========================================
+   Dos segundos para adelante con la tecla + y dos para atras con la tecla
+   -, que es lo que hace falta para repetir una accion sin ir a buscarla
+   con el mouse. Andan las dos del teclado comun y las del numerico. */
+function gpVidMover(seg){
+  if(!gpV.player||!gpV.player.getCurrentTime||!gpV.player.seekTo) return;
+  var t0;
+  try{ t0=gpV.player.getCurrentTime(); }catch(e){ return; }
+  if(typeof t0!=='number') return;
+  var nuevo=Math.max(0,t0+seg);
+  gpV.manual=true;                 /* ver gpVidPlayAt: frena el salto solo */
+  try{ gpV.player.seekTo(nuevo,true); }catch(e){}
+  var n=document.getElementById('gpVidNow');
+  if(n) n.textContent=(seg>0?'+':'\u2212')+Math.abs(seg)+' seg \u00b7 '+nuevo.toFixed(1)+'s';
+}
 
 function gpYtId(u){ if(!u) return ''; u=String(u); var m=u.match(/(?:v=|youtu\.be\/|embed\/)([A-Za-z0-9_-]{11})/); return m?m[1]:(u.length===11?u:''); }
 function gpVidUrl(code){ var M=window.MAPA_VIDEOS||{}; return gpYtId(M[code]||GP_VID_FALLBACK[code]||''); }
@@ -3418,6 +3542,11 @@ function gpVidDom(){
    +'<button id="gpVidPlay" style="background:#22c55e;color:#04210f;border:none;font-weight:800;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit">▶ Reproducir</button>'
    +'<button id="gpVidPrev" style="border:1px solid #243044;background:#16212f;color:#e2e8f0;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer">◀</button>'
    +'<button id="gpVidNext" style="border:1px solid #243044;background:#16212f;color:#e2e8f0;font-weight:700;padding:8px 12px;border-radius:8px;cursor:pointer">▶</button>'
+   +'<label style="display:flex;align-items:center;gap:5px;color:#7689a1;font-size:11px;font-weight:800;letter-spacing:.08em">VEL'
+   +'<select id="gpVidVel" style="background:#16212f;color:#e2e8f0;border:1px solid #243044;border-radius:8px;padding:7px 8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">'
+   +'<option value="0.25">0.25\u00d7</option><option value="0.5">0.5\u00d7</option><option value="0.75">0.75\u00d7</option>'
+   +'<option value="1" selected>1\u00d7</option><option value="1.5">1.5\u00d7</option><option value="2">2\u00d7</option></select></label>'
+   +'<span style="color:#55657a;font-size:11px;letter-spacing:.3px">+ / \u2212 mueven el video 2 seg</span>'
    +'<span id="gpVidNow" style="color:#7689a1;font-size:12px"></span></div>'
    +'<div id="gpVidList" style="max-height:240px;overflow:auto;border-top:1px solid #1f2c3d"></div>'
    +'<button id="gpVidSave" style="margin-top:10px;width:100%;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
@@ -3431,12 +3560,37 @@ function gpVidDom(){
   document.getElementById('gpVidPrev').onclick=function(){ gpVidNav(-1); };
   document.getElementById('gpVidNext').onclick=function(){ gpVidNav(1); };
   document.getElementById('gpVidSave').onclick=gpVidSaveFn;
+  var vsel=document.getElementById('gpVidVel');
+  if(vsel){
+    try{
+      var gv=parseFloat(localStorage.getItem('vb_gp_vid_vel'));
+      /* solo si es una de las que estan en la lista: con un valor raro el
+         desplegable queda en blanco */
+      if(gv>0&&vsel.querySelector('option[value="'+gv+'"]')){ gpV.speed=gv; vsel.value=String(gv); }
+    }catch(e){}
+    vsel.onchange=function(){ gpVidSetVel(this.value); };
+  }
+  /* Las teclas + y -, solo con el reproductor abierto y sin estar escribiendo
+     en un campo (los de antes/despues son numericos y ahi el + es texto). */
+  if(!window.__gpVidTeclas){
+    window.__gpVidTeclas=1;
+    document.addEventListener('keydown',function(e){
+      var o=document.getElementById('gpVidOverlay');
+      if(!o||o.style.display==='none'||o.style.display==='') return;
+      if(e.ctrlKey||e.altKey||e.metaKey) return;
+      var tg=(e.target&&e.target.tagName)||'';
+      if(tg==='INPUT'||tg==='SELECT'||tg==='TEXTAREA'||(e.target&&e.target.isContentEditable)) return;
+      var k=e.key;
+      if(k==='+'||k==='='||k==='Add'){ e.preventDefault(); gpVidMover(2); }
+      else if(k==='-'||k==='_'||k==='Subtract'){ e.preventDefault(); gpVidMover(-2); }
+    });
+  }
   // cargar YouTube API una sola vez
   if(!window.YT){ var s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
 }
 function gpVidEnsurePlayer(cb){
   if(gpV.player&&gpV.ready){ cb(); return; }
-  function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; cb(); },onError:function(e){ gpVidErr(e.data); }}}); }
+  function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; gpVidPonerVel(); cb(); },onStateChange:function(ev){ if(ev&&ev.data===1) gpVidPonerVel(); },onError:function(e){ gpVidErr(e.data); }}}); }
   if(window.YT&&window.YT.Player){ if(!gpV.player) mk(); else cb(); }
   else { var iv=setInterval(function(){ if(window.YT&&window.YT.Player){ clearInterval(iv); if(!gpV.player) mk(); else cb(); } },120); }
 }
@@ -3509,10 +3663,16 @@ function gpVidPlayAt(i){
   if(!vid){ gpVidErr(0); gpVidRender(); return; }
   gpVidEnsurePlayer(function(){
     var start=Math.max(0,c.t_start-gpV.PRE), end=c.t_atk+gpV.POST;
+    gpV.fin=end; gpV.manual=false;
     gpV.player.loadVideoById({videoId:vid,startSeconds:start});
+    gpVidPonerVel();
     gpV.playing=true; document.getElementById('gpVidPlay').textContent='⏸ Pausar';
     clearInterval(gpV.timer);
-    gpV.timer=setInterval(function(){ if(gpV.player&&gpV.player.getCurrentTime&&gpV.player.getCurrentTime()>=end){ gpVidNext(); } },150);
+    /* Mientras se esta mirando a mano con + y -, el salto automatico al clip
+       siguiente queda en pausa: si no, alcanzaba con adelantar dos segundos
+       cerca del final para que el video se fuera solo al ataque que venia.
+       Vuelve a andar al pasar de clip con los botones. */
+    gpV.timer=setInterval(function(){ if(gpV.manual) return; if(gpV.player&&gpV.player.getCurrentTime&&gpV.player.getCurrentTime()>=gpV.fin){ gpVidNext(); } },150);
     gpVidRender();
   });
 }
@@ -4141,7 +4301,17 @@ function renderArmador(){
           sel.style.cssText='background:rgba(255,255,255,.03);border:1px solid rgba(129,140,248,.12);border-radius:4px;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:4px 2px;width:100%;cursor:pointer;text-align:center;text-align-last:center';
           var BLQ_OPTS=[{v:'',l:'— Sin definir —'},{v:'1BLQ',l:'\u261d Opción 1'},{v:'2BLQ',l:'\u270c Opción 2'},{v:'CIERRE',l:'\u270a Colgado'},{v:'LECTURA',l:'\ud83d\udd90 Lectura'},{v:'CUERNO',l:'\ud83e\udd18 Punta y Punta'},{v:'6-5',l:'6-5'},{v:'6-1',l:'6-1'}];
           BLQ_OPTS.forEach(function(op){ var o=document.createElement('option');o.value=op.v;o.textContent=op.l; if(op.v===blqState[key][side.k])o.selected=true; sel.appendChild(o); });
-          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; cvW.innerHTML=gpnArmGrid(dd,blqState[key],pos,setterIdx); });
+          /* ══ LAS OPCIONES DE BLOQUEO SE GUARDAN ══════════════════════
+             Vivian solo en la memoria de la pagina: al recargar se perdian
+             y el asistente nunca las veia. Van al paquete del rival, igual
+             que el resto. */
+          var blqRotKey='vb_gp_blqrot_'+GP_RIVAL_SLUG+'_'+setterIdx+'_'+key+'_'+side.k;
+          gpEdLeer(blqRotKey,function(v){
+            blqState[key][side.k]=v||'';
+            sel.value=v||'';
+            try{ cvW.innerHTML=gpnArmGrid(dd,blqState[key],pos,setterIdx); }catch(e){}
+          },sel);
+          sel.addEventListener('change',function(){ blqState[key][side.k]=sel.value; gpEdGuardar(blqRotKey,sel.value); cvW.innerHTML=gpnArmGrid(dd,blqState[key],pos,setterIdx); });
           col2.appendChild(sl); col2.appendChild(sel); blqRow.appendChild(col2);
         });
         card.appendChild(blqRow);
@@ -4151,9 +4321,10 @@ function renderArmador(){
         notaWrap.style.cssText='border-top:1px solid rgba(129,140,248,.12);background:rgba(129,140,248,.05)';
         var notaInp=document.createElement('input');
         notaInp.type='text'; notaInp.placeholder='✍️ Anotá algo…';
-        try{ notaInp.value=localStorage.getItem(notaKey)||''; }catch(e){}
+        gpEdLeer(notaKey,function(v){ notaInp.value=v||''; },notaInp);
         notaInp.style.cssText='width:100%;box-sizing:border-box;background:transparent;border:none;color:#e2e8f0;font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;padding:6px 8px;text-align:center;outline:none';
-        notaInp.addEventListener('input',function(){ try{ localStorage.setItem(notaKey,this.value); }catch(e){} });
+        notaInp.addEventListener('change',function(){ gpEdGuardar(notaKey,this.value); });
+        notaInp.addEventListener('blur',function(){ gpEdGuardar(notaKey,this.value); });
         notaWrap.appendChild(notaInp); card.appendChild(notaWrap);
         var stRow=document.createElement('div');
         stRow.style.cssText='display:flex;border-top:1px solid var(--border)';
@@ -4661,9 +4832,9 @@ function renderJuego(){
         span.contentEditable='true';
         span.style.cssText='font-size:15px;color:#dbe4f0;line-height:1.5;flex:1;outline:none;border-radius:4px;padding:2px 4px;transition:background .15s';
         span.addEventListener('focus',function(){this.style.background='rgba(255,255,255,.06)';});
-        span.addEventListener('blur',function(){this.style.background='transparent';try{localStorage.setItem(k,this.innerHTML);}catch(e){}});
-        var saved=null; try{saved=localStorage.getItem(k);}catch(e){}
-        span.innerHTML=(saved!==null&&saved!=='')?saved:t;
+        span.addEventListener('blur',function(){this.style.background='transparent'; gpEdGuardar(k,this.innerHTML);});
+        span.innerHTML=t;
+        gpEdLeer(k,function(v){ if(v!=='') span.innerHTML=v; },span);
         row.appendChild(bullet);row.appendChild(span);
         jb.appendChild(row);
         idx++;
@@ -4677,9 +4848,8 @@ function renderJuego(){
     var fk=GP_RIVAL_SLUG+'_jc_'+cardKey+'_libre';
     freeInp.contentEditable='true';
     freeInp.style.cssText='font-size:15px;color:#f8d77a;line-height:1.5;flex:1;outline:none;min-height:20px';
-    var fsv=null;try{fsv=localStorage.getItem(fk);}catch(e){}
-    if(fsv) freeInp.innerHTML=fsv;
-    freeInp.addEventListener('blur',function(){try{localStorage.setItem(fk,this.innerHTML);}catch(e){}});
+    gpEdLeer(fk,function(v){ freeInp.innerHTML=v||''; },freeInp);
+    freeInp.addEventListener('blur',function(){ gpEdGuardar(fk,this.innerHTML); });
     freeRow.appendChild(lapiz);freeRow.appendChild(freeInp);
     jb.appendChild(freeRow);
     return card;
@@ -5438,9 +5608,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261015-1635"></script>
-<script src="ayuda.js?v=20261015-1635"></script>
-<script src="volver_inicio.js?v=20261015-1635" defer></script>
+<script src="temporadas_menu.js?v=20261015-1651"></script>
+<script src="ayuda.js?v=20261015-1651"></script>
+<script src="volver_inicio.js?v=20261015-1651" defer></script>
 </body>
 </html>
 
