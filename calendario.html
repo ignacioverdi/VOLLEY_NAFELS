@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261015-2351"></script>
-<script src="selector_categoria.js?v=20261015-2351"></script>
-<script src="datos_seguros.js?v=20261015-2351"></script>
-<script src="firebase.js?v=20261015-2351" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261015-2351"></script>
+<script src="categorias_club.js?v=20261016-0007"></script>
+<script src="selector_categoria.js?v=20261016-0007"></script>
+<script src="datos_seguros.js?v=20261016-0007"></script>
+<script src="firebase.js?v=20261016-0007" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261016-0007"></script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
      los botones y los desplegables salen en Arial. */
@@ -214,14 +214,14 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20261015-2351">
+<link rel="stylesheet" href="movil.css?v=20261016-0007">
 <!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
      para todos los datos de equipo, en un solo lugar. -->
 
 
-<script src="iconos.js?v=20261015-2351" defer></script>
+<script src="iconos.js?v=20261016-0007" defer></script>
 
-<script src="nav.js?v=20261015-2351" defer></script>
+<script src="nav.js?v=20261016-0007" defer></script>
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -269,6 +269,7 @@
   <span data-t="📦 Archivar la temporada">📦 Archivar la temporada</span></button>
 <button class="add-btn" id="add-btn" onclick="openForm()" data-solo-editor data-t="+ Agregar"><span data-t="+ Agregar">+ Agregar</span></button>
     <button class="import-btn" id="import-btn" onclick="importFixture()" data-solo-editor data-t="⬇️ Importar fixture 2026/27"><span data-t="⬇️ Importar fixture 2026/27">⬇️ Importar fixture 2026/27</span></button>
+    <button class="import-btn" id="recuperar-btn" onclick="recuperarDelRespaldo()" data-solo-editor data-t="♻️ Recuperar del respaldo"><span data-t="♻️ Recuperar del respaldo">♻️ Recuperar del respaldo</span></button>
     <button class="import-btn" id="import-gym-btn" onclick="importGym()" data-solo-editor style="display:none" data-t="🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)"><span data-t="🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)">🏋️ Gimnasio (Lun/Mié/Vie · sep–abr)</span></button>
     <button class="import-btn" id="import-xmas-btn" onclick="importHolidays()" data-solo-editor style="display:none" data-t="🎄 Christmas Holidays (20–25 dic)"><span data-t="🎄 Christmas Holidays (20–25 dic)">🎄 Christmas Holidays (20–25 dic)</span></button>
     <button class="import-btn" id="import-volley-btn" onclick="importVolley()" data-solo-editor style="display:none" data-t="🏐 Vóley (01/09 – 30/04, sin vacaciones)"><span data-t="🏐 Vóley (01/09 – 30/04, sin vacaciones)">🏐 Vóley (01/09 – 30/04, sin vacaciones)</span></button>
@@ -521,6 +522,80 @@ var FIXTURE_PRIMERA=[
     render();
     alert(added+' partido(s) agregado(s)'+(added<FIXTURE.length?'. '+(FIXTURE.length-added)+' ya estaban cargados.':'.'));
   }
+  /* ══ VOLVER A PONER LO QUE SE PERDIO ═══════════════════════════════════
+     Los respaldos diarios de Firebase tienen el calendario de cada dia.
+     RECUPERAR_CALENDARIO.py los abre en la computadora del club —ahi esta
+     la llave— y deja calendario_respaldo.js con todos los partidos que
+     alguna vez estuvieron, cada uno en su version mas nueva: con la hora,
+     el lugar y el mapa que se habian escrito a mano.
+
+     Aca se compara con lo que hay hoy y se vuelve a poner SOLO lo que
+     falta. No se borra ni se cambia ni un partido de los que estan.
+
+     La escritura la hace esta pagina, con la sesion del que la abrio: no
+     hay ninguna clave de Firebase dando vueltas en la carpeta.          */
+  function recuperarDelRespaldo(){
+    if(window.VB_esEditor && !VB_esEditor()) return;
+    if(!window.CAL_RESPALDO){
+      var sc=document.createElement('script');
+      sc.src='calendario_respaldo.js?v='+Date.now();
+      sc.onload=function(){ recuperarDelRespaldo(); };
+      sc.onerror=function(){
+        alert('No encontré calendario_respaldo.js.\n\n' +
+              'Corré RECUPERAR_CALENDARIO.bat en la carpeta del club y publicá.');
+      };
+      document.head.appendChild(sc);
+      return;
+    }
+    var R = window.CAL_RESPALDO || {}, delResp = (R.partidos || []);
+    if(!delResp.length){ alert('El archivo del respaldo vino vacío.'); return; }
+    var arr = (data.partidos || []).slice();
+    function k(x){ return (x.fecha||'')+'|'+(x.rival||'')+'|'+(x.condicion||x.cond||''); }
+    var tengo = {}; arr.forEach(function(x){ tengo[k(x)] = 1; });
+    var faltan = delResp.filter(function(x){ return !tengo[k(x)]; });
+    if(!faltan.length){
+      alert('No falta nada.\n\nTodo lo que hay en los respaldos (del ' +
+            (R.desde||'?') + ' al ' + (R.hasta||'?') + ') ya está en el calendario.');
+      return;
+    }
+    var hoy = new Date().toISOString().slice(0,10);
+    var porvenir = faltan.filter(function(x){ return (x.fecha||'') >= hoy; });
+    var pasados  = faltan.filter(function(x){ return (x.fecha||'') <  hoy; });
+    function linea(x){
+      return '  ' + (x.fecha||'') + ' ' + (x.hora||'--:--') + '  ' + (x.rival||'?') +
+             ' (' + (x.condicion||x.cond||'') + ')' + (x.lugar ? (' · ' + x.lugar) : '');
+    }
+    var elegidos = porvenir;
+    if(!porvenir.length){
+      if(!pasados.length) return;
+      if(!confirm('De lo que falta no hay nada por jugar: son ' + pasados.length +
+                  ' partido(s) ya jugado(s).\n\n' + pasados.map(linea).join('\n') +
+                  '\n\n¿Los pongo igual?')) return;
+      elegidos = pasados;
+    } else {
+      if(!confirm('Faltan ' + porvenir.length + ' partido(s) por jugar que sí están en el respaldo:\n\n' +
+                  porvenir.map(linea).join('\n') +
+                  '\n\n¿Los vuelvo a poner, con su hora y su lugar?\n' +
+                  'No se borra ni se cambia nada de lo que ya está.')) return;
+      if(pasados.length && confirm('También faltan ' + pasados.length +
+                  ' partido(s) ya jugado(s):\n\n' + pasados.map(linea).join('\n') +
+                  '\n\n¿Los pongo también?')) elegidos = porvenir.concat(pasados);
+    }
+    var usados = {}; arr.forEach(function(x){ if(x.id != null) usados[String(x.id)] = 1; });
+    elegidos.forEach(function(x){
+      var q = {}; for(var c in x) q[c] = x[c];
+      if(q.id == null || usados[String(q.id)]) q.id = Date.now() + Math.floor(Math.random()*100000);
+      usados[String(q.id)] = 1;
+      arr.push(q);
+    });
+    arr.sort(function(a,b){ return (a.fecha||'') < (b.fecha||'') ? -1 : 1; });
+    data.partidos = arr;
+    fbSet('calendario/partidos', arr);
+    render();
+    alert('Listo: volvieron ' + elegidos.length + ' partido(s).\n' +
+          'El calendario quedó con ' + arr.length + '.');
+  }
+
   // ── Importar sesiones de gimnasio: Lun/Mié/Vie de sep–dic 2026, 10:00–11:45, Welcome Fitness ──
   function importGym(){ if(window.VB_esEditor&&!VB_esEditor())return;
     if(!confirm('¿Agregar las sesiones de gimnasio (Lun/Mié/Vie de sep 2026 – abr 2027, 10:00–11:45) al calendario?')) return;
@@ -1048,7 +1123,7 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20261015-2351" onerror="void 0"></script>
+<script src="lang.js?v=20261016-0007" onerror="void 0"></script>
 <script>
 /* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
    El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
@@ -1208,8 +1283,8 @@ window.temporadaAlCalendario = function(){
   else setTimeout(poner, 300);
 })();
 </script>
-<script src="ayuda.js?v=20261015-2351"></script>
-<script src="volver_inicio.js?v=20261015-2351" defer></script>
+<script src="ayuda.js?v=20261016-0007"></script>
+<script src="volver_inicio.js?v=20261016-0007" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
