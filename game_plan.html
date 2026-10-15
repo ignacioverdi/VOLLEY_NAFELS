@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261015-2307"></script>
-<script src="selector_categoria.js?v=20261015-2307"></script>
-<script src="objetivos_config.js?v=20261015-2307"></script>
+<script src="categorias_club.js?v=20261015-2316"></script>
+<script src="selector_categoria.js?v=20261015-2316"></script>
+<script src="objetivos_config.js?v=20261015-2316"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -445,7 +445,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261015-2307" onerror="void 0"></script>
+<script src="lang.js?v=20261015-2316" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -456,7 +456,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261015-2307"></script>
+<script src="datos_seguros.js?v=20261015-2316"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -469,15 +469,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261015-2307" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261015-2307"></script>
-<script src="videos.js?v=20261015-2307" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261015-2316" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261015-2316"></script>
+<script src="videos.js?v=20261015-2316" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261015-2307">
+<link rel="stylesheet" href="movil.css?v=20261015-2316">
 
-<script src="iconos.js?v=20261015-2307" defer></script>
+<script src="iconos.js?v=20261015-2316" defer></script>
 </head>
 <body>
 
@@ -3577,7 +3577,7 @@ function gpVidDom(){
    +'<b id="gpVidTitle" style="font-size:16px;color:#e2e8f0;font-family:Barlow,sans-serif">Reproductor</b>'
    +'<div style="display:flex;gap:6px"><button id="gpVidMax" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">⛶ Maximizar</button>'
    +'<button id="gpVidClose" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div></div>'
-   +'<div id="gpVidWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:11px;overflow:hidden;margin-bottom:10px"><div id="gpVidPlayer" style="width:100%;height:100%"></div></div>'
+   +'<div id="gpVidWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:11px;overflow:hidden;margin-bottom:10px"></div>'
    +'<div id="gpVidChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>'
    +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap">'
    +'<button id="gpVidPlay" style="background:#22c55e;color:#04210f;border:none;font-weight:800;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit">▶ Reproducir</button>'
@@ -3587,7 +3587,7 @@ function gpVidDom(){
    +'<select id="gpVidVel" style="background:#16212f;color:#e2e8f0;border:1px solid #243044;border-radius:8px;padding:7px 8px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">'
    +'<option value="0.25">0.25\u00d7</option><option value="0.5">0.5\u00d7</option><option value="0.75">0.75\u00d7</option>'
    +'<option value="1" selected>1\u00d7</option><option value="1.5">1.5\u00d7</option><option value="2">2\u00d7</option></select></label>'
-   +'<span style="color:#55657a;font-size:11px;letter-spacing:.3px">+ / \u2212 mueven el video 2 seg</span>'
+   +'<span style="color:#55657a;font-size:11px;letter-spacing:.3px">+ / \u2212 mueven el video 2 seg \u00b7 clic en el video = pausa</span>'
    +'<span id="gpVidNow" style="color:#7689a1;font-size:12px"></span></div>'
    +'<div id="gpVidList" style="max-height:240px;overflow:auto;border-top:1px solid #1f2c3d"></div>'
    +'<button id="gpVidSave" style="margin-top:10px;width:100%;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
@@ -3597,6 +3597,7 @@ function gpVidDom(){
   d.addEventListener('click',function(e){ if(e.target===d) gpVidCloseFn(); });
   document.getElementById('gpVidClose').onclick=gpVidCloseFn;
   document.getElementById('gpVidMax').onclick=function(){ var w=document.getElementById('gpVidWrap'); if(!document.fullscreenElement){ w.requestFullscreen&&w.requestFullscreen(); } else { document.exitFullscreen&&document.exitFullscreen(); } };
+  gpVidHueco();
   document.getElementById('gpVidPlay').onclick=gpVidToggle;
   document.getElementById('gpVidPrev').onclick=function(){ gpVidNav(-1); };
   document.getElementById('gpVidNext').onclick=function(){ gpVidNav(1); };
@@ -3629,20 +3630,54 @@ function gpVidDom(){
   // cargar YouTube API una sola vez
   if(!window.YT){ var s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
 }
+/* ══ LA TAPA QUE SE QUEDA CON LOS CLICS DEL VIDEO ════════════════════════
+   El video es un iframe de YouTube. Un clic ahi adentro lo maneja YouTube:
+   pausa por su cuenta —y nosotros ni nos enteramos— y ademas se lleva el
+   teclado, asi que el + y el - dejaban de andar. Para el entrenador la
+   pantalla quedaba trabada: tocaba el video y ya no podia ni seguir, ni
+   volver, ni mover.
+
+   Encima del iframe va una tapa transparente. Los clics son NUESTROS: hacen
+   pausa/continuar con la misma funcion que el boton de abajo, el teclado se
+   queda en la pagina y el + y el - siguen andando. No se pierde nada: los
+   controles de YouTube estan apagados (controls:0) desde siempre. */
+function gpVidHueco(){
+  var w=document.getElementById('gpVidWrap');
+  if(!w) return;
+  w.innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>'
+    +'<div id="gpVidCapa" title="Pausar / continuar" style="position:absolute;inset:0;cursor:pointer;background:transparent"></div>';
+  var c=document.getElementById('gpVidCapa');
+  if(c) c.onclick=function(e){ e.stopPropagation(); gpVidToggle(); };
+}
+
+/* ══ EL BOTON DICE LO QUE EL VIDEO ESTA HACIENDO DE VERDAD ═══════════════
+   gpV.playing era lo que NOSOTROS creiamos. Si el video se pausaba por otro
+   lado, seguiamos creyendo que andaba, y entonces "Reproducir" lo unico que
+   hacia era pausar algo que ya estaba pausado. Ahora lo manda YouTube: cada
+   vez que el reproductor cambia de estado, el boton se acomoda. */
+function gpVidPlaying(on){
+  gpV.playing=!!on;
+  var b=document.getElementById('gpVidPlay');
+  if(b) b.textContent=on?'\u23f8 Pausar':'\u25b6 Reproducir';
+}
+
 function gpVidEnsurePlayer(cb){
   if(gpV.player&&gpV.ready){ cb(); return; }
   /* el hueco donde vive el reproductor, por si se lo llevo un mensaje de error */
-  var _w=document.getElementById('gpVidWrap');
-  if(_w && !document.getElementById('gpVidPlayer')) _w.innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
-  function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; gpVidPonerVel(); cb(); },onStateChange:function(ev){ if(ev&&ev.data===1) gpVidPonerVel(); },onError:function(e){ gpVidErr(e.data); }}}); }
+  if(!document.getElementById('gpVidPlayer')) gpVidHueco();
+  function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; gpVidPonerVel(); cb(); },onStateChange:function(ev){
+    if(!ev) return;
+    /* 1 reproduciendo · 2 en pausa · 0 termino el video */
+    if(ev.data===1){ gpVidPonerVel(); gpVidPlaying(true); }
+    else if(ev.data===2||ev.data===0){ gpVidPlaying(false); }
+  },onError:function(e){ gpVidErr(e.data); }}}); }
   if(window.YT&&window.YT.Player){ if(!gpV.player) mk(); else cb(); }
   else { var iv=setInterval(function(){ if(window.YT&&window.YT.Player){ clearInterval(iv); if(!gpV.player) mk(); else cb(); } },120); }
 }
 /* Tira abajo el reproductor para que el proximo clip lo arme de nuevo. */
 function gpVidReset(){
   gpV.player=null; gpV.ready=false; gpV.vid='';
-  var w=document.getElementById('gpVidWrap');
-  if(w) w.innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
+  gpVidHueco();
 }
 function gpVidErr(code){
   var local=(location.protocol==='file:');
@@ -3703,7 +3738,24 @@ function gpVidRender(){
   hint.textContent=gpV.coach?'Tildá los ataques que querés y guardá: el equipo verá solo esos. (El jugador, si no guardaste nada, ve todos.)':(gpV.readonly?'Secuencia preparada por el entrenador.':'El entrenador todavía no preparó esta zona — los ves todos.');
 }
 function gpVidSelected(){ return gpV.list.filter(function(c){ return c._sel; }); }
-function gpVidToggle(){ if(gpV.playing){ gpVidStop(); } else { var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; } gpVidPlayAt(gpV.list.indexOf(s[0])); } }
+/* ══ PAUSAR Y CONTINUAR, NO EMPEZAR DE NUEVO ═════════════════════════════
+   Con un clip abierto el boton (y la tapa del video) pausan y continuan ESE
+   clip. Antes, apretar "Reproducir" se iba siempre al PRIMERO de la
+   secuencia: se perdia donde estabas, y si el video estaba pausado por fuera
+   lo unico que hacia era pausar otra vez.
+   Solo cuando no hay nada abierto arranca la secuencia desde el principio. */
+function gpVidToggle(){
+  if(gpV.idx>=0 && gpV.player && gpV.player.getPlayerState){
+    var st=-1; try{ st=gpV.player.getPlayerState(); }catch(e){}
+    if(st===1||st===3){ try{ gpV.player.pauseVideo(); }catch(e){} gpVidPlaying(false); }
+    else { gpV.manual=false;            /* al continuar, vuelve el salto solo */
+           try{ gpV.player.playVideo(); }catch(e){} gpVidPlaying(true); }
+    return;
+  }
+  var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);});
+  if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; }
+  gpVidPlayAt(gpV.list.indexOf(s[0]));
+}
 /* ══ PASAR DE UN CLIP AL OTRO SIN REHACER EL REPRODUCTOR ═══════════════════
    Antes, en CADA clip se tiraba abajo el iframe de YouTube y se construia uno
    nuevo de cero: hay que volver a bajar el reproductor, volver a abrir el
@@ -3738,7 +3790,7 @@ function gpVidPlayAt(i){
       gpVidReset(); gpVidRender(); return;
     }
     gpVidPonerVel();
-    gpV.playing=true; document.getElementById('gpVidPlay').textContent='⏸ Pausar';
+    gpVidPlaying(true);
     clearInterval(gpV.timer);
     /* Mientras se esta mirando a mano con + y -, el salto automatico al clip
        siguiente queda en pausa: si no, alcanzaba con adelantar dos segundos
@@ -3753,8 +3805,10 @@ function gpVidNext(){
   if(k>=0&&k+1<pool.length){ gpVidPlayAt(gpV.list.indexOf(pool[k+1])); } else { gpVidStop(true); }
 }
 function gpVidNav(d){ var vis=gpVidVisible(); var cur=gpV.list[gpV.idx]; var k=vis.indexOf(cur); var n=k+d; if(n<0||n>=vis.length) return; gpVidPlayAt(gpV.list.indexOf(vis[n])); }
-function gpVidStop(done){ clearInterval(gpV.timer); gpV.playing=false; var p=document.getElementById('gpVidPlay'); if(p)p.textContent='▶ Reproducir'; if(gpV.player&&gpV.player.pauseVideo) gpV.player.pauseVideo(); if(done){ var n=document.getElementById('gpVidNow'); if(n)n.textContent='Fin de la secuencia'; } }
-function gpVidCloseFn(){ gpVidStop(); var o=document.getElementById('gpVidOverlay'); if(o)o.style.display='none'; if(gpV.player&&gpV.player.stopVideo) gpV.player.stopVideo(); }
+function gpVidStop(done){ clearInterval(gpV.timer); gpVidPlaying(false); if(gpV.player&&gpV.player.pauseVideo){ try{ gpV.player.pauseVideo(); }catch(e){} } if(done){ var n=document.getElementById('gpVidNow'); if(n)n.textContent='Fin de la secuencia'; } }
+/* Al cerrar se PAUSA, no se descarga el video: si se vuelve a abrir la misma
+   secuencia arranca al toque en vez de bajar todo de nuevo. */
+function gpVidCloseFn(){ gpVidStop(); var o=document.getElementById('gpVidOverlay'); if(o)o.style.display='none'; }
 function gpVidSaveFn(){
   var sel=gpVidSelected();
   var keys=sel.map(function(c){ return c._key; });
@@ -5680,9 +5734,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261015-2307"></script>
-<script src="ayuda.js?v=20261015-2307"></script>
-<script src="volver_inicio.js?v=20261015-2307" defer></script>
+<script src="temporadas_menu.js?v=20261015-2316"></script>
+<script src="ayuda.js?v=20261015-2316"></script>
+<script src="volver_inicio.js?v=20261015-2316" defer></script>
 </body>
 </html>
 
