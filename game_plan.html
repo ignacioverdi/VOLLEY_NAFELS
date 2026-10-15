@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261015-1657"></script>
-<script src="selector_categoria.js?v=20261015-1657"></script>
-<script src="objetivos_config.js?v=20261015-1657"></script>
+<script src="categorias_club.js?v=20261015-2304"></script>
+<script src="selector_categoria.js?v=20261015-2304"></script>
+<script src="objetivos_config.js?v=20261015-2304"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -445,7 +445,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261015-1657" onerror="void 0"></script>
+<script src="lang.js?v=20261015-2304" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -456,7 +456,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261015-1657"></script>
+<script src="datos_seguros.js?v=20261015-2304"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -469,15 +469,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261015-1657" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261015-1657"></script>
-<script src="videos.js?v=20261015-1657" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261015-2304" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261015-2304"></script>
+<script src="videos.js?v=20261015-2304" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261015-1657">
+<link rel="stylesheet" href="movil.css?v=20261015-2304">
 
-<script src="iconos.js?v=20261015-1657" defer></script>
+<script src="iconos.js?v=20261015-2304" defer></script>
 </head>
 <body>
 
@@ -2251,11 +2251,21 @@ function gpnVideo(num,tipo,cat,ev){
   document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(catTxt?(' · '+catTxt):'')+(evTxt?(' · '+evTxt):'')+' — '+clips.length+' acciones';
   document.getElementById('gpVidOverlay').style.display='flex';
   try{ gpnTiempos(); }catch(e){}
-  clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; c._sel=true; });
-  gpV.readonly=false;
-  gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
-  gpV.ev=null; gpV.idx=-1;
-  gpVidRender();
+  clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
+  /* ══ LA SECUENCIA GUARDADA ══════════════════════════════════════════
+     Esto faltaba: la ficha del jugador GUARDABA la seleccion pero no la
+     volvia a leer nunca, asi que al reabrir el reproductor aparecian los
+     clips todos tildados otra vez y parecia que no se guardaba nada. El
+     reproductor del armador si lo hacia; ahora los dos hacen lo mismo. */
+  var aplicar=function(guardado){
+    var habia=gpSelAplicar(clips,guardado);
+    gpV.readonly=false;
+    if(!gpV.coach && habia){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; }
+    gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
+    gpV.ev=null; gpV.idx=-1;
+    gpVidRender();
+  };
+  if(typeof fbGet==='function'){ fbGet(gpSelRuta(),aplicar); } else { aplicar(null); }
 }
 
 /* ── los filtros, con la misma escala que plan de partido ── */
@@ -3452,7 +3462,38 @@ var GP_VID_FALLBACK={'751238':'1hi9AA9sHKs'}; // links de prueba mientras se com
 var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null,key:'',coach:true,readonly:false,PRE:2,POST:4,
          /* speed: la velocidad elegida · manual: se esta mirando a mano con + y -
             · fin: el segundo en que termina el clip que se esta viendo */
-         speed:1,manual:false,fin:0};
+         /* vid: que video de YouTube tiene cargado AHORA el reproductor.
+            Sirve para no volver a cargarlo cuando el clip siguiente es del
+            mismo partido: ahi alcanza con mover la aguja. */
+         speed:1,manual:false,fin:0,vid:''};
+
+/* ══ LO TILDADO, MIENTRAS DURA LA PAGINA ════════════════════════════════
+   Cada vez que se abre el reproductor la lista de clips se arma de cero.
+   Lo que el entrenador habia tildado y todavia no guardo se perdia apenas
+   cambiaba de fundamento —de ataque a saque y vuelta— o cerraba y volvia a
+   abrir: parecia que la pantalla se olvidaba de todo.
+
+   Se recuerda en memoria por secuencia (jugador + fundamento + filtros).
+   Lo de la memoria manda sobre lo guardado en Firebase, porque es lo ultimo
+   que hizo. Al recargar la pagina se pierde, y esta bien: lo que tiene que
+   sobrevivir de verdad es lo que se GUARDA con el boton de abajo. */
+var GP_SEL={};
+function gpSelRecordar(){
+  if(!gpV.key) return;
+  var m=GP_SEL[gpV.key]={};
+  gpV.list.forEach(function(c){ m[c._key]=!!c._sel; });
+}
+/* Pone el tilde de cada clip y dice si habia algo guardado. */
+function gpSelAplicar(clips,guardado){
+  var mem=GP_SEL[gpV.key], set=null;
+  if(guardado&&guardado.length){ set={}; guardado.forEach(function(k){ set[k]=1; }); }
+  clips.forEach(function(c){
+    if(mem && mem[c._key]!==undefined) c._sel=!!mem[c._key];
+    else c._sel = set ? !!set[c._key] : true;
+  });
+  return !!set;
+}
+function gpSelRuta(){ return 'gp_video_sel/'+String(gpV.key||'').replace(/[^a-zA-Z0-9_]/g,'_'); }
 
 /* == LA VELOCIDAD DE REPRODUCCION ======================================
    La misma que tiene plan de partido. El reproductor se vuelve a crear en
@@ -3590,12 +3631,22 @@ function gpVidDom(){
 }
 function gpVidEnsurePlayer(cb){
   if(gpV.player&&gpV.ready){ cb(); return; }
+  /* el hueco donde vive el reproductor, por si se lo llevo un mensaje de error */
+  var _w=document.getElementById('gpVidWrap');
+  if(_w && !document.getElementById('gpVidPlayer')) _w.innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
   function mk(){ gpV.player=new YT.Player('gpVidPlayer',{playerVars:{rel:0,modestbranding:1,playsinline:1,controls:0,disablekb:1,fs:0,iv_load_policy:3},events:{onReady:function(){ gpV.ready=true; gpVidPonerVel(); cb(); },onStateChange:function(ev){ if(ev&&ev.data===1) gpVidPonerVel(); },onError:function(e){ gpVidErr(e.data); }}}); }
   if(window.YT&&window.YT.Player){ if(!gpV.player) mk(); else cb(); }
   else { var iv=setInterval(function(){ if(window.YT&&window.YT.Player){ clearInterval(iv); if(!gpV.player) mk(); else cb(); } },120); }
 }
+/* Tira abajo el reproductor para que el proximo clip lo arme de nuevo. */
+function gpVidReset(){
+  gpV.player=null; gpV.ready=false; gpV.vid='';
+  var w=document.getElementById('gpVidWrap');
+  if(w) w.innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
+}
 function gpVidErr(code){
   var local=(location.protocol==='file:');
+  gpV.player=null; gpV.ready=false; gpV.vid='';
   var w=document.getElementById('gpVidWrap');
   w.innerHTML='<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:#e2e8f0;font-size:14px;line-height:1.6">'+(local?'<b style="color:#f59e0b">Abrilo desde tu sitio en vivo (https)</b>, no como archivo local — YouTube no reproduce localmente.':'No hay video para este partido todavía. Cargá el link en <b>mapa_videos.js</b> (código '+(gpV.list[gpV.idx]?gpV.list[gpV.idx].code:'?')+').')+'</div>';
 }
@@ -3614,16 +3665,14 @@ function gpOpenVideo(rot,zone,sidx){
   document.getElementById('gpVidOverlay').style.display='flex';
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
   // cargar selección guardada del entrenador
-  var path='gp_video_sel/'+gpV.key.replace(/[^a-zA-Z0-9_]/g,'_');
   var apply=function(saved){
-    var set=(saved&&saved.length)?new Set(saved):null;
-    clips.forEach(function(c){ c._sel = set? set.has(c._key) : true; });
+    var habia=gpSelAplicar(clips,saved);
     gpV.readonly=false;
-    if(!gpV.coach && set){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; } // jugador con secuencia guardada → solo eso
+    if(!gpV.coach && habia){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; } // jugador con secuencia guardada → solo eso
     gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;}); gpV.ev=null; gpV.idx=-1;
     gpVidRender();
   };
-  if(typeof fbGet==='function'){ fbGet(path,apply); } else { apply(null); }
+  if(typeof fbGet==='function'){ fbGet(gpSelRuta(),apply); } else { apply(null); }
 }
 
 function gpVidVisible(){ return gpV.list.filter(function(c){ return !gpV.ev || c.ev===gpV.ev; }); }
@@ -3646,7 +3695,7 @@ function gpVidRender(){
     var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
     row.style.opacity=_play?'1':'.5';
     row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
-    if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; }; }
+    if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; gpSelRecordar(); }; }
     row.onclick=function(){ gpVidPlayAt(i); }; L.appendChild(row); });
   document.getElementById('gpVidNow').textContent=vis.length+' clips';
   document.getElementById('gpVidSave').style.display=gpV.coach?'block':'none';
@@ -3655,16 +3704,39 @@ function gpVidRender(){
 }
 function gpVidSelected(){ return gpV.list.filter(function(c){ return c._sel; }); }
 function gpVidToggle(){ if(gpV.playing){ gpVidStop(); } else { var s=(gpV.readonly?gpV.list:gpVidSelected()).filter(function(c){return c.t_atk>0 && !!gpVidUrl(c.code);}); if(!s.length){ alert('Estos ataques todavia no tienen video cargado. Agrega el link del partido en mapa_videos.js.'); return; } gpVidPlayAt(gpV.list.indexOf(s[0])); } }
+/* ══ PASAR DE UN CLIP AL OTRO SIN REHACER EL REPRODUCTOR ═══════════════════
+   Antes, en CADA clip se tiraba abajo el iframe de YouTube y se construia uno
+   nuevo de cero: hay que volver a bajar el reproductor, volver a abrir el
+   video y volver a buscar el segundo. Por eso entre ataque y ataque se
+   quedaba varios segundos en negro.
+
+   Ahora el reproductor se arma UNA sola vez y se queda:
+     · si el clip que viene es del MISMO partido -> solo se mueve la aguja,
+       que es instantaneo (la gran mayoria de las secuencias son de uno o dos
+       partidos);
+     · si es de otro partido -> se le cambia el video al mismo reproductor,
+       que sigue siendo mucho mas rapido que crearlo entero.
+   Es lo mismo que ya hace plan de partido. */
 function gpVidPlayAt(i){
   if(i<0||i>=gpV.list.length) return; gpV.idx=i; var c=gpV.list[i];
   var vid=gpVidUrl(c.code);
-  document.getElementById('gpVidWrap').innerHTML='<div id="gpVidPlayer" style="width:100%;height:100%"></div>';
-  gpV.player=null; gpV.ready=false;
   if(!vid){ gpVidErr(0); gpVidRender(); return; }
   gpVidEnsurePlayer(function(){
     var start=Math.max(0,c.t_start-gpV.PRE), end=c.t_atk+gpV.POST;
     gpV.fin=end; gpV.manual=false;
-    gpV.player.loadVideoById({videoId:vid,startSeconds:start});
+    try{
+      if(gpV.vid===vid && gpV.player.seekTo){
+        gpV.player.seekTo(start,true);
+        var _st=(gpV.player.getPlayerState?gpV.player.getPlayerState():-1);
+        if(_st!==1&&_st!==3) gpV.player.playVideo();
+      }else{
+        gpV.vid=vid;
+        gpV.player.loadVideoById({videoId:vid,startSeconds:start});
+      }
+    }catch(e){
+      /* si por lo que sea el reproductor quedo sordo, se rehace una vez */
+      gpVidReset(); gpVidRender(); return;
+    }
     gpVidPonerVel();
     gpV.playing=true; document.getElementById('gpVidPlay').textContent='⏸ Pausar';
     clearInterval(gpV.timer);
@@ -3685,9 +3757,9 @@ function gpVidStop(done){ clearInterval(gpV.timer); gpV.playing=false; var p=doc
 function gpVidCloseFn(){ gpVidStop(); var o=document.getElementById('gpVidOverlay'); if(o)o.style.display='none'; if(gpV.player&&gpV.player.stopVideo) gpV.player.stopVideo(); }
 function gpVidSaveFn(){
   var sel=gpVidSelected();
-  var path='gp_video_sel/'+gpV.key.replace(/[^a-zA-Z0-9_]/g,'_');
   var keys=sel.map(function(c){ return c._key; });
-  if(typeof fbSet==='function'){ fbSet(path,keys); }
+  gpSelRecordar();
+  if(typeof fbSet==='function'){ fbSet(gpSelRuta(),keys); }
   var btn=document.getElementById('gpVidSave'); var t=btn.textContent;
   btn.textContent='✓ Guardado ('+sel.length+' clips) — el equipo verá solo estos'; btn.style.background='#22c55e';
   setTimeout(function(){ btn.textContent=t; btn.style.background='#3b82f6'; },2200);
@@ -5608,9 +5680,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261015-1657"></script>
-<script src="ayuda.js?v=20261015-1657"></script>
-<script src="volver_inicio.js?v=20261015-1657" defer></script>
+<script src="temporadas_menu.js?v=20261015-2304"></script>
+<script src="ayuda.js?v=20261015-2304"></script>
+<script src="volver_inicio.js?v=20261015-2304" defer></script>
 </body>
 </html>
 
