@@ -48,15 +48,15 @@ def _codigo_de_archivo(fname, date):
 # ── EL PUESTO DE CADA JUGADOR ──────────────────────────────────────────────
 #  Sale del plantel del club, que es donde esta la verdad: lo carga el cuerpo
 #  tecnico en ALTA DE JUGADORES y se actualiza cuando cambia alguien.
-#
+    #
 #  Antes era una tabla por dorsal escrita a mano aca adentro. Dos problemas:
 #  se desactualiza sin que nadie se entere -medido: decia ARMADOR donde el
 #  plantel dice PUNTA- y en otro club le asigna a cada uno el puesto de otra
 #  persona, porque los dorsales no son los mismos.
-#
+    #
 #  Deducirlo de la cancha tampoco alcanza: midiendo un partido real, asi solo
 #  se acierta al LIBERO y a los CENTRALES, y 7 de 12 quedan en OTRO.
-#
+    #
 #  Se exige window.PLANTEL_ para no confundirse con otro archivo que empiece
 #  igual (plantel_desde_dvw.js es codigo, no datos). Si el plantel no esta,
 #  devuelve vacio y el motor deduce lo que puede, como antes.
@@ -164,14 +164,14 @@ NOMBRE_CORTO = {
 #  ejercicio, pero sus saques NO SON DE NADIE: no los tira una persona, no
 #  tienen intencion ni tecnica, y sumarlos a la estadistica de saque del
 #  equipo la deforma. Eran 276 de 1.424, el 19%.
-#
+    #
 #  Las RECEPCIONES de esos saques SI cuentan: el jugador esta entrenando
 #  justamente eso, recibir pelotas potentes.
-#
+    #
 #  Tampoco se toca la logica de fases: el saque de la maquina igual abre el
 #  punto, asi que la recepcion y el ataque posterior siguen clasificando
 #  bien como side-out.
-#
+    #
 #  El numero sale de la configuracion del club. Si algun dia se usa otro, o
 #  se agrega una segunda maquina, se cambia ahi y no en el codigo.
 # ══════════════════════════════════════════════════════════════════════════
@@ -258,14 +258,14 @@ TEAM_NORM = {
 #  Para el club que la escribio funcionaba; para cualquier otro, no: los .dvw
 #  traian Boca, River o quien fuera, el motor recorria SOLO su lista y no
 #  encontraba nada. La app quedaba vacia sin decir por que.
-#
+    #
 #  Ahora salen de dos lados, en este orden:
-#
+    #
 #    1) config_club.json, si el club lo configuro. Es lo que manda.
 #    2) LOS DATOS MISMOS. Despues de leer los .dvw se sabe exactamente que
 #       equipos hay: se usan esos. Asi funciona aunque nadie haya configurado
 #       nada, que es como llega un cliente nuevo.
-#
+    #
 #  La lista de aca abajo queda solo como ultimo recurso.
 # ═══════════════════════════════════════════════════════════════════════════
 try:
@@ -311,7 +311,7 @@ def equipos_de_los_datos(teams_data, actuales, propio):
 # del .dvw, asi que se descartaban TODOS los partidos y datos_partidos.js
 # salia vacio: sin dashboard, sin analisis y sin plan de partido, aunque el
 # proceso dijera "LISTO".
-#
+    #
 # Ahora solo se usa si config_club no dijo nada.
 if 'MAIN_TEAM' not in dir() or not MAIN_TEAM or MAIN_TEAM.startswith('{{'):
     MAIN_TEAM = 'Nafels'   # el equipo propio
@@ -551,17 +551,17 @@ def infer_pos(atk_acts):
 #  Liga Nacional de septiembre a abril —cruza al siguiente—. Con un solo corte,
 #  uno de los dos siempre queda mal etiquetado y sus partidos desaparecen de
 #  las pantallas.
-#
+    #
 #  Ahora cada partido dice de que torneo es, y de ahi sale su temporada. El
 #  torneo se busca en dos lados, en este orden:
-#
+    #
 #    1) lo que declara el propio .dvw (campo Competencia de [3MATCH])
 #    2) la carpeta donde esta, segun config_club.json
-#
+    #
 #  Hacen falta los dos: un club que scoutea el mismo carga la competencia; uno
 #  que baja los partidos de VolleyMetrics NO —de 97 archivos reales, 94 vinieron
 #  sin ese campo— y ahi la unica pista es la carpeta.
-#
+    #
 #  Si no hay configuracion, se usa la temporada de siempre y todo sigue como
 #  antes: ningun club existente se rompe.
 # ═══════════════════════════════════════════════════════════════════════════
@@ -975,12 +975,12 @@ _TEMP_FILTRO = _temp_filtro_de_argv()
 # Los amistosos de preparacion estan en la MISMA carpeta que los partidos
 # que cuentan, y mezclados ensucian cualquier promedio: cuatro amistosos
 # contra equipos de otra categoria mueven la eficacia de la liga entera.
-#
+    #
 # Separarlos por carpeta obligaba a reorganizar todo y a acordarse de
 # mover cada archivo. Se separan por FECHA, que ya esta en el .dvw:
 # fases_temporada.json dice desde cuando empieza lo oficial y el resto
 # se deduce solo. Un archivo de una linea por temporada, y nada mas.
-#
+    #
 # Lo que devuelve _fase_de():
 #     'PRE'  amistoso de pretemporada
 #     'SC'   Supercopa (cuenta como oficial, marcada aparte)
@@ -1067,7 +1067,16 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # firma por PARTIDO (fecha + equipos) para evitar contar dos veces archivos duplicados/copias
     existing_sigs = {(g.get('date'), tuple(sorted([g.get('home',''), g.get('away','')]))) for g in games_log}
 
-    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    # == LA EXTENSION, EN MAYUSCULA O EN MINUSCULA ========================
+    # Windows guarda el archivo con la extension tal como se escribio: un
+    # .dvw que llego como ".DVW" es el mismo archivo, pero endswith('.dvw')
+    # lo dejaba afuera y el partido no entraba a la base.
+    #
+    # Paso de verdad con "&2026-10-13 AMRISWIL VS JONA.DVW": los generadores
+    # que usan glob si lo leian —plan de partido, video, ficha— y este no, asi
+    # que el partido aparecia en unas pantallas y en el game plan no, sin un
+    # solo aviso. Se compara en minuscula y entra igual, se llame como se llame.
+    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     added = 0; skipped = 0
 
     # ══ Si la base es de una version vieja, se reconstruye ═══════════════════
@@ -1608,7 +1617,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
     seen_sigs = set()  # evitar contar dos veces archivos del mismo partido (copias/duplicados)
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     for fname in files:
         content = _leer_dvw(os.path.join(dvw_dir, fname))
         lines = content.replace('\r\n','\n').split('\n')
@@ -2103,7 +2112,7 @@ except NameError:
 # MOTOR DE BATERÍAS — validado al 100% contra DataVolley oficial (Casla-Velez)
 # Calcula las 11 baterías desde DVW, por jugador y por equipo.
 # ════════════════════════════════════════════════════════════════════
-#
+    #
 # LAS 11 BATERÍAS Y SUS FÓRMULAS (FIRMES):
 #  sq    Saque        = (# + 0.5×/ + 0.25×+ − =) / total saques
 #  rec   Recepción    = (# + 0.5×+ − 0.5×/ − =) / total recepciones
@@ -2116,7 +2125,7 @@ except NameError:
 #  atqri Atq R!       = (# − / − =) / total   [primer atk tras recepción !]
 #  atqrm Atq R-       = (# − / − =) / total   [primer atk tras recepción -]
 #  atqtr Transición   = (# − / − =) / total   [resto de ataques]
-#
+    #
 # REGLA CLAVE DEL CRUCE RECEPCIÓN→ATAQUE:
 #  - La recepción solo cuenta para el PRIMER ataque del equipo tras recibir.
 #  - Si el RIVAL interviene (A/D/E/B) entre la recepción y el ataque,
@@ -2609,7 +2618,7 @@ def build_transicion_data(setters_rallies, setter_names):
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26', t_filter=None):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
 
     games = []
     for fname in files:

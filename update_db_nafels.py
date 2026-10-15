@@ -27,15 +27,15 @@ from collections import defaultdict, Counter
 # ── EL PUESTO DE CADA JUGADOR ──────────────────────────────────────────────
 #  Sale del plantel del club, que es donde esta la verdad: lo carga el cuerpo
 #  tecnico en ALTA DE JUGADORES y se actualiza cuando cambia alguien.
-#
+    #
 #  Antes era una tabla por dorsal escrita a mano aca adentro. Dos problemas:
 #  se desactualiza sin que nadie se entere -medido: decia ARMADOR donde el
 #  plantel dice PUNTA- y en otro club le asigna a cada uno el puesto de otra
 #  persona, porque los dorsales no son los mismos.
-#
+    #
 #  Deducirlo de la cancha tampoco alcanza: midiendo un partido real, asi solo
 #  se acierta al LIBERO y a los CENTRALES, y 7 de 12 quedan en OTRO.
-#
+    #
 #  Se exige window.PLANTEL_ para no confundirse con otro archivo que empiece
 #  igual (plantel_desde_dvw.js es codigo, no datos). Si el plantel no esta,
 #  devuelve vacio y el motor deduce lo que puede, como antes.
@@ -89,14 +89,14 @@ NOMBRE_CORTO = {
 #  ejercicio, pero sus saques NO SON DE NADIE: no los tira una persona, no
 #  tienen intencion ni tecnica, y sumarlos a la estadistica de saque del
 #  equipo la deforma. Eran 276 de 1.424, el 19%.
-#
+    #
 #  Las RECEPCIONES de esos saques SI cuentan: el jugador esta entrenando
 #  justamente eso, recibir pelotas potentes.
-#
+    #
 #  Tampoco se toca la logica de fases: el saque de la maquina igual abre el
 #  punto, asi que la recepcion y el ataque posterior siguen clasificando
 #  bien como side-out.
-#
+    #
 #  El numero sale de la configuracion del club. Si algun dia se usa otro, o
 #  se agrega una segunda maquina, se cambia ahi y no en el codigo.
 # ══════════════════════════════════════════════════════════════════════════
@@ -106,7 +106,7 @@ NOMBRE_CORTO = {
 #  Flotado: M (float) y H (high float).   Potencia: Q (jump) y T (tense).
 #  Sirve para separar la recepcion segun el tipo de saque que llega, que es
 #  otra cosa: no se recibe igual un flotado que un potencia.
-#
+    #
 #  Esta linea se perdio cuando reemplace las formulas de eficacia: mi script
 #  cortaba desde "def eff_..." hasta el siguiente "def", y esta definicion
 #  estaba justo en el medio. Por eso la pantalla de liga dejo de mostrar los
@@ -476,7 +476,16 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     else:
         teams_data = {}; games_log = []; existing_dates = set()
 
-    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    # == LA EXTENSION, EN MAYUSCULA O EN MINUSCULA ========================
+    # Windows guarda el archivo con la extension tal como se escribio: un
+    # .dvw que llego como ".DVW" es el mismo archivo, pero endswith('.dvw')
+    # lo dejaba afuera y el partido no entraba a la base.
+    #
+    # Paso de verdad con "&2026-10-13 AMRISWIL VS JONA.DVW": los generadores
+    # que usan glob si lo leian —plan de partido, video, ficha— y este no, asi
+    # que el partido aparecia en unas pantallas y en el game plan no, sin un
+    # solo aviso. Se compara en minuscula y entra igual, se llame como se llame.
+    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     added = 0; skipped = 0
 
     for fname in dvw_files:
@@ -547,7 +556,7 @@ def build_teams_data_fresh(season_dirs):
     for temporada, carpeta in season_dirs:
         if not os.path.isdir(carpeta):
             print(f"  [{temporada}] carpeta '{carpeta}' no existe → se saltea"); continue
-        dvw=sorted(f for f in os.listdir(carpeta) if f.endswith('.dvw'))
+        dvw=sorted(f for f in os.listdir(carpeta) if f.lower().endswith('.dvw'))
         if not dvw:
             print(f"  [{temporada}] carpeta '{carpeta}' sin .dvw → se saltea"); continue
         usados=0
@@ -815,7 +824,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             liberos_by_team[tm] = libs
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     for fname in files:
         with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -1171,7 +1180,7 @@ except NameError:
 # MOTOR DE BATERÍAS — validado al 100% contra DataVolley oficial (Casla-Velez)
 # Calcula las 11 baterías desde DVW, por jugador y por equipo.
 # ════════════════════════════════════════════════════════════════════
-#
+    #
 # LAS 11 BATERÍAS Y SUS FÓRMULAS (FIRMES):
 #  sq    Saque        = (# + 0.5×/ + 0.25×+ − =) / total saques
 #  rec   Recepción    = (# + 0.5×+ − 0.5×/ − =) / total recepciones
@@ -1184,7 +1193,7 @@ except NameError:
 #  atqri Atq R!       = (# − / − =) / total   [primer atk tras recepción !]
 #  atqrm Atq R-       = (# − / − =) / total   [primer atk tras recepción -]
 #  atqtr Transición   = (# − / − =) / total   [resto de ataques]
-#
+    #
 # REGLA CLAVE DEL CRUCE RECEPCIÓN→ATAQUE:
 #  - La recepción solo cuenta para el PRIMER ataque del equipo tras recibir.
 #  - Si el RIVAL interviene (A/D/E/B) entre la recepción y el ataque,
@@ -1677,7 +1686,7 @@ def build_transicion_data(setters_rallies, setter_names):
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
 
     games = []
     for fname in files:

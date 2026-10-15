@@ -381,7 +381,16 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     else:
         teams_data = {}; games_log = []; existing_dates = set()
 
-    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    # == LA EXTENSION, EN MAYUSCULA O EN MINUSCULA ========================
+    # Windows guarda el archivo con la extension tal como se escribio: un
+    # .dvw que llego como ".DVW" es el mismo archivo, pero endswith('.dvw')
+    # lo dejaba afuera y el partido no entraba a la base.
+    #
+    # Paso de verdad con "&2026-10-13 AMRISWIL VS JONA.DVW": los generadores
+    # que usan glob si lo leian —plan de partido, video, ficha— y este no, asi
+    # que el partido aparecia en unas pantallas y en el game plan no, sin un
+    # solo aviso. Se compara en minuscula y entra igual, se llame como se llame.
+    dvw_files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     added = 0; skipped = 0
 
     for fname in dvw_files:
@@ -675,7 +684,7 @@ def collect_setter_rallies(dvw_dir, team_norm_map, main_teams, teams_data=None):
             liberos_by_team[tm] = libs
     rallies_both = defaultdict(lambda: defaultdict(list))
     setters_detected = {}
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
     for fname in files:
         with open(os.path.join(dvw_dir, fname), encoding='utf-8', errors='ignore') as f:
             content = f.read()
@@ -936,7 +945,7 @@ except NameError:
 def generate_team_pages_data(dvw_dir, team_name, output_dir='.', temporada='2025/26'):
     """Generate datos_historial.js + datos_partidos.js for a specific team from DVW."""
     from datetime import datetime
-    files = sorted([f for f in os.listdir(dvw_dir) if f.endswith('.dvw')])
+    files = sorted([f for f in os.listdir(dvw_dir) if f.lower().endswith('.dvw')])
 
     games = []
     for fname in files:
