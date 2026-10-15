@@ -570,6 +570,18 @@
      Las que llevan {0} son PLANTILLAS: el dato del medio -un apellido, un
      numero- se deja como esta y se traduce el resto. */
   var PHRASES_MEDIDAS = {
+    /* ══ LAS OPCIONES DE BLOQUEO DEL GAME PLAN ═══════════════════════════
+       Los selectores IZQ/CEN/DER de cada rotacion quedaban en castellano con
+       la app en ingles y en aleman: un asistente suizo leia "Colgado" y no
+       tenia idea de que decia. Los nombres son los del voley internacional
+       —Read, Commit, Pin & Pin—, que es como los dice todo el mundo, en
+       aleman tambien. El dibujito va adelante porque el diccionario pide la
+       frase ENTERA, tal cual aparece en pantalla. */
+    '☝ Opción 1': { en:'☝ Option 1', de:'☝ Option 1' },
+    '✌ Opción 2': { en:'✌ Option 2', de:'✌ Option 2' },
+    '✊ Colgado': { en:'✊ Commit', de:'✊ Commit' },
+    '🖐 Lectura': { en:'🖐 Read', de:'🖐 Read' },
+    '🤘 Punta y Punta': { en:'🤘 Pin & pin', de:'🤘 Pin & Pin' },
     /* ══ LO QUE QUEDABA EN CASTELLANO, MEDIDO PANTALLA POR PANTALLA ════════
        Se abrio cada pantalla con la app en INGLES, con datos reales, y se
        anoto TODO nodo de texto visible que translateString() dejaba igual.
