@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261016-0007"></script>
-<script src="selector_categoria.js?v=20261016-0007"></script>
-<script src="datos_seguros.js?v=20261016-0007"></script>
-<script src="firebase.js?v=20261016-0007" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261016-0007"></script>
+<script src="categorias_club.js?v=20261016-0009"></script>
+<script src="selector_categoria.js?v=20261016-0009"></script>
+<script src="datos_seguros.js?v=20261016-0009"></script>
+<script src="firebase.js?v=20261016-0009" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261016-0009"></script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
      los botones y los desplegables salen en Arial. */
@@ -214,14 +214,14 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20261016-0007">
+<link rel="stylesheet" href="movil.css?v=20261016-0009">
 <!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
      para todos los datos de equipo, en un solo lugar. -->
 
 
-<script src="iconos.js?v=20261016-0007" defer></script>
+<script src="iconos.js?v=20261016-0009" defer></script>
 
-<script src="nav.js?v=20261016-0007" defer></script>
+<script src="nav.js?v=20261016-0009" defer></script>
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -451,20 +451,27 @@
    faltando la Supercopa, el sabado 17 contra Amriswil no existia para el
    sistema y el game plan apuntaba al rival del domingo.
 
-   Van los tres que faltaban —la Supercopa y los dos de BigBank Tartu—,
-   con la fecha, el rival y la condicion que ya estaban en el fixture del
-   club. La hora y el lugar quedan vacios A PROPOSITO: no los tengo, y
-   antes que inventarlos prefiero que se completen a mano desde la ficha
-   del partido, que es un campo de texto.                               */
+   Van los tres que faltaban: la Supercopa y los dos de BigBank Tartu.
+
+   La Supercopa es FINAL UNICA EN BERN, no se juega en Amriswil: por eso
+   el lugar dice Bern y no la cancha del rival. La hora y la sala exacta
+   quedan vacias a proposito —no las tengo— y se completan desde la ficha
+   del partido, que es un campo de texto libre. Lo mismo los dos de Tartu.
+
+   La condicion se escribe 'Visita', que es lo que guarda el formulario de
+   esta pantalla. Los 14 de la liga quedaron con 'Visitante' de antes: se
+   ven igual —todo el codigo compara con indexOf('Visit')— pero al EDITAR
+   uno viejo no se prende ninguno de los dos botones. Por eso los nuevos
+   van con la palabra que usa el formulario.                            */
 var FIXTURE_PRIMERA=[
-    {fecha:'2026-10-17',hora:'',rival:'Amriswil',condicion:'Visitante',lugar:'',mapa:''},
+    {fecha:'2026-10-17',hora:'',rival:'Amriswil',condicion:'Visita',lugar:'Bern',mapa:''},
     {fecha:'2026-10-18',hora:'17:00',rival:'Lausanne',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-10-24',hora:'18:00',rival:'St. Gallen',condicion:'Visitante',lugar:'St. Gallen',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFC88X%2BRW'},
     {fecha:'2026-10-31',hora:'17:00',rival:'Jona',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-11-07',hora:'18:00',rival:'Chênois',condicion:'Visitante',lugar:'Genève',mapa:'https://www.google.com/maps/search/?api=1&query=8FR855QV%2BF3'},
     {fecha:'2026-11-10',hora:'',rival:'BigBank Tartu',condicion:'Local',lugar:'',mapa:''},
     {fecha:'2026-11-14',hora:'17:30',rival:'Schönenwerd',condicion:'Visitante',lugar:'Schönenwerd',mapa:'https://www.google.com/maps/search/?api=1&query=8FVC92H3%2BVH'},
-    {fecha:'2026-11-19',hora:'',rival:'BigBank Tartu',condicion:'Visitante',lugar:'',mapa:''},
+    {fecha:'2026-11-19',hora:'',rival:'BigBank Tartu',condicion:'Visita',lugar:'',mapa:''},
     {fecha:'2026-11-21',hora:'17:00',rival:'Amriswil',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-11-28',hora:'17:00',rival:'Colombier',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-12-05',hora:'17:30',rival:'Lausanne',condicion:'Visitante',lugar:'Lausanne',mapa:'https://www.google.com/maps/search/?api=1&query=8FR8GH9H%2BPM'},
@@ -475,6 +482,14 @@ var FIXTURE_PRIMERA=[
     {fecha:'2027-01-30',hora:'17:00',rival:'Amriswil',condicion:'Visitante',lugar:'Amriswil',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFG7XQ%2BCP'},
     {fecha:'2027-02-13',hora:'17:30',rival:'Colombier',condicion:'Visitante',lugar:'Colombier',mapa:'https://www.google.com/maps/search/?api=1&query=8FV83W73%2B5G'}
   ];
+  /* ══ LOCAL O VISITA, ESCRITO DE CUALQUIER FORMA ═══════════════════════
+     El formulario de esta pantalla guarda 'Visita'; el importador del
+     fixture guardaba 'Visitante'. Para mostrar da igual —todo compara con
+     indexOf('Visit')— pero para saber si un partido YA ESTA no: el mismo
+     partido cargado de las dos maneras contaba como dos y se duplicaba. */
+  function vbCond(c){ return (String(c||'').toLowerCase().indexOf('vis')>=0) ? 'V' : 'L'; }
+  function vbMismaCond(a,b){ return vbCond(a)===vbCond(b); }
+
   function importFixture(){ if(window.VB_esEditor&&!VB_esEditor())return;
   /* ── EL FIXTURE DE ESTA CATEGORIA ──────────────────────────────────
      Cada categoria tiene su archivo: fixture_h1l.js, fixture_h2l.js.
@@ -512,7 +527,10 @@ var FIXTURE_PRIMERA=[
     if(!confirm('¿Agregar los '+FIXTURE.length+' partidos del fixture 2026/27 al calendario?\n\nLos que ya estan cargados se saltean.')) return;
     var arr=(data.partidos||[]).slice(), added=0;
     FIXTURE.forEach(function(m){
-      var dup=arr.some(function(x){ return x.fecha===m.fecha && (x.rival||'')===m.rival && (x.condicion||'')===m.condicion; });
+      /* 'Visita' y 'Visitante' son lo mismo: el formulario guarda una y el
+         importador guardaba la otra, asi que un partido cargado a mano se
+         volvia a agregar y quedaba repetido. Se compara normalizado. */
+      var dup=arr.some(function(x){ return x.fecha===m.fecha && (x.rival||'')===m.rival && vbMismaCond(x.condicion, m.condicion); });
       if(dup) return;
       arr.push({ id:Date.now()+Math.floor(Math.random()*100000), fecha:m.fecha, hora:m.hora, lugar:m.lugar, rival:m.rival, condicion:m.condicion, mapa:m.mapa });
       added++;
@@ -550,7 +568,8 @@ var FIXTURE_PRIMERA=[
     var R = window.CAL_RESPALDO || {}, delResp = (R.partidos || []);
     if(!delResp.length){ alert('El archivo del respaldo vino vacío.'); return; }
     var arr = (data.partidos || []).slice();
-    function k(x){ return (x.fecha||'')+'|'+(x.rival||'')+'|'+(x.condicion||x.cond||''); }
+    /* ver vbMismaCond: 'Visita' y 'Visitante' tienen que contar como una */
+    function k(x){ return (x.fecha||'')+'|'+(x.rival||'')+'|'+vbCond(x.condicion||x.cond); }
     var tengo = {}; arr.forEach(function(x){ tengo[k(x)] = 1; });
     var faltan = delResp.filter(function(x){ return !tengo[k(x)]; });
     if(!faltan.length){
@@ -1123,7 +1142,7 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20261016-0007" onerror="void 0"></script>
+<script src="lang.js?v=20261016-0009" onerror="void 0"></script>
 <script>
 /* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
    El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
@@ -1283,8 +1302,8 @@ window.temporadaAlCalendario = function(){
   else setTimeout(poner, 300);
 })();
 </script>
-<script src="ayuda.js?v=20261016-0007"></script>
-<script src="volver_inicio.js?v=20261016-0007" defer></script>
+<script src="ayuda.js?v=20261016-0009"></script>
+<script src="volver_inicio.js?v=20261016-0009" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
