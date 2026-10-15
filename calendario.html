@@ -7,11 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261015-2321"></script>
-<script src="selector_categoria.js?v=20261015-2321"></script>
-<script src="datos_seguros.js?v=20261015-2321"></script>
-<script src="firebase.js?v=20261015-2321" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261015-2321"></script>
+<script src="categorias_club.js?v=20261015-2351"></script>
+<script src="selector_categoria.js?v=20261015-2351"></script>
+<script src="datos_seguros.js?v=20261015-2351"></script>
+<script src="firebase.js?v=20261015-2351" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261015-2351"></script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
      los botones y los desplegables salen en Arial. */
@@ -214,14 +214,14 @@
   }
 }
 </style>
-<link rel="stylesheet" href="movil.css?v=20261015-2321">
+<link rel="stylesheet" href="movil.css?v=20261015-2351">
 <!-- El calendario ya no necesita redirigir: lo hace selector_categoria.js
      para todos los datos de equipo, en un solo lugar. -->
 
 
-<script src="iconos.js?v=20261015-2321" defer></script>
+<script src="iconos.js?v=20261015-2351" defer></script>
 
-<script src="nav.js?v=20261015-2321" defer></script>
+<script src="nav.js?v=20261015-2351" defer></script>
 </head>
 <body>
 <div class="wrap" id="wrap">
@@ -444,12 +444,26 @@
   /* El fixture que venia escrito acá es el de Primera. Se le cambia el
    nombre para que no pise al de las otras categorias: cada una carga el
    suyo desde su propio archivo (fixture_h1l.js, fixture_h2l.js). */
+/* ══ NO SOLO LA LIGA ══════════════════════════════════════════════════
+   Esta lista tenia los 14 partidos de la NLA y nada mas. Pero el equipo
+   juega otras cosas, y el resto de la app saca de aca el PROXIMO RIVAL:
+   faltando la Supercopa, el sabado 17 contra Amriswil no existia para el
+   sistema y el game plan apuntaba al rival del domingo.
+
+   Van los tres que faltaban —la Supercopa y los dos de BigBank Tartu—,
+   con la fecha, el rival y la condicion que ya estaban en el fixture del
+   club. La hora y el lugar quedan vacios A PROPOSITO: no los tengo, y
+   antes que inventarlos prefiero que se completen a mano desde la ficha
+   del partido, que es un campo de texto.                               */
 var FIXTURE_PRIMERA=[
+    {fecha:'2026-10-17',hora:'',rival:'Amriswil',condicion:'Visitante',lugar:'',mapa:''},
     {fecha:'2026-10-18',hora:'17:00',rival:'Lausanne',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-10-24',hora:'18:00',rival:'St. Gallen',condicion:'Visitante',lugar:'St. Gallen',mapa:'https://www.google.com/maps/search/?api=1&query=8FVFC88X%2BRW'},
     {fecha:'2026-10-31',hora:'17:00',rival:'Jona',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-11-07',hora:'18:00',rival:'Chênois',condicion:'Visitante',lugar:'Genève',mapa:'https://www.google.com/maps/search/?api=1&query=8FR855QV%2BF3'},
+    {fecha:'2026-11-10',hora:'',rival:'BigBank Tartu',condicion:'Local',lugar:'',mapa:''},
     {fecha:'2026-11-14',hora:'17:30',rival:'Schönenwerd',condicion:'Visitante',lugar:'Schönenwerd',mapa:'https://www.google.com/maps/search/?api=1&query=8FVC92H3%2BVH'},
+    {fecha:'2026-11-19',hora:'',rival:'BigBank Tartu',condicion:'Visitante',lugar:'',mapa:''},
     {fecha:'2026-11-21',hora:'17:00',rival:'Amriswil',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-11-28',hora:'17:00',rival:'Colombier',condicion:'Local',lugar:'Lintharena, Näfels',mapa:'https://www.google.com/maps/search/?api=1&query=8FVF4358%2B77'},
     {fecha:'2026-12-05',hora:'17:30',rival:'Lausanne',condicion:'Visitante',lugar:'Lausanne',mapa:'https://www.google.com/maps/search/?api=1&query=8FR8GH9H%2BPM'},
@@ -493,7 +507,8 @@ var FIXTURE_PRIMERA=[
       return;
     }
   }
-    if(!confirm('¿Agregar los 14 partidos del fixture 2026/27 al calendario?')) return;
+    /* la cuenta sale de la lista, no escrita a mano: decia 14 para siempre */
+    if(!confirm('¿Agregar los '+FIXTURE.length+' partidos del fixture 2026/27 al calendario?\n\nLos que ya estan cargados se saltean.')) return;
     var arr=(data.partidos||[]).slice(), added=0;
     FIXTURE.forEach(function(m){
       var dup=arr.some(function(x){ return x.fecha===m.fecha && (x.rival||'')===m.rival && (x.condicion||'')===m.condicion; });
@@ -1033,7 +1048,7 @@ window.temporadaAlCalendario = function(){
 };
 
 </script>
-<script src="lang.js?v=20261015-2321" onerror="void 0"></script>
+<script src="lang.js?v=20261015-2351" onerror="void 0"></script>
 <script>
 /* ══ DEL CALENDARIO AL RESTO DE LA APP ═══════════════════════════════════
    El calendario ya tiene el fixture cargado. Estas dos funciones lo usan:
@@ -1193,8 +1208,8 @@ window.temporadaAlCalendario = function(){
   else setTimeout(poner, 300);
 })();
 </script>
-<script src="ayuda.js?v=20261015-2321"></script>
-<script src="volver_inicio.js?v=20261015-2321" defer></script>
+<script src="ayuda.js?v=20261015-2351"></script>
+<script src="volver_inicio.js?v=20261015-2351" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
