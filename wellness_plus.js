@@ -48,7 +48,7 @@
   var EXPLICA = {
     sueno: {
       lb: 'Sueño', ic: '😴',
-      que: 'Cómo dormiste anoche: si te costó, si te despertaste, si te levantaste descansado.',
+      que: 'Cómo dormiste anoche: si te costó, si te despertaste, si descansaste.',
       uno: 'Casi no pegué un ojo', cinco: 'Dormí, pero me desperté', diez: 'De un tirón, impecable'
     },
     energia: {
@@ -79,7 +79,7 @@
   };
   var RPE_EXPLICA = {
     lb: 'Cuánto costó', ic: '🔥',
-    que: 'Lo exigente que SENTISTE la sesión que terminaste. No mide cómo te sentís: mide el trabajo. Se contesta al final.',
+    que: 'Lo exigente que SENTISTE la sesión que terminaste. Se contesta al final.',
     uno: 'Muy suave', cinco: 'Exigente', diez: 'Lo máximo que doy'
   };
   var CLAVES = ['sueno', 'energia', 'piernas', 'cuerpo', 'animo', 'estres'];
@@ -105,11 +105,21 @@
   ];
   function zonas() { try { return (window.WP_CUERPO && window.WP_CUERPO.zonas) || []; } catch (e) { return []; } }
   function zonaDe(k) { var z = zonas(); for (var i = 0; i < z.length; i++) if (z[i].k === k) return z[i]; return null; }
-  function nombreZona(k) { var z = zonaDe(k); return z ? z.lb : k; }
+  function nombreZona(k) { var z = zonaDe(k); return z ? T(z.lb) : k; }
   var ZONAS = [];
 
   var MOL = {};        /* lo que esta marcado AHORA en la pantalla */
   var CARA = 'F';
+
+
+  /* ── EL IDIOMA ────────────────────────────────────────────────────────────
+     T() traduce la frase en el momento de escribirla, con los datos ya
+     puestos adentro. Viene de wellness_idioma.js; si ese archivo faltara,
+     T() devuelve el castellano y la pantalla sigue andando igual. */
+  function T(){ try { return window.wpT.apply(null, arguments); }
+                catch(e){ return arguments[0]; } }
+  function TB(s){ try { return window.wpTBaja(s); } catch(e){ return String(s).toLowerCase(); } }
+  function NUM(n){ try { return window.wpNum(n); } catch(e){ return String(n); } }
 
   /* ══ CUENTAS ════════════════════════════════════════════════════════════ */
   function prom(a) { return a.length ? a.reduce(function (x, y) { return x + y; }, 0) / a.length : 0; }
@@ -158,14 +168,14 @@
      significa mas que a otro que va de 4 a 9 todos los dias. Cuando casi no
      varia, se mira la diferencia cruda para no gritar por nada. */
   function compara(valor, base) {
-    if (!base) return { txt: 'todavía sin referencia', cls: 'neutro', z: 0 };
+    if (!base) return { txt: T('todavía sin referencia'), cls: 'neutro', z: 0 };
     var d = valor - base.m;
     var z = base.sd > 0.4 ? d / base.sd : d / 1.2;
     var cls = z <= -1.5 ? 'muy-bajo' : z <= -0.8 ? 'bajo' : z >= 0.8 ? 'alto' : 'normal';
-    var txt = cls === 'muy-bajo' ? 'MUY por debajo de tu normal'
+    var txt = T(cls === 'muy-bajo' ? 'MUY por debajo de tu normal'
       : cls === 'bajo' ? 'por debajo de tu normal'
       : cls === 'alto' ? 'por encima de tu normal'
-      : 'como siempre';
+      : 'como siempre');
     return { txt: txt, cls: cls, z: z, dif: d, base: base.m };
   }
   var COLCLS = { 'muy-bajo': '#ef4444', 'bajo': '#f59e0b', 'normal': '#94a3b8', 'alto': '#22c55e', 'neutro': '#64748b' };
@@ -220,12 +230,12 @@
              acwr: acwr, cuatro: cuatro.map(Math.round), estimada: sinMin, sesiones: entre(7, 0).length };
   }
   function leerCarga(c) {
-    if (!c || !c.sesiones) return { txt: 'Sin sesiones cargadas esta semana.', col: '#64748b' };
+    if (!c || !c.sesiones) return { txt: T('Sin sesiones cargadas esta semana.'), col: '#64748b' };
     var av = [];
-    if (c.acwr && c.acwr > 1.5) av.push({ t: 'la carga subió de golpe (aguda:crónica ' + c.acwr.toFixed(2) + ')', col: '#ef4444' });
-    else if (c.acwr && c.acwr < 0.8 && c.cuatro[1]) av.push({ t: 'viene entrenando bastante menos que las semanas anteriores', col: '#f59e0b' });
-    if (c.monotonia > 2) av.push({ t: 'todos los días parecidos (monotonía ' + c.monotonia.toFixed(1) + '): falta un día suave', col: '#f59e0b' });
-    if (!av.length) return { txt: 'Carga en orden.', col: '#22c55e' };
+    if (c.acwr && c.acwr > 1.5) av.push({ t: T('la carga subió de golpe (aguda:crónica {0})', c.acwr.toFixed(2)), col: '#ef4444' });
+    else if (c.acwr && c.acwr < 0.8 && c.cuatro[1]) av.push({ t: T('viene entrenando bastante menos que las semanas anteriores'), col: '#f59e0b' });
+    if (c.monotonia > 2) av.push({ t: T('todos los días parecidos (monotonía {0}): falta un día suave', c.monotonia.toFixed(1)), col: '#f59e0b' });
+    if (!av.length) return { txt: T('Carga en orden.'), col: '#22c55e' };
     return { txt: av.map(function (a) { return a.t; }).join(' · '), col: av[0].col };
   }
 
@@ -246,10 +256,10 @@
     for (var i = 1; i < h.length; i++) { if (h[i].date !== h[0].date) { prev = h[i]; break; } }
     var desde = h[h.length - 1].date;
     var d = dias(desde, h[0].date) + 1;
-    if (!prev) return { nivel: hoyN, txt: 'primer día', col: '#94a3b8', dias: d };
-    if (hoyN < prev.mol[k]) return { nivel: hoyN, txt: 'mejorando', col: '#22c55e', dias: d };
-    if (hoyN > prev.mol[k]) return { nivel: hoyN, txt: 'empeorando', col: '#ef4444', dias: d };
-    return { nivel: hoyN, txt: 'igual', col: '#f59e0b', dias: d };
+    if (!prev) return { nivel: hoyN, txt: T('primer día'), col: '#94a3b8', dias: d };
+    if (hoyN < prev.mol[k]) return { nivel: hoyN, txt: T('mejorando'), col: '#22c55e', dias: d };
+    if (hoyN > prev.mol[k]) return { nivel: hoyN, txt: T('empeorando'), col: '#ef4444', dias: d };
+    return { nivel: hoyN, txt: T('igual'), col: '#f59e0b', dias: d };
   }
   function molestiasDe(num, fecha) {
     var es = entradas(num).filter(function (e) { return e.date === fecha && e.mol; });
@@ -313,6 +323,10 @@
   function apellido(num) { var j = jugadores().filter(function (x) { return x.num === num; })[0]; return j ? (j.ap || ('#' + num)) : ('#' + num); }
   function esStaff() { try { return (localStorage.getItem('vb_role') || '').toLowerCase() !== 'player'; } catch (e) { return true; } }
   function numJugador() { try { return window.jugadorConectado ? window.jugadorConectado() : null; } catch (e) { return null; } }
+  function T(){ try { return window.wpT.apply(null, arguments); } catch(e){ return arguments[0]; } }
+  function TB(s){ try { return window.wpTBaja(s); } catch(e){ return String(s).toLowerCase(); } }
+  function NUM(n){ try { return window.wpNum(n); } catch(e){ return String(n); } }
+
 
   /* ── LAS PREGUNTAS, CON LO QUE SIGNIFICAN ───────────────────────────── */
   window.buildQuestions = function () {
@@ -320,15 +334,15 @@
     W.CLAVES.forEach(function (k) { h += unaPregunta(k, W.EXPLICA[k]); });
     h += '<div class="wp-sep"></div>';
     h += '<div class="wp-extra">'
-      + '<label class="fld">¿Cuántas horas dormiste?</label>'
-      + '<input type="number" id="wp-horas" min="0" max="14" step="0.5" placeholder="ej. 7.5">'
-      + '<div class="wp-mini">Opcional. Las horas y cómo dormiste no son lo mismo: 8 horas malas son 8 horas malas.</div>'
+      + '<label class="fld">' + T('¿Cuántas horas dormiste?') + '</label>'
+      + '<input type="number" id="wp-horas" min="0" max="14" step="0.5" placeholder="' + esc(T('ej. 7.5')) + '">'
+      + '<div class="wp-mini">' + esc(T('Opcional. Las horas y cómo dormiste no son lo mismo: 8 horas malas son 8 horas malas.')) + '</div>'
       + '</div>';
     h += unaPregunta('rpe', W.RPE_EXPLICA);
     h += '<div class="wp-extra">'
-      + '<label class="fld">¿Cuántos minutos duró?</label>'
-      + '<input type="number" id="wp-min" min="0" max="300" step="5" placeholder="ej. 90">'
-      + '<div class="wp-mini">Con esto el esfuerzo pasa a ser carga de verdad: RPE × minutos. Si lo dejás vacío se estiman 90.</div>'
+      + '<label class="fld">' + T('¿Cuántos minutos duró?') + '</label>'
+      + '<input type="number" id="wp-min" min="0" max="300" step="5" placeholder="' + esc(T('ej. 90')) + '">'
+      + '<div class="wp-mini">' + esc(T('Con esto el esfuerzo pasa a ser carga de verdad: RPE × minutos. Si lo dejás vacío se estiman 90.')) + '</div>'
       + '</div>';
     el('questions').innerHTML = h;
     W.CLAVES.concat(['rpe']).forEach(function (k) { window.onSlide(k); });
@@ -336,13 +350,13 @@
 
   function unaPregunta(k, x) {
     return '<div class="q wp-q">'
-      + '<div class="q-hd"><div class="q-lb"><span class="ic">' + x.ic + '</span>' + x.lb
-      + '<div class="wp-que">' + esc(x.que) + '</div></div>'
+      + '<div class="q-hd"><div class="q-lb"><span class="ic">' + x.ic + '</span>' + esc(T(x.lb))
+      + '<div class="wp-que">' + esc(T(x.que)) + '</div></div>'
       + '<div class="q-val" id="v-' + k + '">5</div></div>'
       + '<input type="range" min="1" max="10" value="5" id="r-' + k + '" oninput="onSlide(\'' + k + '\')">'
-      + '<div class="wp-anclas"><span><b>1</b> ' + esc(x.uno) + '</span>'
-      + '<span><b>5</b> ' + esc(x.cinco) + '</span>'
-      + '<span><b>10</b> ' + esc(x.diez) + '</span></div>'
+      + '<div class="wp-anclas"><span><b>1</b> ' + esc(T(x.uno)) + '</span>'
+      + '<span><b>5</b> ' + esc(T(x.cinco)) + '</span>'
+      + '<span><b>10</b> ' + esc(T(x.diez)) + '</span></div>'
       + '<div class="wp-vs" id="vs-' + k + '"></div>'
       + '</div>';
   }
@@ -354,10 +368,10 @@
     var num = numActual(), v = +el('r-' + k).value, caja = el('vs-' + k);
     if (!caja) return;
     var base = W.normalDe(num, k, fechaActual());
-    if (!base) { caja.innerHTML = '<span style="color:#64748b">Tu normal se arma con unos días más de respuestas.</span>'; return; }
+    if (!base) { caja.innerHTML = '<span style="color:#64748b">' + esc(T('Tu normal se arma con unos días más de respuestas.')) + '</span>'; return; }
     var c = W.compara(v, base);
     caja.innerHTML = '<span style="color:' + W.COLCLS[c.cls] + '">' + c.txt + '</span>'
-      + '<span style="color:#64748b"> · tu normal: ' + base.m.toFixed(1) + '</span>';
+      + '<span style="color:#64748b"> ' + esc(T('· tu normal: {0}', base.m.toFixed(1))) + '</span>';
   };
 
   function numActual() { var y = numJugador(); if (y !== null && y !== undefined) return y; var s = el('selJug'); return s ? +s.value : 0; }
@@ -374,8 +388,8 @@
 
   function cuerpoSVG(cara) {
     var C = window.WP_CUERPO;
-    if (!C) return '<div class="wp-mini">No se pudo cargar el mapa del cuerpo.</div>';
-    var s = '<svg viewBox="0 0 100 222" class="wp-svg" role="img" aria-label="Mapa del cuerpo">';
+    if (!C) return '<div class="wp-mini">' + esc(T('No se pudo cargar el mapa del cuerpo.')) + '</div>';
+    var s = '<svg viewBox="0 0 100 222" class="wp-svg" role="img" aria-label="' + esc(T('Mapa del cuerpo')) + '">';
     /* la cabeza es parte del dibujo y no se marca */
     (C.cabeza[cara] || []).forEach(function (p) { s += '<polygon points="' + p + '" class="wp-cab"/>'; });
     C.zonas.forEach(function (z) {
@@ -383,9 +397,9 @@
       if (!ps.length) return;
       var n = W.MOL[z.k] || 0;
       var cls = 'wp-zona' + (n ? ' n' + n : '') + (SEL === z.k ? ' sel' : '');
-      s += '<g class="' + cls + '" data-k="' + z.k + '" tabindex="0" role="button" aria-label="' + esc(z.lb) + '">';
+      s += '<g class="' + cls + '" data-k="' + z.k + '" tabindex="0" role="button" aria-label="' + esc(T(z.lb)) + '">';
       ps.forEach(function (p) { s += '<polygon points="' + p + '"/>'; });
-      s += '<title>' + esc(z.lb) + (n ? ' · ' + NIV()[n].lb : '') + '</title></g>';
+      s += '<title>' + esc(T(z.lb)) + (n ? ' · ' + esc(T(NIV()[n].lb)) : '') + '</title></g>';
     });
     return s + '</svg>';
   }
@@ -394,8 +408,8 @@
     var c = el('wp-mapa'); if (!c) return;
     var cara = W.cara(), N = NIV();
     var h = '<div class="wp-caras">'
-      + '<button type="button" class="chip' + (cara === 'F' ? ' on' : '') + '" data-cara="F">Frente</button>'
-      + '<button type="button" class="chip' + (cara === 'E' ? ' on' : '') + '" data-cara="E">Espalda</button>'
+      + '<button type="button" class="chip' + (cara === 'F' ? ' on' : '') + '" data-cara="F">' + esc(T('Frente')) + '</button>'
+      + '<button type="button" class="chip' + (cara === 'E' ? ' on' : '') + '" data-cara="E">' + esc(T('Espalda')) + '</button>'
       + '</div>'
       + '<div class="wp-cuerpo">' + cuerpoSVG(cara) + '</div>';
 
@@ -406,19 +420,19 @@
        el nivel se aprieta aparte, con el nombre delante. */
     if (SEL) {
       var act = W.MOL[SEL] || 0, z = zonaDe(SEL);
-      h += '<div class="wp-sel"><div class="wp-sel-ti">' + esc(z ? z.lb : SEL) + '</div><div class="wp-sel-bs">'
+      h += '<div class="wp-sel"><div class="wp-sel-ti">' + esc(z ? T(z.lb) : SEL) + '</div><div class="wp-sel-bs">'
         + N.slice(1).map(function (n) {
             return '<button type="button" class="wp-nv' + (act === n.n ? ' on' : '') + '" data-n="' + n.n + '"'
-              + ' style="--c:' + n.col + '"><b>' + n.lb + '</b><em>' + esc(n.ayuda) + '</em></button>'; }).join('')
-        + (act ? '<button type="button" class="wp-nv wp-quitar" data-n="0"><b>Quitar</b><em>Ya no me duele</em></button>' : '')
+              + ' style="--c:' + n.col + '"><b>' + esc(T(n.lb)) + '</b><em>' + esc(T(n.ayuda)) + '</em></button>'; }).join('')
+        + (act ? '<button type="button" class="wp-nv wp-quitar" data-n="0"><b>' + esc(T('Quitar')) + '</b><em>' + esc(T('Ya no me duele')) + '</em></button>' : '')
         + '</div></div>';
     } else {
-      h += '<div class="wp-mini wp-ayuda">Tocá la zona que te molesta. Si no te duele nada, no toques nada: está perfecto así.</div>';
+      h += '<div class="wp-mini wp-ayuda">' + esc(T('Tocá la zona que te molesta. Si no te duele nada, no toques nada: está perfecto así.')) + '</div>';
     }
 
     h += '<div class="wp-leyenda">'
       + N.slice(1).map(function (n) {
-          return '<span><i style="background:' + n.col + '"></i><b>' + n.lb + '</b> <em>' + esc(n.ayuda) + '</em></span>'; }).join('')
+          return '<span><i style="background:' + n.col + '"></i><b>' + esc(T(n.lb)) + '</b> <em>' + esc(T(n.ayuda)) + '</em></span>'; }).join('')
       + '</div><div class="wp-listamol" id="wp-listamol"></div>';
     c.innerHTML = h;
 
@@ -446,14 +460,14 @@
 
     var marcadas = Object.keys(W.MOL);
     el('wp-listamol').innerHTML = marcadas.length
-      ? '<div class="wp-bl-ti" style="font-size:14px;margin-top:4px">Lo que marcaste</div>'
+      ? '<div class="wp-bl-ti" style="font-size:14px;margin-top:4px">' + esc(T('Lo que marcaste')) + '</div>'
         + marcadas.map(function (k) {
             var n = W.MOL[k], z = zonaDe(k);
             var otra = z && !((z[W.cara()] || []).length);
             return '<div class="wp-molfila"><i style="background:' + N[n].col + '"></i>'
-              + esc(z ? z.lb : k) + ' <b style="color:' + N[n].col + '">' + N[n].lb + '</b>'
-              + (otra ? '<span class="wp-mini" style="margin:0"> · se ve del otro lado</span>' : '')
-              + '<button type="button" class="wp-x" data-k="' + k + '" aria-label="Quitar">✕</button></div>'; }).join('')
+              + esc(z ? T(z.lb) : k) + ' <b style="color:' + N[n].col + '">' + esc(T(N[n].lb)) + '</b>'
+              + (otra ? '<span class="wp-mini" style="margin:0"> ' + esc(T('· se ve del otro lado')) + '</span>' : '')
+              + '<button type="button" class="wp-x" data-k="' + k + '" aria-label="' + esc(T('Quitar')) + '">✕</button></div>'; }).join('')
       : '';
     [].forEach.call(c.querySelectorAll('.wp-x'), function (b) {
       b.onclick = function () { delete W.MOL[b.getAttribute('data-k')]; pintarMapa(); };
@@ -465,7 +479,7 @@
     var sel = el('selJug'); var num = +sel.value;
     var yo = numJugador(); if (yo !== null && yo !== undefined) num = yo;
     var j = jugadores().filter(function (x) { return x.num === num; })[0];
-    if (!j) { alert('Elegí un jugador.'); return; }
+    if (!j) { alert(T('Elegí un jugador.')); return; }
     var date = fechaActual();
     var q = {}, suma = 0;
     W.CLAVES.forEach(function (k) { var v = +el('r-' + k).value; q[k] = v; suma += v; });
@@ -502,39 +516,40 @@
     var peor = movs[0], mejor = movs[movs.length - 1];
 
     var h = '<div class="result">'
-      + '<div class="muted" style="font-size:11px;letter-spacing:2px;text-transform:uppercase">Tu wellness de hoy</div>'
+      + '<div class="muted" style="font-size:11px;letter-spacing:2px;text-transform:uppercase">' + esc(T('Tu wellness de hoy')) + '</div>'
       + '<div class="big" id="resPct" style="color:' + col + '">' + e.pct + '%</div>';
     if (baseP) {
       h += '<div class="fb" style="color:' + col + '">' + c.txt + '</div>'
-        + '<div class="wp-mini" style="margin-top:2px">Tu normal de las últimas 3 semanas es '
-        + Math.round(baseP.m) + '% · sobre ' + baseP.n + ' respuestas</div>';
+        + '<div class="wp-mini" style="margin-top:2px">'
+        + esc(T('Tu normal de las últimas 3 semanas es {0}% · sobre {1} respuestas', Math.round(baseP.m), baseP.n)) + '</div>';
     } else {
-      h += '<div class="fb" style="color:#94a3b8">Todavía no tenés suficientes días cargados para comparar.</div>'
-        + '<div class="wp-mini" style="margin-top:2px">Con 4 respuestas ya te digo cómo venís contra vos mismo.</div>';
+      h += '<div class="fb" style="color:#94a3b8">' + esc(T('Todavía no tenés suficientes días cargados para comparar.')) + '</div>'
+        + '<div class="wp-mini" style="margin-top:2px">' + esc(T('Con 4 respuestas ya te digo cómo venís contra vos mismo.')) + '</div>';
     }
     if (peor && peor.c.z <= -0.8) {
       h += '<div class="wp-dest" style="border-color:' + W.COLCLS[peor.c.cls] + '55">'
-        + '<b style="color:' + W.COLCLS[peor.c.cls] + '">' + W.EXPLICA[peor.k].ic + ' ' + W.EXPLICA[peor.k].lb
-        + ' es lo que más te bajó</b><br><span class="wp-mini">' + e.q[peor.k] + '/10 · tu normal '
-        + peor.c.base.toFixed(1) + '</span></div>';
+        + '<b style="color:' + W.COLCLS[peor.c.cls] + '">'
+        + esc(T('{0} es lo que más te bajó', W.EXPLICA[peor.k].ic + ' ' + T(W.EXPLICA[peor.k].lb)))
+        + '</b><br><span class="wp-mini">'
+        + esc(T('{0}/10 · tu normal {1}', e.q[peor.k], peor.c.base.toFixed(1))) + '</span></div>';
     } else if (mejor && mejor.c.z >= 0.8) {
       h += '<div class="wp-dest" style="border-color:#22c55e55"><b style="color:#22c55e">'
-        + W.EXPLICA[mejor.k].ic + ' ' + W.EXPLICA[mejor.k].lb + ' es lo mejor que traés hoy</b></div>';
+        + esc(T('{0} es lo mejor que traés hoy', W.EXPLICA[mejor.k].ic + ' ' + T(W.EXPLICA[mejor.k].lb))) + '</b></div>';
     }
     var mols = Object.keys(W.MOL);
     if (mols.length) {
-      h += '<div class="wp-dest" style="border-color:#f9731655"><b style="color:#f97316">Marcaste '
-        + mols.length + ' zona' + (mols.length > 1 ? 's' : '') + '</b><br><span class="wp-mini">'
+      h += '<div class="wp-dest" style="border-color:#f9731655"><b style="color:#f97316">'
+        + esc(T(mols.length > 1 ? 'Marcaste {0} zonas' : 'Marcaste {0} zona', mols.length)) + '</b><br><span class="wp-mini">'
         + mols.map(function (k) { return esc(W.nombreZona(k)); }).join(' · ')
-        + ' — el cuerpo técnico lo ve en el parte de hoy.</span></div>';
+        + ' ' + esc(T('— el cuerpo técnico lo ve en el parte de hoy.')) + '</span></div>';
     }
     var st = W.staffDe(e.num, e.date);
     if (st && st.disp) {
       h += '<div class="wp-dest" style="border-color:' + W.DISP[st.disp].col + '55"><b style="color:'
-        + W.DISP[st.disp].col + '">' + W.DISP[st.disp].lb + '</b>'
+        + W.DISP[st.disp].col + '">' + esc(T(W.DISP[st.disp].lb)) + '</b>'
         + (st.nota ? '<br><span class="wp-mini">' + esc(st.nota) + '</span>' : '') + '</div>';
     }
-    h += '<div style="margin-top:12px"><a href="prep_fisica.html" style="color:var(--acc);font-size:13px;font-weight:700;text-decoration:none">Ver tu preparación física →</a></div></div>';
+    h += '<div style="margin-top:12px"><a href="prep_fisica.html" style="color:var(--acc);font-size:13px;font-weight:700;text-decoration:none">' + esc(T('Ver tu preparación física →')) + '</a></div></div>';
     caja.innerHTML = h;
     caja.style.display = 'block';
     caja.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -565,7 +580,7 @@
     if (!st || !st.disp) { c.style.display = 'none'; c.innerHTML = ''; return; }
     c.style.display = 'block';
     c.innerHTML = '<div class="wp-aviso" style="border-color:' + W.DISP[st.disp].col + '66">'
-      + '<b style="color:' + W.DISP[st.disp].col + '">' + W.DISP[st.disp].lb + '</b>'
+      + '<b style="color:' + W.DISP[st.disp].col + '">' + esc(T(W.DISP[st.disp].lb)) + '</b>'
       + (st.nota ? '<div class="wp-mini" style="margin-top:3px">' + esc(st.nota) + '</div>' : '')
       + '</div>';
   }
@@ -585,6 +600,10 @@
   function jugadores() { try { return (window.PLANTEL_NAFELS && window.PLANTEL_NAFELS.jugadores) || []; } catch (e) { return []; } }
   function esStaff() { try { return (localStorage.getItem('vb_role') || '').toLowerCase() !== 'player'; } catch (e) { return true; } }
   function col(p) { return p >= 85 ? '#22c55e' : p >= 70 ? '#4ade80' : p >= 55 ? '#f59e0b' : '#ef4444'; }
+  function T(){ try { return window.wpT.apply(null, arguments); } catch(e){ return arguments[0]; } }
+  function TB(s){ try { return window.wpTBaja(s); } catch(e){ return String(s).toLowerCase(); } }
+  function NUM(n){ try { return window.wpNum(n); } catch(e){ return String(n); } }
+
 
   /* ── HISTORIAL ──────────────────────────────────────────────────────── */
   var histOrig = window.renderHist;
@@ -598,32 +617,35 @@
 
     var base = W.normalPct(num, hoy);
     if (base) {
-      extra += '<div class="wp-bloque"><div class="wp-bl-ti">Tu normal</div>'
-        + '<div class="wp-mini">Promedio propio de las últimas 3 semanas: <b style="color:' + col(Math.round(base.m)) + '">'
-        + Math.round(base.m) + '%</b> sobre ' + base.n + ' respuestas. Es contra esto que se mide tu día, no contra el 100.</div></div>';
+      extra += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('Tu normal')) + '</div>'
+        + '<div class="wp-mini">'
+        + T('Promedio propio de las últimas 3 semanas: {0} sobre {1} respuestas. Es contra esto que se mide tu día, no contra el 100.',
+            '<b style="color:' + col(Math.round(base.m)) + '">' + Math.round(base.m) + '%</b>', base.n)
+        + '</div></div>';
     }
 
     var c = W.cargaDe(num, hoy), lec = W.leerCarga(c);
     if (c.sesiones) {
-      extra += '<div class="wp-bloque"><div class="wp-bl-ti">Tu carga</div>'
+      extra += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('Tu carga')) + '</div>'
         + '<div class="wp-cargas">'
-        + caja('Esta semana', c.semana.toLocaleString('es-AR'), '#e2e8f0', 'RPE × minutos, últimos 7 días')
-        + caja('Monotonía', c.monotonia ? c.monotonia.toFixed(1) : '—', c.monotonia > 2 ? '#f59e0b' : '#22c55e', 'Arriba de 2: todos los días iguales')
-        + caja('Aguda:crónica', c.acwr ? c.acwr.toFixed(2) : '—', (c.acwr > 1.5 || (c.acwr && c.acwr < 0.8)) ? '#f59e0b' : '#22c55e', 'Esta semana contra el promedio de 4')
+        + caja(T('Esta semana'), NUM(c.semana), '#e2e8f0', T('RPE × minutos, últimos 7 días'))
+        + caja(T('Monotonía'), c.monotonia ? c.monotonia.toFixed(1) : '—', c.monotonia > 2 ? '#f59e0b' : '#22c55e', T('Arriba de 2: todos los días iguales'))
+        + caja(T('Aguda:crónica'), c.acwr ? c.acwr.toFixed(2) : '—', (c.acwr > 1.5 || (c.acwr && c.acwr < 0.8)) ? '#f59e0b' : '#22c55e', T('Esta semana contra el promedio de 4'))
         + '</div>'
         + '<div class="wp-mini" style="color:' + lec.col + ';margin-top:6px">' + esc(lec.txt) + '</div>'
-        + (c.estimada ? '<div class="wp-mini">Alguna sesión no tiene los minutos cargados: ahí se estimaron 90.</div>' : '')
+        + (c.estimada ? '<div class="wp-mini">' + esc(T('Alguna sesión no tiene los minutos cargados: ahí se estimaron 90.')) + '</div>' : '')
         + '</div>';
     }
 
     var mols = W.molestiasDe(num, hoy);
     if (Object.keys(mols).length) {
-      extra += '<div class="wp-bloque"><div class="wp-bl-ti">Tus molestias de hoy</div>'
+      extra += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('Tus molestias de hoy')) + '</div>'
         + Object.keys(mols).map(function (k) {
             var t = W.tendenciaZona(num, k, hoy), n = mols[k];
             return '<div class="wp-molfila"><i style="background:' + W.NIVELES[n].col + '"></i>'
-              + esc(W.nombreZona(k)) + ' · <b style="color:' + W.NIVELES[n].col + '">' + W.NIVELES[n].lb + '</b>'
-              + (t ? ' · <span style="color:' + t.col + '">' + t.txt + '</span><span class="wp-mini"> (' + t.dias + ' día' + (t.dias > 1 ? 's' : '') + ')</span>' : '')
+              + esc(W.nombreZona(k)) + ' · <b style="color:' + W.NIVELES[n].col + '">' + esc(T(W.NIVELES[n].lb)) + '</b>'
+              + (t ? ' · <span style="color:' + t.col + '">' + esc(t.txt) + '</span><span class="wp-mini"> '
+                   + esc(T(t.dias > 1 ? '({0} días)' : '({0} día)', t.dias)) + '</span>' : '')
               + '</div>'; }).join('')
         + '</div>';
     }
@@ -675,28 +697,28 @@
     /* 'entrena' ya sale de filtrar los limitados y los que no entrenan: si
        encima se los restaba, quedaban descontados dos veces */
     var h = '<div class="wp-conteo">'
-      + conteo(entrena, 'Entrenan', '#22c55e')
-      + conteo(lim, 'Limitados', '#f59e0b')
-      + conteo(no, 'No entrenan', '#ef4444')
-      + conteo(sin.length, 'Sin reportar', '#64748b')
+      + conteo(entrena, T('Entrenan'), '#22c55e')
+      + conteo(lim, T('Limitados'), '#f59e0b')
+      + conteo(no, T('No entrenan'), '#ef4444')
+      + conteo(sin.length, T('Sin reportar'), '#64748b')
       + '</div>';
 
     if (sin.length) {
-      h += '<div class="wp-bloque"><div class="wp-bl-ti">Todavía no reportaron</div>'
+      h += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('Todavía no reportaron')) + '</div>'
         + '<div class="wp-mini">' + sin.map(function (f) { return esc(f.ap); }).join(' · ') + '</div></div>';
     }
 
     var atencion = filas.filter(function (f) { return f.prio >= 14 && f.reporto; })
                         .sort(function (a, b) { return b.prio - a.prio; });
-    h += '<div class="wp-bloque"><div class="wp-bl-ti">Requiere atención</div>';
+    h += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('Requiere atención')) + '</div>';
     h += atencion.length
       ? atencion.map(function (f) { return tarjeta(f, fecha, true); }).join('')
-      : '<div class="wp-mini">Nadie en rojo hoy. El plantel llega bien.</div>';
+      : '<div class="wp-mini">' + esc(T('Nadie en rojo hoy. El plantel llega bien.')) + '</div>';
     h += '</div>';
 
     var resto = filas.filter(function (f) { return atencion.indexOf(f) < 0; })
                      .sort(function (a, b) { return (b.pct || -1) - (a.pct || -1); });
-    h += '<div class="wp-bloque"><div class="wp-bl-ti">El resto del plantel</div>'
+    h += '<div class="wp-bloque"><div class="wp-bl-ti">' + esc(T('El resto del plantel')) + '</div>'
       + resto.map(function (f) { return tarjeta(f, fecha, false); }).join('') + '</div>';
 
     cont.innerHTML = h;
@@ -713,10 +735,10 @@
     var cabeza = '<div class="wp-tj-hd">'
       + '<b>' + esc(f.ap) + '</b>'
       + (f.pct != null ? '<span class="wp-tj-pct" style="color:' + col(f.pct) + '">' + f.pct + '%</span>'
-                       : '<span class="wp-tj-pct" style="color:#64748b">sin reportar</span>')
+                       : '<span class="wp-tj-pct" style="color:#64748b">' + esc(T('sin reportar')) + '</span>')
       + (c ? '<span class="wp-tj-vs" style="color:' + W.COLCLS[c.cls] + '">' + c.txt + '</span>' : '')
       + (f.st && f.st.disp ? '<span class="wp-pill" style="background:' + W.DISP[f.st.disp].col + '22;color:'
-            + W.DISP[f.st.disp].col + ';border-color:' + W.DISP[f.st.disp].col + '55">' + W.DISP[f.st.disp].lb + '</span>' : '')
+            + W.DISP[f.st.disp].col + ';border-color:' + W.DISP[f.st.disp].col + '55">' + esc(T(W.DISP[f.st.disp].lb)) + '</span>' : '')
       + '</div>';
 
     var cuerpo = '';
@@ -728,44 +750,48 @@
       });
       cuerpo += '<div class="wp-items">' + movs.map(function (m) {
         var cc = m.c ? W.COLCLS[m.c.cls] : '#94a3b8';
-        return '<span class="wp-item" title="' + esc(W.EXPLICA[m.k].que) + '">'
-          + W.EXPLICA[m.k].ic + ' ' + W.EXPLICA[m.k].lb
+        return '<span class="wp-item" title="' + esc(T(W.EXPLICA[m.k].que)) + '">'
+          + W.EXPLICA[m.k].ic + ' ' + esc(T(W.EXPLICA[m.k].lb))
           + ' <b style="color:' + cc + '">' + (m.v != null ? m.v : '—') + '</b>'
           + (m.c && m.c.base != null ? '<em>/' + m.c.base.toFixed(1) + '</em>' : '') + '</span>'; }).join('') + '</div>';
       var bajos = movs.filter(function (m) { return m.c && m.c.z <= -0.8; });
       if (bajos.length) {
-        cuerpo += '<div class="wp-frase">Lo que le bajó contra lo suyo: '
-          + bajos.map(function (m) { return '<b>' + W.EXPLICA[m.k].lb.toLowerCase() + '</b>'; }).join(', ') + '.</div>';
+        cuerpo += '<div class="wp-frase">'
+          + T('Lo que le bajó contra lo suyo: {0}.',
+              bajos.map(function (m) { return '<b>' + esc(TB(W.EXPLICA[m.k].lb)) + '</b>'; }).join(', '))
+          + '</div>';
       }
-      if (e.horas != null) cuerpo += '<div class="wp-mini">Durmió ' + e.horas + ' h.</div>';
+      if (e.horas != null) cuerpo += '<div class="wp-mini">' + esc(T('Durmió {0} h.', e.horas)) + '</div>';
     } else {
-      cuerpo += '<div class="wp-mini">No cargó la encuesta de este día.</div>';
+      cuerpo += '<div class="wp-mini">' + esc(T('No cargó la encuesta de este día.')) + '</div>';
     }
 
     var ks = Object.keys(f.mols);
     if (ks.length) {
-      cuerpo += '<div class="wp-frase"><b>Molestias:</b> ' + ks.map(function (k) {
+      cuerpo += '<div class="wp-frase"><b>' + esc(T('Molestias:')) + '</b> ' + ks.map(function (k) {
         var t = W.tendenciaZona(f.num, k, fecha), n = f.mols[k];
-        return '<span style="color:' + W.NIVELES[n].col + '">' + esc(W.nombreZona(k)) + ' (' + W.NIVELES[n].lb.toLowerCase() + ')</span>'
-          + (t ? '<span style="color:' + t.col + '"> ' + t.txt + ', ' + t.dias + 'd</span>' : ''); }).join(' · ') + '</div>';
+        return '<span style="color:' + W.NIVELES[n].col + '">' + esc(W.nombreZona(k)) + ' (' + esc(TB(W.NIVELES[n].lb)) + ')</span>'
+          + (t ? '<span style="color:' + t.col + '"> ' + esc(T('{0}, {1}d', t.txt, t.dias)) + '</span>' : ''); }).join(' · ') + '</div>';
     }
     if (f.carga.sesiones) {
-      cuerpo += '<div class="wp-frase"><b>Carga:</b> ' + f.carga.semana.toLocaleString('es-AR')
-        + ' esta semana · monotonía ' + (f.carga.monotonia ? f.carga.monotonia.toFixed(1) : '—')
-        + ' · aguda:crónica ' + (f.carga.acwr ? f.carga.acwr.toFixed(2) : '—')
+      cuerpo += '<div class="wp-frase"><b>' + esc(T('Carga:')) + '</b> '
+        + esc(T('{0} esta semana · monotonía {1} · aguda:crónica {2}',
+                NUM(f.carga.semana),
+                f.carga.monotonia ? f.carga.monotonia.toFixed(1) : '—',
+                f.carga.acwr ? f.carga.acwr.toFixed(2) : '—'))
         + ' <span style="color:' + lec.col + '">— ' + esc(lec.txt) + '</span></div>';
     }
     if (f.st && f.st.nota) {
-      cuerpo += '<div class="wp-frase"><b>Nota del cuerpo técnico:</b> ' + esc(f.st.nota) + '</div>';
+      cuerpo += '<div class="wp-frase"><b>' + esc(T('Nota del cuerpo técnico:')) + '</b> ' + esc(f.st.nota) + '</div>';
     }
     if (esStaff()) {
       cuerpo += '<div class="wp-staff" data-num="' + f.num + '">'
         + '<div class="wp-disp">'
         + ['ok', 'lim', 'no'].map(function (d) {
             var on = f.st && f.st.disp === d;
-            return '<button type="button" class="chip' + (on ? ' on' : '') + '" data-d="' + d + '">' + W.DISP[d].lb + '</button>'; }).join('')
+            return '<button type="button" class="chip' + (on ? ' on' : '') + '" data-d="' + d + '">' + esc(T(W.DISP[d].lb)) + '</button>'; }).join('')
         + '</div>'
-        + '<input type="text" class="wp-nota" placeholder="Nota para el jugador: por qué, y qué sí puede hacer" value="'
+        + '<input type="text" class="wp-nota" placeholder="' + esc(T('Nota para el jugador: por qué, y qué sí puede hacer')) + '" value="'
         + esc(f.st && f.st.nota ? f.st.nota : '') + '">'
         + '</div>';
     }
@@ -820,4 +846,41 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(arrancar, 60); });
   else setTimeout(arrancar, 60);
+
+  /* ══ EL BOTON ES/EN/DE ════════════════════════════════════════════════
+     Todo lo que escribe este archivo nace ya en el idioma elegido, asi que
+     al cambiarlo hay que volver a dibujarlo: el traductor de lang.js no
+     puede, porque estas frases llevan numeros adentro y nunca son dos veces
+     la misma. Se redibuja lo que hay en pantalla, sin tocar lo guardado. */
+  window.addEventListener('langchange', function () {
+    /* Lo que el jugador ya movio NO se toca: se anotan los valores, se
+       vuelven a dibujar las preguntas en el idioma nuevo y se reponen. Si
+       en vez de esto se llamara a maybeLoadExisting, lo contestado y sin
+       guardar se perderia por cambiar de idioma. Las zonas marcadas viven
+       en W.MOL, que tampoco se toca. */
+    var vals = {};
+    try {
+      (window.WP.CLAVES || []).concat(['rpe']).forEach(function (k) {
+        var r = document.getElementById('r-' + k); if (r) vals[k] = r.value;
+      });
+      var h = document.getElementById('wp-horas'), m = document.getElementById('wp-min');
+      if (h) vals.__horas = h.value;
+      if (m) vals.__min = m.value;
+    } catch (e) {}
+    try { window.buildQuestions(); } catch (e) {}
+    try {
+      Object.keys(vals).forEach(function (k) {
+        if (k === '__horas' || k === '__min') return;
+        var r = document.getElementById('r-' + k);
+        if (r) { r.value = vals[k]; window.onSlide(k); }
+      });
+      var h2 = document.getElementById('wp-horas'), m2 = document.getElementById('wp-min');
+      if (h2 && vals.__horas != null) h2.value = vals.__horas;
+      if (m2 && vals.__min != null) m2.value = vals.__min;
+    } catch (e) {}
+    try { window.renderHist(); } catch (e) {}
+    try { window.wpPintarMapa(); } catch (e) {}
+    try { window.wpPintarParte(); } catch (e) {}
+    try { window.wpPintarAviso(); } catch (e) {}
+  });
 })();

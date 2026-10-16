@@ -2,11 +2,11 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WELLNESS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261016-0749"></script>
-<script src="selector_categoria.js?v=20261016-0749"></script>
-<script src="datos_seguros.js?v=20261016-0749"></script>
-<script src="firebase.js?v=20261016-0749" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261016-0749"></script>
+<script src="categorias_club.js?v=20261016-0813"></script>
+<script src="selector_categoria.js?v=20261016-0813"></script>
+<script src="datos_seguros.js?v=20261016-0813"></script>
+<script src="firebase.js?v=20261016-0813" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261016-0813"></script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
      los botones y los desplegables salen en Arial. */
@@ -120,7 +120,7 @@
 }
 
   /* ══ WELLNESS QUE EXPLICA · estilos de wellness_plus.js ═══════════════ */
-  .wp-que{font-size:11.5px;color:#94a3b8;line-height:1.45;margin-top:3px;max-width:52ch}
+  .wp-que{font-size:11.5px;color:#94a3b8;line-height:1.45;margin-top:3px}
   .wp-anclas{display:flex;justify-content:space-between;gap:8px;margin-top:5px;font-size:10px;color:#64748b;line-height:1.3}
   .wp-anclas span{flex:1}
   .wp-anclas span:nth-child(2){text-align:center}
@@ -206,12 +206,12 @@
   .wp-nota{width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--text);border-radius:9px;
     padding:9px 11px;font-family:'Barlow Condensed';font-size:13.5px}
   @media(max-width:600px){ .wp-anclas{font-size:9.5px} .wp-tj-vs{width:100%} }
-</style><link rel="stylesheet" href="movil.css?v=20261016-0749">
-<script src="mi_fila.js?v=20261016-0749" onerror="void 0"></script>
+</style><link rel="stylesheet" href="movil.css?v=20261016-0813">
+<script src="mi_fila.js?v=20261016-0813" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261016-0749" defer></script>
+<script src="iconos.js?v=20261016-0813" defer></script>
 
-<script src="nav.js?v=20261016-0749" defer></script>
+<script src="nav.js?v=20261016-0813" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -252,8 +252,8 @@
 
     <!-- ====== DONDE DUELE ====== -->
     <div class="card">
-      <div class="card-ti">🩹 ¿Te duele algo?</div>
-      <div class="card-sub">Tocá la zona. Cada toque sube un nivel; el cuarto la apaga</div>
+      <div class="card-ti" data-t="🩹 ¿Te duele algo?">🩹 ¿Te duele algo?</div>
+      <div class="card-sub" data-t="Tocá la zona que te molesta y elegí cuánto">Tocá la zona que te molesta y elegí cuánto</div>
       <div id="wp-mapa"></div>
     </div>
 
@@ -300,17 +300,17 @@
   <!-- ====== PARTE DE HOY (cuerpo tecnico) ====== -->
   <div id="view-parte" style="display:none">
     <div class="card">
-      <div class="card-ti">🩺 Parte del día</div>
-      <div class="card-sub">Quién llega cómo, quién no reportó y a quién hay que mirar</div>
+      <div class="card-ti" data-t="🩺 Parte del día">🩺 Parte del día</div>
+      <div class="card-sub" data-t="Quién llega cómo, quién no reportó y a quién hay que mirar">Quién llega cómo, quién no reportó y a quién hay que mirar</div>
       <div style="max-width:200px;margin-bottom:16px">
-        <label class="fld">Día</label><input type="date" id="wp-fecha">
+        <label class="fld" data-t="Día">Día</label><input type="date" id="wp-fecha">
       </div>
       <div id="wp-parte"></div>
     </div>
   </div>
 </div>
 
-<script src="plantel_nafels.js?v=20261016-0749" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261016-0813" onerror="void 0"></script>
 <script>
 /* ============================================================================
    CAPA DE DATOS  —  local + nube (Firebase) usando el mismo fbSet/fbGet que ya
@@ -644,12 +644,13 @@ function jugadorConectado(){
      Va DESPUES del script de la pantalla, a proposito: vuelve a declarar
      las pocas funciones que cambian. Sacando esta linea, la pantalla queda
      exactamente como estaba antes. -->
-<script src="wellness_cuerpo.js?v=20261016-0749"></script>
-<script src="wellness_plus.js?v=20261016-0749"></script>
-<script src="lang.js?v=20261016-0749" onerror="void 0"></script>
-<script src="onesignal_push.js?v=20261016-0749" defer></script>
-<script src="ayuda.js?v=20261016-0749"></script>
-<script src="volver_inicio.js?v=20261016-0749" defer></script>
+<script src="wellness_idioma.js?v=20261016-0813"></script>
+<script src="wellness_cuerpo.js?v=20261016-0813"></script>
+<script src="wellness_plus.js?v=20261016-0813"></script>
+<script src="lang.js?v=20261016-0813" onerror="void 0"></script>
+<script src="onesignal_push.js?v=20261016-0813" defer></script>
+<script src="ayuda.js?v=20261016-0813"></script>
+<script src="volver_inicio.js?v=20261016-0813" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
