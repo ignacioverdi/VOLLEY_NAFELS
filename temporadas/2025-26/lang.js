@@ -582,6 +582,27 @@
     '✊ Colgado': { en:'✊ Commit', de:'✊ Commit' },
     '🖐 Lectura': { en:'🖐 Read', de:'🖐 Read' },
     '🤘 Punta y Punta': { en:'🤘 Pin & pin', de:'🤘 Pin & Pin' },
+    /* ══ EL WELLNESS NUEVO ═════════════════════════════════════
+       El menu salia en ingles y la encuesta en castellano. Estos son los
+       rotulos FIJOS de las pantallas nuevas del wellness; todo lo que lleva
+       un numero adentro lo traduce wellness_idioma.js en el momento de
+       escribirlo, porque la frase entera nunca es dos veces la misma. */
+    'Parte de hoy':      { en:'Today’s report', de:'Tagesbericht' },
+    '🩹 ¿Te duele algo?': { en:'🩹 Does anything hurt?', de:'🩹 Tut dir etwas weh?' },
+    'Tocá la zona que te molesta y elegí cuánto':
+      { en:'Tap the area that bothers you and choose how much',
+        de:'Tippe auf die Stelle, die dich stört, und wähle wie stark' },
+    '🩺 Parte del día': { en:'🩺 Report of the day', de:'🩺 Tagesbericht' },
+    'Quién llega cómo, quién no reportó y a quién hay que mirar':
+      { en:'Who is arriving how, who has not reported and who to watch',
+        de:'Wer wie ankommt, wer nicht gemeldet hat und wen man beobachten muss' },
+    'Día': { en:'Day', de:'Tag' },
+    /* La nota del pie de la solapa Equipo se arma en dos pedazos con un <b>
+       en el medio. El primero ya estaba traducido y el segundo no: en ingles
+       la frase terminaba en castellano. */
+    '= hoy comparado con su propio promedio. RPE = qué tan exigente sintió la sesión (no entra al %).':
+      { en:'= today compared with his own average. RPE = how demanding the session felt (it does not count towards the %).',
+        de:'= heute im Vergleich zu seinem eigenen Schnitt. RPE = wie fordernd sich die Einheit angefühlt hat (zählt nicht zum %).' },
     /* ══ LO QUE QUEDABA EN CASTELLANO, MEDIDO PANTALLA POR PANTALLA ════════
        Se abrio cada pantalla con la app en INGLES, con datos reales, y se
        anoto TODO nodo de texto visible que translateString() dejaba igual.
