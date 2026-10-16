@@ -141,6 +141,22 @@ def main():
     for p in porvenir:
         decir('    %s     (del respaldo del %s)' % (como_se_ve(p), encontrados[clave(p)][1]))
 
+    # ══ SIN LOS ESCUDOS ══════════════════════════════════════════════
+    # Cada partido puede traer el escudo del rival metido adentro como
+    # imagen en base64. Con eso el archivo salia de casi un MEGA para
+    # veinticinco partidos, y se publica en el sitio.
+    #
+    # Los escudos no hacen falta para recuperar nada: ya estan guardados
+    # con los partidos que SI estan, y la app los vuelve a usar sola para
+    # ese rival. Se sacan, y el archivo queda en unos pocos KB.
+    CAMPOS = ('id', 'fecha', 'hora', 'rival', 'condicion', 'cond',
+              'lugar', 'mapa', 'nota', 'torneo')
+    flacos = []
+    for p in partidos:
+        q = dict((c, p[c]) for c in CAMPOS if c in p)
+        flacos.append(q)
+    partidos = flacos
+
     datos = {'generado': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
              'desde': archivos[-1][9:19], 'hasta': archivos[0][9:19],
              'partidos': partidos}
