@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261016-0824"></script>
-<script src="selector_categoria.js?v=20261016-0824"></script>
-<script src="objetivos_config.js?v=20261016-0824"></script>
+<script src="categorias_club.js?v=20261016-0859"></script>
+<script src="selector_categoria.js?v=20261016-0859"></script>
+<script src="objetivos_config.js?v=20261016-0859"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -445,7 +445,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261016-0824" onerror="void 0"></script>
+<script src="lang.js?v=20261016-0859" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -456,7 +456,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261016-0824"></script>
+<script src="datos_seguros.js?v=20261016-0859"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -469,15 +469,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261016-0824" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261016-0824"></script>
-<script src="videos.js?v=20261016-0824" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261016-0859" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261016-0859"></script>
+<script src="videos.js?v=20261016-0859" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261016-0824">
+<link rel="stylesheet" href="movil.css?v=20261016-0859">
 
-<script src="iconos.js?v=20261016-0824" defer></script>
+<script src="iconos.js?v=20261016-0859" defer></script>
 </head>
 <body>
 
@@ -862,6 +862,26 @@ GP_TD = gpCompFiltra(GP_TD);
    llega el paquete se repinta. Sin internet se sigue viendo y escribiendo
    igual que antes; se sincroniza al volver. Lo que se esta tipeando en ese
    momento no se pisa.                                                     */
+/* ══ QUIEN ESTA MIRANDO ═══════════════════════════════════════════════════
+   Esta pantalla preguntaba por una funcion llamada vbIsCoach para saber si
+   el que mira es del cuerpo tecnico o es un jugador. Esa funcion NO EXISTE
+   en ningun archivo de la app: nunca existio. Como el codigo decia
+   "si no existe, asumo entrenador", TODO EL MUNDO era entrenador.
+
+   Lo que se perdia: el jugador abria el video y veia la lista entera con
+   casillas y el boton de guardar, en vez de recibir los ocho clips que el
+   entrenador le habia dejado preparados. El modo jugador estaba escrito y
+   no corria nunca.
+
+   La funcion que SI existe es VB_esEditor, de firebase.js: devuelve false
+   solo cuando el rol guardado es 'player'. Si no hay sesion, es editor —
+   igual que en el resto de la app. */
+function gpEsEntrenador(){
+  try{ if(typeof VB_esEditor==='function') return !!VB_esEditor(); }catch(e){}
+  try{ return (localStorage.getItem('vb_role')||'').toLowerCase()!=='player'; }catch(e){}
+  return true;
+}
+
 var GP_ED={}, GP_ED_LISTO=false, GP_ED_REG=[];
 function gpEdSlug(k){ return String(k).replace(/[^a-zA-Z0-9_]/g,'_'); }
 function gpEdRuta(){ return 'gp_edit/'+gpEdSlug(GP_RIVAL_SLUG||'rival'); }
@@ -2244,11 +2264,14 @@ function gpnVideo(num,tipo,cat,ev){
   var evTxt=(!ev||!ev.length)?'':(typeof ev==='string'?ev:ev.join(' '));
   if(!clips.length){ alert('No hay acciones con video para ese filtro.'); return; }
   gpVidDom();
-  gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
+  gpV.coach=gpEsEntrenador();
   var catTxt=(!cat||cat==='all'||!cat.length)?'':(typeof cat==='string'?cat:cat.join('+'));
   gpV.key=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(catTxt||'all')+(evTxt?('_'+evTxt.replace(/[^#+!\-\/=]/g,'')):'');
   var ape=gpApellido(num)||('#'+num);
-  document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(catTxt?(' · '+catTxt):'')+(evTxt?(' · '+evTxt):'')+' — '+clips.length+' acciones';
+  var _rotulo=function(n){
+    document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(catTxt?(' · '+catTxt):'')+(evTxt?(' · '+evTxt):'')+' — '+n+' acciones';
+  };
+  _rotulo(clips.length);
   document.getElementById('gpVidOverlay').style.display='flex';
   try{ gpnTiempos(); }catch(e){}
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
@@ -2263,6 +2286,7 @@ function gpnVideo(num,tipo,cat,ev){
     if(!gpV.coach && habia){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; }
     gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
     gpV.ev=null; gpV.idx=-1;
+    _rotulo(gpV.list.length);
     gpVidRender();
   };
   if(typeof fbGet==='function'){ fbGet(gpSelRuta(),aplicar); } else { aplicar(null); }
@@ -2272,8 +2296,73 @@ function gpnVideo(num,tipo,cat,ev){
 /* Un desplegable con casillas. Sirve igual para el tipo (combinacion o
    potencia/flotado) que para la valoracion: sin nada marcado valen todas,
    y asi las dos filas de botones sueltos pasan a dos botones. */
+/* ══ LA TARJETA, TAL COMO LA DEJO EL ENTRENADOR ═══════════════════════════
+   La secuencia de video se guarda con una clave que incluye el filtro:
+   jugador + fundamento + combinacion + resultado. Si el entrenador guardo
+   ocho ataques con "X5" puesto y el jugador abria la tarjeta con los filtros
+   vacios, estaba mirando OTRA clave y no encontraba nada preparado. Por eso
+   parecia que la seleccion no se guardaba.
+
+   Asi que ahora se guarda tambien la configuracion de la tarjeta —que
+   solapa y que filtros— en la misma rama compartida que ya usan las notas y
+   las opciones de bloqueo. El jugador abre la tarjeta igual que la dejo el
+   entrenador, y ahi la secuencia coincide sola.
+
+   Solo guarda el cuerpo tecnico. El jugador la lee y nada mas: su escritura
+   ya la frena firebase.js, pero ni siquiera se intenta. */
+/* ══ CUANTOS CLIPS HAY PREPARADOS ════════════════════════════════════════
+   El boton de la tarjeta contaba las acciones del filtro —10— pero el
+   jugador, al abrirlo, recibe solo las que el entrenador dejo tildadas —7—.
+   Un numero que no es el que despues aparece es un numero mal puesto.
+
+   Las secuencias se bajan UNA sola vez, en el mismo viaje para todas, igual
+   que las notas. Mientras no llegan, el boton dice lo de siempre. */
+var GP_SELS=null;
+function gpSelsClave(num,tipo,cat,ev){
+  var catTxt=(!cat||cat==='all'||!cat.length)?'':(typeof cat==='string'?cat:cat.join('+'));
+  var evTxt=(!ev||!ev.length)?'':(typeof ev==='string'?ev:ev.join(' '));
+  var k=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(catTxt||'all')+(evTxt?('_'+evTxt.replace(/[^#+!\-\/=]/g,'')):'');
+  return k.replace(/[^a-zA-Z0-9_]/g,'_');
+}
+function gpSelsCuantos(num,tipo,cat,ev){
+  if(!GP_SELS) return null;
+  var v=GP_SELS[gpSelsClave(num,tipo,cat,ev)];
+  return (v instanceof Array && v.length) ? v.length : null;
+}
+function gpSelsCargar(){
+  if(typeof fbGet!=='function') return;
+  try{
+    fbGet('gp_video_sel', function(d){
+      GP_SELS=(d&&typeof d==='object')?d:{};
+      /* los botones ya dibujados se vuelven a rotular solos */
+      try{ [].forEach.call(document.querySelectorAll('.gpn-vbtn'),function(b){ if(b._txt) b._txt(); }); }catch(e){}
+    });
+  }catch(e){}
+}
+try{ gpSelsCargar(); }catch(e){}
+
+var GPN_CFG={};
+function gpnCfgClave(num){ return 'vb_gp_cfg_'+(GP_RIVAL_SLUG||'rival')+'_'+num; }
+function gpnCfgGuardar(num){
+  if(!gpEsEntrenador()) return;
+  var c=GPN_CFG[num]||{};
+  try{ gpEdGuardar(gpnCfgClave(num), JSON.stringify({
+    tab:c.tab||'', cat:(c.cat||[]).slice(), ev:(c.ev||[]).slice() })); }catch(e){}
+}
+function gpnCfgParse(txt){
+  try{
+    var o=JSON.parse(txt);
+    if(o&&typeof o==='object') return { tab:String(o.tab||''),
+      cat:(o.cat instanceof Array)?o.cat.slice():[],
+      ev:(o.ev instanceof Array)?o.ev.slice():[] };
+  }catch(e){}
+  return null;
+}
+
 function gpnDesplegable(opts){
-  var sel=[];
+  /* lo que venia guardado entra ya marcado, y sin avisar: el aviso es para
+     los cambios de la persona, no para el estado inicial */
+  var sel=(opts.init instanceof Array)?opts.init.slice():[];
   var dd=document.createElement('div'); dd.className='gpn-dd';
   var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
   var menu=document.createElement('div'); menu.className='gpn-ddm';
@@ -2281,9 +2370,13 @@ function gpnDesplegable(opts){
     if(!sel.length){ bt.innerHTML=opts.vacio+' <i class="gpn-n">'+opts.total()+'</i> <span class="car">\u25be</span>'; bt.classList.remove('act'); }
     else { bt.innerHTML=sel.map(opts.chip).join(' ')+' <i class="gpn-n">'+opts.total(sel)+'</i> <span class="car">\u25be</span>'; bt.classList.add('act'); }
   }
+  var _hay={};
+  opts.items.forEach(function(it){ _hay[it.k]=1; });
+  sel=sel.filter(function(k){ return _hay[k]; });   /* lo que ya no esta en los datos, afuera */
   opts.items.forEach(function(it){
     var row=document.createElement('label'); row.className='gpn-ddi';
     row.innerHTML='<input type="checkbox">'+it.html+'<span class="nn">'+it.n+'</span>';
+    if(sel.indexOf(it.k)>=0) row.querySelector('input').checked=true;
     row.querySelector('input').onchange=function(){
       if(this.checked){ if(sel.indexOf(it.k)<0) sel.push(it.k); }
       else { var i=sel.indexOf(it.k); if(i>=0) sel.splice(i,1); }
@@ -2316,11 +2409,12 @@ function gpnDesplegable(opts){
   return {el:dd, sel:function(){return sel;}};
 }
 
-function gpnFiltros(cont,num,tipo,cats,escala,onPick){
+function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
   var acc=gpnClips(num,tipo,'all',null);
   var cuentaCat={},cuentaEv={};
   acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
-  var estado={cat:[],ev:[]};
+  var estado={ cat:(ini&&ini.cat instanceof Array)?ini.cat.slice():[],
+               ev :(ini&&ini.ev  instanceof Array)?ini.ev.slice() :[] };
   var barra=document.createElement('div'); barra.className='gpn-flt';
   var fila=document.createElement('div'); fila.className='gpn-row';
 
@@ -2332,7 +2426,8 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick){
     chip:function(k){ return '<b style="color:#E6EDF6">'+k+'</b>'; },
     items:cats.filter(function(c){return c.k!=='all';}).map(function(c){
       return {k:c.k, n:cuentaCat[c.k]||0, html:'<span>'+c.html+'</span>'}; }),
-    onChange:function(s){ estado.cat=s.slice(); onPick(estado); }
+    onChange:function(s){ estado.cat=s.slice(); onPick(estado); },
+    init:estado.cat
   });
 
   var lblE=document.createElement('span'); lblE.className='gpn-lbl'; lblE.textContent='Resultado';
@@ -2343,7 +2438,8 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick){
     items:escala.filter(function(p){return cuentaEv[p[0]];}).map(function(p){
       return {k:p[0], n:cuentaEv[p[0]],
               html:'<span class="ev" style="color:'+GPN_EVCOL[p[0]]+'">'+p[0]+'</span><span>'+p[1]+'</span>'}; }),
-    onChange:function(s){ estado.ev=s.slice(); onPick(estado); }
+    onChange:function(s){ estado.ev=s.slice(); onPick(estado); },
+    init:estado.ev
   });
 
   fila.appendChild(lblC); fila.appendChild(ddC.el);
@@ -2358,7 +2454,10 @@ function gpnBotonVideo(cont,num,tipo,estado){
   /* el rotulo se arma pegando: como frase entera no estaba en el
      diccionario y en ingles quedaba "Ver video" en castellano. */
   function txt(){
-    var n=gpnClips(num,tipo,estado.cat.length?estado.cat:'all',estado.ev.length?estado.ev:null).length;
+    var cat=estado.cat.length?estado.cat:'all', ev=estado.ev.length?estado.ev:null;
+    var n=gpnClips(num,tipo,cat,ev).length;
+    /* al jugador le llega la secuencia del entrenador, no el filtro entero */
+    if(!gpEsEntrenador()){ var k=gpSelsCuantos(num,tipo,cat,ev); if(k) n=k; }
     var s='\u25b6 Ver video \u2014 '+n+' acciones';
     try{ if(typeof translateString==='function') s=translateString(s,(typeof getLang==='function'?getLang():'es')); }catch(e){}
     b.innerHTML=s;
@@ -2432,7 +2531,16 @@ function gpnPanel(j,cont,tipo){
   var escala=(tipo==='recepcion')?GPN_RESS_REC:GPN_RESS;
   var caja=document.createElement('div'); caja.className='gpn-caja';
   var btn=null;
-  var estado=gpnFiltros(caja,num,tipo,cats,escala,function(st){ dibujar(st); if(btn&&btn._txt) btn._txt(); });
+  /* Si el entrenador dejo esta solapa con filtros puestos, se abre asi: es la
+     unica forma de que el boton de video caiga en la misma clave con la que
+     el guardo la secuencia. */
+  var cfg=GPN_CFG[num];
+  var ini=(cfg&&cfg.tab===tipo)?cfg:null;
+  var estado=gpnFiltros(caja,num,tipo,cats,escala,function(st){
+    dibujar(st); if(btn&&btn._txt) btn._txt();
+    GPN_CFG[num]={tab:tipo,cat:st.cat.slice(),ev:st.ev.slice()};
+    gpnCfgGuardar(num);
+  }, ini);
   /* El SVG lleva width:100%. Suelto en el panel se estiraba a 1400 px de ancho
      por 1350 de alto —una cancha por pantalla—. Va en una columna con techo y
      al lado la lectura, que es como se mira: el dibujo a la izquierda y lo que
@@ -2513,21 +2621,51 @@ function gpnFichaJugador(j,idx){
   var activo=disponibles.slice().sort(function(a,b){ return gpnCuenta(j.num,b)-gpnCuenta(j.num,a); })[0];
   if(j.pos==='LIBERO' && disponibles.indexOf('recepcion')>=0) activo='recepcion';
 
+  var tabBtn={};
   ['ataque','saque','recepcion'].forEach(function(t){
     var n=gpnCuenta(j.num,t);
     var b=document.createElement(n?'button':'span');
     b.className='gpn-tab'+(n?'':' off')+(t===activo?' on':'');
     b.textContent=ETQ[t]+' '+(n||'—');
-    if(n){ b.type='button'; b.onclick=function(ev){ ev.stopPropagation();
+    if(n){ tabBtn[t]=b; b.type='button'; b.onclick=function(ev){ ev.stopPropagation();
       [].forEach.call(tabs.children,function(x){x.classList.remove('on');});
-      b.classList.add('on'); pintar(t); }; }
+      b.classList.add('on');
+      /* cambiar de solapa empieza de cero: los filtros eran los de la otra */
+      GPN_CFG[j.num]={tab:t,cat:[],ev:[]};
+      gpnCfgGuardar(j.num);
+      pintar(t); }; }
     tabs.appendChild(b);
   });
+  function gpnMarcarTab(t){
+    if(!tabBtn[t]) return false;
+    [].forEach.call(tabs.children,function(x){x.classList.remove('on');});
+    tabBtn[t].classList.add('on');
+    return true;
+  }
   card.appendChild(tabs); card.appendChild(cuerpo);
 
   function pintar(t){ try{ gpnPanel(j,cuerpo,t); }catch(e){ try{console.warn('[gpn] ficha',e);}catch(_){}
     cuerpo.innerHTML='<div class="gpn-vacio">No se pudo dibujar este fundamento.</div>'; } }
   if(activo) pintar(activo); else cuerpo.innerHTML='<div class="gpn-vacio">Sin acciones registradas.</div>';
+
+  /* ── COMO LA DEJO EL ENTRENADOR ───────────────────────────────────────
+     Se lee despues del primer dibujo, no antes: asi la tarjeta aparece al
+     toque con lo de siempre y se reacomoda sola cuando llega lo guardado
+     —primero lo de este aparato, despues lo de la nube—. Si no hay nada
+     guardado no se toca nada y queda exactamente como estaba. */
+  if(activo){
+    var _ultimo='';
+    gpEdLeer(gpnCfgClave(j.num), function(v){
+      if(v===_ultimo) return;          /* no repintar dos veces lo mismo */
+      var o=gpnCfgParse(v); if(!o) return;
+      if(o.tab && !tabBtn[o.tab]) return;    /* ese fundamento no tiene datos */
+      _ultimo=v;
+      GPN_CFG[j.num]=o;
+      var t=o.tab||activo;
+      gpnMarcarTab(t);
+      pintar(t);
+    });
+  }
 
   /* ── claves automaticas: lo mismo que mostraba la franja de antes ── */
   var ana={ataque:[],saque:[],recepcion:[]};
@@ -3692,7 +3830,7 @@ function gpOpenVideo(rot,zone,sidx){
   gpVidDom();
   var rec=GP_ARM_PHASE==='SO'?GP_ARM_REC:null;
   var clips=gpZoneClips(_st,rot,GP_ARM_PHASE,rec,zone);
-  gpV.coach=(typeof vbIsCoach==='function')?vbIsCoach():true;
+  gpV.coach=gpEsEntrenador();
   gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+gpOcClave()+gpSzClave()+'_z'+zone;
   var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+gpRecqEtiqueta()):'Transición';  /* el titulo del reproductor dice tambien con quien en la cancha: si no, dos secuencias distintas se llaman igual */
   if(gpOcActivo()) faseLbl+=' · en cancha '+gpOcEtiqueta();
@@ -5734,9 +5872,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261016-0824"></script>
-<script src="ayuda.js?v=20261016-0824"></script>
-<script src="volver_inicio.js?v=20261016-0824" defer></script>
+<script src="temporadas_menu.js?v=20261016-0859"></script>
+<script src="ayuda.js?v=20261016-0859"></script>
+<script src="volver_inicio.js?v=20261016-0859" defer></script>
 </body>
 </html>
 
