@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261017-1133"></script>
-<script src="selector_categoria.js?v=20261017-1133"></script>
+<script src="categorias_club.js?v=20261017-2320"></script>
+<script src="selector_categoria.js?v=20261017-2320"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -359,14 +359,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261017-1133"></script>
+<script src="objetivos_config.js?v=20261017-2320"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261017-1133"></script>
+<script src="datos_seguros.js?v=20261017-2320"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -377,12 +377,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261017-1133" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-1133"></script>
-<script src="lang.js?v=20261017-1133"></script>
-<script src="objetivos.js?v=20261017-1133" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261017-1133"></script>
-  <script src="video_delay.js?v=20261017-1133" onerror="void 0"></script>
+<script src="firebase.js?v=20261017-2320" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-2320"></script>
+<script src="lang.js?v=20261017-2320"></script>
+<script src="objetivos.js?v=20261017-2320" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261017-2320"></script>
+  <script src="video_delay.js?v=20261017-2320" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -679,7 +679,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-1133">
+<link rel="stylesheet" href="movil.css?v=20261017-2320">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -1955,6 +1955,10 @@ function renderTeamDV4(act){
    El panel de scouting publica VOLEY_DATA en Firebase en cada acción.
    Acá lo leemos y refrescamos solo. Si no hay Firebase, seguimos usando datos_voley.js */
 var _liveTS='';
+/* lo que el scout publica AHORA: fecha completa, id y nombre de la sesion.
+   Hasta ahora lo unico que llegaba era la hora suelta, y con eso no se puede
+   saber si lo que se ve es de este partido o del entrenamiento de ayer. */
+var _liveISO=null, _liveSid=null, _liveTitulo='', _liveTipo='';
 function abrirPlanPreparado(){
   window.open('plan_partido.html', '_blank');
 }
@@ -1980,6 +1984,8 @@ function abrirPlanPreparadoModal(){
   m.style.display='block';
 }
 var _lastRally = -1; var _lastAcciones = null;   /* último punto cerrado que ya mostramos */
+var _lastSid = null;      /* la sesion que estamos mostrando */
+var _ultData = 0;         /* cuando bajamos la vista pesada por ultima vez */
 function refrescarVista(D){
   window.VOLEY_DATA=D;
   try{ render(); }catch(e){}
@@ -2002,7 +2008,7 @@ function refrescarVista(D){
 function pvTraerAhora(){
   var e = document.getElementById('pv-edad');
   if(e) e.textContent = 'buscando...';
-  try{ _lastRally = null; _lastAcciones = null; }catch(x){}
+  try{ _lastRally = null; _lastAcciones = null; _lastSid = null; _ultData = 0; }catch(x){}
   traerEnVivo(true);
   setTimeout(pvEdad, 900);
 }
@@ -2011,21 +2017,63 @@ function pvTraerAhora(){
 /* Cuantos minutos pasaron desde el sello de hora del ultimo dato. Vive
    aparte porque ahora lo usan dos cosas: el cartel de "hace X min" y el
    marcador, que necesita saber si el partido sigue o ya termino. */
+function pvEsISO(ts){ return /^\d{4}-\d{2}-\d{2}T/.test(String(ts||'')); }
+function pvHoraDe(ts){
+  var s=String(ts||'');
+  if(pvEsISO(s)){ var d=new Date(s);
+    return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  var m=s.match(/(\d{1,2}):(\d{2})/); return m?m[0]:s;
+}
+/* De cuando es, en palabras. Con fecha completa se puede decir "de ayer";
+   con la hora sola, no, y eso hay que decirlo en vez de inventarlo. */
+function pvCuandoDe(ts){
+  var s=String(ts||'');
+  if(!pvEsISO(s)) return 'de las '+pvHoraDe(s)+' (sin fecha)';
+  var d=new Date(s), hoy=new Date(), ayer=new Date(Date.now()-864e5);
+  var dd=function(x){ return x.getFullYear()+'/'+x.getMonth()+'/'+x.getDate(); };
+  var h=pvHoraDe(s);
+  if(dd(d)===dd(hoy))  return 'de hoy '+h;
+  if(dd(d)===dd(ayer)) return 'de AYER '+h;
+  return 'del '+String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+h;
+}
 function pvMinutosDe(ts){
-  var m = String(ts||'').match(/(\d{1,2}):(\d{2})/);
+  var s = String(ts||'');
+  /* ══ CON FECHA, SI LA TRAE ═════════════════════════════════════════════
+     Lo que publica el scout ahora viaja con fecha completa. Lo viejo trae
+     solo "19:25", y con eso la cuenta se hace contra el reloj: sirve para
+     saber si pasaron minutos, NO para distinguir ayer de hoy. Por eso se
+     publica con fecha. */
+  if(pvEsISO(s)){
+    var d=new Date(s); if(isNaN(d.getTime())) return null;
+    return Math.max(0, Math.round((Date.now()-d.getTime())/60000));
+  }
+  var m = s.match(/(\d{1,2}):(\d{2})/);
   if(!m) return null;
   var ahora = new Date();
   var dif = (ahora.getHours()*60 + ahora.getMinutes()) - (parseInt(m[1],10)*60 + parseInt(m[2],10));
   if(dif < 0) dif += 24*60;            /* paso la medianoche */
   return dif;
 }
+/* El mejor sello que tengamos: el del scout si trae fecha, si no el viejo. */
+function pvSello(){
+  try{
+    if(_liveISO) return _liveISO;
+    var V=window.VOLEY_DATA;
+    if(V && V.iso) return V.iso;
+    return _liveTS || (V && V.ts) || null;
+  }catch(e){ return _liveTS||null; }
+}
+function pvQuien(){
+  if(!_liveTitulo) return '';
+  return (_liveTipo==='entrenamiento'?'Entrenamiento':'Partido')+' \u00b7 '+_liveTitulo+' \u00b7 ';
+}
 
 function pvEdad(){
   var e = document.getElementById('pv-edad');
   if(!e) return;
-  var ts = null;
-  try{ ts = _liveTS || (window.VOLEY_DATA && VOLEY_DATA.ts) || null; }catch(x){}
+  var ts = pvSello();
   if(!ts){ e.textContent = 'sin datos en la nube'; e.style.color = '#64748b'; return; }
+  var quien = pvQuien(), hora = pvHoraDe(ts);
 
   /* ══ EL SELLO ES SOLO LA HORA ════════════════════════════════════════════
      voley_data viaja con ts = "19:25": la hora, sin fecha. La primera version
@@ -2035,15 +2083,20 @@ function pvEdad(){
      ahora. Si el sello marca mas de seis horas atras, no es de este
      entrenamiento —ningun entrenamiento dura tanto—. */
   var dif = pvMinutosDe(ts);
-  if(dif === null){ e.textContent = 'último dato: ' + ts; e.style.color = '#94a3b8'; return; }
+  if(dif === null){ e.textContent = quien + 'último dato: ' + hora; e.style.color = '#94a3b8'; return; }
 
-  if(dif <= 1){ e.textContent = 'al día · ' + ts; e.style.color = '#4ade80'; return; }
-  if(dif < 10){ e.textContent = 'hace ' + dif + ' min · ' + ts; e.style.color = '#94a3b8'; return; }
+  if(dif <= 1){ e.textContent = quien + 'al día · ' + hora; e.style.color = '#4ade80'; return; }
+  if(dif < 10){ e.textContent = quien + 'hace ' + dif + ' min · ' + hora; e.style.color = '#94a3b8'; return; }
   if(dif < 360){
-    e.textContent = '⚠ hace ' + dif + ' min que no llega nada nuevo · ' + ts;
+    e.textContent = '⚠ ' + quien + 'hace ' + dif + ' min que no llega nada nuevo · ' + hora;
     e.style.color = '#fbbf24'; return;
   }
-  e.textContent = '⚠ lo que ves es de otro entrenamiento (' + ts + ')';
+  /* ══ DECIR QUE ESTO NO ES DE AHORA ═══════════════════════════════════════
+     Antes decia "de otro entrenamiento" y mostraba la hora suelta. Con la
+     fecha se puede ser exacto: el que mira tiene que entender, sin pensarlo,
+     que lo que esta leyendo NO es el partido que se esta jugando. */
+  e.textContent = '⚠ ESTO NO ES DE AHORA — ' + (quien||'lo último que hay en la nube es ')
+                + pvCuandoDe(ts) + '. No está llegando nada en vivo.';
   e.style.color = '#f87171';
 }
 
@@ -2053,6 +2106,16 @@ function traerEnVivo(primera){
      refrescar la vista pesada: solo cuando el scout CIERRA un punto. */
   fbGet('voley_live', function(L){
     if(!L) return;
+    /* ══ DE QUE SESION ES ESTO ═══════════════════════════════════════════
+       El scout publica el id, el tipo y el titulo de la sesion. Con eso el
+       panel sabe —y puede decir— si lo que muestra es el partido de ahora o
+       el entrenamiento de ayer, en vez de deducirlo de una hora suelta. */
+    try{
+      if(typeof L.sid==='string' && L.sid){ _liveSid=L.sid; }
+      if(typeof L.titulo==='string') _liveTitulo=L.titulo;
+      if(typeof L.tipo==='string') _liveTipo=L.tipo;
+      if(pvEsISO(L.ts)) _liveISO=L.ts;
+    }catch(e){}
     try{
       var g=function(id){return document.getElementById(id);};
       var abr3=function(n){ n=(n||'').trim(); return n?n.substring(0,3).toUpperCase():'---'; };
@@ -2071,7 +2134,7 @@ function traerEnVivo(primera){
          Si hace mas de quince minutos que no entra una accion, el partido
          no esta en curso. Entonces el tablero muestra el RESULTADO —los
          sets— y lo dice: FINAL. El puntito deja de latir.               */
-      var _min = pvMinutosDe((window.VOLEY_DATA && VOLEY_DATA.ts) || '');
+      var _min = pvMinutosDe(pvSello() || '');
       var _vivo = (_min === null) || (_min <= 15);
       var _sl = L.local.sets||0, _sv = L.visitante.sets||0;
 
@@ -2119,12 +2182,24 @@ function traerEnVivo(primera){
        se comporta igual que antes —entre punto y punto igual hubo acciones—
        y en entrenamiento por fin se actualiza solo. */
     var acciones = (typeof L.acciones==='number') ? L.acciones : null;
+    var sid = (typeof L.sid==='string' && L.sid) ? L.sid : null;
+    /* ══ UNA RED POR DEBAJO ══════════════════════════════════════════════
+       La vista pesada se bajaba SOLO cuando cambiaba el contador de rally o
+       el de acciones. Si por lo que sea esos contadores no se movian —y hay
+       mil motivos: el scout no llegaba a publicar voley_live, se corto la
+       red un rato, arranco otra sesion— el panel se quedaba pegado a lo
+       anterior para siempre, sin avisar. Ahora tambien se baja cuando cambia
+       la SESION, y como piso cada 20 segundos pase lo que pase. */
+    var cambioSesion = (sid !== null && sid !== _lastSid);
+    var vencido = (Date.now() - _ultData) > 20000;
     if(rally!==null || acciones!==null){
-      if(rally!==_lastRally || acciones!==_lastAcciones || primera){
-        _lastRally = rally; _lastAcciones = acciones;
+      if(rally!==_lastRally || acciones!==_lastAcciones || cambioSesion || vencido || primera){
+        _lastRally = rally; _lastAcciones = acciones; if(sid!==null) _lastSid = sid;
         fbGet('voley_data', function(D){
+          _ultData = Date.now();
           if(!D || !D.j || !D.j.length) return;
-          _liveTS=D.ts;
+          _liveTS=D.ts; if(D.iso) _liveISO=D.iso;
+          if(!_liveTitulo && D.titulo){ _liveTitulo=D.titulo; _liveTipo=D.tipo||''; }
           refrescarVista(D);
           var b=document.getElementById('live-badge'); if(b) b.style.display='inline-flex';
         });
@@ -2132,9 +2207,11 @@ function traerEnVivo(primera){
     } else {
       /* modo viejo por timestamp */
       fbGet('voley_data', function(D){
+        _ultData = Date.now();
         if(!D || !D.j || !D.j.length) return;
         if(D.ts===_liveTS && !primera) return;
-        _liveTS=D.ts;
+        _liveTS=D.ts; if(D.iso) _liveISO=D.iso;
+        if(!_liveTitulo && D.titulo){ _liveTitulo=D.titulo; _liveTipo=D.tipo||''; }
         refrescarVista(D);
         var b=document.getElementById('live-badge'); if(b) b.style.display='inline-flex';
       });
@@ -2662,8 +2739,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261017-1133" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261017-1133"></script>
+<script src="plantel_nafels.js?v=20261017-2320" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261017-2320"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2762,7 +2839,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261017-1133"></script>
+<script src="ayuda.js?v=20261017-2320"></script>
 
 
 
@@ -2869,7 +2946,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   });
 })();
 </script>
-<script src="volver_inicio.js?v=20261017-1133" defer></script>
+<script src="volver_inicio.js?v=20261017-2320" defer></script>
 </body>
 </html>
 
