@@ -582,6 +582,9 @@
     '✊ Colgado': { en:'✊ Commit', de:'✊ Commit' },
     '🖐 Lectura': { en:'🖐 Read', de:'🖐 Read' },
     '🤘 Punta y Punta': { en:'🤘 Pin & pin', de:'🤘 Pin & Pin' },
+    /* el reproductor de game plan, lo que ve el JUGADOR */
+    'Secuencia preparada por el entrenador.': { en:'Sequence prepared by the coach.', de:'Vom Trainer vorbereitete Sequenz.' },
+    'El entrenador todavía no preparó esta zona — los ves todos.': { en:'The coach has not prepared this one yet — you see them all.', de:'Der Trainer hat das noch nicht vorbereitet — du siehst alle.' },
     /* ══ EL WELLNESS NUEVO ═════════════════════════════════════
        El menu salia en ingles y la encuesta en castellano. Estos son los
        rotulos FIJOS de las pantallas nuevas del wellness; todo lo que lleva

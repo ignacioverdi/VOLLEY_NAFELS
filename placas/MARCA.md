@@ -26,13 +26,13 @@ También en `marca.py`, todo junto arriba:
     NOMBRE     = 'VOLLEY·STATS'
     LEMA       = 'El vóley, explicado con datos'
     WEB        = 'volley-stats.com'
-    HANDLE     = '@volleystats'
+    HANDLE     = '@volley_statsok'
     CIERRE_TT  = 'Seguí para ver la próxima fecha'
     CIERRE_YT  = 'Suscribite y no te perdés ninguna fecha'
     PITCH      = 'Todo sale del scout del partido, con el sistema que usan
                   los clubes'
 
-Cambiá el handle por el que uses de verdad.
+El handle real de Instagram es `@volley_statsok`.
 
 ## Dónde aparece cada cosa
 

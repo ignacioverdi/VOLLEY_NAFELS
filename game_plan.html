@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261016-0859"></script>
-<script src="selector_categoria.js?v=20261016-0859"></script>
-<script src="objetivos_config.js?v=20261016-0859"></script>
+<script src="categorias_club.js?v=20261017-1043"></script>
+<script src="selector_categoria.js?v=20261017-1043"></script>
+<script src="objetivos_config.js?v=20261017-1043"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -445,7 +445,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261016-0859" onerror="void 0"></script>
+<script src="lang.js?v=20261017-1043" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -456,7 +456,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261016-0859"></script>
+<script src="datos_seguros.js?v=20261017-1043"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -469,15 +469,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261016-0859" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261016-0859"></script>
-<script src="videos.js?v=20261016-0859" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261017-1043" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-1043"></script>
+<script src="videos.js?v=20261017-1043" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261016-0859">
+<link rel="stylesheet" href="movil.css?v=20261017-1043">
 
-<script src="iconos.js?v=20261016-0859" defer></script>
+<script src="iconos.js?v=20261017-1043" defer></script>
 </head>
 <body>
 
@@ -2271,6 +2271,7 @@ function gpnVideo(num,tipo,cat,ev){
   var _rotulo=function(n){
     document.getElementById('gpVidTitle').textContent='#'+num+' '+ape+' · '+tipo+(catTxt?(' · '+catTxt):'')+(evTxt?(' · '+evTxt):'')+' — '+n+' acciones';
   };
+  gpV._rot=_rotulo;
   _rotulo(clips.length);
   document.getElementById('gpVidOverlay').style.display='flex';
   try{ gpnTiempos(); }catch(e){}
@@ -2281,10 +2282,11 @@ function gpnVideo(num,tipo,cat,ev){
      clips todos tildados otra vez y parecia que no se guardaba nada. El
      reproductor del armador si lo hacia; ahora los dos hacen lo mismo. */
   var aplicar=function(guardado){
-    var habia=gpSelAplicar(clips,guardado);
-    gpV.readonly=false;
-    if(!gpV.coach && habia){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; }
-    gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;});
+    var ord=gpSelAplicar(clips,guardado);
+    gpV.readonly=false; gpV.oficial=false; gpV.verDesc=false;
+    gpV.orden=ord?ord.slice():null;
+    if(!gpV.coach && ord){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; }
+    gpV.list=gpOrdenar(clips);
     gpV.ev=null; gpV.idx=-1;
     _rotulo(gpV.list.length);
     gpVidRender();
@@ -3603,7 +3605,10 @@ var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null
          /* vid: que video de YouTube tiene cargado AHORA el reproductor.
             Sirve para no volver a cargarlo cuando el clip siguiente es del
             mismo partido: ahi alcanza con mover la aguja. */
-         speed:1,manual:false,fin:0,vid:''};
+         /* orden: el orden que dejo el entrenador (lista de _key)
+            · oficial: se esta mirando la VERSION OFICIAL, la del jugador
+            · verDesc: esta abierto el cajon de las descartadas */
+         speed:1,manual:false,fin:0,vid:'',orden:null,oficial:false,verDesc:false,_rot:null};
 
 /* ══ LO TILDADO, MIENTRAS DURA LA PAGINA ════════════════════════════════
    Cada vez que se abre el reproductor la lista de clips se arma de cero.
@@ -3618,18 +3623,81 @@ var gpV={player:null,ready:false,timer:null,list:[],idx:-1,playing:false,ev:null
 var GP_SEL={};
 function gpSelRecordar(){
   if(!gpV.key) return;
-  var m=GP_SEL[gpV.key]={};
+  var m={};
   gpV.list.forEach(function(c){ m[c._key]=!!c._sel; });
+  GP_SEL[gpV.key]={m:m,ord:(gpV.orden||[]).slice()};
 }
-/* Pone el tilde de cada clip y dice si habia algo guardado. */
+/* ══ LO GUARDADO ES UNA LISTA, Y EL ORDEN CUENTA ════════════════════════
+   Lo que se guarda es la lista de clips tildados EN EL ORDEN en que el
+   entrenador los dejo, y ese es el orden en que el jugador los ve. Firebase
+   devuelve una lista cuando las claves son 0..n; si alguna vez volviera como
+   objeto, igual se entiende. */
+function gpSelLista(guardado){
+  if(!guardado) return null;
+  var a=[];
+  if(guardado instanceof Array){
+    guardado.forEach(function(k){ if(typeof k==='string'&&k) a.push(k); });
+  } else if(typeof guardado==='object'){
+    Object.keys(guardado).sort(function(x,y){ return (parseInt(x,10)||0)-(parseInt(y,10)||0); })
+      .forEach(function(k){ var v=guardado[k]; if(typeof v==='string'&&v) a.push(v); });
+  }
+  return a.length?a:null;
+}
+/* Pone el tilde de cada clip y devuelve el orden guardado (o null si no
+   habia nada preparado). */
 function gpSelAplicar(clips,guardado){
-  var mem=GP_SEL[gpV.key], set=null;
-  if(guardado&&guardado.length){ set={}; guardado.forEach(function(k){ set[k]=1; }); }
+  var mem=GP_SEL[gpV.key], ord=gpSelLista(guardado), set=null;
+  if(ord){ set={}; ord.forEach(function(k){ set[k]=1; }); }
+  var mm=(mem&&mem.m)?mem.m:null;
   clips.forEach(function(c){
-    if(mem && mem[c._key]!==undefined) c._sel=!!mem[c._key];
+    if(mm && mm[c._key]!==undefined) c._sel=!!mm[c._key];
     else c._sel = set ? !!set[c._key] : true;
   });
-  return !!set;
+  if(mem&&mem.ord&&mem.ord.length) ord=mem.ord.slice();   /* lo ultimo que hizo el entrenador manda */
+  return ord;
+}
+/* ══ EL ORDEN DE LA LISTA ════════════════════════════════════════════════
+   Arriba van las tildadas, en el orden que eligio el entrenador. Abajo las
+   descartadas, por minuto de partido. El jugador recibe solo el primer
+   bloque, asi que ese orden es el que va a ver. */
+function gpOrdenar(clips){
+  var pos={}; (gpV.orden||[]).forEach(function(k,i){ pos[k]=i; });
+  var si=[], no=[];
+  clips.forEach(function(c){ (c._sel?si:no).push(c); });
+  si.sort(function(a,b){
+    var pa=(pos[a._key]!==undefined)?pos[a._key]:1e9, pb=(pos[b._key]!==undefined)?pos[b._key]:1e9;
+    return (pa!==pb)?(pa-pb):(a.t_atk-b.t_atk);
+  });
+  no.sort(function(a,b){ return a.t_atk-b.t_atk; });
+  return si.concat(no);
+}
+/* Rehace la lista sin perder el clip que esta abierto. */
+function gpVidRearmar(){
+  var cur=(gpV.idx>=0)?gpV.list[gpV.idx]:null;
+  gpV.list=gpOrdenar(gpV.list);
+  gpV.idx=cur?gpV.list.indexOf(cur):-1;
+  gpVidRender();
+}
+/* ▲▼ : mueve un ataque dentro del bloque de los tildados. */
+function gpOrdenMover(c,d){
+  var si=gpVidSelected(), k=si.indexOf(c), n=k+d;
+  if(k<0||n<0||n>=si.length) return;
+  var t=si[k]; si[k]=si[n]; si[n]=t;
+  gpV.orden=si.map(function(x){ return x._key; });
+  gpSelRecordar(); gpVidRearmar();
+}
+/* Al tildar o destildar: la que entra va al final del orden, la que sale se
+   va del orden y cae al cajon de las descartadas. */
+function gpSelTildar(c,on){
+  c._sel=!!on;
+  gpV.orden=gpVidSelected().map(function(x){ return x._key; });
+  gpSelRecordar(); gpVidRearmar();
+}
+/* El ojo: la VERSION OFICIAL es, literal, la lista que recibe el jugador. */
+function gpVidOficial(on){
+  gpV.oficial=!!on;
+  if(gpV.oficial) gpV.ev=null;
+  gpVidRender();
 }
 function gpSelRuta(){ return 'gp_video_sel/'+String(gpV.key||'').replace(/[^a-zA-Z0-9_]/g,'_'); }
 
@@ -3727,8 +3795,11 @@ function gpVidDom(){
    +'<option value="1" selected>1\u00d7</option><option value="1.5">1.5\u00d7</option><option value="2">2\u00d7</option></select></label>'
    +'<span style="color:#55657a;font-size:11px;letter-spacing:.3px">+ / \u2212 mueven el video 2 seg \u00b7 clic en el video = pausa</span>'
    +'<span id="gpVidNow" style="color:#7689a1;font-size:12px"></span></div>'
-   +'<div id="gpVidList" style="max-height:240px;overflow:auto;border-top:1px solid #1f2c3d"></div>'
-   +'<button id="gpVidSave" style="margin-top:10px;width:100%;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
+   +'<div id="gpVidList" style="max-height:min(52vh,430px);overflow:auto;border-top:1px solid #1f2c3d"></div>'
+   +'<div style="display:flex;gap:8px;margin-top:10px">'
+   +'<button id="gpVidSave" style="flex:1;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
+   +'<button id="gpVidOfi" style="flex:none;background:transparent;border:1px solid #334155;color:#94a3b8;padding:11px 14px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:.06em">👁 VERSIÓN OFICIAL</button>'
+   +'</div>'
    +'<div id="gpVidHint" style="font-size:11px;color:#7689a1;margin-top:8px;line-height:1.5"></div>'
    +'</div>';
   document.body.appendChild(d);
@@ -3740,6 +3811,7 @@ function gpVidDom(){
   document.getElementById('gpVidPrev').onclick=function(){ gpVidNav(-1); };
   document.getElementById('gpVidNext').onclick=function(){ gpVidNav(1); };
   document.getElementById('gpVidSave').onclick=gpVidSaveFn;
+  document.getElementById('gpVidOfi').onclick=function(){ gpVidOficial(!gpV.oficial); };
   var vsel=document.getElementById('gpVidVel');
   if(vsel){
     try{
@@ -3834,46 +3906,129 @@ function gpOpenVideo(rot,zone,sidx){
   gpV.key=(GP_RIVAL_SLUG||'rival')+'__r'+rot+'_'+GP_ARM_PHASE+(GP_ARM_PHASE==='SO'?('_'+GP_ARM_RECQ.slice().sort().join('')):'')+gpOcClave()+gpSzClave()+'_z'+zone;
   var faseLbl=GP_ARM_PHASE==='SO'?('Side-out '+gpRecqEtiqueta()):'Transición';  /* el titulo del reproductor dice tambien con quien en la cancha: si no, dos secuencias distintas se llaman igual */
   if(gpOcActivo()) faseLbl+=' · en cancha '+gpOcEtiqueta();
-  document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+clips.length+' ataques';
+  var _rotA=function(n){ document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+n+' ataques'; };
+  gpV._rot=_rotA; _rotA(clips.length);
   document.getElementById('gpVidOverlay').style.display='flex';
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
   // cargar selección guardada del entrenador
   var apply=function(saved){
-    var habia=gpSelAplicar(clips,saved);
-    gpV.readonly=false;
-    if(!gpV.coach && habia){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; } // jugador con secuencia guardada → solo eso
-    gpV.list=clips.slice().sort(function(a,b){return a.t_atk-b.t_atk;}); gpV.ev=null; gpV.idx=-1;
+    var ord=gpSelAplicar(clips,saved);
+    gpV.readonly=false; gpV.oficial=false; gpV.verDesc=false;
+    gpV.orden=ord?ord.slice():null;
+    if(!gpV.coach && ord){ clips=clips.filter(function(c){return c._sel;}); gpV.readonly=true; } // jugador con secuencia guardada → solo eso
+    gpV.list=gpOrdenar(clips); gpV.ev=null; gpV.idx=-1;
+    _rotA(gpV.list.length);
     gpVidRender();
   };
   if(typeof fbGet==='function'){ fbGet(gpSelRuta(),apply); } else { apply(null); }
 }
 
-function gpVidVisible(){ return gpV.list.filter(function(c){ return !gpV.ev || c.ev===gpV.ev; }); }
+function gpVidVisible(){ return gpV.list.filter(function(c){ return (!gpV.ev||c.ev===gpV.ev) && (!gpV.oficial||c._sel); }); }
+/* ══ LA LISTA, EN DOS BLOQUES ════════════════════════════════════════════
+   Arriba las tildadas —con ▲▼ para ordenarlas— y abajo, plegadas, las
+   descartadas. El entrenador ve de un saque que queda y que no, sin perder
+   acceso a ninguna. El jugador ve un solo bloque: las tildadas, en ese
+   orden. El boton del ojo muestra esa misma lista al entrenador. */
+/* Las casillas, las flechas y los dos bloques son del cuerpo tecnico.
+   El jugador —tenga o no secuencia preparada— ve la lista y nada mas: antes
+   le aparecian casillas que no hacian nada (firebase.js le frena la
+   escritura), y eso es peor que no tenerlas. */
+function gpVidEditable(){ return gpV.coach && !gpV.readonly && !gpV.oficial; }
+/* El filtro por valoracion si lo usan los dos. */
+function gpVidChipsOn(){ return !gpV.readonly && !gpV.oficial; }
+function gpVidFila(c,editable){
+  var i=gpV.list.indexOf(c);
+  var row=document.createElement('div');
+  row.style.cssText='display:flex;gap:9px;align-items:center;padding:8px 4px;border-bottom:1px solid #16212f;cursor:pointer;font-size:13px;color:#e2e8f0'+(i===gpV.idx?';background:rgba(34,197,94,.10)':'');
+  var _vid=gpVidUrl(c.code), _play=(c.t_atk>0&&!!_vid);
+  var puedeTildar=editable&&_play;
+  var chk=puedeTildar?('<input type="checkbox" '+(c._sel?'checked':'')+' style="width:16px;height:16px;accent-color:#22c55e">')
+                     :'<span style="width:16px;display:inline-block;flex:none"></span>';
+  /* las flechas solo en el bloque de arriba y sin filtro de valoracion
+     puesto: con la lista recortada, mover un lugar se ve como que no pasa */
+  var flechas='';
+  if(puedeTildar&&c._sel&&!gpV.ev){
+    var est='border:1px solid #243044;background:#16212f;color:#94a3b8;font-weight:900;font-size:11px;line-height:1;width:20px;height:17px;border-radius:5px;cursor:pointer;padding:0;font-family:inherit';
+    flechas='<span class="gpv-ord" style="display:flex;flex-direction:column;gap:2px;flex:none">'
+      +'<button data-d="-1" title="Subir" style="'+est+'">▲</button>'
+      +'<button data-d="1" title="Bajar" style="'+est+'">▼</button></span>';
+  }
+  var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
+  var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
+  var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
+  row.style.opacity=_play?'1':'.5';
+  row.innerHTML=flechas+chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
+  if(puedeTildar){
+    var cb=row.querySelector('input[type=checkbox]');
+    if(cb) cb.onclick=function(e){ e.stopPropagation(); gpSelTildar(c,this.checked); };
+    [].forEach.call(row.querySelectorAll('.gpv-ord button'),function(b){
+      b.onclick=function(e){ e.stopPropagation(); gpOrdenMover(c,parseInt(b.getAttribute('data-d'),10)); };
+    });
+  }
+  row.onclick=function(){ gpVidPlayAt(i); };
+  return row;
+}
 function gpVidRender(){
+  var editable=gpVidEditable();
   // chips de valoración
-  var box=document.getElementById('gpVidChips'); box.style.display=gpV.readonly?'none':'flex'; box.innerHTML='';
+  var box=document.getElementById('gpVidChips'); box.style.display=gpVidChipsOn()?'flex':'none'; box.innerHTML='';
   var order=['#','+','!','-','=','/'], lbl={'#':'# punto','+':'+ bueno','!':'! neutro','-':'- malo','=':'= error','/':'/ bloq'};
   var counts={}; gpV.list.forEach(function(c){ counts[c.ev]=(counts[c.ev]||0)+1; });
   order.forEach(function(ev){ if(!counts[ev]) return; var b=document.createElement('button'); var on=gpV.ev===ev;
     b.style.cssText='border:1px solid '+(on?gpEvColor(ev):'#243044')+';background:'+(on?gpEvColor(ev)+'22':'transparent')+';color:'+(on?'#fff':'#94a3b8')+';font-weight:800;font-size:13px;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:inherit';
     b.textContent=lbl[ev]+' ('+counts[ev]+')'; b.onclick=function(){ gpV.ev=(gpV.ev===ev?null:ev); gpVidRender(); }; box.appendChild(b); });
   // lista
-  var L=document.getElementById('gpVidList'); L.innerHTML=''; var vis=gpVidVisible();
-  vis.forEach(function(c){ var i=gpV.list.indexOf(c);
-    var row=document.createElement('div'); row.style.cssText='display:flex;gap:9px;align-items:center;padding:8px 4px;border-bottom:1px solid #16212f;cursor:pointer;font-size:13px;color:#e2e8f0'+(i===gpV.idx?';background:rgba(34,197,94,.10)':'');
-    var _vid=gpVidUrl(c.code), _play=(c.t_atk>0&&!!_vid);
-    var chk=(gpV.readonly||!_play)?'<span style="width:16px;display:inline-block;flex:none"></span>':'<input type="checkbox" '+(c._sel?'checked':'')+' style="width:16px;height:16px;accent-color:#22c55e">';
-    var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
-    var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
-    var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
-    row.style.opacity=_play?'1':'.5';
-    row.innerHTML=chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
-    if(!gpV.readonly){ var cb=row.querySelector('input'); cb.onclick=function(e){ e.stopPropagation(); c._sel=this.checked; gpSelRecordar(); }; }
-    row.onclick=function(){ gpVidPlayAt(i); }; L.appendChild(row); });
-  document.getElementById('gpVidNow').textContent=vis.length+' clips';
-  document.getElementById('gpVidSave').style.display=gpV.coach?'block':'none';
+  var L=document.getElementById('gpVidList'); L.innerHTML='';
+  var vis=gpVidVisible();
+  var elegidas=vis.filter(function(c){ return c._sel; });
+  var fuera=vis.filter(function(c){ return !c._sel; });
+  if(!editable){
+    vis.forEach(function(c){ L.appendChild(gpVidFila(c,false)); });
+  } else {
+    if(elegidas.length){
+      var h1=document.createElement('div');
+      h1.style.cssText='padding:7px 4px 5px;font-size:10px;font-weight:900;letter-spacing:.12em;color:#22c55e;text-transform:uppercase';
+      h1.textContent='Elegidas · '+elegidas.length+(gpV.ev?'':' · ▲▼ para ordenar');
+      L.appendChild(h1);
+    }
+    elegidas.forEach(function(c){ L.appendChild(gpVidFila(c,true)); });
+    if(fuera.length){
+      var h2=document.createElement('div');
+      h2.style.cssText='padding:9px 4px 7px;margin-top:4px;border-top:1px solid #1f2c3d;font-size:10px;font-weight:900;letter-spacing:.12em;color:#64748b;text-transform:uppercase;cursor:pointer;user-select:none';
+      h2.textContent=(gpV.verDesc?'▾':'▸')+' Descartadas · '+fuera.length+(gpV.verDesc?'':' (tocá para verlas)');
+      h2.onclick=function(){ gpV.verDesc=!gpV.verDesc; gpVidRender(); };
+      L.appendChild(h2);
+      if(gpV.verDesc) fuera.forEach(function(c){ var r=gpVidFila(c,true); r.style.opacity=(parseFloat(r.style.opacity||'1')*0.72); L.appendChild(r); });
+    }
+    if(!elegidas.length&&!fuera.length){
+      var v0=document.createElement('div');
+      v0.style.cssText='padding:14px 4px;color:#64748b;font-size:12px';
+      v0.textContent='No hay acciones con ese filtro.';
+      L.appendChild(v0);
+    }
+  }
+  var now=document.getElementById('gpVidNow');
+  if(gpV.oficial) now.textContent='VERSIÓN OFICIAL · '+vis.length+' clips';
+  else if(editable&&fuera.length) now.textContent=elegidas.length+' elegidas · '+fuera.length+' descartadas';
+  else now.textContent=vis.length+' clips';
+  try{ if(gpV._rot) gpV._rot(gpV.oficial?vis.length:gpV.list.length); }catch(e){}
+  // pie
+  var bs=document.getElementById('gpVidSave'), bo=document.getElementById('gpVidOfi');
+  if(bs) bs.style.display=(gpV.coach&&!gpV.oficial)?'block':'none';
+  if(bo){
+    var hay=gpV.list.filter(function(c){ return c._sel; }).length;
+    bo.style.display=(gpV.coach&&hay)?'block':'none';
+    bo.style.flex=gpV.oficial?'1':'none';
+    bo.textContent=gpV.oficial?'← VOLVER A EDITAR':'👁 VERSIÓN OFICIAL';
+    bo.style.borderColor=gpV.oficial?'#22c55e':'#334155';
+    bo.style.color=gpV.oficial?'#22c55e':'#94a3b8';
+  }
   var hint=document.getElementById('gpVidHint');
-  hint.textContent=gpV.coach?'Tildá los ataques que querés y guardá: el equipo verá solo esos. (El jugador, si no guardaste nada, ve todos.)':(gpV.readonly?'Secuencia preparada por el entrenador.':'El entrenador todavía no preparó esta zona — los ves todos.');
+  hint.textContent=gpV.oficial
+    ? ('Esto es exactamente lo que ve el jugador: '+vis.length+' clips, en este orden. Nada mas.')
+    : (gpV.coach
+        ? 'Tildá los ataques, ordenalos con ▲▼ y guardá: el jugador abre la tarjeta y ve solo esos, en ese orden.'
+        : (gpV.readonly?'Secuencia preparada por el entrenador.':'El entrenador todavía no preparó esta zona — los ves todos.'));
 }
 function gpVidSelected(){ return gpV.list.filter(function(c){ return c._sel; }); }
 /* ══ PAUSAR Y CONTINUAR, NO EMPEZAR DE NUEVO ═════════════════════════════
@@ -3949,11 +4104,22 @@ function gpVidStop(done){ clearInterval(gpV.timer); gpVidPlaying(false); if(gpV.
 function gpVidCloseFn(){ gpVidStop(); var o=document.getElementById('gpVidOverlay'); if(o)o.style.display='none'; }
 function gpVidSaveFn(){
   var sel=gpVidSelected();
+  var btn=document.getElementById('gpVidSave'), t=btn.textContent;
+  /* guardar cero seria "no hay nada preparado" y el jugador volveria a ver
+     todos: no es lo que quiso hacer, asi que se avisa y no se guarda */
+  if(!sel.length){
+    btn.textContent='Tildá al menos un ataque'; btn.style.background='#b45309';
+    setTimeout(function(){ btn.textContent=t; btn.style.background='#3b82f6'; },2000);
+    return;
+  }
   var keys=sel.map(function(c){ return c._key; });
+  gpV.orden=keys.slice();
   gpSelRecordar();
   if(typeof fbSet==='function'){ fbSet(gpSelRuta(),keys); }
-  var btn=document.getElementById('gpVidSave'); var t=btn.textContent;
-  btn.textContent='✓ Guardado ('+sel.length+' clips) — el equipo verá solo estos'; btn.style.background='#22c55e';
+  /* el numero del boton de la tarjeta queda al dia sin recargar la pagina */
+  try{ if(!GP_SELS) GP_SELS={}; GP_SELS[String(gpV.key||'').replace(/[^a-zA-Z0-9_]/g,'_')]=keys.slice();
+       [].forEach.call(document.querySelectorAll('.gpn-vbtn'),function(b){ if(b._txt) b._txt(); }); }catch(e){}
+  btn.textContent='✓ Guardado ('+sel.length+' clips) — el equipo verá solo estos, en este orden'; btn.style.background='#22c55e';
   setTimeout(function(){ btn.textContent=t; btn.style.background='#3b82f6'; },2200);
 }
 
@@ -5872,9 +6038,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261016-0859"></script>
-<script src="ayuda.js?v=20261016-0859"></script>
-<script src="volver_inicio.js?v=20261016-0859" defer></script>
+<script src="temporadas_menu.js?v=20261017-1043"></script>
+<script src="ayuda.js?v=20261017-1043"></script>
+<script src="volver_inicio.js?v=20261017-1043" defer></script>
 </body>
 </html>
 
