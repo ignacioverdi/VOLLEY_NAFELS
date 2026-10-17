@@ -569,13 +569,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261017-2330"></script>
-<script src="selector_categoria.js?v=20261017-2330"></script>
-<script src="lang.js?v=20261017-2330"></script>
+<script src="categorias_club.js?v=20261017-2351"></script>
+<script src="selector_categoria.js?v=20261017-2351"></script>
+<script src="lang.js?v=20261017-2351"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-2330">
+<link rel="stylesheet" href="movil.css?v=20261017-2351">
 </head>
 <body>
 
@@ -1315,9 +1315,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261017-2330" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-2330"></script>
-<script src="objetivos.js?v=20261017-2330" onerror="void 0"></script>
+<script src="firebase.js?v=20261017-2351" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-2351"></script>
+<script src="objetivos.js?v=20261017-2351" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1326,14 +1326,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261017-2330" onerror="void 0"></script>
-<script src="video_delay.js?v=20261017-2330" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261017-2351" onerror="void 0"></script>
+<script src="video_delay.js?v=20261017-2351" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261017-2330" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261017-2330"></script>
+<script src="plantel_nafels.js?v=20261017-2351" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261017-2351"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -6279,6 +6279,9 @@ function saveSetup(){
 }
 
 function arrancarPartido(){
+  /* el chequeo va antes que nada: si la nube no escucha, que se sepa ahora y
+     no dos horas despues */
+  try{ pvChequearNube(true); }catch(e){}
   escribirEstado('>LUp', M.serving);
   if(!M.modo) M.modo='partido';
   SETUP_OBLIGATORIO=false;
@@ -7122,6 +7125,59 @@ let _pubT=null, _pubUlt=0;
 let _rallyN = 0;
 let _pubFallos = 0;
 
+/* ══ EL HISTORIAL DE SESIONES ════════════════════════════════════════════
+   La nube guardaba UNA sola sesion en vivo: la ultima que se publico. Al
+   arrancar la siguiente, la anterior se pisaba y desde el panel ya no habia
+   forma de volver a abrirla —y si una sesion no llegaba a publicarse, el
+   panel seguia mostrando la vieja como si fuera la de ahora—.
+
+   Ahora cada sesion deja su copia en voley_hist, con un indice chico aparte
+   (voley_hist_idx) para poder listarlas en el panel sin bajarlas todas. Se
+   guarda como mucho cada 30 segundos y se queda con las ultimas 14. */
+var _histT=0, _histPodado=false;
+function pvHistClave(F){
+  var k = (F && F.sid) ? F.sid : ('s'+String((F&&F.iso)||'').replace(/[^0-9]/g,''));
+  return String(k).replace(/[^a-zA-Z0-9_-]/g,'_');
+}
+function pvArchivar(F, VD){
+  if(typeof fbSet!=='function' || !VD || !F) return;
+  if(Date.now()-_histT < 30000) return;
+  _histT = Date.now();
+  var k = pvHistClave(F);
+  if(!k || k==='s') return;
+  var quien=''; try{ if(typeof fbUser==='function' && fbUser()) quien=fbUser().email||''; }catch(e){}
+  var acc=0;    try{ acc=(M.codes||[]).filter(function(c){return c&&c.k==='play';}).length; }catch(e){}
+  var marc='';  try{ marc=(M.home.name||'')+' '+(M.home.sets||0)+'-'+(M.away.sets||0)+' '+(M.away.name||''); }catch(e){}
+  var ficha={ iso:F.iso, tipo:F.tipo, titulo:F.titulo, por:quien,
+              acciones:acc, set:(M&&M.set)||1, marcador:marc };
+  try{ fbSet('voley_hist_idx/'+k, ficha); }catch(e){}
+  var full={}; for(var q in ficha) full[q]=ficha[q];
+  full.data = VD;
+  try{ full.codes = M.codes.filter(function(c){return c&&c.k==='play';})
+        .map(function(c){ return {c:c.c, set:c.set, t:(c.t||0), zh:(c.zh||0), za:(c.za||0)}; }); }catch(e){}
+  try{ fbSet('voley_hist/'+k, full); }catch(e){}
+  if(!_histPodado){ _histPodado=true; setTimeout(pvPodarHist, 5000); }
+}
+/* se queda con las 14 mas nuevas y borra el resto */
+function pvPodarHist(){
+  try{
+    if(typeof fbGet!=='function' || typeof fbSet!=='function') return;
+    fbGet('voley_hist_idx', function(idx){
+      try{
+        if(!idx || typeof idx!=='object') return;
+        var ks=Object.keys(idx);
+        if(ks.length<=14) return;
+        ks.sort(function(a,b){
+          return String((idx[b]||{}).iso||'').localeCompare(String((idx[a]||{}).iso||''));
+        });
+        ks.slice(14).forEach(function(k){
+          try{ fbSet('voley_hist/'+k, null); fbSet('voley_hist_idx/'+k, null); }catch(e){}
+        });
+      }catch(e){}
+    });
+  }catch(e){}
+}
+
 /* ══ LA FIRMA DE LA SESION ════════════════════════════════════════════════
    Lo que se publicaba viajaba sellado con la HORA sola —"19:25"— y sin decir
    de que sesion era. Del otro lado, el panel no tenia forma de distinguir el
@@ -7142,12 +7198,31 @@ function pvFirma(){
    El puntito se prendia al INTENTAR publicar, no al confirmar, y los errores
    de red se tragaban en silencio. Podias scoutear un partido entero con la
    pantalla diciendo que todo bien y a la nube sin subir una sola accion.  */
-function pvAvisoPublicar(ok, motivo){
+function pvAvisoPublicar(ok, motivo, cantar){
   try{
     var el=document.getElementById('pubdot');
     if(el) el.className = ok ? 'pubdot on' : 'pubdot mal';
+    /* ══ CUANDO TODO ANDA, TAMBIEN HAY QUE DECIRLO ════════════════════════
+       Un puntito celeste no es una respuesta a "¿me ves?". Al arrancar el
+       partido o el entrenamiento aparece una franja verde que se va sola:
+       en dos segundos se sabe que del otro lado SE VE, sin llamar a nadie. */
+    if(ok && cantar){
+      var v=document.getElementById('pub-ok');
+      if(!v){
+        v=document.createElement('div'); v.id='pub-ok';
+        v.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99998;background:#15803d;color:#fff;'
+          +'font-family:Barlow Condensed,sans-serif;font-weight:800;letter-spacing:.06em;font-size:15px;'
+          +'padding:9px 14px;text-align:center';
+        document.body.appendChild(v);
+      }
+      v.textContent='\u2713 CONECTADO \u2014 lo que cargues se ve en el panel al instante';
+      v.style.display='block';
+      clearTimeout(window.__pubOkT);
+      window.__pubOkT=setTimeout(function(){ try{ v.style.display='none'; }catch(e){} }, 6000);
+    }
     var b=document.getElementById('pub-aviso');
     if(!ok){
+      try{ var v2=document.getElementById('pub-ok'); if(v2) v2.style.display='none'; }catch(e){}
       if(!b){
         b=document.createElement('div'); b.id='pub-aviso';
         b.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99999;background:#b91c1c;color:#fff;'
@@ -7162,6 +7237,35 @@ function pvAvisoPublicar(ok, motivo){
     } else if(b){ b.style.display='none'; }
   }catch(e){}
 }
+
+/* ══ ANTES DE EMPEZAR: ¿LA NUBE NOS ESTA ESCUCHANDO? ══════════════════════
+   Paso de verdad: se scouteo un partido entero con la sesion de Firebase
+   cerrada en este navegador. No subio NADA —ni el partido en vivo ni el
+   respaldo de pv_encurso— y del lado del scout no habia una sola señal: el
+   puntito seguia celeste. Del otro lado, el panel mostraba el entrenamiento
+   del dia anterior como si fuera el de ahora.
+
+   Ahora, al abrir la pantalla y al arrancar cada partido o entrenamiento, se
+   hace una escritura de prueba y se dice con todas las letras si la nube
+   contesta o no. Dos segundos de chequeo valen mas que dos horas de scout
+   que no ve nadie. */
+function pvChequearNube(cantar){
+  var fin=function(ok,motivo){ try{ pvAvisoPublicar(ok,motivo,ok&&cantar); }catch(e){} };
+  try{
+    if(typeof fbSet!=='function'){ fin(false,'esta pantalla no puede escribir en la nube'); return; }
+    if(typeof vbEsJugador==='function' && vbEsJugador()){ fin(false,'entraste con usuario de jugador'); return; }
+    var hay=false; try{ hay=!!(typeof FB_SES!=='undefined' && FB_SES); }catch(e){}
+    if(!hay){ fin(false,'no hay sesión iniciada en este navegador'); return; }
+    var p=fbSet('voley_ping', {iso:new Date().toISOString()});
+    if(p && typeof p.then==='function'){ p.then(function(ok){ fin(!!ok, ok?'':'la nube no contesta'); }); }
+    else fin(true,'');
+  }catch(e){ fin(false,'no se pudo escribir'); }
+}
+try{
+  if(document.readyState==='loading')
+    document.addEventListener('DOMContentLoaded',function(){ setTimeout(function(){ pvChequearNube(false); },2500); });
+  else setTimeout(function(){ pvChequearNube(false); },2500);
+}catch(e){}
 
 /* ── PUBLICACIÓN EN VIVO ──────────────────────────────────────
    Cada acción actualiza VOLEY_DATA en Firebase. El panel de análisis
@@ -7243,6 +7347,7 @@ function publicarVivo(){
       });
     }catch(e){}
 
+    try{ pvArchivar(F, VD); }catch(e){}  /* la copia de esta sesion, para poder volver a abrirla */
     try{ guardarEnCurso(); }catch(e){}   /* el partido sin exportar, a la nube */
     try{ publicarSesion(); }catch(e){}   /* la sesion completa, para traerla desde otra maquina */
     _pubUlt=Date.now();
@@ -9626,8 +9731,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261017-2330" onerror="void 0"></script>
-<script src="ayuda.js?v=20261017-2330"></script>
+<script src="volver_inicio.js?v=20261017-2351" onerror="void 0"></script>
+<script src="ayuda.js?v=20261017-2351"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10795,11 +10900,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261017-2330" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261017-2351" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261017-2330" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261017-2351" onerror="void 0"></script>
 </body>
 </html>

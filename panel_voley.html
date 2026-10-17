@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261017-2330"></script>
-<script src="selector_categoria.js?v=20261017-2330"></script>
+<script src="categorias_club.js?v=20261017-2351"></script>
+<script src="selector_categoria.js?v=20261017-2351"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -359,14 +359,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261017-2330"></script>
+<script src="objetivos_config.js?v=20261017-2351"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261017-2330"></script>
+<script src="datos_seguros.js?v=20261017-2351"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -377,12 +377,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261017-2330" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-2330"></script>
-<script src="lang.js?v=20261017-2330"></script>
-<script src="objetivos.js?v=20261017-2330" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261017-2330"></script>
-  <script src="video_delay.js?v=20261017-2330" onerror="void 0"></script>
+<script src="firebase.js?v=20261017-2351" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-2351"></script>
+<script src="lang.js?v=20261017-2351"></script>
+<script src="objetivos.js?v=20261017-2351" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261017-2351"></script>
+  <script src="video_delay.js?v=20261017-2351" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -679,7 +679,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-2330">
+<link rel="stylesheet" href="movil.css?v=20261017-2351">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -781,6 +781,12 @@ function renderObjetivosJugador(cid,nombre,extra){
   <button onclick="pvTraerAhora()" style="padding:7px 16px;border-radius:9px;cursor:pointer;
     border:1px solid rgba(148,163,184,.3);background:rgba(148,163,184,.06);color:inherit;
     font:inherit;font-size:13px">&#8635; Traer de nuevo</button>
+  <button onclick="pvVerActual()" style="padding:7px 16px;border-radius:9px;cursor:pointer;
+    border:1px solid rgba(34,211,238,.35);background:rgba(34,211,238,.08);color:#22d3ee;
+    font:inherit;font-size:13px;font-weight:700">&#9679; Sesi&oacute;n actual</button>
+  <button onclick="pvAbrirSesiones()" style="padding:7px 16px;border-radius:9px;cursor:pointer;
+    border:1px solid rgba(148,163,184,.3);background:rgba(148,163,184,.06);color:inherit;
+    font:inherit;font-size:13px">&#128193; Otra sesi&oacute;n</button>
   <span id="pv-edad" style="font-size:12px;color:#94a3b8"></span>
 </div>
 <div id="live-badge" style="display:none;align-items:center;justify-content:center;gap:18px;margin:0 0 16px;padding:12px 20px;background:linear-gradient(180deg,rgba(20,21,42,.9),rgba(13,14,26,.9));border:1px solid rgba(255,255,255,.1);border-radius:14px">
@@ -1958,7 +1964,9 @@ var _liveTS='';
 /* lo que el scout publica AHORA: fecha completa, id y nombre de la sesion.
    Hasta ahora lo unico que llegaba era la hora suelta, y con eso no se puede
    saber si lo que se ve es de este partido o del entrenamiento de ayer. */
-var _liveISO=null, _liveSid=null, _liveTitulo='', _liveTipo='';
+var _liveISO=null, _liveSid=null, _liveTitulo='', _liveTipo='', _liveAcc=null;
+/* cuando se esta mirando una sesion guardada a proposito, el vivo no la pisa */
+var _sesionFija=null, _seedHecho=false;
 function abrirPlanPreparado(){
   window.open('plan_partido.html', '_blank');
 }
@@ -2004,6 +2012,133 @@ function refrescarVista(D){
     if(document.getElementById('objetivos-panel') && typeof renderObjetivos==='function') renderObjetivos('objetivos-panel');
   }catch(e){}
 }
+/* ══ LAS SESIONES GUARDADAS ══════════════════════════════════════════════
+   La nube guarda UNA sola sesion en vivo: la ultima publicada. Cuando se
+   arranca la siguiente, la anterior se pisa, y desde aca no habia forma de
+   volver a abrirla. El scout ahora deja una copia de cada sesion en
+   voley_hist, con un indice chico (voley_hist_idx) para poder listarlas.
+
+   Y si lo que hay en vivo todavia no esta archivado —porque lo publico un
+   scout con la version anterior—, este panel lo archiva al verlo, asi no se
+   pierde. Eso solo lo hace el cuerpo tecnico: al jugador firebase.js le
+   bloquea la escritura. */
+function pvSembrarHist(L, D){
+  if(_seedHecho) return; _seedHecho=true;
+  try{
+    if(typeof VB_esEditor==='function' && !VB_esEditor()) return;
+    if(typeof fbSet!=='function' || typeof fbGet!=='function') return;
+    if(!D || !(D.j||[]).length) return;
+    var iso = (L && pvEsISO(L.ts)) ? L.ts : (D.iso||null);
+    if(!iso) return;
+    var k = (L && L.sid) ? String(L.sid) : ('s'+String(iso).replace(/[^0-9]/g,''));
+    k = k.replace(/[^a-zA-Z0-9_-]/g,'_');
+    fbGet('voley_hist_idx/'+k, function(ya){
+      if(ya) return;
+      var ln=(L&&L.local)?L.local:{}, vn=(L&&L.visitante)?L.visitante:{};
+      var ficha={ iso:iso, tipo:(L&&L.tipo)||D.tipo||'', por:'',
+                  titulo:(L&&L.titulo)||D.titulo||((ln.n||'')+' - '+(vn.n||'')),
+                  acciones:(L&&typeof L.acciones==='number')?L.acciones:0,
+                  set:(L&&L.set)||1,
+                  marcador:(ln.n||'')+' '+(ln.sets||0)+'-'+(vn.sets||0)+' '+(vn.n||'') };
+      try{ fbSet('voley_hist_idx/'+k, ficha); }catch(e){}
+      var full={}; for(var q in ficha) full[q]=ficha[q];
+      full.data=D;
+      try{ if(window.VOLEY_CODES && window.VOLEY_CODES.codes) full.codes=window.VOLEY_CODES.codes; }catch(e){}
+      try{ fbSet('voley_hist/'+k, full); }catch(e){}
+    });
+  }catch(e){}
+}
+function pvAvisoSesion(h){
+  var b=document.getElementById('pv-sesion-aviso');
+  if(!b){
+    b=document.createElement('div'); b.id='pv-sesion-aviso';
+    b.style.cssText='margin:0 0 12px;padding:10px 14px;border-radius:10px;text-align:center;'
+      +'background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.4);color:#fbbf24;'
+      +'font-size:13px;line-height:1.5';
+    var r=document.getElementById('pv-refresh');
+    if(r && r.parentNode) r.parentNode.insertBefore(b, r.nextSibling);
+    else document.body.insertBefore(b, document.body.firstChild);
+  }
+  if(!h){ b.style.display='none'; return; }
+  b.innerHTML='Estás viendo una <b>sesión guardada</b>: '+((h.titulo||'')+' · '+pvCuandoDe(h.iso))
+    +(h.acciones?(' · '+h.acciones+' acciones'):'')
+    +' &nbsp; <a href="#" onclick="pvVerActual();return false;" style="color:#22d3ee;font-weight:700">volver a la sesión actual</a>';
+  b.style.display='block';
+}
+function pvVerActual(){
+  _sesionFija=null;
+  pvAvisoSesion(null);
+  try{ var lb=document.getElementById('live-badge'); if(lb) lb.style.display='inline-flex'; }catch(e){}
+  pvTraerAhora();
+}
+function pvCargarSesion(k){
+  if(typeof fbGet!=='function') return;
+  var e=document.getElementById('pv-edad'); if(e) e.textContent='abriendo...';
+  fbGet('voley_hist/'+k, function(h){
+    if(!h || !h.data || !(h.data.j||[]).length){ alert('Esa sesión no tiene datos guardados.'); return; }
+    _sesionFija=k;
+    _liveISO=h.iso||null; _liveTitulo=h.titulo||''; _liveTipo=h.tipo||''; _liveAcc=h.acciones||null;
+    _liveTS=(h.data&&h.data.ts)||'';
+    try{ if(h.codes) window.VOLEY_CODES={codes:h.codes}; }catch(x){}
+    try{ var lb=document.getElementById('live-badge'); if(lb) lb.style.display='none'; }catch(x){}
+    refrescarVista(h.data);
+    pvAvisoSesion(h);
+    pvEdad();
+    pvCerrarSesiones();
+  });
+}
+function pvCerrarSesiones(){
+  var o=document.getElementById('m-sesiones'); if(o) o.style.display='none';
+}
+function pvAbrirSesiones(){
+  var o=document.getElementById('m-sesiones');
+  if(!o){
+    o=document.createElement('div'); o.id='m-sesiones';
+    o.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(4,8,14,.86);'
+      +'display:none;align-items:center;justify-content:center;padding:16px';
+    o.innerHTML='<div style="background:#0e151f;border:1px solid #243044;border-radius:16px;'
+      +'width:min(640px,96vw);max-height:88vh;overflow:auto;padding:18px">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">'
+      +'<b style="font-size:16px;color:#e2e8f0">Sesiones guardadas</b>'
+      +'<button onclick="pvCerrarSesiones()" style="border:1px solid #243044;background:transparent;'
+      +'color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div>'
+      +'<div id="pv-ses-lista" style="display:flex;flex-direction:column;gap:8px"></div></div>';
+    o.addEventListener('click',function(ev){ if(ev.target===o) pvCerrarSesiones(); });
+    document.body.appendChild(o);
+  }
+  o.style.display='flex';
+  var L=document.getElementById('pv-ses-lista');
+  L.innerHTML='<div style="color:#64748b;font-size:13px;padding:10px">Buscando...</div>';
+  if(typeof fbGet!=='function'){ L.innerHTML='<div style="color:#f87171;padding:10px">Sin conexión.</div>'; return; }
+  fbGet('voley_hist_idx', function(idx){
+    L.innerHTML='';
+    var ks = (idx && typeof idx==='object') ? Object.keys(idx) : [];
+    if(!ks.length){
+      L.innerHTML='<div style="color:#94a3b8;font-size:13px;line-height:1.6;padding:10px">'
+        +'Todavía no hay sesiones guardadas.<br>A partir de ahora, cada partido y cada entrenamiento '
+        +'que scoutee el equipo queda acá y lo vas a poder abrir cuando quieras.</div>';
+      return;
+    }
+    ks.sort(function(a,b){ return String((idx[b]||{}).iso||'').localeCompare(String((idx[a]||{}).iso||'')); });
+    ks.forEach(function(k){
+      var h=idx[k]||{};
+      var fila=document.createElement('button');
+      fila.style.cssText='display:flex;flex-direction:column;gap:3px;text-align:left;width:100%;'
+        +'background:'+(k===_sesionFija?'rgba(34,211,238,.10)':'rgba(255,255,255,.03)')+';'
+        +'border:1px solid '+(k===_sesionFija?'rgba(34,211,238,.5)':'rgba(255,255,255,.1)')+';'
+        +'border-radius:11px;padding:11px 13px;cursor:pointer;color:inherit;font:inherit';
+      fila.innerHTML='<span style="font-size:14px;color:#e2e8f0;font-weight:700">'
+        +((h.tipo==='entrenamiento'?'🏋️ ':'🏐 ')+(h.titulo||'(sin nombre)'))+'</span>'
+        +'<span style="font-size:12px;color:#7689a1">'+pvCuandoDe(h.iso)
+        +(h.acciones?(' · '+h.acciones+' acciones'):'')
+        +(h.marcador?(' · '+h.marcador):'')
+        +(h.por?(' · '+h.por):'')+'</span>';
+      fila.onclick=function(){ pvCargarSesion(k); };
+      L.appendChild(fila);
+    });
+  });
+}
+
 /* ── traer ahora, sin esperar al proximo cambio ──────────────────────────── */
 function pvTraerAhora(){
   var e = document.getElementById('pv-edad');
@@ -2074,6 +2209,12 @@ function pvEdad(){
   var ts = pvSello();
   if(!ts){ e.textContent = 'sin datos en la nube'; e.style.color = '#64748b'; return; }
   var quien = pvQuien(), hora = pvHoraDe(ts);
+  /* si la sesion la elegiste vos, no corresponde el aviso de "esto no es de
+     ahora": ya sabes lo que estas mirando, y lo dice el cartel de arriba */
+  if(_sesionFija){
+    e.textContent = 'Sesión guardada · ' + quien.replace(/ · $/,'') + ' · ' + pvCuandoDe(ts);
+    e.style.color = '#fbbf24'; return;
+  }
 
   /* ══ EL SELLO ES SOLO LA HORA ════════════════════════════════════════════
      voley_data viaja con ts = "19:25": la hora, sin fecha. La primera version
@@ -2085,7 +2226,18 @@ function pvEdad(){
   var dif = pvMinutosDe(ts);
   if(dif === null){ e.textContent = quien + 'último dato: ' + hora; e.style.color = '#94a3b8'; return; }
 
-  if(dif <= 1){ e.textContent = quien + 'al día · ' + hora; e.style.color = '#4ade80'; return; }
+  if(dif <= 1){
+    /* ══ QUE SE VEA QUE ES AHORA ══════════════════════════════════════════
+       "al día" no alcanza cuando lo que querés saber es si estás viendo lo
+       que el scout está tipeando en este momento. Con la fecha completa se
+       pueden contar los segundos. */
+    var seg = null;
+    try{ if(pvEsISO(ts)) seg = Math.max(0, Math.round((Date.now()-new Date(ts).getTime())/1000)); }catch(x){}
+    e.textContent = '● EN VIVO · ' + quien.replace(/ · $/,'')
+      + (_liveAcc!=null ? ' · ' + _liveAcc + ' acciones' : '')
+      + (seg!=null ? ' · hace ' + seg + ' s' : ' · ' + hora);
+    e.style.color = '#4ade80'; return;
+  }
   if(dif < 10){ e.textContent = quien + 'hace ' + dif + ' min · ' + hora; e.style.color = '#94a3b8'; return; }
   if(dif < 360){
     e.textContent = '⚠ ' + quien + 'hace ' + dif + ' min que no llega nada nuevo · ' + hora;
@@ -2106,6 +2258,8 @@ function traerEnVivo(primera){
      refrescar la vista pesada: solo cuando el scout CIERRA un punto. */
   fbGet('voley_live', function(L){
     if(!L) return;
+    /* si se eligió a mano una sesión guardada, el vivo no la pisa */
+    if(_sesionFija) return;
     /* ══ DE QUE SESION ES ESTO ═══════════════════════════════════════════
        El scout publica el id, el tipo y el titulo de la sesion. Con eso el
        panel sabe —y puede decir— si lo que muestra es el partido de ahora o
@@ -2114,6 +2268,7 @@ function traerEnVivo(primera){
       if(typeof L.sid==='string' && L.sid){ _liveSid=L.sid; }
       if(typeof L.titulo==='string') _liveTitulo=L.titulo;
       if(typeof L.tipo==='string') _liveTipo=L.tipo;
+      if(typeof L.acciones==='number') _liveAcc=L.acciones;
       if(pvEsISO(L.ts)) _liveISO=L.ts;
     }catch(e){}
     try{
@@ -2198,8 +2353,10 @@ function traerEnVivo(primera){
         fbGet('voley_data', function(D){
           _ultData = Date.now();
           if(!D || !D.j || !D.j.length) return;
+          if(_sesionFija) return;
           _liveTS=D.ts; if(D.iso) _liveISO=D.iso;
           if(!_liveTitulo && D.titulo){ _liveTitulo=D.titulo; _liveTipo=D.tipo||''; }
+          try{ pvSembrarHist(L, D); }catch(e){}
           refrescarVista(D);
           var b=document.getElementById('live-badge'); if(b) b.style.display='inline-flex';
         });
@@ -2739,8 +2896,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261017-2330" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261017-2330"></script>
+<script src="plantel_nafels.js?v=20261017-2351" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261017-2351"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2839,7 +2996,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261017-2330"></script>
+<script src="ayuda.js?v=20261017-2351"></script>
 
 
 
@@ -2946,7 +3103,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   });
 })();
 </script>
-<script src="volver_inicio.js?v=20261017-2330" defer></script>
+<script src="volver_inicio.js?v=20261017-2351" defer></script>
 </body>
 </html>
 
