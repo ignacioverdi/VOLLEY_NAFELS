@@ -569,13 +569,13 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 <!-- Motor de idiomas (ES / EN / DE). En espanol no hace nada: el observador
      sale de inmediato. En ingles o aleman traduce 200 ms despues de que la
      pantalla se queda quieta, asi que no molesta mientras se scoutea. -->
-<script src="categorias_club.js?v=20261017-2320"></script>
-<script src="selector_categoria.js?v=20261017-2320"></script>
-<script src="lang.js?v=20261017-2320"></script>
+<script src="categorias_club.js?v=20261017-2330"></script>
+<script src="selector_categoria.js?v=20261017-2330"></script>
+<script src="lang.js?v=20261017-2330"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-2320">
+<link rel="stylesheet" href="movil.css?v=20261017-2330">
 </head>
 <body>
 
@@ -1315,9 +1315,9 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
 </div></div>
 
 <div class="toast" id="toast"></div>
-<script src="firebase.js?v=20261017-2320" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-2320"></script>
-<script src="objetivos.js?v=20261017-2320" onerror="void 0"></script>
+<script src="firebase.js?v=20261017-2330" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-2330"></script>
+<script src="objetivos.js?v=20261017-2330" onerror="void 0"></script>
 <!-- ══ EL MOTOR BUENO DEL DELAY, QUE EN ESTA PAGINA NO ESTABA ═══════════
      video_delay.js tiene dos motores: el de clips de 12 segundos y el de
      buffer continuo (delay_buffer.js), que es el que deja elegir el retraso
@@ -1326,14 +1326,14 @@ input.f:focus,select.f:focus{border-color:var(--b2)}
      Resultado: el panel que usa el scout siempre caia al motor viejo, que es
      el que se siente como que "se traba". panel_voley.html si lo carga, por
      eso ahi se veia mejor. -->
-<script src="delay_buffer.js?v=20261017-2320" onerror="void 0"></script>
-<script src="video_delay.js?v=20261017-2320" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261017-2330" onerror="void 0"></script>
+<script src="video_delay.js?v=20261017-2330" onerror="void 0"></script>
 <!-- El plantel maestro del club. El panel lo usa como RESPALDO para resolver
      el nombre de un jugador cuando el plantel del partido no lo tiene.
      Antes no se cargaba, asi que ese respaldo nunca tenia de donde leer.
      Con onerror, si el archivo no esta la pagina sigue igual que hoy. -->
-<script src="plantel_nafels.js?v=20261017-2320" onerror="void 0"></script>
-<script src="objetivos_config.js?v=20261017-2320"></script>
+<script src="plantel_nafels.js?v=20261017-2330" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261017-2330"></script>
 <script>
 /* ============================================================
    CÓDIGO DATA VOLLEY — definiciones del manual
@@ -3512,6 +3512,27 @@ function abrirPlanteles(){
                                : (M.home.name || 'Local');
   if(ta) ta.textContent = M.away.name || 'Visitante';
   document.getElementById('m-planteles').classList.add('open');
+
+  /* ══ LO QUE SIGUE DESPUES DE LOS PLANTELES ═══════════════════════════════
+     En el paso previo al primer set, cerrar los planteles —por «Empezar el
+     partido» o por «Volver»— tiene que llevar a la formacion. Se mira el
+     propio cartel: asi los dos botones y cualquier otra forma de cerrarlo
+     terminan en el mismo lugar, y nadie queda con la pantalla en blanco. */
+  if(_plAntes){
+    try{
+      var _mp=document.getElementById('m-planteles');
+      var _ob=new MutationObserver(function(){
+        if(_mp.classList.contains('open')) return;
+        _ob.disconnect();
+        if(!_plAntes) return;
+        _plAntes=false;
+        try{ M._plVisto=true; persist(); }catch(e){}
+        var _o=_plObl; _plObl=false;
+        setTimeout(function(){ try{ openSetup(_o); }catch(e){} }, 30);
+      });
+      _ob.observe(_mp,{attributes:true,attributeFilter:['class']});
+    }catch(e){}
+  }
 }
 
 function plGuardar(side){
@@ -3540,6 +3561,10 @@ function plGuardar(side){
 function plConfirmar(){
   ['home','away'].forEach(plGuardar);
   closeModal('m-planteles');
+  /* si esto es el paso previo, lo que sigue es la formacion y la abre el
+     observador de abrirPlanteles: el partido todavia no arranca */
+  if(_plAntes) return;
+  try{ M._plVisto=true; persist(); }catch(e){}
   arrancarPartido();
 }
 
@@ -5675,6 +5700,29 @@ document.getElementById('e-code').addEventListener('keydown', function(e){ if(e.
    MODALES
    ============================================================ */
 let SETUP_OBLIGATORIO=false;
+/* ══ LOS PLANTELES: UNA VEZ, Y ANTES DE LA FORMACION ══════════════════════
+   Se abrian DESPUES de cargar la formacion y en CADA set: al cerrar un set
+   volvian a aparecer y habia que pasarlos de largo con el partido esperando.
+   Ahora se repasan una sola vez —antes del primer set— y despues no molestan
+   mas: en los sets siguientes se abre solo la formacion.
+     _plAntes  : estamos en el paso de planteles previo a la formacion
+     _plObl    : el "obligatorio" de la formacion, guardado mientras tanto
+     _plPend   : caso raro —todavia no hay equipos elegidos—: se repasan
+                 DESPUES de la formacion, una sola vez, como antes      */
+let _plAntes=false, _plObl=false, _plPend=false;
+function _plHayJugadas(){
+  try{ return (M.codes||[]).some(function(c){ return c && c.k==='play'; }); }catch(e){ return false; }
+}
+function _plNombreOk(n){
+  n=String(n||'').trim().toUpperCase();
+  return !!n && n!=='LOCAL' && n!=='VISITANTE' && n!=='ENTRENAMIENTO';
+}
+function _plNombresListos(){
+  try{
+    if(typeof unSoloEquipo==='function' && unSoloEquipo()) return _plNombreOk(M.home.name);
+    return _plNombreOk(M.home.name) && _plNombreOk(M.away.name);
+  }catch(e){ return false; }
+}
 function closeModal(id){
   if(id==='m-armador'){ toast('Elegí quién arma para poder seguir',true); return; }
   if(id==='m-setup' && SETUP_OBLIGATORIO){
@@ -6013,6 +6061,24 @@ function nuevoDrill(){
   toast('Nuevo drill · empieza '+h+'-'+a+' · '+_antes+' códigos intactos');
 }
 function openSetup(obligatorio){
+  /* ══ PRIMERO LOS PLANTELES, SOLO ANTES DEL PRIMER SET ══════════════════
+     Si es el set 1, no hay ninguna accion cargada y todavia no se repasaron
+     en este partido, se abren los planteles y la formacion queda para
+     despues: la abre sola el observador de abajo cuando se cierran.
+     En el set 2, 3, 4 y 5 esta condicion ya no se cumple y se va derecho a
+     la formacion, que es lo unico que hace falta al cambiar de set. */
+  try{
+    if(!_plAntes && !M._plVisto && (M.set||1)===1 && !_plHayJugadas()){
+      if(_plNombresListos()){
+        _plAntes=true; _plObl=!!obligatorio;
+        abrirPlanteles();
+        return;
+      }
+      /* sin equipos elegidos los planteles estarian vacios: se repasan
+         despues de la formacion, una sola vez */
+      _plPend=true;
+    }
+  }catch(e){}
   /* ══ EN UN ENTRENAMIENTO EL SEIS ES OPCIONAL ═══════════════════════════
      En un partido la formacion es obligatoria: sin ella no se puede llevar
      la rotacion ni saber quien saca. En un ENTRENAMIENTO no: siempre son los
@@ -6099,7 +6165,8 @@ function cerrarPartidoActual(){
   M.home.pts=0; M.home.sets=0; M.away.pts=0; M.away.sets=0;
   M.set=1; SEL_I=-1; CALL_PEND=null;
   if(M.setsHist) M.setsHist=[];
-  delete M._id;
+  delete M._id; delete M._plVisto;
+  _plAntes=false; _plObl=false; _plPend=false;
   document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador();
   SETUP_OBLIGATORIO = false;
@@ -6131,7 +6198,9 @@ function nuevoPartido(){
   /* la pila de reabrir punto es del partido que se cierra: si quedara, Ctrl+A
      restauraría el marcador de un partido que ya no existe */
   RALLY_UNDO.length = 0;
-  delete M._id; document.getElementById('code').value='';
+  delete M._id; delete M._plVisto;      /* partido nuevo: los planteles se repasan otra vez */
+  _plAntes=false; _plObl=false; _plPend=false;
+  document.getElementById('code').value='';
   renderAll(); persist(); avisarMarcador(); openSetup();
 }
 
@@ -6201,7 +6270,12 @@ function saveSetup(){
      Se suelta una vez que la formacion quedo guardada. */
   SETUP_OBLIGATORIO = false;
   closeModal('m-setup');
-  abrirPlanteles();
+  /* Antes esto abria los planteles SIEMPRE, tambien al empezar el set 2, 3,
+     4 y 5. Ahora los planteles ya se repasaron antes del primer set y aca se
+     arranca derecho. El unico caso en que todavia se abren despues es el del
+     partido que se arma sin equipos elegidos. */
+  if(_plPend){ _plPend=false; abrirPlanteles(); return; }
+  arrancarPartido();
 }
 
 function arrancarPartido(){
@@ -9552,8 +9626,8 @@ function _filaTecla(e){
 }
 document.addEventListener('keydown', _filaTecla, true);
 </script>
-<script src="volver_inicio.js?v=20261017-2320" onerror="void 0"></script>
-<script src="ayuda.js?v=20261017-2320"></script>
+<script src="volver_inicio.js?v=20261017-2330" onerror="void 0"></script>
+<script src="ayuda.js?v=20261017-2330"></script>
 
 <div id="m-repro" class="modal">
   <div class="mbox" style="max-width:520px">
@@ -10721,11 +10795,11 @@ function renderAnalisis(){
 </script>
 <!-- La barra de analisis (manual 9.5). Va en su propio archivo a proposito:
      solo lee y dibuja, y si no carga el panel sigue igual que siempre. -->
-<script src="analisis_vivo.js?v=20261017-2320" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261017-2330" onerror="void 0"></script>
 <!-- El rediseno del panel: la barra agrupada, el marcador en la barra,
      las rotaciones legibles y el cuadro de "como venimos". Va en su
      propio archivo a proposito: solo reacomoda y pinta, y si no carga
      el panel queda exactamente como estaba. -->
-<script src="panel_estilo.js?v=20261017-2320" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261017-2330" onerror="void 0"></script>
 </body>
 </html>
