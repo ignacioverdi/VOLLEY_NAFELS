@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261017-1115"></script>
-<script src="selector_categoria.js?v=20261017-1115"></script>
-<script src="objetivos_config.js?v=20261017-1115"></script>
+<script src="categorias_club.js?v=20261017-1133"></script>
+<script src="selector_categoria.js?v=20261017-1133"></script>
+<script src="objetivos_config.js?v=20261017-1133"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261017-1115" onerror="void 0"></script>
+<script src="lang.js?v=20261017-1133" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261017-1115"></script>
+<script src="datos_seguros.js?v=20261017-1133"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261017-1115" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-1115"></script>
-<script src="videos.js?v=20261017-1115" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261017-1133" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-1133"></script>
+<script src="videos.js?v=20261017-1133" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-1115">
+<link rel="stylesheet" href="movil.css?v=20261017-1133">
 
-<script src="iconos.js?v=20261017-1115" defer></script>
+<script src="iconos.js?v=20261017-1133" defer></script>
 </head>
 <body>
 
@@ -2756,6 +2756,32 @@ function gpnFichaJugador(j,idx){
 /* ══ 3 · EL PLAN ═════════════════════════════════════════════════════
    El resumen de todo lo de arriba: por donde atacan y a quien sacarle.
    Se arma con los mismos datos, no hay nada escrito a mano. */
+/* ══ LOS TEXTOS QUE ESCRIBE ESTA PANTALLA ════════════════════════════════
+   lang.js traduce nodos de texto COMPLETOS, y estos no le sirven: uno es el
+   arranque de un campo editable —traducirlo ahi seria meterse con lo que
+   escribe el entrenador— y los otros son el texto de un cartelito que vive
+   en un atributo y no en un nodo. Asi que se escriben ya traducidos, y la
+   pantalla se vuelve a dibujar sola cuando se cambia de idioma. */
+var GPN_TXT={
+  'de positivas: ':{en:'of positives: ',de:'der positiven: '},
+  'de positivas.':{en:'of positives.',de:'der positiven.'},
+  'es el más barato del equipo.':{en:'he is the cheapest on the team.',de:'er ist der guenstigste im Team.'},
+  'Elegir':{en:'Choose',de:'Wählen'},
+  'Automático':{en:'Automatic',de:'Automatisch'},
+  'Nota sobre el':{en:'Note on',de:'Notiz zu'},
+  'Conclusión tuya sobre cómo atacan…':{en:'Your own take on how they attack…',de:'Dein Fazit dazu, wie sie angreifen…'},
+  'Cómo le vamos a sacar…':{en:'How we are going to serve at him…',de:'Wie wir auf ihn aufschlagen…'},
+  'escribí tu veredicto…':{en:'write your verdict…',de:'schreib dein Fazit…'}
+};
+function gpnIdioma(){
+  try{ if(typeof window.getLang==='function') return window.getLang(); }catch(e){}
+  try{ var l=localStorage.getItem('vb_lang'); if(l==='en'||l==='de') return l; }catch(e){}
+  return 'es';
+}
+function gpnTr(es){
+  var l=gpnIdioma(); if(l==='es') return es;
+  var e=GPN_TXT[es]; return (e&&e[l])?e[l]:es;
+}
 var GPN_PLAN_CFG={atk:null,rec:null}, GPN_PLAN_CONT=null, GPN_PLAN_LEIDO=false,
     GPN_PLAN_ABRE={atk:false,rec:false}, _gpnPlanT=null;
 function gpnPlanK(s){ return (GP_RIVAL_SLUG||'rival')+'_plan_'+s; }
@@ -2766,6 +2792,7 @@ function gpnPlanPintar(){
   clearTimeout(_gpnPlanT);
   _gpnPlanT=setTimeout(function(){ try{ gpnPlan(GPN_PLAN_CONT); }catch(e){} },0);
 }
+try{ window.addEventListener('langchange',function(){ gpnPlanPintar(); }); }catch(e){}
 function gpnPlanLeerCfg(){
   if(GPN_PLAN_LEIDO) return; GPN_PLAN_LEIDO=true;
   gpEdLeer(gpnPlanK('atk'),function(v){
@@ -2793,6 +2820,7 @@ function gpnPlanFila(k,ph){
   lap.textContent='✎';
   var ed=document.createElement('div');
   ed.className='gpn-ed';
+  ed.setAttribute('data-notr','1');          /* lo escribe el: no se traduce */
   ed.setAttribute('data-ph',ph||'');
   ed.style.cssText='font-size:14px;color:#F8D77A;line-height:1.5;flex:1;min-height:19px';
   if(dt){
@@ -2811,7 +2839,7 @@ function gpnPlanChips(items,activo,onPick,onAuto,autoOn){
   var box=document.createElement('div');
   box.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px';
   var a=document.createElement('button');
-  a.className='gpn-chip'+(autoOn?' on':''); a.textContent='Automático'; a.onclick=onAuto;
+  a.className='gpn-chip'+(autoOn?' on':''); a.textContent=gpnTr('Automático'); a.onclick=onAuto;
   box.appendChild(a);
   items.forEach(function(it){
     var b=document.createElement('button');
@@ -2898,7 +2926,7 @@ function gpnPlan(cont){
   var c1=document.createElement('div'); c1.className='gpn-plan-c';
   var t1=document.createElement('div'); t1.className='gpn-plan-t';
   t1.innerHTML='Cómo atacan ellos<span>un color por zona de origen</span>';
-  if(dt) t1.appendChild(gpnPlanBoton('atk','Elegir'));
+  if(dt) t1.appendChild(gpnPlanBoton('atk',gpnTr('Elegir')));
   c1.appendChild(t1);
   if(dt&&GPN_PLAN_ABRE.atk){
     c1.appendChild(gpnPlanChips(
@@ -2936,17 +2964,17 @@ function gpnPlan(cont){
     }
     j.appendChild(hd);
     var dd=document.createElement('div'); dd.innerHTML=gpnDirs(acc,cmap,'DESDE'); j.appendChild(dd);
-    j.appendChild(gpnPlanFila(gpnPlanK('n_j'+x.num),'Nota sobre el #'+x.num+'…'));
+    j.appendChild(gpnPlanFila(gpnPlanK('n_j'+x.num),gpnTr('Nota sobre el')+' #'+x.num+'…'));
     c1.appendChild(j);
   });
-  c1.appendChild(gpnPlanFila(gpnPlanK('n_atk'),'Conclusión tuya sobre cómo atacan…'));
+  c1.appendChild(gpnPlanFila(gpnPlanK('n_atk'),gpnTr('Conclusión tuya sobre cómo atacan…')));
   wrap.appendChild(c1);
 
   /* ══ tarjeta 2 · a quien sacarle ══ */
   var c2=document.createElement('div'); c2.className='gpn-plan-c';
   var t2=document.createElement('div'); t2.className='gpn-plan-t';
   t2.innerHTML='A quién sacarle<span>un color por tipo de saque</span>';
-  if(dt) t2.appendChild(gpnPlanBoton('rec','Elegir'));
+  if(dt) t2.appendChild(gpnPlanBoton('rec',gpnTr('Elegir')));
   c2.appendChild(t2);
   if(dt&&GPN_PLAN_ABRE.rec&&recs.length){
     c2.appendChild(gpnPlanChips(
@@ -2966,7 +2994,7 @@ function gpnPlan(cont){
     /* la parte de los numeros NO se toca: sale del scout */
     fr.innerHTML='El <b style="font-family:Anton,sans-serif;color:#F5A524">#'+peor.num+'</b> '
       +gpnEsc(gpApellido(peor.num)||'')+' recibe <b style="font-family:Anton,sans-serif">'+peor.n+'</b> pelotas con '
-      +'<b style="font-family:Anton,sans-serif;color:#FF8A99">'+peor.pct+'%</b> de positivas';
+      +'<b style="font-family:Anton,sans-serif;color:#FF8A99">'+peor.pct+'%</b>';
     /* ── el veredicto ──────────────────────────────────────────────────
        Los numeros de arriba salen del scout. El veredicto es tuyo y se
        guarda POR JUGADOR: si cambias de objetivo no te queda pegada la
@@ -2978,18 +3006,20 @@ function gpnPlan(cont){
     var sep=document.createElement('span'); sep.style.cssText='color:#E6EDF6';
     var ver=document.createElement('span');
     ver.className='gpn-ed';
-    ver.setAttribute('data-ph','escribí tu veredicto…');
+    ver.setAttribute('data-notr','1');
+    ver.setAttribute('data-ph',gpnTr('escribí tu veredicto…'));
     ver.style.cssText='font-size:17px;color:#F8D77A;line-height:1.45';
-    ver.innerHTML=esElPeor?'es el más barato del equipo.':'';
+    ver.innerHTML=esElPeor?gpnTr('es el más barato del equipo.'):'';
     var puntuar=function(){
       var hay=(ver.textContent||'').trim().length>0;
-      sep.textContent=hay?': ':'.';
+      sep.textContent=' '+gpnTr(hay?'de positivas: ':'de positivas.');
       if(!dt) ver.style.display=hay?'inline':'none';
     };
     if(dt){
       ver.contentEditable='true';
+      /* la puntuacion se acomoda al SALIR del campo: moverla con cada tecla
+         despierta al observador del idioma mientras el esta escribiendo */
       ver.addEventListener('blur',function(){ gpEdGuardar(gpnPlanK('ver'+peor.num),this.innerHTML); puntuar(); });
-      ver.addEventListener('input',puntuar);
     }
     gpEdLeer(gpnPlanK('ver'+peor.num),function(v){
       if(document.activeElement!==ver) ver.innerHTML=v||'';
@@ -3028,7 +3058,7 @@ function gpnPlan(cont){
     var v2=document.createElement('div'); v2.className='gpn-vacio';
     v2.textContent='Sin datos de recepción rival.'; c2.appendChild(v2);
   }
-  c2.appendChild(gpnPlanFila(gpnPlanK('n_srv'),'Cómo le vamos a sacar…'));
+  c2.appendChild(gpnPlanFila(gpnPlanK('n_srv'),gpnTr('Cómo le vamos a sacar…')));
   wrap.appendChild(c2);
 
   cont.appendChild(wrap);
@@ -6271,9 +6301,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261017-1115"></script>
-<script src="ayuda.js?v=20261017-1115"></script>
-<script src="volver_inicio.js?v=20261017-1115" defer></script>
+<script src="temporadas_menu.js?v=20261017-1133"></script>
+<script src="ayuda.js?v=20261017-1133"></script>
+<script src="volver_inicio.js?v=20261017-1133" defer></script>
 </body>
 </html>
 

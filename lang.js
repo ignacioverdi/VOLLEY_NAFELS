@@ -5784,10 +5784,34 @@
       }
     });
     var nodes=[],n; while((n=walker.nextNode())) nodes.push(n);
+    /* ══ LO QUE ESCRIBE UNA PERSONA NO SE TRADUCE NI SE PISA ══════════════
+       Aca se guardaba el texto original en node.__es la PRIMERA vez que se
+       veia el nodo, y despues siempre se volvia a escribir la traduccion de
+       ESE original. En un campo editable eso borraba lo que estaban
+       escribiendo: el observador ve el nodo cuando tiene una sola letra,
+       se guarda esa letra como "original", y 200 ms despues repone la letra
+       y se lleva puesta la frase entera. Pasaba en las notas del game plan,
+       en el plan de partido y en cualquier otro campo de la app, y solo en
+       ingles o aleman —en castellano el observador ni corre—.
+
+       Ahora, dentro de un campo editable:
+         · si el texto cambio desde la ultima vez que lo escribimos NOSOTROS,
+           ese texto es de la persona y pasa a ser el original;
+         · y mientras lo esta escribiendo —el campo tiene el foco— no se
+           toca.
+       El texto que viene de fabrica se sigue traduciendo igual que siempre,
+       porque ahi node.nodeValue es exactamente lo ultimo que escribimos. */
+    var _foco=document.activeElement;
     nodes.forEach(function(node){
+      var p=node.parentNode;
+      if(p && p.isContentEditable){
+        if(node.__tr==null || node.nodeValue!==node.__tr) node.__es=node.nodeValue;
+        if(_foco && _foco.contains && _foco.contains(node)) return;
+      }
       if(node.__es==null) node.__es=node.nodeValue;
       var tr=translateString(node.__es, lang);
       if(node.nodeValue!==tr) node.nodeValue=tr;
+      node.__tr=tr;
     });
   }
   window.translateTextNodes=translateTextNodes;
