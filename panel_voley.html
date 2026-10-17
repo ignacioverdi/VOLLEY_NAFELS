@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261017-2356"></script>
-<script src="selector_categoria.js?v=20261017-2356"></script>
+<script src="categorias_club.js?v=20261018-0002"></script>
+<script src="selector_categoria.js?v=20261018-0002"></script>
 <script src="datos_voley.js.enc" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -359,14 +359,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261017-2356"></script>
+<script src="objetivos_config.js?v=20261018-0002"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261017-2356"></script>
+<script src="datos_seguros.js?v=20261018-0002"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -377,12 +377,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261017-2356" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-2356"></script>
-<script src="lang.js?v=20261017-2356"></script>
-<script src="objetivos.js?v=20261017-2356" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261017-2356"></script>
-  <script src="video_delay.js?v=20261017-2356" onerror="void 0"></script>
+<script src="firebase.js?v=20261018-0002" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261018-0002"></script>
+<script src="lang.js?v=20261018-0002"></script>
+<script src="objetivos.js?v=20261018-0002" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261018-0002"></script>
+  <script src="video_delay.js?v=20261018-0002" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -679,7 +679,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-2356">
+<link rel="stylesheet" href="movil.css?v=20261018-0002">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2035,8 +2035,9 @@ function pvSembrarHist(L, D){
     fbGet('voley_hist_idx/'+k, function(ya){
       if(ya) return;
       var ln=(L&&L.local)?L.local:{}, vn=(L&&L.visitante)?L.visitante:{};
-      var ficha={ iso:iso, tipo:(L&&L.tipo)||D.tipo||'', por:'',
-                  titulo:(L&&L.titulo)||D.titulo||((ln.n||'')+' - '+(vn.n||'')),
+      var _tit=(L&&L.titulo)||D.titulo||((ln.n||'')+' - '+(vn.n||''));
+      var _tip=(L&&L.tipo)||D.tipo||(pvEsEntren('',_tit)?'entrenamiento':'');
+      var ficha={ iso:iso, tipo:_tip, por:'', titulo:_tit,
                   acciones:(L&&typeof L.acciones==='number')?L.acciones:0,
                   set:(L&&L.set)||1,
                   marcador:(ln.n||'')+' '+(ln.sets||0)+'-'+(vn.sets||0)+' '+(vn.n||'') };
@@ -2060,7 +2061,9 @@ function pvAvisoSesion(h){
     else document.body.insertBefore(b, document.body.firstChild);
   }
   if(!h){ b.style.display='none'; return; }
-  b.innerHTML='Estás viendo una <b>sesión guardada</b>: '+((h.titulo||'')+' · '+pvCuandoDe(h.iso))
+  b.innerHTML='Estás viendo una <b>sesión guardada</b>: '
+    +((pvEsEntren(h.tipo,h.titulo)?'Entrenamiento · ':'Partido · ')
+      +(pvTituloDe(h.tipo,h.titulo)||'')+' · '+pvCuandoDe(h.iso))
     +(h.acciones?(' · '+h.acciones+' acciones'):'')
     +' &nbsp; <a href="#" onclick="pvVerActual();return false;" style="color:#22d3ee;font-weight:700">volver a la sesión actual</a>';
   b.style.display='block';
@@ -2127,8 +2130,9 @@ function pvAbrirSesiones(){
         +'background:'+(k===_sesionFija?'rgba(34,211,238,.10)':'rgba(255,255,255,.03)')+';'
         +'border:1px solid '+(k===_sesionFija?'rgba(34,211,238,.5)':'rgba(255,255,255,.1)')+';'
         +'border-radius:11px;padding:11px 13px;cursor:pointer;color:inherit;font:inherit';
+      var _ent=pvEsEntren(h.tipo,h.titulo);
       fila.innerHTML='<span style="font-size:14px;color:#e2e8f0;font-weight:700">'
-        +((h.tipo==='entrenamiento'?'🏋️ ':'🏐 ')+(h.titulo||'(sin nombre)'))+'</span>'
+        +((_ent?'🏋️ ':'🏐 ')+(pvTituloDe(h.tipo,h.titulo)||'(sin nombre)'))+'</span>'
         +'<span style="font-size:12px;color:#7689a1">'+pvCuandoDe(h.iso)
         +(h.acciones?(' · '+h.acciones+' acciones'):'')
         +(h.marcador?(' · '+h.marcador):'')
@@ -2198,9 +2202,27 @@ function pvSello(){
     return _liveTS || (V && V.ts) || null;
   }catch(e){ return _liveTS||null; }
 }
+/* ══ PARTIDO O ENTRENAMIENTO ═════════════════════════════════════════════
+   Lo que publica el scout ahora dice de que es. Lo que quedo publicado por
+   una version anterior, no. Cuando falta, dos nombres iguales son un
+   entrenamiento: en un partido un equipo no se enfrenta a si mismo. Decirle
+   "Partido" a un entrenamiento es dar un dato mal, aunque sea un rotulo. */
+function pvEsEntren(tipo, titulo){
+  if(tipo==='entrenamiento') return true;
+  if(tipo==='partido') return false;
+  var p=String(titulo||'').split(' - ');
+  return p.length===2 && !!p[0].trim() && p[0].trim().toUpperCase()===p[1].trim().toUpperCase();
+}
+/* en un entrenamiento no hace falta repetir el nombre del club dos veces */
+function pvTituloDe(tipo, titulo){
+  var t=String(titulo||'');
+  if(pvEsEntren(tipo,t)){ var p=t.split(' - '); if(p.length===2) return p[0].trim(); }
+  return t;
+}
 function pvQuien(){
   if(!_liveTitulo) return '';
-  return (_liveTipo==='entrenamiento'?'Entrenamiento':'Partido')+' \u00b7 '+_liveTitulo+' \u00b7 ';
+  return (pvEsEntren(_liveTipo,_liveTitulo)?'Entrenamiento':'Partido')
+       + ' \u00b7 ' + pvTituloDe(_liveTipo,_liveTitulo) + ' \u00b7 ';
 }
 
 function pvEdad(){
@@ -2896,8 +2918,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261017-2356" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261017-2356"></script>
+<script src="plantel_nafels.js?v=20261018-0002" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261018-0002"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -2996,7 +3018,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261017-2356"></script>
+<script src="ayuda.js?v=20261018-0002"></script>
 
 
 
@@ -3103,7 +3125,7 @@ function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) re
   });
 })();
 </script>
-<script src="volver_inicio.js?v=20261017-2356" defer></script>
+<script src="volver_inicio.js?v=20261018-0002" defer></script>
 </body>
 </html>
 
