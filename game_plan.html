@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261017-1043"></script>
-<script src="selector_categoria.js?v=20261017-1043"></script>
-<script src="objetivos_config.js?v=20261017-1043"></script>
+<script src="categorias_club.js?v=20261017-1115"></script>
+<script src="selector_categoria.js?v=20261017-1115"></script>
+<script src="objetivos_config.js?v=20261017-1115"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -396,7 +396,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
   border-radius:7px;padding:6px 9px;white-space:nowrap}
 .gpn-hm:hover{color:#E6EDF6;border-color:rgba(255,255,255,.2)}
 /* ── 3 · el plan ── */
-.gpn-plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px}
+.gpn-plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:16px}
 .gpn-plan-c{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 20px}
 .gpn-plan-t{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:.12em;color:#E6EDF6;
   margin-bottom:12px;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
@@ -406,6 +406,24 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-plan-h{display:flex;align-items:baseline;gap:7px;margin-bottom:5px;font-size:15px}
 .gpn-plan-lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#5E6B7D;margin-bottom:6px}
 .gpn-plan-dest{background:rgba(240,86,106,.07);border:1px solid rgba(240,86,106,.25);border-radius:12px;padding:13px 15px}
+/* lo que escribe el entrenador sobre el plan */
+.gpn-ed{outline:none;border-radius:4px;padding:1px 4px;transition:background .15s}
+.gpn-ed:focus{background:rgba(255,255,255,.07)}
+.gpn-ed:empty:before{content:attr(data-ph);color:#46536A;font-style:italic}
+.gpn-chip{border:1px solid rgba(255,255,255,.14);background:transparent;color:#8494A8;
+  font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em;
+  padding:4px 9px;border-radius:7px;cursor:pointer}
+.gpn-chip:hover{color:#E6EDF6;border-color:rgba(255,255,255,.26)}
+.gpn-chip.on{border-color:#F5A524;background:rgba(245,165,36,.14);color:#F5A524}
+.gpn-mini{border:1px solid rgba(255,255,255,.14);background:transparent;color:#5E6B7D;
+  font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:800;letter-spacing:.12em;
+  padding:3px 8px;border-radius:6px;cursor:pointer;text-transform:uppercase;white-space:nowrap}
+.gpn-mini:hover{color:#E6EDF6}
+.gpn-mini.on{color:#F5A524;border-color:rgba(245,165,36,.5)}
+.gpn-fl{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#8494A8;
+  font-weight:900;font-size:9px;line-height:1;width:19px;height:15px;border-radius:5px;cursor:pointer;
+  padding:0;font-family:inherit}
+.gpn-fl:hover{color:#E6EDF6;border-color:rgba(255,255,255,.3)}
 /* ── la cancha del armador, compacta como plan de partido ── */
 .gpn-armcourt{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
 .gpn-ac{height:48px;border-radius:5px;display:flex;flex-direction:column;align-items:center;
@@ -445,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261017-1043" onerror="void 0"></script>
+<script src="lang.js?v=20261017-1115" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -456,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261017-1043"></script>
+<script src="datos_seguros.js?v=20261017-1115"></script>
 <script src="liga_data.js.enc"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -469,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261017-1043" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261017-1043"></script>
-<script src="videos.js?v=20261017-1043" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261017-1115" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261017-1115"></script>
+<script src="videos.js?v=20261017-1115" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261017-1043">
+<link rel="stylesheet" href="movil.css?v=20261017-1115">
 
-<script src="iconos.js?v=20261017-1043" defer></script>
+<script src="iconos.js?v=20261017-1115" defer></script>
 </head>
 <body>
 
@@ -2738,26 +2756,126 @@ function gpnFichaJugador(j,idx){
 /* ══ 3 · EL PLAN ═════════════════════════════════════════════════════
    El resumen de todo lo de arriba: por donde atacan y a quien sacarle.
    Se arma con los mismos datos, no hay nada escrito a mano. */
+var GPN_PLAN_CFG={atk:null,rec:null}, GPN_PLAN_CONT=null, GPN_PLAN_LEIDO=false,
+    GPN_PLAN_ABRE={atk:false,rec:false}, _gpnPlanT=null;
+function gpnPlanK(s){ return (GP_RIVAL_SLUG||'rival')+'_plan_'+s; }
+/* repintar SIEMPRE en el proximo turno: gpEdLeer puede llamar de vuelta en el
+   acto y, sin esto, gpnPlan se llamaria a si misma mientras se esta armando */
+function gpnPlanPintar(){
+  if(!GPN_PLAN_CONT) return;
+  clearTimeout(_gpnPlanT);
+  _gpnPlanT=setTimeout(function(){ try{ gpnPlan(GPN_PLAN_CONT); }catch(e){} },0);
+}
+function gpnPlanLeerCfg(){
+  if(GPN_PLAN_LEIDO) return; GPN_PLAN_LEIDO=true;
+  gpEdLeer(gpnPlanK('atk'),function(v){
+    var a=null; try{ a=JSON.parse(v); }catch(e){}
+    GPN_PLAN_CFG.atk=(a instanceof Array)?a.map(Number).filter(function(n){return !isNaN(n);}):null;
+    if(GPN_PLAN_CFG.atk && !GPN_PLAN_CFG.atk.length) GPN_PLAN_CFG.atk=null;
+    gpnPlanPintar();
+  });
+  gpEdLeer(gpnPlanK('rec'),function(v){
+    var n=parseInt(v,10);
+    GPN_PLAN_CFG.rec=isNaN(n)?null:n;
+    gpnPlanPintar();
+  });
+}
+/* ── una linea ✎ ─────────────────────────────────────────────────────────
+   La escribe el cuerpo tecnico y la lee el equipo. Si esta vacia, al
+   jugador no se le muestra el renglon: una fila con un lapiz y nada al
+   lado no le dice nada a nadie. */
+function gpnPlanFila(k,ph){
+  var dt=gpEsEntrenador();
+  var row=document.createElement('div');
+  row.style.cssText='display:flex;gap:7px;align-items:flex-start;margin-top:7px';
+  var lap=document.createElement('span');
+  lap.style.cssText='color:#F5A524;font-size:12px;flex:none;line-height:1.7';
+  lap.textContent='✎';
+  var ed=document.createElement('div');
+  ed.className='gpn-ed';
+  ed.setAttribute('data-ph',ph||'');
+  ed.style.cssText='font-size:14px;color:#F8D77A;line-height:1.5;flex:1;min-height:19px';
+  if(dt){
+    ed.contentEditable='true';
+    ed.addEventListener('blur',function(){ gpEdGuardar(k,this.innerHTML); });
+  } else { row.style.display='none'; }
+  gpEdLeer(k,function(v){
+    if(document.activeElement!==ed) ed.innerHTML=v||'';
+    if(!dt) row.style.display=(ed.textContent||'').trim()?'flex':'none';
+  },ed);
+  row.appendChild(lap); row.appendChild(ed);
+  return row;
+}
+/* la fila de chips para elegir de quien se habla */
+function gpnPlanChips(items,activo,onPick,onAuto,autoOn){
+  var box=document.createElement('div');
+  box.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px';
+  var a=document.createElement('button');
+  a.className='gpn-chip'+(autoOn?' on':''); a.textContent='Automático'; a.onclick=onAuto;
+  box.appendChild(a);
+  items.forEach(function(it){
+    var b=document.createElement('button');
+    b.className='gpn-chip'+(activo(it)?' on':''); b.textContent=it.lbl;
+    b.onclick=function(){ onPick(it); };
+    box.appendChild(b);
+  });
+  return box;
+}
+function gpnPlanBoton(cual,txt){
+  var b=document.createElement('button');
+  b.className='gpn-mini'+(GPN_PLAN_ABRE[cual]?' on':'');
+  b.textContent=(GPN_PLAN_ABRE[cual]?'✕ ':'✎ ')+txt;
+  b.onclick=function(){ GPN_PLAN_ABRE[cual]=!GPN_PLAN_ABRE[cual]; gpnPlanPintar(); };
+  return b;
+}
+function gpnPlanMover(lista,i,d){
+  var n=i+d; if(n<0||n>=lista.length) return;
+  var nums=lista.map(function(x){ return x.num; });
+  var t=nums[i]; nums[i]=nums[n]; nums[n]=t;
+  GPN_PLAN_CFG.atk=nums;
+  gpEdGuardar(gpnPlanK('atk'),JSON.stringify(nums));
+  gpnPlanPintar();
+}
+function gpnPlanTogAtk(num,autos){
+  var cur=(GPN_PLAN_CFG.atk&&GPN_PLAN_CFG.atk.length)?GPN_PLAN_CFG.atk.slice():autos.slice();
+  var k=cur.indexOf(num);
+  if(k>=0) cur.splice(k,1); else cur.push(num);
+  GPN_PLAN_CFG.atk=cur.length?cur:null;
+  gpEdGuardar(gpnPlanK('atk'),cur.length?JSON.stringify(cur):'');
+  gpnPlanPintar();
+}
+function gpnPlanRec(num){
+  GPN_PLAN_CFG.rec=num;
+  gpEdGuardar(gpnPlanK('rec'),(num==null)?'':String(num));
+  gpnPlanPintar();
+}
+
+/* ══ 3 · EL PLAN ═════════════════════════════════════════════════════
+   El resumen de todo lo de arriba: por donde atacan y a quien sacarle.
+   Los NUMEROS siguen saliendo del scout y no se pueden escribir a mano —
+   asi tiene que ser—, pero tres cosas son del entrenador: quienes
+   aparecen y en que orden, el veredicto del titular, y una linea ✎ por
+   jugador y por tarjeta. Se guarda en la misma rama compartida que las
+   notas, asi que el jugador abre la pantalla y ve lo que dejaste. */
 function gpnPlan(cont){
   if(!cont) return;
-  var td=GP_TD||{};
-  /* --- como atacan: los tres de mas volumen --- */
-  var ats=Object.keys(td.atk||{}).map(function(ns){
+  GPN_PLAN_CONT=cont;
+  gpnPlanLeerCfg();
+  var td=GP_TD||{}, dt=gpEsEntrenador();
+  cont.innerHTML='';
+
+  /* ── candidatos ── */
+  var todosA=Object.keys(td.atk||{}).map(function(ns){
     return {num:+ns, n:((td.atk[ns].a)||[]).length};
-  }).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;}).slice(0,3);
-  var h1='';
-  ats.forEach(function(x){
-    var acc=gpnClips(x.num,'ataque','all',null);
-    var ori={}; acc.forEach(function(c){ if(c.orig) ori[c.orig]=1; });
-    var cmap=gpnColores(Object.keys(ori).map(Number));
-    h1+='<div class="gpn-plan-j"><div class="gpn-plan-h">'
-      +'<b style="font-family:Anton,sans-serif;color:#F5A524">#'+x.num+'</b> '
-      +'<span style="color:#E6EDF6;font-weight:600">'+gpnEsc(gpApellido(x.num)||'')+'</span> '
-      +'<span style="color:#5E6B7D;font-size:11px;letter-spacing:1px">'+gpnEsc(GP_POS_LABEL[(td.roster||{})[String(x.num)]]||'')+'</span>'
-      +'<span style="margin-left:auto;color:#5E6B7D;font-size:13px"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+x.n+'</b> remates</span>'
-      +'</div>'+gpnDirs(acc,cmap,'DESDE')+'</div>';
+  }).filter(function(x){return x.n>0;}).sort(function(a,b){return b.n-a.n;});
+  var autoA=todosA.slice(0,3).map(function(x){ return x.num; });
+  var selA=(GPN_PLAN_CFG.atk||[]).filter(function(n){
+    return todosA.some(function(x){ return x.num===n; });
   });
-  /* --- a quien sacarle: el receptor con menos positivas --- */
+  var ats = selA.length
+    ? selA.map(function(n){ return todosA.filter(function(x){return x.num===n;})[0]; })
+    : todosA.slice(0,3);
+
   var recs=Object.keys(td.rec||{}).map(function(ns){
     var acc=gpnClips(+ns,'recepcion','all',null);
     if(acc.length<5) return null;
@@ -2767,38 +2885,153 @@ function gpnPlan(cont){
       t.n++; if(c.ev==='#'||c.ev==='+') t.p++; });
     return {num:+ns, n:acc.length, pct:Math.round(pos/acc.length*100), tipos:porTipo};
   }).filter(Boolean).sort(function(a,b){return a.pct-b.pct;});
-  var h2='';
+  var peor=null;
   if(recs.length){
-    var peor=recs[0];
-    var lineas='';
+    peor=(GPN_PLAN_CFG.rec!=null)
+      ? (recs.filter(function(r){return r.num===GPN_PLAN_CFG.rec;})[0]||recs[0])
+      : recs[0];
+  }
+
+  var wrap=document.createElement('div'); wrap.className='gpn-plan';
+
+  /* ══ tarjeta 1 · como atacan ellos ══ */
+  var c1=document.createElement('div'); c1.className='gpn-plan-c';
+  var t1=document.createElement('div'); t1.className='gpn-plan-t';
+  t1.innerHTML='Cómo atacan ellos<span>un color por zona de origen</span>';
+  if(dt) t1.appendChild(gpnPlanBoton('atk','Elegir'));
+  c1.appendChild(t1);
+  if(dt&&GPN_PLAN_ABRE.atk){
+    c1.appendChild(gpnPlanChips(
+      todosA.map(function(x){ return {num:x.num, lbl:'#'+x.num+' '+(gpApellido(x.num)||'')+' · '+x.n}; }),
+      function(it){ return ats.some(function(a){return a.num===it.num;}); },
+      function(it){ gpnPlanTogAtk(it.num,autoA); },
+      function(){ GPN_PLAN_CFG.atk=null; gpEdGuardar(gpnPlanK('atk'),''); gpnPlanPintar(); },
+      !selA.length
+    ));
+  }
+  if(!ats.length){
+    var v1=document.createElement('div'); v1.className='gpn-vacio';
+    v1.textContent='Sin datos de ataque rival.'; c1.appendChild(v1);
+  }
+  ats.forEach(function(x,i){
+    var acc=gpnClips(x.num,'ataque','all',null);
+    var ori={}; acc.forEach(function(c){ if(c.orig) ori[c.orig]=1; });
+    var cmap=gpnColores(Object.keys(ori).map(Number));
+    var j=document.createElement('div'); j.className='gpn-plan-j';
+    var hd=document.createElement('div'); hd.className='gpn-plan-h';
+    hd.innerHTML='<b style="font-family:Anton,sans-serif;color:#F5A524">#'+x.num+'</b> '
+      +'<span style="color:#E6EDF6;font-weight:600">'+gpnEsc(gpApellido(x.num)||'')+'</span> '
+      +'<span style="color:#5E6B7D;font-size:11px;letter-spacing:1px">'+gpnEsc(GP_POS_LABEL[(td.roster||{})[String(x.num)]]||'')+'</span>'
+      +'<span style="margin-left:auto;color:#5E6B7D;font-size:13px"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+x.n+'</b> remates</span>';
+    if(dt&&ats.length>1){
+      var fl=document.createElement('span');
+      fl.style.cssText='display:flex;gap:3px;margin-left:8px;flex:none';
+      [['▲',-1,'Subir'],['▼',1,'Bajar']].forEach(function(p){
+        var b=document.createElement('button');
+        b.className='gpn-fl'; b.textContent=p[0]; b.title=p[2];
+        b.onclick=function(){ gpnPlanMover(ats,i,p[1]); };
+        fl.appendChild(b);
+      });
+      hd.appendChild(fl);
+    }
+    j.appendChild(hd);
+    var dd=document.createElement('div'); dd.innerHTML=gpnDirs(acc,cmap,'DESDE'); j.appendChild(dd);
+    j.appendChild(gpnPlanFila(gpnPlanK('n_j'+x.num),'Nota sobre el #'+x.num+'…'));
+    c1.appendChild(j);
+  });
+  c1.appendChild(gpnPlanFila(gpnPlanK('n_atk'),'Conclusión tuya sobre cómo atacan…'));
+  wrap.appendChild(c1);
+
+  /* ══ tarjeta 2 · a quien sacarle ══ */
+  var c2=document.createElement('div'); c2.className='gpn-plan-c';
+  var t2=document.createElement('div'); t2.className='gpn-plan-t';
+  t2.innerHTML='A quién sacarle<span>un color por tipo de saque</span>';
+  if(dt) t2.appendChild(gpnPlanBoton('rec','Elegir'));
+  c2.appendChild(t2);
+  if(dt&&GPN_PLAN_ABRE.rec&&recs.length){
+    c2.appendChild(gpnPlanChips(
+      recs.map(function(r){ return {num:r.num, lbl:'#'+r.num+' '+(gpApellido(r.num)||'')+' · '+r.pct+'%'}; }),
+      function(it){ return !!peor && peor.num===it.num; },
+      function(it){ gpnPlanRec(it.num); },
+      function(){ gpnPlanRec(null); },
+      GPN_PLAN_CFG.rec==null
+    ));
+  }
+  if(peor){
+    var dest=document.createElement('div'); dest.className='gpn-plan-dest';
+    var lbl=document.createElement('div'); lbl.className='gpn-plan-lbl'; lbl.textContent='A quién sacarle';
+    dest.appendChild(lbl);
+    var fr=document.createElement('div');
+    fr.style.cssText='font-size:17px;color:#E6EDF6;line-height:1.45';
+    /* la parte de los numeros NO se toca: sale del scout */
+    fr.innerHTML='El <b style="font-family:Anton,sans-serif;color:#F5A524">#'+peor.num+'</b> '
+      +gpnEsc(gpApellido(peor.num)||'')+' recibe <b style="font-family:Anton,sans-serif">'+peor.n+'</b> pelotas con '
+      +'<b style="font-family:Anton,sans-serif;color:#FF8A99">'+peor.pct+'%</b> de positivas';
+    /* ── el veredicto ──────────────────────────────────────────────────
+       Los numeros de arriba salen del scout. El veredicto es tuyo y se
+       guarda POR JUGADOR: si cambias de objetivo no te queda pegada la
+       frase del anterior. La frase que viene de fabrica —"es el mas
+       barato del equipo"— solo aparece sobre el que REALMENTE tiene el
+       peor porcentaje; si elegis a otro a mano, arranca en blanco,
+       porque decir eso de el seria mentira. */
+    var esElPeor=(recs.length && peor.num===recs[0].num);
+    var sep=document.createElement('span'); sep.style.cssText='color:#E6EDF6';
+    var ver=document.createElement('span');
+    ver.className='gpn-ed';
+    ver.setAttribute('data-ph','escribí tu veredicto…');
+    ver.style.cssText='font-size:17px;color:#F8D77A;line-height:1.45';
+    ver.innerHTML=esElPeor?'es el más barato del equipo.':'';
+    var puntuar=function(){
+      var hay=(ver.textContent||'').trim().length>0;
+      sep.textContent=hay?': ':'.';
+      if(!dt) ver.style.display=hay?'inline':'none';
+    };
+    if(dt){
+      ver.contentEditable='true';
+      ver.addEventListener('blur',function(){ gpEdGuardar(gpnPlanK('ver'+peor.num),this.innerHTML); puntuar(); });
+      ver.addEventListener('input',puntuar);
+    }
+    gpEdLeer(gpnPlanK('ver'+peor.num),function(v){
+      if(document.activeElement!==ver) ver.innerHTML=v||'';
+      puntuar();
+    },ver);
+    puntuar();
+    fr.appendChild(sep); fr.appendChild(ver);
+    dest.appendChild(fr);
+    var lins=document.createElement('div');
+    lins.style.cssText='display:flex;flex-direction:column;gap:5px;margin-top:9px';
+    var hl='';
     Object.keys(peor.tipos).forEach(function(t){
       var v=peor.tipos[t], p=Math.round(v.p/v.n*100), c=GPN_TIPO[t]||GPN_CAT[0];
-      lineas+='<div class="gpn-dir"><span class="gpn-dot" style="background:rgba('+c[0]+',.9)"></span>'
+      hl+='<div class="gpn-dir"><span class="gpn-dot" style="background:rgba('+c[0]+',.9)"></span>'
         +'<span style="color:'+c[1]+'">'+t+'</span><span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+v.n+'</b> rec.</span>'
         +'<span style="color:#3D4857">→</span><b style="font-family:Anton,sans-serif;color:'+(p<30?'#FF8A99':(p>=50?'#8FDCF8':'#C6D2E0'))+'">'+p+'%</b>'
         +'<span style="color:#5E6B7D">positiva</span></div>';
     });
-    h2='<div class="gpn-plan-dest"><div class="gpn-plan-lbl">A quién sacarle</div>'
-      +'<div style="font-size:17px;color:#E6EDF6;line-height:1.4">El <b style="font-family:Anton,sans-serif;color:#F5A524">#'+peor.num+'</b> '
-      +gpnEsc(gpApellido(peor.num)||'')+' recibe <b style="font-family:Anton,sans-serif">'+peor.n+'</b> pelotas con '
-      +'<b style="font-family:Anton,sans-serif;color:#FF8A99">'+peor.pct+'%</b> de positivas: es el más barato del equipo.</div>'
-      +'<div style="display:flex;flex-direction:column;gap:5px;margin-top:9px">'+lineas+'</div></div>';
-    if(recs.length>1){
-      h2+='<div class="gpn-plan-lbl" style="margin-top:13px">El resto</div><div style="display:flex;flex-direction:column;gap:5px">';
-      recs.slice(1).forEach(function(r){
-        h2+='<div class="gpn-dir"><span style="color:#C6D2E0">#'+r.num+' '+gpnEsc(gpApellido(r.num)||'')+'</span>'
+    lins.innerHTML=hl; dest.appendChild(lins);
+    c2.appendChild(dest);
+    var resto=recs.filter(function(r){ return r.num!==peor.num; });
+    if(resto.length){
+      var rl=document.createElement('div'); rl.className='gpn-plan-lbl';
+      rl.style.marginTop='13px'; rl.textContent='El resto'; c2.appendChild(rl);
+      var rb=document.createElement('div');
+      rb.style.cssText='display:flex;flex-direction:column;gap:5px';
+      var hr='';
+      resto.forEach(function(r){
+        hr+='<div class="gpn-dir"><span style="color:#C6D2E0">#'+r.num+' '+gpnEsc(gpApellido(r.num)||'')+'</span>'
           +'<span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+r.n+'</b> rec.</span>'
           +'<span style="color:#3D4857">→</span><b style="font-family:Anton,sans-serif;color:'+(r.pct<30?'#FF8A99':(r.pct>=50?'#8FDCF8':'#C6D2E0'))+'">'+r.pct+'%</b></div>';
       });
-      h2+='</div>';
+      rb.innerHTML=hr; c2.appendChild(rb);
     }
-  } else h2='<div class="gpn-vacio">Sin datos de recepción rival.</div>';
+  } else {
+    var v2=document.createElement('div'); v2.className='gpn-vacio';
+    v2.textContent='Sin datos de recepción rival.'; c2.appendChild(v2);
+  }
+  c2.appendChild(gpnPlanFila(gpnPlanK('n_srv'),'Cómo le vamos a sacar…'));
+  wrap.appendChild(c2);
 
-  cont.innerHTML=
-    '<div class="gpn-plan">'
-    +'<div class="gpn-plan-c"><div class="gpn-plan-t">Cómo atacan ellos<span>un color por zona de origen</span></div>'+h1+'</div>'
-    +'<div class="gpn-plan-c"><div class="gpn-plan-t">A quién sacarle<span>un color por tipo de saque</span></div>'+h2+'</div>'
-    +'</div>';
+  cont.appendChild(wrap);
 }
 
 /* ══ LA CANCHA DEL ARMADOR, COMO EN PLAN DE PARTIDO ═══════════════════
@@ -6038,9 +6271,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261017-1043"></script>
-<script src="ayuda.js?v=20261017-1043"></script>
-<script src="volver_inicio.js?v=20261017-1043" defer></script>
+<script src="temporadas_menu.js?v=20261017-1115"></script>
+<script src="ayuda.js?v=20261017-1115"></script>
+<script src="volver_inicio.js?v=20261017-1115" defer></script>
 </body>
 </html>
 
