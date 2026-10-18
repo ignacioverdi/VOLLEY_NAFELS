@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261018-2247"></script>
-<script src="selector_categoria.js?v=20261018-2247"></script>
+<script src="categorias_club.js?v=20261018-2313"></script>
+<script src="selector_categoria.js?v=20261018-2313"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261018-2247"></script>
-<script src="filtro_tipo.js?v=20261018-2247" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261018-2313"></script>
+<script src="filtro_tipo.js?v=20261018-2313" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261018-2247" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261018-2247"></script>
+<script src="firebase.js?v=20261018-2313" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261018-2313"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,11 +233,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261018-2247">
+<link rel="stylesheet" href="movil.css?v=20261018-2313">
 
-<script src="iconos.js?v=20261018-2247" defer></script>
+<script src="iconos.js?v=20261018-2313" defer></script>
 
-<script src="nav.js?v=20261018-2247" defer></script>
+<script src="nav.js?v=20261018-2313" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -520,6 +520,24 @@ window.__DESCIFRAR_SINCRONO = true;
   // estado
   var selMatch={}, selPlayers={}, selAct={}, selEval={}, selSet={}, selected={};
   var fDz=[], fOz=[], fPh="", fCall=[], fApos=[], fRival="", fDate="", fSk="";
+  /* ══ UNA FECHA O VARIAS ════════════════════════════════════════════════
+     fDate era una sola fecha. El dashboard necesita mandar las sesiones que
+     estan elegidas arriba —que pueden ser varias— asi que ahora ?date=
+     acepta una lista separada por comas. Con una sola fecha se comporta
+     exactamente como antes. */
+  var fDateSet=null;
+  function setFDate(v){
+    fDate = String(v==null?'':v).trim();
+    fDateSet = null;
+    if(fDate.indexOf(',')>=0){
+      fDateSet = {};
+      fDate.split(',').forEach(function(d){ d=String(d).trim(); if(d) fDateSet[d]=1; });
+    }
+  }
+  function fDateOk(d){
+    if(!fDate) return true;
+    return fDateSet ? !!fDateSet[d] : (d === fDate);
+  }
 /* ══ CON QUE RECEPCION SE LLEGO AL ATAQUE ═══════════════════════════════
    build_video.py ahora guarda en cada ataque la valoracion de la recepcion
    que lo origino, en a.rq: #, +, ! o -. Vacio = vino de transicion.
@@ -674,7 +692,7 @@ var fTy=[];
       /* El filtro de valoracion. Los botones estaban en pantalla pero nunca se
          aplicaban: al pedir los ataques bloqueados venian todos mezclados. */
       if(evK.length && !selEval[a.ev]) return false;
-      if(fDate && (VD.matches[a.mc]||{}).date!==fDate) return false;
+      if(fDate && !fDateOk((VD.matches[a.mc]||{}).date)) return false;
       if(fRival && _rnorm(oppName(a.mc))!==_rnorm(fRival)) return false;
       if(fApos.length&&(a.sk!=="Armado"||fApos.indexOf(a.apos)<0)) return false;
       if(fCall.length&&(a.sk!=="Armado"||fCall.indexOf(a.call)<0)) return false;
@@ -780,7 +798,7 @@ var fTy=[];
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -965,7 +983,7 @@ var fTy=[];
     $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';fDate='';fSk='';resetSit();rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -1122,7 +1140,9 @@ var fTy=[];
     }catch(e){}
 
     if(fRival) partes.push('vs <b>' + fRival + '</b>');
-    if(fDate)  partes.push('del <b>' + fDate + '</b>');
+    if(fDate)  partes.push(fDateSet
+                   ? ('de las <b>' + Object.keys(fDateSet).length + ' sesiones elegidas</b>')
+                   : ('del <b>' + fDate + '</b>'));
 
     el.innerHTML = partes.join(' · ');
   }
@@ -1151,7 +1171,7 @@ var fTy=[];
        existen en este */
     selMatch = {}; selPlayers = {}; selAct = {}; selEval = {}; selSet = {}; selected = {};
     fDz = []; fOz = []; fPh = ''; fRq = []; fTy = []; fCall = []; fApos = [];
-    fRival = ''; fDate = ''; fSk = ''; selSeason = '';
+    fRival = ''; setFDate(''); fSk = ''; selSeason = '';
     try{ resetSit(); }catch(e){}
     current = -1; try{ stop(); }catch(e){}
 
@@ -1192,7 +1212,7 @@ var fTy=[];
   var pRq=Q.get('rq'), pTy=Q.get('ty');
     var pRival=Q.get('rival'), pDate=Q.get('date');
     if(pRival) fRival=pRival;
-    if(pDate) fDate=pDate;
+    if(pDate) setFDate(pDate);
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
@@ -1255,9 +1275,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261018-2247" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261018-2247" onerror="void 0"></script>
-<script src="ayuda.js?v=20261018-2247"></script>
+<script src="lang.js?v=20261018-2313" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261018-2313" onerror="void 0"></script>
+<script src="ayuda.js?v=20261018-2313"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════

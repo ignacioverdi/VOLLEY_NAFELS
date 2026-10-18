@@ -16,17 +16,17 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261018-2247" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261018-2247" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261018-2247"></script>
-<script src="filtro_tipo.js?v=20261018-2247" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261018-2247" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261018-2313" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261018-2313" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261018-2313"></script>
+<script src="filtro_tipo.js?v=20261018-2313" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261018-2313" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261018-2247" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261018-2247" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261018-2313" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261018-2313" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -43,11 +43,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261018-2247" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261018-2313" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261018-2247" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261018-2313" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc" onerror="void 0"></script>
   
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261018-2247" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261018-2247"></script>
+<script src="firebase.js?v=20261018-2313" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261018-2313"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261018-2247">
+<link rel="stylesheet" href="movil.css?v=20261018-2313">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261018-2247" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261018-2313" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,9 +782,9 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261018-2247" defer></script>
+<script src="iconos.js?v=20261018-2313" defer></script>
 
-<script src="nav.js?v=20261018-2247" defer></script>
+<script src="nav.js?v=20261018-2313" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -1359,10 +1359,22 @@ function eqBuildPanel(){
       var esP=!!(f.x && f.x.rival);
       var et=eqEsc(f.x.fecha||'')+eqEsc(turnoTxt(f.x))+' \u00b7 '
            + (esP?('vs '+eqEsc(f.x.rival||'RIVAL')):'Entrenamiento');
+      /* ══ EL RESULTADO, AL LADO DEL PARTIDO ════════════════════════════
+         La lista decia la fecha y el rival. Para saber si ese era el que se
+         gano habia que acordarse. El resultado ya viene con la sesion, asi
+         que se muestra: verde si se gano, rojo si se perdio. En los
+         entrenamientos no va, porque ahi el "resultado" son los drills. */
+      var R = esP ? (f.x.resultado||null) : null;
+      var res = '';
+      if(R && R.nafels!=null && R.rival!=null){
+        res = ' <b style="font-variant-numeric:tabular-nums;color:'
+            + ((+R.nafels > +R.rival) ? '#4ade80' : '#f87171') + '">'
+            + (+R.nafels) + '\u2013' + (+R.rival) + '</b>';
+      }
       h+='<label style="'+IT+'">'
        +  '<input type="checkbox" '+((EQ_SEL&&EQ_SEL.has(f.i))?'checked':'')
        +  ' onchange="eqTildar('+f.i+',this.checked)">'
-       +  '<span>'+(esP?'\ud83c\udfc6':'\ud83c\udfcb\ufe0f')+' '+et+'</span></label>';
+       +  '<span>'+(esP?'\ud83c\udfc6':'\ud83c\udfcb\ufe0f')+' '+et+res+'</span></label>';
     });
   });
   p.innerHTML=h;
@@ -1570,12 +1582,16 @@ function renderEqStats(){
           if(q.length===3) return q[2].slice(0,4)+'-'+('0'+q[1]).slice(-2)+'-'+('0'+q[0]).slice(-2); }
         return '';
       }
+      /* ══ Y SIEMPRE QUE EL FOCO SEA MAS CHICO QUE TODO ══════════════════
+         Antes esto solo se acotaba si habias elegido una sesion a mano. Con
+         el filtro de competencia puesto —que ya deja una sola sesion— la
+         Defensa seguia sumando el video de todas: el numero no era el del
+         partido que estabas mirando. */
       var _fechas = null;
-      if((typeof EQ_SESION !== 'undefined' && EQ_SESION >= 0) ||
-         (typeof eqHaySeleccion === 'function' && eqHaySeleccion())){
-        _fechas = {};
-        try{ getEqSesiones().forEach(function(s){ var k=_fkey(s && s.fecha); if(k) _fechas[k]=1; }); }catch(e){ _fechas=null; }
-      }
+      try{
+        var _qs = (typeof dbatFechas==='function') ? dbatFechas() : '';
+        if(_qs){ _fechas={}; _qs.split(',').forEach(function(d){ if(d) _fechas[d]=1; }); }
+      }catch(e){ _fechas=null; }
 
       var _M = {}, _idsEnt = {};
       try{
@@ -1744,11 +1760,44 @@ var DBAT_VALOR = {
   bloqueo:   [null, null, '#', '+', '!', '-', '/', '=']   /* # + ! - / =    */
 };
 
+/* ══ EL VIDEO TAMBIEN RESPETA LO QUE ESTA ELEGIDO ARRIBA ════════════════════
+   El numero de la tabla abria cortes.html con el jugador, el fundamento y la
+   valoracion, pero sin decir de QUE sesiones. Con la Supercopa elegida se
+   veian primero los ataques de ese partido y, a continuacion, los de todos
+   los demas: lo que estaba filtrado arriba no viajaba al video.
+
+   Ahora viajan las FECHAS de las sesiones que estan en foco —las que ya
+   dejaron el filtro de tipo, el de competencia y la eleccion a mano—. Si en
+   foco estan todas, no se manda nada y cortes.html abre como siempre.
+
+   Las fechas se mandan en aaaa-mm-dd, que es como las guarda el archivo de
+   video; las sesiones las traen como dd/mm/aaaa. */
+function dbatFechas(){
+  try{
+    var ses = (typeof getEqSesiones==='function') ? (getEqSesiones()||[]) : [];
+    var todas = (DATA && DATA.entrenamientos) ? DATA.entrenamientos.length : 0;
+    if(!ses.length) return '';
+    if(todas && ses.length >= todas) return '';      /* estan todas: nada que acotar */
+    var out=[], visto={};
+    ses.forEach(function(x){
+      var t=String((x && x.fecha)||'').trim(), k='';
+      var m=t.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if(m) k=m[3]+'-'+('0'+m[2]).slice(-2)+'-'+('0'+m[1]).slice(-2);
+      else if(/^\d{4}-\d{2}-\d{2}/.test(t)) k=t.slice(0,10);
+      if(k && !visto[k]){ visto[k]=1; out.push(k); }
+    });
+    return out.join(',');
+  }catch(e){ return ''; }
+}
+function dbatFechaQS(){
+  var f = dbatFechas();
+  return f ? ('&date=' + encodeURIComponent(f)) : '';
+}
 function dbatURL(num, skill, valor){
   var u = 'cortes.html?num=' + encodeURIComponent(num);
   if(skill) u += '&sk=' + encodeURIComponent(skill);
   if(valor) u += '&ev=' + encodeURIComponent(valor);
-  return u;
+  return u + dbatFechaQS();
 }
 
 function renderEqContent(){
@@ -1923,7 +1972,7 @@ function renderEqContent(){
       } else tot[k]+=(j[k]||0);
     });
     var bg=ri%2?'rgba(255,255,255,.015)':'transparent';
-    html+='<tr style="background:'+bg+';cursor:pointer" title="Ver video de '+j.n+' 🎬" onclick="window.open(\'cortes.html?num='+encodeURIComponent(j.c)+(skVid?'&sk='+encodeURIComponent(skVid):'')+'\',\'_blank\')">'
+    html+='<tr style="background:'+bg+';cursor:pointer" title="Ver video de '+j.n+' 🎬" onclick="window.open(\'cortes.html?num='+encodeURIComponent(j.c)+(skVid?'&sk='+encodeURIComponent(skVid):'')+dbatFechaQS()+'\',\'_blank\')">'
       +'<td><div class="t-name"><div class="t-cam">'+j.c+'</div><span style="font-weight:800;font-size:14px">'+j.n+'</span> <span style="opacity:.35;font-size:14px">🎬</span></div></td>'
       +(isAcum?'<td style="color:var(--mut)">'+j.PJ+'</td>':'')
       +cells.map(function(c,i){
@@ -2054,7 +2103,7 @@ function renderDefensaTabla(){
             /* Misma celda que las otras tablas: el dorsal en su recuadro y el
                apellido al lado, y la fila abre los cortes de ese jugador. */
             _h += '<tr style="cursor:pointer" title="Ver defensas de '+p.ap+' 🎬"'
-                + ' onclick="window.open(\'cortes.html?num='+encodeURIComponent(p.num)+'&sk=Defensa\',\'_blank\')">'
+                + ' onclick="window.open(\'cortes.html?num='+encodeURIComponent(p.num)+'&sk=Defensa'+dbatFechaQS()+'\',\'_blank\')">'
                 + '<td><div class="t-name"><div class="t-cam">'+p.num+'</div>'
                 + '<span style="font-weight:800;font-size:14px">'+p.ap+'</span>'
                 + ' <span style="opacity:.35;font-size:14px">🎬</span></div></td>'
@@ -2126,7 +2175,7 @@ function renderDefensaTabla(){
   h+='</tr></thead><tbody>';
   rows.forEach(function(p){
     var e=eff(p);
-    h+='<tr style="cursor:pointer" title="Ver defensas de '+p.name+' en video 🎬" onclick="window.open(\'cortes.html?num='+parseInt(p.num,10)+'&sk=Defensa\',\'_blank\')"><td style="font-weight:700">#'+parseInt(p.num,10)+' '+p.name+' <span style="opacity:.5">🎬</span></td>'
+    h+='<tr style="cursor:pointer" title="Ver defensas de '+p.name+' en video 🎬" onclick="window.open(\'cortes.html?num='+parseInt(p.num,10)+'&sk=Defensa'+dbatFechaQS()+'\',\'_blank\')"><td style="font-weight:700">#'+parseInt(p.num,10)+' '+p.name+' <span style="opacity:.5">🎬</span></td>'
       +'<td style="font-weight:800;color:'+effColor(e,'def')+'">'+fmt(e)+'</td>'
       +'<td style="font-weight:700;color:#06b6d4">'+p.T+'</td>'
       +'<td style="color:#22c55e">'+p.perf+'</td>'
@@ -2701,11 +2750,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261018-2247"></script>
-<script src="lang.js?v=20261018-2247"></script>
-<script src="temporadas_menu.js?v=20261018-2247"></script>
-<script src="ayuda.js?v=20261018-2247"></script>
-<script src="velocidades_saque.js?v=20261018-2247" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261018-2313"></script>
+<script src="lang.js?v=20261018-2313"></script>
+<script src="temporadas_menu.js?v=20261018-2313"></script>
+<script src="ayuda.js?v=20261018-2313"></script>
+<script src="velocidades_saque.js?v=20261018-2313" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2755,7 +2804,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261018-2247" defer></script>
+<script src="volver_inicio.js?v=20261018-2313" defer></script>
 </body>
 </html>
 
