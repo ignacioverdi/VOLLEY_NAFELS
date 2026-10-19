@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261019-2035"></script>
-<script src="selector_categoria.js?v=20261019-2035"></script>
+<script src="categorias_club.js?v=20261019-2122"></script>
+<script src="selector_categoria.js?v=20261019-2122"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261019-2035"></script>
-<script src="filtro_tipo.js?v=20261019-2035" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261019-2122"></script>
+<script src="filtro_tipo.js?v=20261019-2122" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261019-2035" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261019-2035"></script>
+<script src="firebase.js?v=20261019-2122" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261019-2122"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,11 +233,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261019-2035">
+<link rel="stylesheet" href="movil.css?v=20261019-2122">
 
-<script src="iconos.js?v=20261019-2035" defer></script>
+<script src="iconos.js?v=20261019-2122" defer></script>
 
-<script src="nav.js?v=20261019-2035" defer></script>
+<script src="nav.js?v=20261019-2122" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -323,6 +323,25 @@ window.__DESCIFRAR_SINCRONO = true;
             </select>
             <span class="seval"><button class="sev" data-ev="#">#</button><button class="sev" data-ev="+">+</button><button class="sev" data-ev="!">!</button><button class="sev" data-ev="/">/</button><button class="sev" data-ev="-">-</button><button class="sev" data-ev="=">=</button></span>
           </div>
+        </div>
+      </div>
+      <div class="flabel"><span data-t="Viene de">Viene de</span> <span style="text-transform:none" data-t="(el fundamento anterior de la jugada)"><span data-t="(el fundamento anterior de la jugada)">(el fundamento anterior de la jugada)</span></span></div>
+      <div class="dd">
+        <div class="dd-btn" id="vdeBtn"><span data-t="Elegir fundamento previo">Elegir fundamento previo</span> <span class="n" id="vdeN">—</span></div>
+        <div class="dd-panel" id="vdePanel" style="padding:9px 10px">
+          <style>
+            #vdePanel .vderow{display:flex;gap:5px;align-items:center;margin-bottom:6px;flex-wrap:wrap}
+            #vdePanel .vdesk{font-size:12px;font-weight:700;min-width:84px;color:var(--txt)}
+            #vdePanel .vdev{background:var(--card2);border:1px solid var(--line);color:var(--muted);border-radius:6px;padding:3px 6px;font-size:11px;font-weight:700;cursor:pointer;display:inline-flex;gap:4px;align-items:center;min-width:46px;justify-content:center}
+            #vdePanel .vdev b{font-size:12px}
+            #vdePanel .vdev i{font-style:normal;font-variant-numeric:tabular-nums;opacity:.7}
+            #vdePanel .vdev.on{background:var(--naf);border-color:var(--naf);color:#fff}
+            #vdePanel .vdev.on i{opacity:.95}
+            #vdePanel .vdev.vacio{opacity:.3;cursor:default}
+            #vdePanel .vdehint{font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.4}
+          </style>
+          <div class="vdehint" data-t="De qué fundamento viene la jugada. El número es cuántos clips hay con los filtros de arriba."><span data-t="De qué fundamento viene la jugada. El número es cuántos clips hay con los filtros de arriba.">De qué fundamento viene la jugada. El número es cuántos clips hay con los filtros de arriba.</span></div>
+          <div id="vdeFilas"></div>
         </div>
       </div>
       <!-- El numero era lo mas grande de la pantalla y nadie decide con el.
@@ -674,6 +693,115 @@ var fTy=[];
     var acts=C.rallies[rid]||[];
     return conds.every(function(cd){ return acts.some(function(x){ return x.sk===cd.sk && (!cd.evs.length || cd.evs.indexOf(x.ev)>=0); }); });
   }
+  /* ══ "VIENE DE": EL FUNDAMENTO ANTERIOR DE LA JUGADA ══════════════════════
+     Faltaba poder pedir, por ejemplo, los ataques que salieron de una
+     recepcion !. Lo mas parecido que habia era "Elegir situacion", pero esa
+     pregunta es otra: pide que el RALLY haya tenido una recepcion !, no que
+     el ataque venga de ella. Medido sobre los 16 partidos: 244 ataques contra
+     193. Los 51 de diferencia son contraataques de un rally que arranco con
+     recepcion ! pero que salieron de una defensa. Lo mismo pasa con a.ph
+     (SO/TR), que tambien es del rally entero: de los 791 ataques marcados SO,
+     128 salieron de una defensa y 37 de un freeball.
+
+     Como se decide de que viene una jugada:
+       - si el fundamento elegido es un PRIMER CONTACTO (recepcion, defensa,
+         freeball, saque) se busca el primer contacto anterior mas cercano y
+         tiene que ser ese. Asi el contraataque despues de una defensa no
+         entra como "viene de recepcion".
+       - si es armado, bloqueo o ataque, se busca el mas cercano hacia atras
+         dentro del rally. Eso deja preguntar cosas como "ataques despues de
+         que nos bloquearon" (ataque previo /), donde la defensa del medio es
+         justamente parte de la jugada.
+     Con varios tildados la respuesta es "cualquiera de estos" (o). */
+  var fVde={};
+  var VDE_SKS=['Recepción','Defensa','Freeball','Saque','Armado','Bloqueo','Ataque'];
+  var VDE_PRIMER={'Recepción':1,'Defensa':1,'Freeball':1,'Saque':1};
+  var _vdeCuentas={}, _vdeFirma='', _vdeCtx=null, _vdeCtxK='';
+
+  function vdeCtx(P){
+    /* Mismo corte de rally que usa contextualize(): nueva jugada en cada
+       saque o recepcion nuestra. Se guarda el rally y la posicion de cada
+       accion adentro, para poder caminar hacia atras. */
+    var g={}, idx={};
+    function k(a){ return a.mc+'|'+a.t+'|'+a.num+'|'+a.sk; }
+    P.forEach(function(a){ var q=a.mc+'|'+a.set; (g[q]=g[q]||[]).push(a); });
+    Object.keys(g).forEach(function(q){
+      var arr=g[q].slice().sort(function(x,y){return x.t-y.t;});
+      var R=null;
+      arr.forEach(function(a){
+        if(R===null || a.sk==='Saque' || a.sk==='Recepción') R=[];
+        R.push({sk:a.sk, ev:a.ev});
+        idx[k(a)]={R:R, i:R.length-1};
+      });
+    });
+    return {idx:idx, key:k};
+  }
+  function vdeCtxCache(){
+    var k=MODO+'|'+selTeam+'|'+selectedMatchCodes().slice().sort().join(',');
+    if(_vdeCtx && _vdeCtxK===k) return _vdeCtx;
+    _vdeCtxK=k; _vdeCtx=vdeCtx(pool());
+    return _vdeCtx;
+  }
+  function vdeAnterior(R,i,sk){
+    var j;
+    if(VDE_PRIMER[sk]){
+      for(j=i-1;j>=0;j--) if(VDE_PRIMER[R[j].sk]) return (R[j].sk===sk)?R[j]:null;
+      return null;
+    }
+    for(j=i-1;j>=0;j--) if(R[j].sk===sk) return R[j];
+    return null;
+  }
+  function vdeElegidas(){ return Object.keys(fVde).filter(function(k){return fVde[k];}); }
+  function vdeOk(a,C){
+    var sel=vdeElegidas(); if(!sel.length) return true;
+    var p=C.idx[C.key(a)]; if(!p) return false;
+    var cache={};
+    for(var n=0;n<sel.length;n++){
+      var par=sel[n].split('|'), sk=par[0], ev=par[1];
+      if(!(sk in cache)) cache[sk]=vdeAnterior(p.R,p.i,sk);
+      var ant=cache[sk];
+      if(ant && (ant.ev||'')===ev) return true;
+    }
+    return false;
+  }
+  function vdeContar(base,C){
+    var c={};
+    base.forEach(function(a){
+      var p=C.idx[C.key(a)]; if(!p) return;
+      for(var n=0;n<VDE_SKS.length;n++){
+        var sk=VDE_SKS[n], ant=vdeAnterior(p.R,p.i,sk);
+        if(ant){ var k=sk+'|'+(ant.ev||''); c[k]=(c[k]||0)+1; }
+      }
+    });
+    return c;
+  }
+  function vdePintar(){
+    var cont=$('vdeFilas'); if(!cont) return;
+    var sel=vdeElegidas();
+    /* Se redibuja solo si cambio algo: si no, cada toque de cualquier filtro
+       recrea 42 botones y el traductor los recorre de nuevo al vicio. */
+    var firma=JSON.stringify(_vdeCuentas)+'||'+sel.slice().sort().join(',');
+    if(firma===_vdeFirma){ return; }
+    _vdeFirma=firma;
+    var html='';
+    VDE_SKS.forEach(function(sk){
+      var hay=false;
+      EVAL_ORDER.forEach(function(e){ if(_vdeCuentas[sk+'|'+e] || fVde[sk+'|'+e]) hay=true; });
+      if(!hay) return;
+      html+='<div class="vderow"><span class="vdesk">'+sk+'</span>';
+      EVAL_ORDER.forEach(function(e){
+        var k=sk+'|'+e, n=_vdeCuentas[k]||0, on=!!fVde[k];
+        html+='<button class="vdev'+(on?' on':'')+((n||on)?'':' vacio')+'" data-vde="'+k+'"'
+            + ((n||on)?'':' disabled')+' title="'+(EVAL_NAME[e]||e)+'">'
+            + '<b data-notr>'+e+'</b> <i data-notr>'+n+'</i></button>';
+      });
+      html+='</div>';
+    });
+    cont.innerHTML=html;
+    var b=$('vdeN'); if(b) b.textContent = sel.length? (sel.length+(sel.length===1?' elegido':' elegidos')) : '—';
+  }
+  function resetVde(){ fVde={}; _vdeFirma=''; }
+
   function resetSit(){
     Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sitsk'),function(s){s.value='';});
     Array.prototype.forEach.call(document.querySelectorAll('#sitPanel .sev.on'),function(b){b.classList.remove('on');});
@@ -684,7 +812,11 @@ var fTy=[];
     var CONDS = sitConds();
     var CTX = CONDS.length ? contextualize(pool()) : null;
     var _sl=document.getElementById('sitN'); if(_sl)_sl.textContent=(CONDS.length===0?'—':CONDS.length+(CONDS.length===1?' condición':' condiciones'));
-    filtered=basePool().filter(function(a){
+    var _VC=vdeCtxCache();
+    /* Primero se filtra TODO menos "viene de": esa lista es la que se cuenta
+       para los numeros de los botones. Si se contara despues, al tildar uno
+       los demas se irian a cero. */
+    var _sinVde=basePool().filter(function(a){
       if(!selAct[akey(a.sk,sub(a))]) return false;
       if(fDz.length&&(a.sk!==(fSk||"Ataque")||fDz.indexOf(a.dz)<0)) return false;
       if(fOz.length&&(a.sk!==(fSk||"Ataque")||fOz.indexOf(a.oz)<0)) return false;
@@ -703,7 +835,11 @@ var fTy=[];
       if(stK.length&&stK.indexOf(a.set)<0) return false;
       if(CONDS.length && !matchConds(a,CTX,CONDS)) return false;
       return true;
-    }).sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
+    });
+    _vdeCuentas=vdeContar(_sinVde,_VC);
+    vdePintar();
+    filtered=_sinVde.filter(function(a){ return vdeOk(a,_VC); })
+      .sort(function(a,b){ var ra=evRank(a.ev),rb=evRank(b.ev); if(ra!==rb)return ra-rb; if(a.mc!==b.mc)return a.mc<b.mc?-1:1; return a.t-b.t;});
     /* Antes esto corria la expresion regular una vez por ACCION: con 8180
        acciones son 8180 regex en cada filtrada, para 13 partidos. Ahora se
        resuelve una vez por partido y se reparte. */
@@ -800,7 +936,7 @@ var fTy=[];
   function quickReel(sk,evs){
     Object.keys(selAct).forEach(function(k){selAct[k]=(k.split('|')[0]===sk);});
     selEval={}; (evs||[]).forEach(function(e){if(e)selEval[e]=1;});
-    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();
+    selPlayers={}; selSet={}; fDz=[];fOz=[];fPh='';fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();resetVde();
     buildActionTree();
     document.querySelectorAll('#fEval [data-ev]').forEach(function(c){c.classList.toggle('on',!!selEval[c.dataset.ev]);});
     apply();
@@ -980,12 +1116,20 @@ var fTy=[];
     $('pBtn').addEventListener('click',function(){$('pPanel').classList.toggle('open');});
     $('pPanel').addEventListener('click',function(e){var c=e.target.closest('[data-p]');if(!c)return;var n=c.dataset.p;selPlayers[n]=!selPlayers[n];rebuildAll();});
     $('fEval').addEventListener('click',function(e){var c=e.target.closest('[data-ev]');if(!c)return;var v=c.dataset.ev;if(selEval[v])delete selEval[v];else selEval[v]=1;c.classList.toggle('on');apply();});
+    $('vdeBtn').addEventListener('click',function(){$('vdePanel').classList.toggle('open');});
+    $('vdePanel').addEventListener('click',function(e){
+      var b=e.target.closest('[data-vde]'); if(!b||b.disabled) return;
+      var k=b.dataset.vde;
+      if(fVde[k]) delete fVde[k]; else fVde[k]=1;
+      _vdeFirma='';           /* obliga a redibujar con el tilde puesto */
+      apply();
+    });
     $('sitBtn').addEventListener('click',function(){$('sitPanel').classList.toggle('open');});
     $('sitPanel').addEventListener('click',function(e){var b=e.target.closest('.sev');if(!b)return;b.classList.toggle('on');apply();});
     $('sitPanel').addEventListener('change',function(e){if(e.target.classList&&e.target.classList.contains('sitsk'))apply();});
     $('sBtn').addEventListener('click',function(){$('sPanel').classList.toggle('open');});
     $('sPanel').addEventListener('click',function(e){var c=e.target.closest('[data-set]');if(!c)return;var v=c.dataset.set;if(selSet[v])delete selSet[v];else selSet[v]=1;var bx=c.querySelector('.box');if(bx)bx.textContent=selSet[v]?'✓':'';c.classList.toggle('on',!!selSet[v]);updateSN();apply();});
-    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();rebuildAll();});
+    $('reset').addEventListener('click',function(){selPlayers={};selEval={};selSet={};selAct={};fDz=[];fOz=[];fPh='';fRq=[];fTy=[];fCall=[];fApos=[];fRival='';setFDate('');fSk='';resetSit();resetVde();rebuildAll();});
     $('btnPlay').addEventListener('click',togglePlay);
     $('btnNext').addEventListener('click',function(){if(ready)next();});
     $('btnPrev').addEventListener('click',prev);
@@ -1069,12 +1213,27 @@ var fTy=[];
 
     /* el fundamento elegido, aunque no haya combos */
     if(typeof fSk!=='undefined' && fSk) p.push('sk='+encodeURIComponent(fSk));
+    else {
+      /* ── EL FUNDAMENTO ELEGIDO A MANO TAMBIEN TIENE QUE VIAJAR ──────────
+         fSk solo se llena cuando se entra desde una bateria o desde un link.
+         Si el fundamento se eligio tildando el arbol (lo normal), el link no
+         lo llevaba y el que lo recibia veia todos los fundamentos. Con el
+         filtro de "viene de" eso se nota el doble: pedis los ATAQUES que
+         vienen de una recepcion ! y al otro le aparecen tambien las defensas
+         y los armados de esas mismas jugadas. */
+      var _conAlgo={};
+      Object.keys(selAct).forEach(function(k){ if(selAct[k]) _conAlgo[k.split('|')[0]]=1; });
+      var _unicos=Object.keys(_conAlgo);
+      if(_unicos.length===1) p.push('sk='+encodeURIComponent(_unicos[0]));
+    }
     var atk=Object.keys(selAct).filter(function(k){return k.indexOf('Ataque|')===0;});
     var atkOn=atk.filter(function(k){return selAct[k];});
     if(atkOn.length && atkOn.length<atk.length){
       if(p.indexOf('sk=Ataque')<0 && !(typeof fSk!=='undefined' && fSk)) p.push('sk=Ataque');
       p.push('combo='+atkOn.map(function(k){return k.split('|')[1];}).join(','));
     }
+
+    var _vd=vdeElegidas(); if(_vd.length) p.push('vde='+encodeURIComponent(_vd.join(',')));
 
     var evs=Object.keys(selEval).filter(function(k){return selEval[k];});
     if(!evs.length) evs=Object.keys(selEval);
@@ -1176,6 +1335,7 @@ var fTy=[];
     fDz = []; fOz = []; fPh = ''; fRq = []; fTy = []; fCall = []; fApos = [];
     fRival = ''; setFDate(''); fSk = ''; selSeason = '';
     try{ resetSit(); }catch(e){}
+    try{ resetVde(); }catch(e){}
     current = -1; try{ stop(); }catch(e){}
 
     var n = Object.keys(VD.matches || {}).length;
@@ -1251,6 +1411,8 @@ var fTy=[];
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
+    var pVde=Q.get('vde');
+    if(pVde) pVde.split(',').forEach(function(x){ x=x.trim(); if(x) fVde[x]=1; });
   if(pRq) fRq=pRq.split(',').map(function(x){return x.trim();}).filter(Boolean);
   if(pTy) fTy=pTy.split(',').map(function(x){return x.trim();}).filter(Boolean);
     if(pApos) fApos=pApos.split(',').map(Number);
@@ -1303,6 +1465,7 @@ var fTy=[];
         var on=(pp[0]===sk)&&(!pSub||!!_quiere[pp[1]]);selAct[k]=on;if(on)any=true;});
       if(any){ buildActionTree(); $('ddPanel').classList.add('open'); apply(); }
       var fl=[]; if(fDz.length)fl.push('zona destino '+fDz.join('/')); if(fOz.length)fl.push('zona origen '+fOz.join('/')); if(fPh)fl.push('fase '+(fPh==='SO'?'Side-Out':'Transición')); if(fApos.length)fl.push('armado a zona '+fApos.join('/')); if(pCall)fl.push('llamada '+pCall.split(',').join('/'));
+      var _vdl=vdeElegidas(); if(_vdl.length)fl.push('viene de '+_vdl.map(function(k){var q=k.split('|');return q[0]+' '+q[1];}).join(' o '));
       if(fl.length) $('sub').textContent='Filtrado por '+fl.join(' · ')+' · '+filtered.length+' clip(s)';
     }
     loadYT();
@@ -1310,9 +1473,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261019-2035" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261019-2035" onerror="void 0"></script>
-<script src="ayuda.js?v=20261019-2035"></script>
+<script src="lang.js?v=20261019-2122" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261019-2122" onerror="void 0"></script>
+<script src="ayuda.js?v=20261019-2122"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
@@ -1370,12 +1533,27 @@ function _copiarYAvisar(url){
    y el camino corto SIEMPRE caia en el link largo de 700 caracteres. Y al
    abrir con ?r=CODIGO pasaba lo mismo: 401 y "no encontre el recorte".
    firebase.js ya sabe sacar el token y renovarlo; se usa eso. */
-function _recorteQS(){
+function _recorteQS(limite){
+  /* EL LIMITE DE TIEMPO SOLO LO USA EL BOTON COMPARTIR.
+     _fbArrancar() no resuelve hasta que haya sesion. Para Compartir eso es
+     un riesgo: si por algun motivo no hay sesion, el boton se quedaria
+     colgado y no pasaria nada (justo lo que se vino a arreglar), asi que a
+     los 3 segundos sigue sin token y manda el link largo.
+
+     Para ABRIR un recorte es al revés y hay que esperar: el que abre el link
+     desde WhatsApp normalmente todavia no entro, y tiene que poder escribir
+     el mail con calma. Con un limite corto, en un telefono lento se daba por
+     vencido antes del ingreso, pedia sin token, Firebase devolvia 401 y le
+     avisaba "no encontre el recorte, puede que el link sea viejo" — mentira,
+     el recorte estaba. Por eso el lector llama sin limite. */
+  var esperar;
   try{
     if(typeof _fbArrancar==='function' && typeof _fbSufijo==='function')
-      return _fbArrancar().then(_fbSufijo).catch(function(){ return ''; });
+      esperar = _fbArrancar().then(_fbSufijo).catch(function(){ return ''; });
   }catch(e){}
-  return Promise.resolve('');
+  if(!esperar) return Promise.resolve('');
+  if(!limite) return esperar;
+  return Promise.race([ esperar, new Promise(function(res){ setTimeout(function(){ res(''); }, limite); }) ]);
 }
 function _recorteURL(cod,q){
   /* fbURL() respeta la rama del club: si manana el sistema corre para otro
@@ -1408,7 +1586,7 @@ function linkCorto(largo){
   /* Con 5 letras hay 17 millones de combinaciones, pero repetir una pisaria
      el recorte de otro. Antes de guardar se fija si el codigo esta libre; si
      esta tomado, prueba con otro. Tres intentos alcanzan de sobra. */
-  return _recorteQS().then(function(auth){
+  return _recorteQS(3000).then(function(auth){
     function intentar(vuelta){
       var cod = _codigoNuevo();
       return fetch(_recorteURL(cod, auth))
@@ -1464,8 +1642,14 @@ function linkCorto(largo){
   _recorteQS().then(function(auth){
     mostrar();
     return fetch(_recorteURL(cod, auth))
-      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(r){
+        /* 401/403 no es "el recorte no existe": es que no se pudo preguntar.
+           Decirle que el link es viejo seria mandarlo a buscar donde no es. */
+        if(r.status === 401 || r.status === 403){ roto(); return null; }
+        return r.ok ? r.json() : false;
+      })
       .then(function(d){
+        if(d === null) return;                 /* ya se aviso */
         if(d && d.q && !d.error){ location.replace(location.pathname + '?' + d.q); return; }
         perdido();
       })
