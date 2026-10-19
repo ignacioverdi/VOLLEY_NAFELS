@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261019-2207"></script>
-<script src="selector_categoria.js?v=20261019-2207"></script>
+<script src="categorias_club.js?v=20261019-2217"></script>
+<script src="selector_categoria.js?v=20261019-2217"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261019-2207"></script>
-<script src="filtro_tipo.js?v=20261019-2207" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261019-2217"></script>
+<script src="filtro_tipo.js?v=20261019-2217" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261019-2207" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261019-2207"></script>
+<script src="firebase.js?v=20261019-2217" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261019-2217"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -103,9 +103,9 @@ window.__DESCIFRAR_SINCRONO = true;
      de ellos y cada una se scrollea por dentro. De paso la pagina entera
      entra en una pantalla: antes el panel de filtros media 854 px y
      obligaba a bajar 138 px aunque no hiciera falta. */
-  .card.filters, .card.clips{position:sticky;top:12px;max-height:calc(100vh - 308px);overscroll-behavior:contain}
-  .card.filters{overflow-y:auto;padding-bottom:18px}
-  .card.clips{display:flex;flex-direction:column}
+  .card.filters, .card.clips{position:sticky;top:12px;overscroll-behavior:contain}
+  .card.filters{max-height:var(--alto-izq, calc(100vh - 308px));overflow-y:auto;padding-bottom:18px}
+  .card.clips{max-height:var(--alto-der, calc(100vh - 380px));display:flex;flex-direction:column}
   .card.clips .listwrap{max-height:none;flex:1 1 auto;overflow-y:auto}
   .card.clips .listhead{border-top:none;flex-wrap:wrap;gap:6px}
   .card.clips .listhead .x{margin-left:auto;flex-wrap:wrap;gap:6px}
@@ -296,11 +296,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261019-2207">
+<link rel="stylesheet" href="movil.css?v=20261019-2217">
 
-<script src="iconos.js?v=20261019-2207" defer></script>
+<script src="iconos.js?v=20261019-2217" defer></script>
 
-<script src="nav.js?v=20261019-2207" defer></script>
+<script src="nav.js?v=20261019-2217" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -1230,6 +1230,54 @@ var fTy=[];
         case 'ArrowDown': e.preventDefault(); bumpSpeed(-1); break;
       }
     });
+    /* ══ EL PISO DE LAS COLUMNAS SE MIDE SOLO ════════════════════════════
+       Abajo de la pantalla flotan botones fijos que ponen OTROS archivos
+       —atras y el escudo del club (volver_inicio.js), ayuda (ayuda.js),
+       novedades (novedades.js)— y manana puede aparecer uno mas. Dejar la
+       medida escrita a mano aca significa que el dia que alguien agregue o
+       mueva un boton, vuelve a tapar la lista y nadie se entera.
+
+       Asi que se miden al vuelo: se buscan los fijos chicos que esten en la
+       mitad de abajo, se ve hasta donde suben de cada lado, y cada columna
+       se corta diez pixeles arriba del mas alto de su lado. Se vuelve a
+       medir a los 0,6s, 1,8s y 4s porque esos botones los dibujan scripts
+       que cargan despues, y cada vez que cambia el tamano de la ventana. */
+    (function(){
+      var raiz=document.documentElement;
+      function medir(){
+        var g=$('grid'), cl=document.querySelector('.card.clips');
+        if(!g||!cl) return;
+        if(getComputedStyle(cl).position!=='sticky'){            /* apilado: sin topes */
+          raiz.style.removeProperty('--alto-izq'); raiz.style.removeProperty('--alto-der'); return;
+        }
+        var vh=innerHeight, aw=innerWidth, izq=0, der=0;
+        var todos=document.body.getElementsByTagName('*');
+        for(var i=0;i<todos.length;i++){
+          var e=todos[i];
+          if(g.contains(e)) continue;                            /* lo de adentro no cuenta */
+          var s=getComputedStyle(e);
+          if(s.position!=='fixed'||s.display==='none'||s.visibility==='hidden'||s.opacity==='0') continue;
+          var b=e.getBoundingClientRect();
+          if(b.width<8||b.height<8||b.width>300||b.height>300) continue;
+          if(b.bottom<vh*0.45) continue;                         /* solo los de abajo */
+          var sube=vh-b.top+10;
+          if(b.left+b.width/2 < aw/2){ if(sube>izq) izq=sube; } else { if(sube>der) der=sube; }
+        }
+        [['.card.filters','--alto-izq',izq],['.card.clips','--alto-der',der]].forEach(function(p){
+          var c=document.querySelector(p[0]); if(!c) return;
+          var tope=0, el=c; while(el){ tope+=el.offsetTop; el=el.offsetParent; }
+          var h=Math.max(220, Math.round(vh - tope - p[2]));
+          raiz.style.setProperty(p[1], h+'px');
+        });
+      }
+      medir();
+      setTimeout(medir,600); setTimeout(medir,1800); setTimeout(medir,4000);
+      var tmp=null;
+      addEventListener('resize',function(){ clearTimeout(tmp); tmp=setTimeout(medir,150); });
+      try{ addEventListener('langchange',function(){ setTimeout(medir,250); }); }catch(e){}
+      window.vbMedirPiso=medir;
+    })();
+
     /* ── PLEGAR EL PANEL DE FILTROS ──────────────────────────────────── */
     (function(){
       var g=$('grid'), b=$('togFiltros');
@@ -1566,9 +1614,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261019-2207" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261019-2207" onerror="void 0"></script>
-<script src="ayuda.js?v=20261019-2207"></script>
+<script src="lang.js?v=20261019-2217" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261019-2217" onerror="void 0"></script>
+<script src="ayuda.js?v=20261019-2217"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
