@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261019-1648"></script>
-<script src="selector_categoria.js?v=20261019-1648"></script>
+<script src="categorias_club.js?v=20261019-1704"></script>
+<script src="selector_categoria.js?v=20261019-1704"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261019-1648"></script>
-<script src="filtro_tipo.js?v=20261019-1648" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261019-1704"></script>
+<script src="filtro_tipo.js?v=20261019-1704" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261019-1648" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261019-1648"></script>
+<script src="firebase.js?v=20261019-1704" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261019-1704"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,11 +233,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261019-1648">
+<link rel="stylesheet" href="movil.css?v=20261019-1704">
 
-<script src="iconos.js?v=20261019-1648" defer></script>
+<script src="iconos.js?v=20261019-1704" defer></script>
 
-<script src="nav.js?v=20261019-1648" defer></script>
+<script src="nav.js?v=20261019-1704" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -526,6 +526,8 @@ window.__DESCIFRAR_SINCRONO = true;
      acepta una lista separada por comas. Con una sola fecha se comporta
      exactamente como antes. */
   var fDateSet=null;
+  /* cuando el link trae fechas sin video, se dice en el renglon de arriba */
+  var avisoFecha='';
   function setFDate(v){
     fDate = String(v==null?'':v).trim();
     fDateSet = null;
@@ -1143,6 +1145,7 @@ var fTy=[];
     if(fDate)  partes.push(fDateSet
                    ? ('de las <b>' + Object.keys(fDateSet).length + ' sesiones elegidas</b>')
                    : ('del <b>' + fDate + '</b>'));
+    if(avisoFecha) partes.push('<span class="none">' + avisoFecha + '</span>');
 
     el.innerHTML = partes.join(' · ');
   }
@@ -1212,7 +1215,39 @@ var fTy=[];
   var pRq=Q.get('rq'), pTy=Q.get('ty');
     var pRival=Q.get('rival'), pDate=Q.get('date');
     if(pRival) fRival=pRival;
-    if(pDate) setFDate(pDate);
+    if(pDate){
+      /* ══ LA FECHA ELIGE LOS PARTIDOS, NO FILTRA POR DETRAS ══════════════
+         El dashboard manda las sesiones que estan en foco. Como filtro suelto
+         andaba a medias: la lista de clips salia bien, pero todo lo que la
+         rodea seguia contando los once partidos. Se leia «todos los 11
+         partidos», «Todos (11)» y «Ataque 202» con treinta y un clips abajo
+         —y parecia que habia traido cualquier cosa, aunque los clips fueran
+         los correctos.
+
+         Ahora la fecha se usa UNA vez, para dejar tildados los partidos de
+         esos dias, y despues se suelta. El selector, los contadores del
+         arbol, la lista de jugadores y el renglon de arriba dicen todos lo
+         mismo. Y si queres sumar otro partido, lo tildas y aparece: deja de
+         ser una jaula invisible. */
+      setFDate(pDate);
+      var _codes = seasonCodes();
+      var _hay = false;
+      for(var _i=0;_i<_codes.length;_i++){ if(fDateOk((VD.matches[_codes[_i]]||{}).date)){ _hay=true; break; } }
+      if(_hay){
+        Object.keys(selMatch).forEach(function(c){
+          if(!fDateOk((VD.matches[c]||{}).date)) delete selMatch[c];
+        });
+        _codes.forEach(function(c){ if(fDateOk((VD.matches[c]||{}).date)) selMatch[c]=true; });
+      } else {
+        /* ninguna de esas fechas tiene video cargado todavia: se deja lo que
+           habia y se avisa, en vez de dejar la pantalla en blanco sin decir
+           por que */
+        avisoFecha = 'todavía no hay video de ' +
+          (fDateSet ? ('esas ' + Object.keys(fDateSet).length + ' sesiones') : ('la sesión del ' + fDate));
+      }
+      setFDate('');
+      renderMatches();
+    }
     if(pDz) fDz=pDz.split(',').map(Number);
     if(pOz) fOz=pOz.split(',').map(Number);
     if(pPh) fPh=pPh;
@@ -1275,9 +1310,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261019-1648" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261019-1648" onerror="void 0"></script>
-<script src="ayuda.js?v=20261019-1648"></script>
+<script src="lang.js?v=20261019-1704" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261019-1704" onerror="void 0"></script>
+<script src="ayuda.js?v=20261019-1704"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
