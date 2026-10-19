@@ -7,15 +7,15 @@
 <!-- Las fuentes de la app. Esta pantalla era la unica que salia con la
      fuente del sistema, y por eso parecia de otro programa. -->
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261019-2010"></script>
-<script src="selector_categoria.js?v=20261019-2010"></script>
+<script src="categorias_club.js?v=20261019-2035"></script>
+<script src="selector_categoria.js?v=20261019-2035"></script>
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261019-2010"></script>
-<script src="filtro_tipo.js?v=20261019-2010" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261019-2035"></script>
+<script src="filtro_tipo.js?v=20261019-2035" onerror="void 0"></script>
   <!-- datos_video_25-26 sacado: es el video de la CAPSULA. Esta pantalla es
        de la 26-27, y cargarlo mezclaba jugadores nuevos con cortes de la
        temporada pasada. -->
@@ -36,8 +36,8 @@ window.__DESCIFRAR_SINCRONO = true;
 <script src="mapa_videos.js.enc?v=3" onerror="void 0"></script>
 <script src="mapa_videos_ent.js.enc?v=3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="firebase.js?v=20261019-2010" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261019-2010"></script>
+<script src="firebase.js?v=20261019-2035" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261019-2035"></script>
 <style>
   /* == LOS COLORES DE LA APP, NO LOS DE ESTA PANTALLA =====================
      El acento era verde y el fondo tenia degrade: entrabas de cualquier
@@ -233,11 +233,11 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261019-2010">
+<link rel="stylesheet" href="movil.css?v=20261019-2035">
 
-<script src="iconos.js?v=20261019-2010" defer></script>
+<script src="iconos.js?v=20261019-2035" defer></script>
 
-<script src="nav.js?v=20261019-2010" defer></script>
+<script src="nav.js?v=20261019-2035" defer></script>
 </head>
 <body>
 <div class="hdr"><div class="hdr-in">
@@ -1310,9 +1310,9 @@ var fTy=[];
   document.addEventListener('DOMContentLoaded',init);
 })();
 </script>
-<script src="lang.js?v=20261019-2010" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261019-2010" onerror="void 0"></script>
-<script src="ayuda.js?v=20261019-2010"></script>
+<script src="lang.js?v=20261019-2035" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261019-2035" onerror="void 0"></script>
+<script src="ayuda.js?v=20261019-2035"></script>
 
 <script>
 /* ══ LINK CORTO PARA COMPARTIR ══════════════════════════════════════════════
@@ -1330,16 +1330,58 @@ var fTy=[];
    Si Firebase no contesta, se manda el link largo de siempre: es feo pero
    funciona, y es preferible a quedarse sin poder compartir. */
 
+/* ══ EL AVISO TIENE QUE SER PROPIO ═══════════════════════════════════════
+   Este script es de nivel raiz: el bloque grande de la pantalla es un
+   (function(){...})() aparte y la funcion toast() vive adentro de ese
+   bloque. Desde aca "toast" no era esa funcion: el navegador publica como
+   variable global cualquier elemento con id, y hay un <div id="toast">.
+   Asi que toast('...') llamaba al DIV y tiraba "toast is not a function".
+
+   Ese error pasaba adentro de un .then() sin catch: se perdia en silencio.
+   Resultado: el link se copiaba perfecto, pero no aparecia ningun cartel y
+   el boton parecia muerto. Ahora el aviso es de este script y usa el mismo
+   div (la clase .show ya esta en el CSS). */
+function _avisoCorto(t){
+  try{
+    var e=document.getElementById('toast');
+    if(!e){ return false; }
+    e.textContent=t;
+    e.classList.add('show');
+    setTimeout(function(){ e.classList.remove('show'); },2600);
+    return true;
+  }catch(e2){ return false; }
+}
+
 /* Copiar al portapapeles y avisar. Es lo que hacia el boton antes, sacado
    aparte para que lo puedan usar el camino corto y el largo. */
 function _copiarYAvisar(url){
+  function manual(){ try{ prompt('Copiá y compartí este link:', url); }catch(e){} }
   if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(url).then(
-      function(){ toast('Link copiado \u2713 \u2014 pegalo en WhatsApp'); },
-      function(){ prompt('Copiá y compartí este link:', url); });
-  } else {
-    prompt('Copiá y compartí este link:', url);
-  }
+    navigator.clipboard.writeText(url).then(function(){
+      try{ if(!_avisoCorto('Link copiado \u2713 \u2014 pegalo en WhatsApp')) manual(); }
+      catch(e){ manual(); }
+    }, manual);
+  } else manual();
+}
+
+/* ══ EL TOKEN DE LA SESION ═══════════════════════════════════════════════
+   /recortes no tiene regla propia en Firebase: hereda la de la raiz, que
+   pide sesion. Los fetch de aca salian sin token, el guardado devolvia 401
+   y el camino corto SIEMPRE caia en el link largo de 700 caracteres. Y al
+   abrir con ?r=CODIGO pasaba lo mismo: 401 y "no encontre el recorte".
+   firebase.js ya sabe sacar el token y renovarlo; se usa eso. */
+function _recorteQS(){
+  try{
+    if(typeof _fbArrancar==='function' && typeof _fbSufijo==='function')
+      return _fbArrancar().then(_fbSufijo).catch(function(){ return ''; });
+  }catch(e){}
+  return Promise.resolve('');
+}
+function _recorteURL(cod,q){
+  /* fbURL() respeta la rama del club: si manana el sistema corre para otro
+     club, los recortes no se mezclan. */
+  try{ if(typeof fbURL==='function') return fbURL('recortes/'+cod, q); }catch(e){}
+  return _fbURL()+'/recortes/'+cod+'.json'+(q||'');
 }
 
 function _fbURL(){
@@ -1366,22 +1408,24 @@ function linkCorto(largo){
   /* Con 5 letras hay 17 millones de combinaciones, pero repetir una pisaria
      el recorte de otro. Antes de guardar se fija si el codigo esta libre; si
      esta tomado, prueba con otro. Tres intentos alcanzan de sobra. */
-  function intentar(vuelta){
-    var cod = _codigoNuevo();
-    return fetch(_fbURL() + '/recortes/' + cod + '.json')
-      .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(ya){
-        if(ya && ya.q){
-          if(vuelta < 3) return intentar(vuelta + 1);
-          return largo;                    /* rarisimo: se manda el largo */
-        }
-        return fetch(_fbURL() + '/recortes/' + cod + '.json',
-                     { method:'PUT', headers:{'Content-Type':'application/json'}, body: cuerpo })
-          .then(function(r){ return r.ok ? (base + '?r=' + cod) : largo; });
-      })
-      .catch(function(){ return largo; });
-  }
-  return intentar(1);
+  return _recorteQS().then(function(auth){
+    function intentar(vuelta){
+      var cod = _codigoNuevo();
+      return fetch(_recorteURL(cod, auth))
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(ya){
+          if(ya && ya.q){
+            if(vuelta < 3) return intentar(vuelta + 1);
+            return largo;                  /* rarisimo: se manda el largo */
+          }
+          return fetch(_recorteURL(cod, auth),
+                       { method:'PUT', headers:{'Content-Type':'application/json'}, body: cuerpo })
+            .then(function(r){ return r.ok ? (base + '?r=' + cod) : largo; });
+        })
+        .catch(function(){ return largo; });
+    }
+    return intentar(1);
+  }).catch(function(){ return largo; });
 }
 
 /* Al abrir con ?r=CODIGO, se busca el recorte y se entra con sus filtros. */
@@ -1397,22 +1441,36 @@ function linkCorto(largo){
     + 'align-items:center;justify-content:center;background:rgba(2,6,23,.92);'
     + 'color:#e2e8f0;font-family:inherit;font-size:14px';
   av.textContent = 'Abriendo el recorte ' + cod + '…';
-  document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(av); });
 
-  fetch(_fbURL() + '/recortes/' + cod + '.json')
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d && d.q){ location.replace(location.pathname + '?' + d.q); return; }
-      av.innerHTML = '<div style="text-align:center;line-height:1.6">'
-        + 'No encontré el recorte <b>' + cod + '</b>.<br>'
-        + '<span style="color:#94a3b8;font-size:13px">Puede que el link sea viejo.</span><br>'
-        + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
-    })
-    .catch(function(){
-      av.innerHTML = '<div style="text-align:center;line-height:1.6">'
-        + 'No pude abrir el recorte.<br>'
-        + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
-    });
+  /* El cartel se pone DESPUES de que haya sesion. Antes se pegaba al cargar
+     con z-index 99999 y tapaba la pantalla de ingreso: el que abria el link
+     desde WhatsApp sin haber entrado nunca se quedaba con "Abriendo el
+     recorte..." para siempre, sin poder escribir el mail. */
+  function mostrar(){ try{ if(document.body && !av.parentNode) document.body.appendChild(av); }catch(e){} }
+  function perdido(){
+    mostrar();
+    av.innerHTML = '<div style="text-align:center;line-height:1.6">'
+      + 'No encontré el recorte <b>' + cod + '</b>.<br>'
+      + '<span style="color:#94a3b8;font-size:13px">Puede que el link sea viejo.</span><br>'
+      + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
+  }
+  function roto(){
+    mostrar();
+    av.innerHTML = '<div style="text-align:center;line-height:1.6">'
+      + 'No pude abrir el recorte.<br>'
+      + '<a href="' + location.pathname + '" style="color:#7dd3fc">Abrir cortes de video</a></div>';
+  }
+
+  _recorteQS().then(function(auth){
+    mostrar();
+    return fetch(_recorteURL(cod, auth))
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(d && d.q && !d.error){ location.replace(location.pathname + '?' + d.q); return; }
+        perdido();
+      })
+      .catch(roto);
+  }).catch(roto);
 })();
 </script>
 </body>
