@@ -901,6 +901,9 @@
     "ayer": { en:"yesterday", de:"gestern" },
     "No pude leer la base. ¿Estás con tu sesión iniciada?": { en:"I could not read the database. Are you signed in?", de:"Ich konnte die Datenbank nicht lesen. Bist du angemeldet?" },
     "Todavía no hay nada anotado.": { en:"Nothing recorded yet.", de:"Noch nichts aufgezeichnet." },
+    "Todavía no entró nadie hoy.": { en:"Nobody has come in today yet.", de:"Heute war noch niemand da." },
+    "Hoy": { en:"Today", de:"Heute" },
+    "Último ingreso primero": { en:"Most recent first", de:"Zuletzt aktiv zuerst" },
     "Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.": { en:"Recording starts from now on, every time someone opens a screen.", de:"Die Aufzeichnung beginnt ab jetzt, jedes Mal wenn jemand einen Bildschirm öffnet." },
     "Esta pantalla es sólo para el cuerpo técnico.": { en:"This screen is for the coaching staff only.", de:"Dieser Bildschirm ist nur für das Trainerteam." },
     "Qué pantallas abre cada uno y cuántos minutos de video mira. Día por día, para saber a quién hay que sentarse a mirar el video al lado.":

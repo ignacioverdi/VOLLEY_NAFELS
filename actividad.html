@@ -99,26 +99,28 @@ tr.det td{background:#0A0B14;border-top:none;padding:0}
   tr.det td{display:block;padding:0}
 }
 </style>
-<script src="categorias_club.js?v=20261019-2217"></script>
-<script src="selector_categoria.js?v=20261019-2217"></script>
-<script src="plantel_nafels.js?v=20261019-2217" onerror="void 0"></script>
-<script src="lang.js?v=20261019-2217"></script>
-<link rel="stylesheet" href="movil.css?v=20261019-2217">
+<script src="categorias_club.js?v=20261019-2233"></script>
+<script src="selector_categoria.js?v=20261019-2233"></script>
+<script src="plantel_nafels.js?v=20261019-2233" onerror="void 0"></script>
+<script src="lang.js?v=20261019-2233"></script>
+<link rel="stylesheet" href="movil.css?v=20261019-2233">
 
-<script src="iconos.js?v=20261019-2217" defer></script>
+<script src="iconos.js?v=20261019-2233" defer></script>
 
-<script src="nav.js?v=20261019-2217" defer></script>
+<script src="nav.js?v=20261019-2233" defer></script>
 </head>
 <body>
 
 <div class="top">
   <h1><span data-t="Quién entra y qué mira">Quién entra y qué mira</span></h1>
   <div style="flex:1"></div>
+  <button id="r1"  onclick="rango(1)"  data-t="Hoy">Hoy</button>
   <button id="r7"  onclick="rango(7)"  data-t="7 días">7 días</button>
   <button id="r14" onclick="rango(14)" data-t="14 días">14 días</button>
   <button id="r30" onclick="rango(30)" class="on" data-t="30 días">30 días</button>
   <button id="soloj" class="on" onclick="soloJug()" data-t="Sólo jugadores">Sólo jugadores</button>
-  <select id="orden" onchange="pintar()">
+  <select id="orden" onchange="guardarOrden();pintar()">
+    <option value="ult_nuevo" selected data-t="Último ingreso primero">Último ingreso primero</option>
     <option value="video" data-t="Los que menos video miran">Los que menos video miran</option>
     <option value="ult" data-t="Los que hace más que no entran">Los que hace más que no entran</option>
     <option value="nom" data-t="Por nombre">Por nombre</option>
@@ -157,9 +159,9 @@ tr.det td{background:#0A0B14;border-top:none;padding:0}
   </div>
 </div>
 
-<script src="datos_seguros.js?v=20261019-2217" onerror="void 0"></script>
-<script src="firebase.js?v=20261019-2217"></script>
-<script src="firebase_por_categoria.js?v=20261019-2217"></script>
+<script src="datos_seguros.js?v=20261019-2233" onerror="void 0"></script>
+<script src="firebase.js?v=20261019-2233"></script>
+<script src="firebase_por_categoria.js?v=20261019-2233"></script>
 <script>
 /* ══════════════════════════════════════════════════════════════════════════
    QUIÉN ENTRA Y QUÉ MIRA
@@ -316,19 +318,33 @@ function pintar(){
   /* el cuerpo tecnico tambien queda registrado, pero la pregunta de todos los
      dias es por los jugadores: por eso arranca filtrado */
   if(SOLOJ) fs = fs.filter(function(f){ return (f.rol||'').toLowerCase() === 'player'; });
+  /* ── CON "HOY", SOLO LOS QUE ENTRARON HOY ──────────────────────────────
+     En 7, 14 y 30 dias la lista trae a todos, porque ahi la pregunta suele
+     ser quien NO esta entrando. En Hoy la pregunta es la contraria: quien
+     entro hoy. Asi que se sacan los que no aparecieron y la tabla queda
+     corta: si entraron cuatro, se ven cuatro. */
+  if(DIAS === 1) fs = fs.filter(function(f){ return f.dias > 0; });
   if(!fs.length){
     document.getElementById('caja').innerHTML = '<div class="vacio">'
-      + T('Todavía no hay nada anotado.') + '<br>'
-      + T('Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.')
+      + (DIAS === 1
+          ? T('Todavía no entró nadie hoy.')
+          : T('Todavía no hay nada anotado.') + '<br>'
+            + T('Se empieza a registrar a partir de ahora, cada vez que alguien abra una pantalla.'))
       + '</div>';
     tiles(fs); return;
   }
   var o = document.getElementById('orden').value;
   fs.sort(function(a,b){
+    /* ── ULTIMO INGRESO PRIMERO ────────────────────────────────────────
+       El que acaba de entrar va arriba. Ojo con el orden de al lado, que
+       se parece pero es al reves: "los que hace mas que no entran" pone
+       primero al que mas tiempo falta, que es la otra pregunta. El que
+       nunca entro tiene ult=0 y cae al fondo en los dos casos. */
+    if(o === 'ult_nuevo') return (b.ult||0) - (a.ult||0);
     if(o === 'nom') return nombre(a.uid).localeCompare(nombre(b.uid));
     if(o === 'ult') return (a.ult||0) - (b.ult||0);
     if(a.seg !== b.seg) return a.seg - b.seg;      /* los que menos miran, arriba */
-    return (a.ult||0) - (b.ult||0);
+    return (b.ult||0) - (a.ult||0);
   });
 
   var h = '<table><thead><tr>'
@@ -402,8 +418,25 @@ function abrir(i){
   if(e) e.style.display = (e.style.display === 'none' ? '' : 'none');
 }
 
+/* los ultimos n dias, sin importar que rango este elegido */
+function ultimosDias(n){
+  var out = [], d = new Date();
+  d.setHours(0,0,0,0);
+  for(var i = n - 1; i >= 0; i--) out.push(dia(new Date(d.getTime() - i*86400000)));
+  return out;
+}
+
 function tiles(fs){
-  var hy = hoy(), ds = diasDelRango(), sem = ds.slice(-7);
+  /* "Entraron esta semana" salia de los ultimos 7 dias DEL RANGO. Con el
+     rango en Hoy el rango tiene un solo dia, asi que el cartel de la semana
+     habria dicho lo mismo que el de hoy. Ahora la semana son siempre los
+     ultimos 7 dias. Lo que no se puede arreglar aca es que esos dias tienen
+     que estar traidos: con el rango en Hoy solo se pidio hoy, asi que el
+     cartel de la semana se esconde en vez de mentir. */
+  var hy = hoy(), sem = ultimosDias(7);
+  var caja = document.getElementById('t-sem');
+  var tarjeta = caja && caja.parentNode;
+  if(tarjeta) tarjeta.style.display = (DIAS >= 7 ? '' : 'none');
   function activos(lista){
     var s = {};
     lista.forEach(function(d){
@@ -419,9 +452,25 @@ function tiles(fs){
   document.getElementById('t-sin').textContent = sinVideo;
 }
 
+/* El orden elegido se guarda en este equipo: al volver a entrar, la pantalla
+   aparece ordenada como la dejaste. De fabrica viene por ultimo ingreso. */
+function guardarOrden(){
+  try{ localStorage.setItem('act_orden', document.getElementById('orden').value); }catch(e){}
+}
+function recordarOrden(){
+  try{
+    var g = localStorage.getItem('act_orden');
+    var s = document.getElementById('orden');
+    if(!s) return;
+    var vale = false;
+    for(var i=0;i<s.options.length;i++) if(s.options[i].value === g) vale = true;
+    s.value = vale ? g : 'ult_nuevo';
+  }catch(e){}
+}
+
 function rango(n){
   DIAS = n;
-  ['r7','r14','r30'].forEach(function(id){
+  ['r1','r7','r14','r30'].forEach(function(id){
     var b = document.getElementById(id);
     if(b) b.className = (id === ('r' + n) ? 'on' : '');
   });
@@ -438,6 +487,7 @@ function arrancar(){
       return;
     }
   }catch(e){}
+  recordarOrden();
   cargar();
 }
 /* igual que en sesiones.html: firebase.js deja la promesa en _fbListo y
@@ -449,7 +499,7 @@ function esperarSesion(){
 }
 esperarSesion();
 </script>
-<script src="volver_inicio.js?v=20261019-2217" onerror="void 0"></script>
-<script src="ayuda.js?v=20261019-2217"></script>
+<script src="volver_inicio.js?v=20261019-2233" onerror="void 0"></script>
+<script src="ayuda.js?v=20261019-2233"></script>
 </body>
 </html>
