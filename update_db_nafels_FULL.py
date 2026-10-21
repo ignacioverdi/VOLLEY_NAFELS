@@ -279,6 +279,18 @@ except Exception:
     pass   # sin configuracion se sigue con lo de abajo y con lo que traigan los datos
 
 
+def _firma_equipos():
+    """Una firma corta de la tabla de equipos. Cambia si la tabla cambia.
+
+    Sirve para darse cuenta de que config_club.json se edito. No se incluye
+    NLA_TEAMS a proposito: esa lista crece con los equipos que aparecen en los
+    datos, asi que cambiaria en cada corrida y la base se reharia siempre.
+    """
+    import hashlib
+    crudo = json.dumps(sorted((TEAM_NORM or {}).items()), ensure_ascii=False)
+    return hashlib.md5(crudo.encode('utf-8')).hexdigest()[:10]
+
+
 def equipos_de_los_datos(teams_data, actuales, propio):
     """Los equipos que REALMENTE aparecen en los partidos leidos.
 
@@ -1135,6 +1147,35 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
         existing_dates = set()
         existing_sigs = set()
 
+    # ══ SI CAMBIO LA TABLA DE EQUIPOS, LA BASE SE REHACE ═══════════════════
+    # La base guarda cada accion bajo el NOMBRE del equipo, y los partidos ya
+    # cargados no se vuelven a leer: es lo que hace que procesar 90 archivos
+    # tarde segundos. Pero cuando se agrega una variante nueva del nombre de
+    # un equipo a config_club.json -"STV St. Gallen 1" es el mismo St Gallen
+    # que "STV St Gallen (NLA Men)"-, el partido que ya estaba cargado se
+    # queda con el nombre VIEJO: el equipo aparece DOS veces en la app, con
+    # los partidos repartidos entre los dos, y arreglar la tabla no alcanza.
+    #
+    # Paso de verdad: el 30/09 contra St Gallen entro con el nombre largo del
+    # scout corregido y quedo como un equipo aparte. La tabla ya estaba bien y
+    # la app seguia mostrando dos St Gallen, porque ese partido no se volvia a
+    # leer. Habia que borrar la base a mano, y nadie podia adivinarlo.
+    #
+    # Se guarda una firma de la tabla. Si la tabla cambio, los partidos se
+    # releen UNA vez con los nombres nuevos y el equipo queda unificado solo.
+    _FIRMA_EQ = _firma_equipos()
+    try:
+        _fv = db.get('_equipos_firma')
+    except Exception:
+        _fv = None
+    if teams_data and _fv != _FIRMA_EQ:
+        print('  Cambio la tabla de equipos de config_club.json: releo los')
+        print('  partidos una sola vez para unificar los nombres.')
+        teams_data = {}
+        games_log = []
+        existing_dates = set()
+        existing_sigs = set()
+
     for fname in dvw_files:
         if fname in existing_dates:
             skipped += 1; continue
@@ -1247,6 +1288,7 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # app que muestra una sola temporada, y avisa de diferencias que no
     # existen.
     db_out = {'_esquema': _ESQUEMA, '_temporada_filtro': _TEMP_FILTRO,
+              '_equipos_firma': _FIRMA_EQ,
               'teams': _crudo, 'games': games_log}
     with open(db_path, 'w', encoding='utf-8') as f:
         json.dump(db_out, f, ensure_ascii=False)
