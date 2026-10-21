@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261021-2259"></script>
-<script src="selector_categoria.js?v=20261021-2259"></script>
-<script src="objetivos_config.js?v=20261021-2259"></script>
+<script src="categorias_club.js?v=20261021-2309"></script>
+<script src="selector_categoria.js?v=20261021-2309"></script>
+<script src="objetivos_config.js?v=20261021-2309"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261021-2259" onerror="void 0"></script>
+<script src="lang.js?v=20261021-2309" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261021-2259"></script>
+<script src="datos_seguros.js?v=20261021-2309"></script>
 <script src="liga_data.js.enc?v=0d9b74f0"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=6af459d8" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261021-2259" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261021-2259"></script>
-<script src="videos.js?v=20261021-2259" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261021-2309" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261021-2309"></script>
+<script src="videos.js?v=20261021-2309" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261021-2259">
+<link rel="stylesheet" href="movil.css?v=20261021-2309">
 
-<script src="iconos.js?v=20261021-2259" defer></script>
+<script src="iconos.js?v=20261021-2309" defer></script>
 </head>
 <body>
 
@@ -2351,6 +2351,45 @@ function gpnCancha(cfg){
 function gpnClips(num,tipo,cat,evFiltro){
   var td=GP_TD||{}, M=(td.matches)||[], RES=['#','/','+','!','=','-'], RECM=['#','+','!','-','/','='];
   var out=[], ns=String(num);
+
+  /* == DONDE ARRANCA EL CORTE ==========================================
+     Antes arrancaba SIEMPRE 6 segundos antes de la accion, un numero fijo.
+     En un punto corto eso es el final del punto anterior; en un rally
+     largo es la mitad de la jugada, y el video entra con la pelota ya en
+     juego. Por eso aca parecia desincronizado y en el detalle de acciones
+     no: ahi el corte arranca donde arranco la jugada de verdad.
+
+     Medido sobre los partidos cargados: entre el inicio de la jugada y el
+     ataque pasan 4 segundos en la mitad de los casos, mas de 12 en uno de
+     cada diez, y hasta 52. Un solo numero fijo no puede servir para las
+     dos puntas.
+
+     Ahora:
+      - SAQUE y RECEPCION arrancan en su propio segundo, que es el comienzo
+        del punto. El scout anota el saque y la recepcion en el MISMO
+        segundo (medido: 85 de 87 casos iguales, 2 con un segundo).
+      - ATAQUE arranca donde empezo la jugada. Ese segundo ya estaba
+        guardado en las filas del armador -inicio y ataque-, asi que se
+        busca por partido y segundo del ataque. Cubre el 86% de los
+        ataques; el que no aparece sigue con los 6 segundos de siempre,
+        que es exactamente lo que habia antes.
+
+     El "Antes" que se elige en pantalla se sigue sumando a esto.          */
+  var _INI = {};
+  if(tipo==='ataque'){
+    (td.setters||[]).forEach(function(s){
+      (s.s||[]).forEach(function(r){
+        var ts=r[13]||0, ta=r[14]||0;
+        if(ta>0 && ts>0 && ts<=ta) _INI[r[12]+'|'+ta]=ts;
+      });
+    });
+  }
+  function _arranque(gi,t){
+    if(tipo==='saque'||tipo==='recepcion') return t;
+    var ts=_INI[gi+'|'+t];
+    return (ts>0)?ts:Math.max(0,t-6);
+  }
+
   function push(cod,ev,orig,dest,gi,t){
     if(!t) return;
     if(cat && cat!=='all'){
@@ -2362,7 +2401,7 @@ function gpnClips(num,tipo,cat,evFiltro){
       else if(evFiltro.length && evFiltro.indexOf(ev)<0) return;
     }
     var mc=M[gi]||null;
-    out.push({code:mc?(mc.code||''):'',t_start:Math.max(0,t-6),t_atk:t,ev:ev,combo:cod,
+    out.push({code:mc?(mc.code||''):'',t_start:Math.max(0,_arranque(gi,t)),t_atk:t,ev:ev,combo:cod,
               orig:orig,dest:dest,date:mc?mc.date:'',rival:mc?mc.rival:'',num:num});
   }
   if(tipo==='ataque'&&td.atk&&td.atk[ns]){
@@ -6550,9 +6589,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261021-2259"></script>
-<script src="ayuda.js?v=20261021-2259"></script>
-<script src="volver_inicio.js?v=20261021-2259" defer></script>
+<script src="temporadas_menu.js?v=20261021-2309"></script>
+<script src="ayuda.js?v=20261021-2309"></script>
+<script src="volver_inicio.js?v=20261021-2309" defer></script>
 </body>
 </html>
 
