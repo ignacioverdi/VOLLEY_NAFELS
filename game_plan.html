@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261021-2034"></script>
-<script src="selector_categoria.js?v=20261021-2034"></script>
-<script src="objetivos_config.js?v=20261021-2034"></script>
+<script src="categorias_club.js?v=20261021-2103"></script>
+<script src="selector_categoria.js?v=20261021-2103"></script>
+<script src="objetivos_config.js?v=20261021-2103"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261021-2034" onerror="void 0"></script>
+<script src="lang.js?v=20261021-2103" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261021-2034"></script>
+<script src="datos_seguros.js?v=20261021-2103"></script>
 <script src="liga_data.js.enc?v=6c3e6585"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=340205ce" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261021-2034" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261021-2034"></script>
-<script src="videos.js?v=20261021-2034" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261021-2103" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261021-2103"></script>
+<script src="videos.js?v=20261021-2103" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261021-2034">
+<link rel="stylesheet" href="movil.css?v=20261021-2103">
 
-<script src="iconos.js?v=20261021-2034" defer></script>
+<script src="iconos.js?v=20261021-2103" defer></script>
 </head>
 <body>
 
@@ -852,11 +852,74 @@ function gpCompFiltra(td){
     }).filter(function(s){ return s.s.length; })
       .sort(function(a,b){ return b.total-a.total; });
   nt.setter=nt.setters[0]||null;
-  nt.matches=(td.matches||[]).filter(function(m){ return gpCompOk(m&&m.fase); });
+  /* ══ ACA ESTABA EL BUG DEL VIDEO ════════════════════════════════════
+     Esta linea sacaba de la lista los partidos de la fase apagada. Suena
+     inofensivo, pero DOS lineas mas abajo el comentario avisa justo lo
+     contrario: las filas de datos indexan por POSICION. Al sacar un
+     elemento, todos los de atras se corren un lugar.
+
+     El caso real: St Gallen tiene 30/09 vs Nafels (PRE) y 18/10 vs Jona
+     (OF). Con el filtro en "solo oficiales", Jona pasaba de la posicion 1
+     a la 0, pero sus 71 filas de ataque seguian diciendo "partido 1".
+     matches[1] devolvia undefined, el clip se quedaba sin codigo de
+     partido y gpVidUrl('') no encontraba nada: las acciones aparecian y
+     el video no. Desde afuera parecia que faltaba el video; el video
+     siempre estuvo.
+
+     Ahora se conserva la POSICION y lo que no entra queda en null. Los dos
+     lugares que buscan por indice ya hacen "matches[i]||null", asi que el
+     agujero no molesta; lo que se arregla es que el que SI entra siga
+     estando en su lugar. */
+  nt.matches=(td.matches||[]).map(function(m){ return gpCompOk(m&&m.fase) ? m : null; });
   /* games se deja entero: las filas lo indexan por POSICION */
   return nt;
 }
 GP_TD = gpCompFiltra(GP_TD);
+
+/* ══ QUE PARTIDOS DEL RIVAL ENTRAN ══════════════════════════════════════
+   Los chips de arriba prenden y apagan una FASE entera. Esto es mas fino:
+   partido por partido. Se aplica en el mismo punto unico que la fase —todo
+   lo que la pantalla dibuja despues sale de GP_TD— asi que con tildar aca
+   quedan alineados los numeros, el armador, las rotaciones y el video, sin
+   tocar ninguna seccion.
+
+   Se guarda lo que queda AFUERA, no lo que queda adentro: asi un partido
+   nuevo del rival entra solo, sin que haya que acordarse de tildarlo. */
+var GP_PART_GUARDADO='vb_gp_part_'+(typeof GP_RIVAL_SLUG!=='undefined'?GP_RIVAL_SLUG:'x');
+var GP_PART_FUERA={};
+(function(){
+  try{
+    var g=JSON.parse(localStorage.getItem(GP_PART_GUARDADO)||'[]');
+    if(g&&g.length) g.forEach(function(i){ GP_PART_FUERA[i]=1; });
+  }catch(e){}
+})();
+function gpPartOk(i){ return !GP_PART_FUERA[i]; }
+function gpPartHayFuera(){ for(var k in GP_PART_FUERA){ if(GP_PART_FUERA[k]) return true; } return false; }
+function gpPartFiltra(td){
+  if(!td || !gpPartHayFuera()) return td;
+  function filas(rows){ return (rows||[]).filter(function(r){ return gpPartOk(r[1]); }); }
+  function porJug(m,campo){
+    var o={};
+    Object.keys(m||{}).forEach(function(k){
+      var p=m[k], f=filas(p[campo]);
+      if(f.length){ var c={}; for(var x in p) c[x]=p[x]; c[campo]=f; o[k]=c; }
+    });
+    return o;
+  }
+  var nt={}; for(var k in td) nt[k]=td[k];
+  nt.atk=porJug(td.atk,'a'); nt.srv=porJug(td.srv,'s');
+  nt.rec=porJug(td.rec,'r'); nt.dig=porJug(td.dig,'d');
+  nt.setters=(td.setters||[]).map(function(s){
+      var c={}; for(var x in s) c[x]=s[x];
+      c.s=filas(s.s); c.total=c.s.length; return c;
+    }).filter(function(s){ return s.s.length; })
+      .sort(function(a,b){ return b.total-a.total; });
+  nt.setter=nt.setters[0]||null;
+  /* misma regla que arriba: se conserva la posicion */
+  nt.matches=(td.matches||[]).map(function(m,i){ return gpPartOk(i)?m:null; });
+  return nt;
+}
+GP_TD = gpPartFiltra(GP_TD);
 
 /* ══ LO QUE ESCRIBE EL CUERPO TECNICO, PARA TODOS ═══════════════════════
    Todo lo que se corrige a mano en esta pantalla —la clave de cada
@@ -3480,6 +3543,72 @@ document.getElementById('match-info').textContent=RIVAL.info;
     hayOfi ? function(){ tocar('ofi'); } : function(){}));
   barra.appendChild(chip('Pretemporada', GP_COMP_CUENTA.PRE, GP_COMP_PRE, '#f59e0b',
     function(){ tocar('pre'); }));
+  /* ══ PARTIDO POR PARTIDO ══════════════════════════════════════════════
+     Los chips de al lado prenden y apagan una fase entera. Esto es mas
+     fino: se elige partido por partido. Sirve, por ejemplo, cuando un
+     scout todavia esta mal cargado y no se quiere que ensucie ningun
+     numero, sin tener que apagar toda la pretemporada.
+     Al aplicar se recarga la pagina: el filtro se resuelve UNA vez sobre
+     GP_TD y de ahi salen los numeros, el armador, las rotaciones y el
+     video, asi que recargar es lo que garantiza que no quede nada a medias. */
+  (function(){
+    var juegos=(GP_TD&&GP_TD.games)||[];
+    if(juegos.length<2) return;
+    var caja=document.createElement('span');
+    caja.style.cssText='position:relative;display:inline-block;margin-left:4px';
+    var btn=document.createElement('button');
+    btn.type='button';
+    var fuera=0; juegos.forEach(function(g,i){ if(!gpPartOk(i)) fuera++; });
+    var dentro=juegos.length-fuera;
+    btn.style.cssText='border:1px solid '+(fuera?'rgba(96,165,250,.55)':'rgba(255,255,255,.14)')
+      +';background:'+(fuera?'rgba(96,165,250,.14)':'rgba(255,255,255,.04)')
+      +';color:'+(fuera?'#93c5fd':'#94a3b8')
+      +';font-family:inherit;font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;cursor:pointer;white-space:nowrap';
+    btn.textContent='\uD83D\uDCCB '+(fuera? (dentro+' de '+juegos.length+' partidos') : ('Todos los partidos ('+juegos.length+')'))+' \u25BE';
+    var pan=document.createElement('div');
+    pan.style.cssText='position:absolute;top:100%;left:0;margin-top:5px;z-index:70;background:#11161f;'
+      +'border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:7px;min-width:260px;'
+      +'max-height:300px;overflow:auto;display:none;box-shadow:0 10px 30px rgba(0,0,0,.55)';
+    var cks=[];
+    var MES=['','ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    juegos.forEach(function(g,i){
+      var fila=document.createElement('label');
+      fila.style.cssText='display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:6px;cursor:pointer;font-size:12px;color:#cbd5e1';
+      var ck=document.createElement('input'); ck.type='checkbox'; ck.checked=gpPartOk(i);
+      ck.style.cssText='accent-color:#22c55e;cursor:pointer;width:14px;height:14px';
+      cks.push(ck);
+      var d=String(g.date||'').split('-');
+      var et=(d.length===3)?(d[2]+' '+MES[parseInt(d[1],10)||0]):(g.date||'');
+      var tx=document.createElement('span');
+      tx.innerHTML=et+' <span style="color:#64748b">vs</span> '+(g.rival||'?');
+      if(g.fase==='PRE') tx.innerHTML+=' <b style="font-size:9px;letter-spacing:1px;color:#f59e0b;border:1px solid rgba(245,158,11,.45);border-radius:4px;padding:0 4px">PRE</b>';
+      fila.appendChild(ck); fila.appendChild(tx); pan.appendChild(fila);
+    });
+    var pie=document.createElement('div');
+    pie.style.cssText='display:flex;gap:6px;margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.08)';
+    function boton(txt,fn,fuerte){
+      var b=document.createElement('button'); b.type='button'; b.textContent=txt;
+      b.style.cssText='flex:1;border:1px solid '+(fuerte?'#22c55e':'rgba(255,255,255,.1)')
+        +';background:'+(fuerte?'rgba(34,197,94,.16)':'rgba(255,255,255,.04)')
+        +';color:'+(fuerte?'#86efac':'#94a3b8')+';font-family:inherit;font-size:11px;font-weight:700;padding:5px;border-radius:6px;cursor:pointer';
+      b.addEventListener('click',fn); return b;
+    }
+    pie.appendChild(boton('Todos',function(){ cks.forEach(function(c){ c.checked=true; }); }));
+    pie.appendChild(boton('Aplicar',function(){
+      var sacar=[];
+      cks.forEach(function(c,i){ if(!c.checked) sacar.push(i); });
+      if(sacar.length===juegos.length){ cks[0].checked=true; sacar.shift(); }  /* no dejar la pantalla vacia */
+      try{ localStorage.setItem(GP_PART_GUARDADO, JSON.stringify(sacar)); }catch(e){}
+      location.reload();
+    },true));
+    pan.appendChild(pie);
+    btn.addEventListener('click',function(e){ e.stopPropagation(); pan.style.display=(pan.style.display==='none'?'block':'none'); });
+    document.addEventListener('click',function(){ pan.style.display='none'; });
+    pan.addEventListener('click',function(e){ e.stopPropagation(); });
+    caja.appendChild(btn); caja.appendChild(pan);
+    barra.appendChild(caja);
+  })();
+
   var nota=document.createElement('span');
   nota.style.cssText='font-size:11px;color:#7689a1;margin-left:auto';
   nota.textContent = GP_COMP_PRE
@@ -4850,7 +4979,13 @@ function renderArmador(){
       if(szPinta) szPinta();
     }
     // ── Selector de partidos (multiselect) ──
-    var gpMatches=(GP_TD.matches||[]);
+    /* El indice que importa es la POSICION en la lista completa, porque es
+       la que traen las filas de datos. Se la lleva cada entrada encima, y
+       los agujeros (lo que el filtro dejo afuera) no se listan. */
+    var gpMatches=(GP_TD.matches||[]).map(function(m,i){
+      if(!m) return null;
+      var c={}; for(var k in m) c[k]=m[k]; c.i=i; return c;
+    }).filter(function(m){ return !!m; });
     var paintMatchUI=function(){};
     var matchLbl=null, matchBox=null;
     if(gpMatches.length){
@@ -6301,9 +6436,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261021-2034"></script>
-<script src="ayuda.js?v=20261021-2034"></script>
-<script src="volver_inicio.js?v=20261021-2034" defer></script>
+<script src="temporadas_menu.js?v=20261021-2103"></script>
+<script src="ayuda.js?v=20261021-2103"></script>
+<script src="volver_inicio.js?v=20261021-2103" defer></script>
 </body>
 </html>
 
