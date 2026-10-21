@@ -279,6 +279,20 @@ except Exception:
     pass   # sin configuracion se sigue con lo de abajo y con lo que traigan los datos
 
 
+def _firma_archivo(ruta):
+    """Un resumen del CONTENIDO del .dvw. Cambia si el archivo cambio.
+
+    Se usa el contenido y no la fecha: un `git pull` o una copia cambian la
+    fecha sin cambiar nada adentro, y eso obligaria a releer todo de gusto.
+    """
+    import hashlib
+    h = hashlib.md5()
+    with open(ruta, 'rb') as f:
+        for trozo in iter(lambda: f.read(262144), b''):
+            h.update(trozo)
+    return h.hexdigest()[:10]
+
+
 def _firma_equipos():
     """Una firma corta de la tabla de equipos. Cambia si la tabla cambia.
 
@@ -1047,11 +1061,41 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
             _hay = {os.path.basename(f) for f in
                     glob.glob(os.path.join(dvw_dir, '*.dvw'))}
             _faltan = [g for g in games_log if g.get('file') not in _hay]
-            if _faltan:
-                print('  Faltan %d partido(s) que estaban en la base: la rehago'
-                      % len(_faltan))
-                for _g in _faltan[:3]:
-                    print('     ya no esta: %s' % _g.get('file'))
+
+            # ══ Y si un partido CAMBIO, tambien ════════════════════════════
+            # Los partidos ya cargados no se vuelven a leer, y se reconocen
+            # por el NOMBRE del archivo. Cuando se corrige un scout y se sube
+            # con el mismo nombre -que es lo normal: se reemplaza-, el motor
+            # ve el nombre de siempre y lo saltea. La correccion no llega
+            # NUNCA a la app, y desde afuera parece que el sistema la ignora.
+            #
+            # Paso de verdad con el scout corregido de St Gallen: los numeros
+            # arreglados adentro del .dvw no aparecian por ningun lado.
+            #
+            # Ahora se guarda un resumen del contenido de cada archivo. Si no
+            # coincide, ese partido se vuelve a leer.
+            _cambiaron = []
+            for _g in games_log:
+                _fn = _g.get('file')
+                if not _fn or _fn not in _hay:
+                    continue
+                try:
+                    if _firma_archivo(os.path.join(dvw_dir, _fn)) != _g.get('firma'):
+                        _cambiaron.append(_fn)
+                except Exception:
+                    pass
+
+            if _faltan or _cambiaron:
+                if _faltan:
+                    print('  Faltan %d partido(s) que estaban en la base: la rehago'
+                          % len(_faltan))
+                    for _g in _faltan[:3]:
+                        print('     ya no esta: %s' % _g.get('file'))
+                if _cambiaron:
+                    print('  Cambiaron %d partido(s) desde la ultima vez: los releo'
+                          % len(_cambiaron))
+                    for _fn in _cambiaron[:3]:
+                        print('     cambio: %s' % _fn)
                 # ══ UNA COPIA ANTES DE REHACERLA ═══════════════════════════
                 # Rehacer la base es correcto cuando se saco un partido a
                 # proposito. Pero si la carpeta quedo vacia o renombrada por
@@ -1219,7 +1263,12 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
                 _p = teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dig':[]})
                 _p.setdefault('dig', []).extend(acts)
 
+        try:
+            _fa = _firma_archivo(fpath)
+        except Exception:
+            _fa = ''
         games_log.append({'file':fname,'date':date,'home':home,'away':away,'temporada':temporada,
+                          'firma':_fa,
                           'code':_codigo_de_archivo(fname, date)})
         added += 1
         if added % 10 == 0: print(f"  Parsed {added} files...")
