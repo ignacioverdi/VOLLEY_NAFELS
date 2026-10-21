@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261021-2115"></script>
-<script src="selector_categoria.js?v=20261021-2115"></script>
-<script src="objetivos_config.js?v=20261021-2115"></script>
+<script src="categorias_club.js?v=20261021-2139"></script>
+<script src="selector_categoria.js?v=20261021-2139"></script>
+<script src="objetivos_config.js?v=20261021-2139"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261021-2115" onerror="void 0"></script>
+<script src="lang.js?v=20261021-2139" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261021-2115"></script>
+<script src="datos_seguros.js?v=20261021-2139"></script>
 <script src="liga_data.js.enc?v=095f1d22"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=8b04378c" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261021-2115" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261021-2115"></script>
-<script src="videos.js?v=20261021-2115" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261021-2139" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261021-2139"></script>
+<script src="videos.js?v=20261021-2139" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261021-2115">
+<link rel="stylesheet" href="movil.css?v=20261021-2139">
 
-<script src="iconos.js?v=20261021-2115" defer></script>
+<script src="iconos.js?v=20261021-2139" defer></script>
 </head>
 <body>
 
@@ -921,6 +921,37 @@ function gpPartFiltra(td){
 }
 GP_TD = gpPartFiltra(GP_TD);
 
+/* ══ ARMADOR ES EL QUE ARMA, NO EL QUE ARMO UNA VEZ ═════════════════════
+   La lista de armadores la arma el motor con TODO el que dejo una pelota
+   armada. Eso incluye al receptor que salva una bola y la deja jugable,
+   que pasa en todos los partidos y no lo convierte en armador.
+
+   Contra Jona, St Gallen: el #5 armo 65 de 69 y el #21 armo 2. La pantalla
+   toma setters[0] como titular y setters[1] como suplente sin mirar
+   cuanto armo cada uno, asi que ponia al #21 al lado del titular como si
+   fueran los dos armadores del equipo.
+
+   Se queda el que llega al 10% de los armados del equipo, y siempre al
+   menos el primero. Un segundo armador de verdad pasa ese piso de sobra:
+   en un 6-2 cada uno anda por el 50%, y uno que entro media rotacion
+   igual queda muy por encima de un 3%. */
+(function(){
+  var ss=(GP_TD&&GP_TD.setters)||[];
+  if(ss.length<2) return;
+  var tot=0;
+  ss.forEach(function(s){ tot += ((s.s||[]).length||0); });
+  if(!tot) return;
+  var PISO=0.10;
+  var quedan=ss.filter(function(s,i){
+    if(i===0) return true;                       /* el principal nunca se saca */
+    return (((s.s||[]).length||0)/tot) >= PISO;
+  });
+  if(quedan.length!==ss.length){
+    GP_TD.setters=quedan;
+    GP_TD.setter=quedan[0]||null;
+  }
+})();
+
 /* ══ LO QUE ESCRIBE EL CUERPO TECNICO, PARA TODOS ═══════════════════════
    Todo lo que se corrige a mano en esta pantalla —la clave de cada
    jugador, la opcion de bloqueo de cada rotacion, las lineas del scouting,
@@ -1290,7 +1321,16 @@ function gpBuildRecepcion(){
         porDest[tp][pp]=T;
       });
     });
-    if(totAll>=10){
+    /* ══ EL SEGUNDO CORTE, EL QUE DE VERDAD ESCONDIA ═══════════════════
+       Aca decia totAll>=10: el que recibia menos de diez no entraba
+       siquiera a los datos de recepcion, asi que despues no habia nada
+       que mostrar aunque se bajara el otro filtro. Contra Jona eso dejaba
+       afuera al #1 y al #11 con 3 recepciones cada uno, que entraron y
+       recibieron igual.
+       Ahora entra todo el que recibio al menos una. Quien se muestra lo
+       decide el entrenador con los botones de la seccion, y a la tarjeta
+       con menos de 10 se le avisa que la muestra es chica. */
+    if(totAll>=1){
       var ficha={num:parseInt(ns),pos:'',acumulado:s,por_destino:porDest,por_rival:{}};
       /* ══ LA CLAVE ES EL DORSAL ════════════════════════════════════════════
          Esto se guardaba como out[apellido]. Con dos jugadores del mismo
@@ -5732,9 +5772,67 @@ function jArea(ph,color,rows){
 function renderRecepcionRival(){
   var cont=document.getElementById('rec-rival-content');
   if(!cont) return;
-  var jugs=JUGADORES.filter(function(j){if(!j.recepcion) return false;var tot=0;['flotado','potencia'].forEach(function(t){if(j.recepcion[t])['desde_z1','desde_z5','desde_z6'].forEach(function(z){tot+=(j.recepcion[t][z]&&j.recepcion[t][z].total)?j.recepcion[t][z].total.tot||0:0;});});return tot>=15;});
-  if(!jugs.length){
+  /* ══ EL PISO DE 15 TAPABA RECEPTORES DE VERDAD ═════════════════════════
+     Habia un corte fijo: menos de 15 recepciones, no se mostraba. La idea
+     era no dibujar porcentajes armados con dos pelotas, y esa parte estaba
+     bien. El problema es a quien se llevaba puesto: contra Jona el #21
+     recibio 12 y no aparecia, igual que el #1 y el #11. El entrenador
+     quiere ver a sus cuatro puntas y a los dos liberos, los reciba mucho
+     o poco.
+
+     Ahora aparece todo el que recibio al menos una, ordenado por volumen,
+     y la eleccion es del entrenador: los botones de arriba prenden y apagan
+     a cada uno, y se acuerda por rival. A las tarjetas con menos de 10
+     recepciones se les avisa que la muestra es chica, que es mas honesto
+     que esconderlas: el dato esta, con su advertencia al lado. */
+  function gpRecTotal(j){
+    var tot=0;
+    if(j && j.recepcion) ['flotado','potencia'].forEach(function(t){
+      if(j.recepcion[t]) ['desde_z1','desde_z5','desde_z6'].forEach(function(z){
+        tot += (j.recepcion[t][z] && j.recepcion[t][z].total) ? (j.recepcion[t][z].total.tot||0) : 0;
+      });
+    });
+    return tot;
+  }
+  var todosRec=JUGADORES.filter(function(j){ return j.recepcion && gpRecTotal(j)>0; })
+    .map(function(j){ j._nrec=gpRecTotal(j); return j; })
+    .sort(function(a,b){ return b._nrec-a._nrec; });
+
+  if(!todosRec.length){
     cont.innerHTML='<div style="color:#475569;font-family:Barlow Condensed,sans-serif;font-size:13px;padding:24px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center">Sin datos de recepción rival cargados</div>';
+    return;
+  }
+
+  var GP_REC_GUARD='vb_gp_rec_'+(typeof GP_RIVAL_SLUG!=='undefined'?GP_RIVAL_SLUG:'x');
+  var gpRecFuera={};
+  try{
+    var _g=JSON.parse(localStorage.getItem(GP_REC_GUARD)||'[]');
+    if(_g && _g.length) _g.forEach(function(n){ gpRecFuera[n]=1; });
+  }catch(e){}
+  var jugs=todosRec.filter(function(j){ return !gpRecFuera[j.num]; });
+
+  /* los botones para elegir quien se muestra */
+  var gpRecBarra='<div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:15px">'
+    + '<span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-right:3px">Receptores</span>';
+  todosRec.forEach(function(j){
+    var on=!gpRecFuera[j.num];
+    var ape=String(j.nombre||'').replace(/^\d+\s*/,'').split(' ')[0];
+    gpRecBarra+='<button type="button" data-recnum="'+j.num+'" title="'+j._nrec+' recepciones" style="'
+      + 'border:1px solid '+(on?'rgba(34,197,94,.5)':'rgba(255,255,255,.1)')+';'
+      + 'background:'+(on?'rgba(34,197,94,.13)':'rgba(255,255,255,.03)')+';'
+      + 'color:'+(on?'#86efac':'#64748b')+';'
+      + 'font-family:Barlow Condensed,sans-serif;font-size:12px;font-weight:700;letter-spacing:.5px;'
+      + 'padding:4px 10px;border-radius:999px;cursor:pointer">'
+      + '#'+j.num+' '+ape
+      + ' <span style="font-size:11px;opacity:.75">'+j._nrec+'</span></button>';
+  });
+  gpRecBarra+='</div>';
+
+  if(!jugs.length){
+    cont.innerHTML=gpRecBarra
+      + '<div style="color:#475569;font-family:Barlow Condensed,sans-serif;font-size:13px;padding:24px;border:1px solid rgba(255,255,255,.06);border-radius:12px;text-align:center">'
+      + 'Apagaste a todos los receptores. Prendé alguno arriba.</div>';
+    gpRecEnganchar(cont, gpRecFuera, GP_REC_GUARD);
     return;
   }
 
@@ -5786,7 +5884,7 @@ function renderRecepcionRival(){
   }
 
   // Grid — 2 cols on wide, 1 on narrow
-  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">';
+  var html=gpRecBarra+'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">';
 
   jugs.forEach(function(j){
     var rec=j.recepcion, recDest=j.recepcionDest, color=j.color||'#64748b';
@@ -5799,7 +5897,9 @@ function renderRecepcionRival(){
     html+='<div style="padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)">';
     html+='<div style="width:38px;height:38px;border-radius:50%;border:2px solid '+color+';display:flex;align-items:center;justify-content:center;font-family:Bebas Neue,sans-serif;font-size:15px;color:'+color+';flex-shrink:0">'+j.num+'</div>';
     html+='<div style="flex:1"><div style="font-family:Bebas Neue,sans-serif;font-size:15px;letter-spacing:1px;color:#e2e8f0">'+nm+'</div>';
-    html+='<div style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">'+(GP_POS_LABEL[j.pos]||j.pos)+'</div></div>';
+    html+='<div style="font-size:9px;color:#475569;letter-spacing:1px;text-transform:uppercase">'+(GP_POS_LABEL[j.pos]||j.pos)
+      + ((j._nrec&&j._nrec<10) ? ' <span style="color:#f59e0b;letter-spacing:.5px"> · sólo '+j._nrec+' rec, muestra chica</span>' : '')
+      + '</div></div>';
     // SM / SQ pills
     html+='<div style="display:flex;gap:5px">';
     if(sm.tot){html+='<div style="text-align:center;padding:5px 9px;border-radius:7px;background:rgba(129,140,248,.08);border:1px solid rgba(129,140,248,.2)"><div style="font-family:Bebas Neue,sans-serif;font-size:15px;color:'+ec(sm.eff||0)+'">'+( sm.eff||0)+'%</div><div style="font-size:7px;color:#475569;letter-spacing:1px">SM</div></div>';}
@@ -5815,6 +5915,20 @@ function renderRecepcionRival(){
 
   html+='</div>';
   cont.innerHTML=html;
+  gpRecEnganchar(cont, gpRecFuera, GP_REC_GUARD);
+}
+
+/* Prende y apaga un receptor, lo guarda para ese rival y vuelve a dibujar. */
+function gpRecEnganchar(cont, fuera, guard){
+  var bs=cont.querySelectorAll('[data-recnum]');
+  for(var i=0;i<bs.length;i++){
+    bs[i].addEventListener('click', function(){
+      var n=this.getAttribute('data-recnum');
+      if(fuera[n]) delete fuera[n]; else fuera[n]=1;
+      try{ localStorage.setItem(guard, JSON.stringify(Object.keys(fuera))); }catch(e){}
+      try{ renderRecepcionRival(); }catch(e){}
+    });
+  }
 }
 
 
@@ -6436,9 +6550,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261021-2115"></script>
-<script src="ayuda.js?v=20261021-2115"></script>
-<script src="volver_inicio.js?v=20261021-2115" defer></script>
+<script src="temporadas_menu.js?v=20261021-2139"></script>
+<script src="ayuda.js?v=20261021-2139"></script>
+<script src="volver_inicio.js?v=20261021-2139" defer></script>
 </body>
 </html>
 
