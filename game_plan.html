@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261021-2309"></script>
-<script src="selector_categoria.js?v=20261021-2309"></script>
-<script src="objetivos_config.js?v=20261021-2309"></script>
+<script src="categorias_club.js?v=20261022-1036"></script>
+<script src="selector_categoria.js?v=20261022-1036"></script>
+<script src="objetivos_config.js?v=20261022-1036"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261021-2309" onerror="void 0"></script>
+<script src="lang.js?v=20261022-1036" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261021-2309"></script>
+<script src="datos_seguros.js?v=20261022-1036"></script>
 <script src="liga_data.js.enc?v=0d9b74f0"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=6af459d8" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261021-2309" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261021-2309"></script>
-<script src="videos.js?v=20261021-2309" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261022-1036" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261022-1036"></script>
+<script src="videos.js?v=20261022-1036" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261021-2309">
+<link rel="stylesheet" href="movil.css?v=20261022-1036">
 
-<script src="iconos.js?v=20261021-2309" defer></script>
+<script src="iconos.js?v=20261022-1036" defer></script>
 </head>
 <body>
 
@@ -2262,6 +2262,23 @@ GPN_PROPIO_ROWS.forEach(function(r,i){r.forEach(function(z,c){GPN_PCOL[z]=c;GPN_
 /* relleno y linea · texto sobre fondo oscuro · texto sobre el relleno fuerte */
 var GPN_CAT=[['201,132,21','#F5A524','#17120A'],['46,159,212','#5BC8F5','#04222F'],['217,84,142','#D9548E','#2B0612']];
 var GPN_TIPO={POTENCIA:GPN_CAT[0],FLOTADO:GPN_CAT[1]};
+/* == UN COLOR POR COMBINACION DE ATAQUE ===============================
+   En la solapa de ataque los colores salian de la ZONA desde donde pega
+   el jugador. Para un central eso es siempre la 3, asi que al elegir dos
+   combinaciones -X1 y X7, por ejemplo- quedaba todo del mismo color y no
+   se podia ver cual iba a donde.
+   Cuando hay DOS O MAS combinaciones elegidas, cada una toma su color.
+   Con una sola, o con "Todas", sigue siendo por zona como siempre.
+   Las dos primeras son las mismas que ya usaba la pantalla. El orden esta
+   puesto a proposito para que los casos que mas se usan -dos o tres
+   combinaciones- sean los mas faciles de separar: medido en OKLab contra
+   el fondo, todos los pares se distinguen hasta cinco combinaciones,
+   tambien simulando daltonismo. */
+var GPN_COMBO_COL=[GPN_CAT[0],GPN_CAT[1],
+  ['190,99,204','#E879F9','#170C19'],
+  ['209,209,209','#FFFFFF','#1A1A1A'],
+  ['28,162,77','#22C55E','#031409'],
+  ['134,189,43','#A3E635','#101705']];
 var GPN_EVCOL={'#':'#8FDCF8','+':'#C6D2E0','!':'#8C9AAC','-':'#7C8A9E','/':'#FF8AC4','=':'#FF8A99'};
 var GPN_RESS=[['#','Punto'],['+','Buena'],['!','Media'],['-','Mala'],['/','Bloqueado'],['=','Error']];
 var GPN_RESS_REC=[['#','Perfecta'],['+','Buena'],['!','Media'],['-','Mala'],['/','Sobrepase'],['=','Error']];
@@ -2649,17 +2666,22 @@ function gpnMapa(acc,tipo){
   return {orig:orig,cells:pct,crudo:cells,flows:flows.slice(0,8),src:src,conDest:tot};
 }
 
-function gpnDirs(acc,ocol,etq){
-  var por={};
+function gpnDirs(acc,ocol,etq,ccol){
+  /* Con ccol la lista se agrupa por COMBINACION en vez de por zona de
+     origen, y cada linea lleva el color de su combinacion. Es la leyenda
+     de la cancha: lo que se ve al lado del dibujo dice que color es cual. */
+  var porCombo=!!ccol, por={};
   acc.forEach(function(c){ if(!c.orig||!c.dest) return;
-    var a=por[c.orig]=por[c.orig]||{tot:0,d:{}}; a.tot++; a.d[c.dest]=(a.d[c.dest]||0)+1; });
+    var k=porCombo?c.combo:c.orig;
+    var a=por[k]=por[k]||{tot:0,d:{}}; a.tot++; a.d[c.dest]=(a.d[c.dest]||0)+1; });
   var out=[];
-  Object.keys(por).map(Number).sort(function(a,b){return por[b].tot-por[a].tot;}).forEach(function(o){
+  var _cl=Object.keys(por); if(!porCombo) _cl=_cl.map(Number);
+  _cl.sort(function(a,b){return por[b].tot-por[a].tot;}).forEach(function(o){
     var a=por[o], top=Object.keys(a.d).map(Number).sort(function(x,y){return a.d[y]-a.d[x];}).slice(0,2);
-    var col=(ocol[o]||GPN_CAT[0]);
+    var col=(porCombo?(ccol[o]||GPN_CAT[0]):(ocol[o]||GPN_CAT[0]));
     var ds=top.map(function(z){ return '<span style="color:#C6D2E0">z'+z+'</span> <b style="font-family:Anton,sans-serif;color:'+col[1]+'">'+Math.round(a.d[z]/a.tot*100)+'%</b>'; }).join(' <span style="color:#3D4857">·</span> ');
     out.push('<div class="gpn-dir"><span class="gpn-dot" style="background:rgba('+col[0]+',.9)"></span>'
-      +'<span style="color:'+col[1]+';letter-spacing:.05em">'+(etq||'DESDE')+' '+o+'</span>'
+      +'<span style="color:'+col[1]+';letter-spacing:.05em">'+(porCombo?gpnEsc(o):((etq||'DESDE')+' '+o))+'</span>'
       +'<span style="color:#5E6B7D"><b style="font-family:Anton,sans-serif;color:#9AA8BA">'+a.tot+'</b></span>'
       +'<span style="color:#3D4857">→</span><span>'+ds+'</span></div>');
   });
@@ -2690,6 +2712,13 @@ function gpnPanel(j,cont,tipo){
       if(!todas.some(function(c){return c.combo===t;})) return;
       cats.push({k:t,html:'<span style="color:'+GPN_TIPO[t][1]+'">'+t+'</span>'}); });
   }
+  /* El color de cada combinacion sale de su POSICION en la lista, no de
+     cuantas haya elegidas: asi X1 es siempre el mismo color, se vea sola o
+     junto a otras. */
+  var GPN_CC={};
+  if(tipo==='ataque') cats.forEach(function(c,i){
+    if(c.k!=='all') GPN_CC[c.k]=GPN_COMBO_COL[(i-1)%GPN_COMBO_COL.length]; });
+
   var escala=(tipo==='recepcion')?GPN_RESS_REC:GPN_RESS;
   var caja=document.createElement('div'); caja.className='gpn-caja';
   var btn=null;
@@ -2719,17 +2748,36 @@ function gpnPanel(j,cont,tipo){
   function dibujar(st){
     var acc=gpnClips(num,tipo,st.cat.length?st.cat:'all',st.ev.length?st.ev:null);
     if(!acc.length){ zona.innerHTML='<div class="gpn-vacio">Ninguna acción con ese filtro.</div>'; return; }
-    var m=gpnMapa(acc,tipo), ocol;
-    if(tipo==='ataque'){ ocol=gpnColores(Object.keys(m.orig).map(Number)); }
+    var m=gpnMapa(acc,tipo), ocol, flows=null, porCombo=(tipo==='ataque'&&st.cat.length>=2);
+    if(porCombo){
+      /* El origen y la celda de destino toman el color de la combinacion que
+         manda ahi; las flechas, en cambio, se separan una por combinacion,
+         que es lo que deja ver a donde va cada una. */
+      ocol={}; var dco={};
+      acc.forEach(function(c){ if(!c.orig) return; var d=dco[c.orig]=dco[c.orig]||{}; d[c.combo]=(d[c.combo]||0)+1; });
+      for(var oz in dco){ var bz=null,bzv=-1; for(var tz in dco[oz]) if(dco[oz][tz]>bzv){bzv=dco[oz][tz];bz=tz;}
+        ocol[oz]=GPN_CC[bz]||GPN_CAT[0]; }
+      var flc={};
+      acc.forEach(function(c){ if(!c.orig||!c.dest) return;
+        var k=c.orig+'>'+c.dest+'>'+c.combo; flc[k]=(flc[k]||0)+1; });
+      flows=[]; for(var fk in flc){ var pp=fk.split('>');
+        flows.push([+pp[0],+pp[1],flc[fk],(GPN_CC[pp[2]]||GPN_CAT[0])[0]]); }
+      flows.sort(function(a,b){return b[2]-a[2];}); flows=flows.slice(0,10);
+    }
+    else if(tipo==='ataque'){ ocol=gpnColores(Object.keys(m.orig).map(Number)); }
     else { ocol={}; var dom={};
       acc.forEach(function(c){ if(!c.orig) return; var d=dom[c.orig]=dom[c.orig]||{}; d[c.combo]=(d[c.combo]||0)+1; });
       for(var o in dom){ var b=null,bv=-1; for(var t in dom[o]) if(dom[o][t]>bv){bv=dom[o][t];b=t;} ocol[o]=GPN_TIPO[b]||GPN_CAT[0]; } }
     var cellCol=null,cellInk=null;
-    if(tipo!=='ataque'){ cellCol={}; cellInk={};
+    if(porCombo){ cellCol={}; cellInk={};
+      var ddc={}; acc.forEach(function(c){ if(!c.dest) return; var d=ddc[c.dest]=ddc[c.dest]||{}; d[c.combo]=(d[c.combo]||0)+1; });
+      for(var zc in ddc){ var bc=null,bcv=-1; for(var tc in ddc[zc]) if(ddc[zc][tc]>bcv){bcv=ddc[zc][tc];bc=tc;}
+        var ccc=GPN_CC[bc]||GPN_CAT[0]; cellCol[zc]=ccc[0]; cellInk[zc]=ccc[2]; } }
+    else if(tipo!=='ataque'){ cellCol={}; cellInk={};
       var dd={}; acc.forEach(function(c){ if(!c.dest) return; var d=dd[c.dest]=dd[c.dest]||{}; d[c.combo]=(d[c.combo]||0)+1; });
       for(var z in dd){ var bb=null,bv2=-1; for(var t2 in dd[z]) if(dd[z][t2]>bv2){bv2=dd[z][t2];bb=t2;}
         var cc=GPN_TIPO[bb]||GPN_CAT[0]; cellCol[z]=cc[0]; cellInk[z]=cc[2]; } }
-    var flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
+    if(!flows) flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
     var rot={ataque:'Dónde caen sus remates',saque:'Dónde pone sus saques',recepcion:'Dónde se para y de dónde le sacan'}[tipo];
     var svg=gpnCancha({cells:m.cells,origins:m.orig,flows:flows,ocol:ocol,cellSrc:m.src,
                        cuenta:m.crudo,
@@ -2737,7 +2785,7 @@ function gpnPanel(j,cont,tipo){
     zona.innerHTML='<div class="gpn-rot">'+rot+' · <b>'+acc.length+'</b> acciones'
       +(m.conDest<acc.length?(' <span style="color:#5E6B7D">('+(acc.length-m.conDest)+' sin destino)</span>'):'')
       +'</div>'+svg;
-    var dirs=gpnDirs(acc,ocol,tipo==='recepcion'?'SAQUE DESDE':'DESDE');
+    var dirs=gpnDirs(acc,ocol,tipo==='recepcion'?'SAQUE DESDE':'DESDE',porCombo?GPN_CC:null);
     lado.querySelector('.gpn-dirs').innerHTML=dirs||'<span style="color:#5E6B7D;font-size:13px">Sin direcciones con destino registrado.</span>';
   }
   dibujar(estado);
@@ -6589,9 +6637,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261021-2309"></script>
-<script src="ayuda.js?v=20261021-2309"></script>
-<script src="volver_inicio.js?v=20261021-2309" defer></script>
+<script src="temporadas_menu.js?v=20261022-1036"></script>
+<script src="ayuda.js?v=20261022-1036"></script>
+<script src="volver_inicio.js?v=20261022-1036" defer></script>
 </body>
 </html>
 
