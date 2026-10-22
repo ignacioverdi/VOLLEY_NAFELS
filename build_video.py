@@ -836,8 +836,20 @@ if __name__=='__main__':
             # Arriba ya se sacan los codigos cuyo .dvw no esta mas, asi que
             # todo lo que llega aca viene de un archivo que existe hoy: se
             # puede reemplazar sin perder nada.
-            _antes = len((existentes.get(code) or {}).get('actions') or [])
-            _ahora = len(m.get('actions') or [])
+            # Se compara el CONTENIDO, no la cantidad de acciones. Contarlas
+            # no alcanza: si el scout se corrige sin agregar ni sacar nada
+            # -se arregla el numero de un jugador, un nombre, una evaluacion-
+            # la cuenta da igual y el partido se daba por bueno. Paso de
+            # verdad: se corrigieron los dorsales de St Gallen del 30/09 y el
+            # game plan los tomo, pero cortes de video y la sintesis siguieron
+            # con los viejos. Dos numeraciones distintas para el mismo
+            # partido, segun la pantalla.
+            try:
+                _antes = json.dumps(existentes.get(code) or {}, sort_keys=True, ensure_ascii=False)
+                _ahora = json.dumps(m or {}, sort_keys=True, ensure_ascii=False)
+            except Exception:
+                _antes = len((existentes.get(code) or {}).get('actions') or [])
+                _ahora = len(m.get('actions') or [])
             if _antes != _ahora:
                 existentes[code]=m; actualizados+=1
         # hornear SOLO los links de los partidos de esta temporada
