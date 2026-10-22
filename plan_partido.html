@@ -234,7 +234,7 @@ footer{margin-top:26px;padding-top:14px;border-top:1px solid var(--border);font-
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261022-1054">
+<link rel="stylesheet" href="movil.css?v=20261022-1106">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    EL ROJO, SOLO PARA EL DATO
@@ -382,14 +382,14 @@ details.fdet .filters{margin-top:8px}
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
 <!-- La definicion unica de las eficiencias de todo el sistema. Esta pagina
      tenia las suyas propias y no coincidian con el resto. -->
-<script src="objetivos_config.js?v=20261022-1054" onerror="void 0"></script>
-<script src="categorias_club.js?v=20261022-1054"></script>
-<script src="selector_categoria.js?v=20261022-1054"></script>
-<script src="mi_fila.js?v=20261022-1054" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261022-1106" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261022-1106"></script>
+<script src="selector_categoria.js?v=20261022-1106"></script>
+<script src="mi_fila.js?v=20261022-1106" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261022-1054" defer></script>
+<script src="iconos.js?v=20261022-1106" defer></script>
 
-<script src="nav.js?v=20261022-1054" defer></script>
+<script src="nav.js?v=20261022-1106" defer></script>
 </head>
 <body>
 <div class="wrap">
@@ -415,6 +415,7 @@ details.fdet .filters{margin-top:8px}
     <button class="mbtn" data-pptipo="P"     onclick="ppSetTipo('P')" data-t="Partidos"><span data-t="Partidos"><span data-t="Partidos">Partidos</span></span></button>
     <button class="mbtn" data-pptipo="E"     onclick="ppSetTipo('E')" data-t="Entrenamientos">Entrenamientos</button>
   </div>
+  <span id="ppfasebar"></span>
   <div class="msel"><button class="mbtn" onclick="togglePanel('r')">Rival <b id="rc"></b> ▾</button><div class="mpanel" id="rpanel"></div></div>
   <div class="msel"><button class="mbtn" onclick="togglePanel('m')"><span data-t="Partido"><span data-t="Partido">Partido</span></span> <b id="mc"></b> ▾</button><div class="mpanel" id="mpanel"></div></div>
   <!-- El minimo de acciones, ahora en pantalla. Antes estaba escondido en el
@@ -531,8 +532,9 @@ function turnoTxt(s){
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261022-1054"></script>
-<script src="filtro_tipo.js?v=20261022-1054" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261022-1106"></script>
+<script src="filtro_tipo.js?v=20261022-1106" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261022-1106" onerror="void 0"></script>
   <script src="liga_data.js.enc?v=286d48e7" onerror="window.LIGA_DATA={teams:{},combos:[],calls:[]}"></script>
   <!-- La distribucion del armador sale de aca, no de plan_partido_data. Antes
        se cargaba SOLO el de partidos, asi que en una temporada sin partidos
@@ -547,13 +549,13 @@ window.__DESCIFRAR_SINCRONO = true;
 <!-- Los videos de las practicas viven en su propio mapa. Sin esto, un
      entrenamiento con video cargado igual no abria el cuadrante. -->
 <script src="mapa_videos_ent.js.enc?v=387ff498" onerror="window.MAPA_VIDEOS_ENT=window.MAPA_VIDEOS_ENT||{}"></script>
-<script src="firebase.js?v=20261022-1054"></script>
-<script src="firebase_por_categoria.js?v=20261022-1054"></script>
+<script src="firebase.js?v=20261022-1106"></script>
+<script src="firebase_por_categoria.js?v=20261022-1106"></script>
 <script src="plan_partido_data.js.enc?v=24192395" onerror="void 0"></script>
 <script src="datos_bloqueo.js.enc?v=21731f7c" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="plan_partido_vivo.js?v=20261022-1054" onerror="void 0"></script>
-<script src="velocidades_saque.js?v=20261022-1054" onerror="void 0"></script>
+<script src="plan_partido_vivo.js?v=20261022-1106" onerror="void 0"></script>
+<script src="velocidades_saque.js?v=20261022-1106" onerror="void 0"></script>
 <script>
 const QP=new URLSearchParams(location.search);
 var FOCUS_NUM=(QP.get('jug')||'').trim();
@@ -619,17 +621,54 @@ function ppPintarTipo(){
   }
 }
 
+/* ══ PRETEMPORADA / OFICIAL ═══════════════════════════════════════════════
+   El mismo corte que ya hace Game Plan, con la misma fuente: la fecha de
+   cada sesion contra fases_temporada.json. Lo resuelve filtro_fase.js, que
+   estaba escrito para esto y no lo usaba ninguna pantalla todavia.
+
+   Si el archivo no esta, o la tabla todavia no llego, NO se filtra nada:
+   vale mas la pantalla entera que un filtro a medias.                      */
+function ppFaseOk(m){
+  try{
+    if(typeof window.vbFaseListo !== 'function' || !window.vbFaseListo()) return true;
+    var f = window.vbFase();
+    if(!f || f === 'todo') return true;
+    return window.vbFaseDe(m && m.date) === f;
+  }catch(e){ return true; }
+}
+
+function ppPintarFase(){
+  try{ window.vbBarraFase('ppfasebar', MATCHES, function(m){ return m && m.date; }); }catch(e){}
+}
+
+/* Cambiar de competencia rehace la seleccion, igual que cambiar entre
+   partidos y entrenamientos. */
+window.vbAlCambiarFase = function(){
+  try{
+    computeMatchMeta();
+    buildRivalPanel(); buildMatchPanel(); updateCounts(); renderAll();
+    if(typeof renderArmador==='function') renderArmador();
+  }catch(e){}
+};
+/* La tabla de fases llega por fetch, despues de que la pantalla ya se
+   dibujo: cuando llega se pinta la barra y, si venia una fase elegida de
+   antes, se aplica. */
+window.vbAlLlegarFases = function(){
+  try{ ppPintarFase(); if(window.vbFase && window.vbFase() !== 'todo') window.vbAlCambiarFase(); }catch(e){}
+};
+
 function computeMatchMeta(){
   var CLAVES = Object.keys(INFO).filter(ppEsDelTipo);
   RIVALS=Array.from(new Set(CLAVES.map(function(k){return INFO[k].opp;}))).sort();
   MATCHES=CLAVES.map(function(k){return {mid:k,opp:INFO[k].opp,date:INFO[k].date,turno:(INFO[k].turno||""),res:INFO[k].res,yt:ppVid(k)};}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:0;});
-  RSEL=new Set(RIVALS);MSEL=new Set(MATCHES.map(function(m){return m.mid;}));
+  RSEL=new Set(RIVALS);MSEL=new Set(MATCHES.filter(ppFaseOk).map(function(m){return m.mid;}));
   /* La barra se pinta ACA y no al final de la pagina: los datos llegan
      despues de que se dibuja el HTML, asi que al arrancar INFO todavia esta
      vacio, ppHayTipos() daba false y la barra quedaba escondida para siempre.
      computeMatchMeta() corre cada vez que se carga o cambia el equipo, que es
      justo cuando INFO ya tiene contenido. */
   try{ ppPintarTipo(); }catch(e){}
+  try{ ppPintarFase(); }catch(e){}
 }
 const RECS=[["all","Todas"],["g","# / +"],["b","! / -"]];
 const FASE=[["all","Todas"],["SO","Side Out"],["TR","Transici\u00f3n"]];
@@ -1625,7 +1664,7 @@ function _ppTurno(m){
 }
 
 function buildMatchPanel(){
-  var ms=MATCHES.filter(function(m){return RSEL.has(m.opp);});
+  var ms=MATCHES.filter(function(m){return RSEL.has(m.opp) && ppFaseOk(m);});
 
   /* cuantas sesiones hay por fecha */
   var porFecha={};
@@ -1649,11 +1688,11 @@ function buildMatchPanel(){
   }).join('');
   document.getElementById('mpanel').innerHTML=h;
 }
-function syncMatches(){MSEL=new Set(MATCHES.filter(function(m){return RSEL.has(m.opp);}).map(function(m){return m.mid;}));}
+function syncMatches(){MSEL=new Set(MATCHES.filter(function(m){return RSEL.has(m.opp) && ppFaseOk(m);}).map(function(m){return m.mid;}));}
 function toggleRival(i){var r=RIVALS[i];if(RSEL.has(r))RSEL.delete(r);else RSEL.add(r);syncMatches();buildRivalPanel();buildMatchPanel();updateCounts();renderAll();}
 function allRivals(on){RSEL=on?new Set(RIVALS):new Set();syncMatches();buildRivalPanel();buildMatchPanel();updateCounts();renderAll();}
 function toggleMatchSel(mid){if(MSEL.has(mid))MSEL.delete(mid);else MSEL.add(mid);updateCounts();renderAll();}
-function allMatchesSel(on){MATCHES.filter(function(m){return RSEL.has(m.opp);}).forEach(function(m){if(on)MSEL.add(m.mid);else MSEL.delete(m.mid);});buildMatchPanel();updateCounts();renderAll();}
+function allMatchesSel(on){MATCHES.filter(function(m){return RSEL.has(m.opp) && ppFaseOk(m);}).forEach(function(m){if(on)MSEL.add(m.mid);else MSEL.delete(m.mid);});buildMatchPanel();updateCounts();renderAll();}
 function updateCounts(){document.getElementById('rc').textContent='('+RSEL.size+')';document.getElementById('mc').textContent='('+MSEL.size+')';
   /* "3 partidos" no sirve cuando lo que se esta mirando son practicas. */
   var _t=ppTipoActual(), _n=MSEL.size;
@@ -1984,8 +2023,8 @@ document.addEventListener("fullscreenchange",function(){
 });
 document.addEventListener("keydown",function(e){if(document.getElementById("vmodal").style.display!=="flex")return;if(e.key==="f"||e.key==="F"){e.preventDefault();toggleFullV();return;}if(e.key==="Escape"){if(enPantallaCompleta())return;closeV();}if(e.key==="ArrowRight")nextClip();if(e.key==="ArrowLeft")prevClip();if(e.key===" "||e.code==="Space"){e.preventDefault();togglePlay();}});
 </script>
-<script src="chat_nafels.js?v=20261022-1054" onerror="void 0"></script>
-<script src="lang.js?v=20261022-1054" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261022-1106" onerror="void 0"></script>
+<script src="lang.js?v=20261022-1106" onerror="void 0"></script>
 <script>
 (function(){
   try{
@@ -2003,7 +2042,7 @@ document.addEventListener("keydown",function(e){if(document.getElementById("vmod
    viejo —sin el campo tipo— la barra queda oculta y no molesta. */
 try{ ppPintarTipo(); }catch(e){}
 </script>
-<script src="volver_inicio.js?v=20261022-1054" onerror="void 0"></script>
-<script src="ayuda.js?v=20261022-1054"></script>
+<script src="volver_inicio.js?v=20261022-1106" onerror="void 0"></script>
+<script src="ayuda.js?v=20261022-1106"></script>
 </body>
 </html>
