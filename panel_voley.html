@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261025-1619"></script>
-<script src="selector_categoria.js?v=20261025-1619"></script>
-<script src="datos_voley.js.enc?v=26195ca2" onerror="void 0" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261025-1630"></script>
+<script src="selector_categoria.js?v=20261025-1630"></script>
+<script src="datos_voley.js.enc?v=83eca292" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
    El panel ya no depende de Google Fonts: funciona 100% offline. */
@@ -162,6 +162,38 @@ body::before{content:'';position:fixed;inset:0;
 .grid{display:grid;gap:.75rem;transition:all .3s}
 .grid.normal{grid-template-columns:repeat(auto-fill,minmax(320px,1fr))}
 .grid.tv{grid-template-columns:repeat(2,1fr)}
+
+/* ══ PANTALLA DE INICIO ═══════════════════════════════════════════════
+   Lo primero que se ve al abrir el panel: como venimos, quien esta
+   cerrando y los atajos al analisis. Las 25 tarjetas de jugador quedan
+   detras de un boton porque miden casi 8.000 pixeles de alto y empujaban
+   todo esto fuera de la pantalla.
+   Los tres recuadros los llena panel_estilo.js —el mismo modulo que los
+   dibuja en Scout en Vivo—, asi que no hay una sola cuenta repetida: lo
+   que se arregle alla queda arreglado aca. */
+#pv-inicio{margin-bottom:1rem}
+#pv-inicio .pvi-cols{display:grid;gap:.75rem;
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr));margin-bottom:.75rem}
+#pv-inicio .pvi-pane{background:var(--card,#13131f);
+  border:1px solid var(--b,rgba(255,255,255,.06));border-radius:14px;padding:14px 16px}
+#pv-inicio .pvi-pane:empty{display:none}
+#pv-inicio .pvi-atajos{margin-bottom:.75rem;padding-top:4px}
+#pv-inicio .pvi-acc{display:flex;gap:.6rem;flex-wrap:wrap}
+#pv-inicio .pvi-btn{flex:1 1 260px;display:flex;align-items:center;gap:10px;
+  padding:13px 16px;border-radius:12px;cursor:pointer;text-align:left;
+  font-family:inherit;font-size:13px;font-weight:700;line-height:1.25;
+  border:1px solid var(--b,rgba(255,255,255,.06));
+  background:var(--card,#13131f);color:#e8e8f0;transition:border-color .15s,background .15s}
+#pv-inicio .pvi-btn:hover{border-color:rgba(255,255,255,.16);background:rgba(255,255,255,.04)}
+#pv-inicio .pvi-btn i{display:block;font-style:normal;font-size:10.5px;font-weight:600;
+  color:var(--mut,#94a3b8);margin-top:3px;letter-spacing:.2px}
+#pv-inicio .pvi-btn .pvi-ic{font-size:18px;line-height:1;flex-shrink:0}
+#pv-inicio .pvi-pri{background:rgba(96,165,250,.12);border-color:rgba(96,165,250,.3);color:#60a5fa}
+#pv-inicio .pvi-pri:hover{background:rgba(96,165,250,.2)}
+#pv-inicio .pvi-pri i{color:rgba(96,165,250,.75)}
+#pv-inicio .pvi-btn.on{background:rgba(230,167,67,.14);border-color:rgba(230,167,67,.35);color:#e6a743}
+#pv-inicio .pvi-btn.on i{color:rgba(230,167,67,.75)}
+@media(max-width:700px){#pv-inicio .pvi-cols{grid-template-columns:1fr}}
 
 /* CARD */
 .card{background:var(--card);border:1px solid var(--b);border-radius:12px;overflow:hidden;transition:all .2s;position:relative}
@@ -359,14 +391,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261025-1619"></script>
+<script src="objetivos_config.js?v=20261025-1630"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261025-1619"></script>
+<script src="datos_seguros.js?v=20261025-1630"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -377,12 +409,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261025-1619" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261025-1619"></script>
-<script src="lang.js?v=20261025-1619"></script>
-<script src="objetivos.js?v=20261025-1619" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261025-1619"></script>
-  <script src="video_delay.js?v=20261025-1619" onerror="void 0"></script>
+<script src="firebase.js?v=20261025-1630" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261025-1630"></script>
+<script src="lang.js?v=20261025-1630"></script>
+<script src="objetivos.js?v=20261025-1630" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261025-1630"></script>
+  <script src="video_delay.js?v=20261025-1630" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -750,7 +782,7 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261025-1619">
+<link rel="stylesheet" href="movil.css?v=20261025-1630">
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -883,7 +915,28 @@ function renderObjetivosJugador(cid,nombre,extra){
   </div>
   <div id="team-bar" style="display:none"></div>
   <div id="team-dv4" style="display:none;margin-bottom:1rem"></div>
-  <div class="grid normal" id="grid"></div>
+  <div id="pv-inicio" data-notr>
+    <div class="pvi-cols">
+      <div class="pvi-pane" id="pe-pulso" data-notr></div>
+      <div class="pvi-pane" id="pe-cierran" data-notr></div>
+    </div>
+    <div class="pvi-pane pvi-atajos"><div id="pe-atajos" data-notr></div></div>
+    <div class="pvi-acc">
+      <button type="button" class="pvi-btn pvi-pri" onclick="abrirAnalisis()"
+              title="El an&aacute;lisis completo, igual que en Scout en Vivo">
+        <span class="pvi-ic">&#128202;</span>
+        <span><span data-t="Tablas y an&aacute;lisis">Tablas y an&aacute;lisis</span>
+          <i><span data-t="mismas referencias para los dos equipos">mismas referencias para los dos equipos</span></i></span>
+      </button>
+      <button type="button" class="pvi-btn" id="pv-tarj-btn" onclick="pvTarjetas()"
+              title="Las tarjetas de cada jugador, una por una">
+        <span class="pvi-ic">&#128101;</span>
+        <span><span data-t="Tarjetas de jugadores">Tarjetas de jugadores</span>
+          <i><span data-t="una por jugador, con todos sus fundamentos">una por jugador, con todos sus fundamentos</span></i></span>
+      </button>
+    </div>
+  </div>
+  <div class="grid normal" id="grid" style="display:none"></div>
 </main>
 
 <!-- PODIO OVERLAY -->
@@ -1079,12 +1132,27 @@ function buildDV4Buttons(){
   });
 }
 
+/* ── LAS TARJETAS, DETRAS DE UN BOTON ───────────────────────────────
+   Son 25 y miden casi 8.000 pixeles: abiertas de entrada tapaban todo lo
+   demas. Se esconden con style.display y NO con una clase, porque
+   toggleTV() reescribe className y se las llevaria puestas. */
+function pvTarjetas(mostrar){
+  const g=document.getElementById('grid');
+  if(!g) return;
+  const ver=(mostrar===undefined)?(g.style.display==='none'):!!mostrar;
+  g.style.display=ver?'':'none';
+  const b=document.getElementById('pv-tarj-btn');
+  if(b) b.classList.toggle('on',ver);
+  if(ver){ try{ g.scrollIntoView({behavior:'smooth',block:'start'}); }catch(e){} }
+}
 function toggleTV(){
   tvMode=!tvMode;
   const g=document.getElementById('grid');
   const btn=document.getElementById('tv-btn');
   g.className='grid '+(tvMode?'tv':'normal');
   btn.classList.toggle('on',tvMode);
+  /* el modo TV ES las tarjetas: si estaban guardadas, se abren solas */
+  if(tvMode) pvTarjetas(true);
   render();
 }
 
@@ -3011,8 +3079,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261025-1619" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261025-1619"></script>
+<script src="plantel_nafels.js?v=20261025-1630" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261025-1630"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -3111,7 +3179,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261025-1619"></script>
+<script src="ayuda.js?v=20261025-1630"></script>
 
 
 
@@ -3938,8 +4006,14 @@ function renderAnalisis(){
 })();
 
 </script>
-<script src="analisis_vivo.js?v=20261025-1619" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261025-1619" defer></script>
+<script src="analisis_vivo.js?v=20261025-1630" onerror="void 0"></script>
+<!-- Los paneles de "como venimos", "quien esta cerrando" y los atajos son
+     los MISMOS que los de Scout en Vivo: el modulo es el mismo archivo. La
+     marca de abajo le dice que aca no toque el marco de la pagina, solo
+     llene los tres recuadros que ya estan en el HTML. -->
+<script>window.PE_SOLO_PANELES = true;</script>
+<script src="panel_estilo.js?v=20261025-1630" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261025-1630" defer></script>
 </body>
 </html>
 

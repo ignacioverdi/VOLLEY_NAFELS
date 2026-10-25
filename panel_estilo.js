@@ -125,11 +125,48 @@
   }
 
   /* ══ 1 · LA HOJA DE ESTILO ═══════════════════════════════════════════ */
-  function estilo() {
+  /* ── EL MARCO NO SIEMPRE ES NUESTRO ──────────────────────────────────
+     Este archivo nacio para Scout en Vivo y ahi, ademas de los paneles,
+     le reacomoda el marco: la barra de arriba, el marcador y las dos
+     canchas de rotacion. Panel Voley quiere los MISMOS paneles —como
+     venimos, quien esta cerrando y los atajos— pero tiene marco propio,
+     que no hay que tocar.
+
+     Asi que cuando la pagina pide solo los paneles se sacan las reglas
+     que apuntan al marco del Scout en Vivo. Se hace sobre el texto ya
+     armado, sin tocar una sola linea de la hoja de estilo de abajo: lo
+     que ve Scout en Vivo es exactamente lo mismo de siempre. */
+  var PE_MARCO = /(^|,)\s*(\.top|\.board|\.rot|\.wrap|#btn-menu-salir)\b/;
+  function soloPaneles(css) {
+    var out = '', i = 0, n = css.length;
+    while (i < n) {
+      var llave = css.indexOf('{', i);
+      if (llave < 0) break;
+      var sel = css.slice(i, llave).trim();
+      var j = llave, prof = 0;
+      for (; j < n; j++) {
+        if (css.charAt(j) === '{') prof++;
+        else if (css.charAt(j) === '}') { prof--; if (prof === 0) break; }
+      }
+      var cuerpo = css.slice(llave + 1, j);
+      if (sel.charAt(0) === '@') {
+        /* adentro de un @media hay reglas: se filtran igual. Los
+           @keyframes no tienen selectores, van enteros. */
+        var dentro = /keyframes/i.test(sel) ? cuerpo : soloPaneles(cuerpo);
+        if (dentro.replace(/\s/g, '')) out += sel + '{' + dentro + '}';
+      } else if (!PE_MARCO.test(sel)) {
+        out += sel + '{' + cuerpo + '}';
+      }
+      i = j + 1;
+    }
+    return out;
+  }
+
+  function estilo(solo) {
     if (document.getElementById('pe-css')) return;
     var s = document.createElement('style');
     s.id = 'pe-css';
-    s.textContent = [
+    var _css = [
       /* la barra: una sola franja, con el marcador adentro */
       '.top{height:58px;padding:0 14px;gap:12px;align-items:center;background:#0E1120;',
       '  border-bottom:1px solid rgba(255,255,255,.07)}',
@@ -331,6 +368,7 @@
       '  .top .tbtn{height:32px;padding:0 11px;font-size:12px}',
       '}'
     ].join('');
+    s.textContent = solo ? soloPaneles(_css) : _css;
     document.head.appendChild(s);
   }
 
@@ -986,21 +1024,38 @@
 
   /* ══ ARRANQUE ════════════════════════════════════════════════════════ */
   function arrancar() {
-    try { estilo(); }        catch (e) { try { console.error('[estilo]', e); } catch (_) {} }
-    try { agrupar(); }       catch (e) { try { console.error('[barra]', e); } catch (_) {} }
-    try { redes(); }         catch (e) { try { console.error('[red]', e); } catch (_) {} }
+    /* La pagina que invita dice que quiere. Poniendo
+       window.PE_SOLO_PANELES = true antes de cargar este archivo entran
+       los paneles y nada mas: ni la barra, ni el marcador, ni las canchas.
+       Sin esa marca —Scout en Vivo— se comporta igual que siempre.
+
+       Los paneles viven en #pe-pulso, #pe-cierran y #pe-atajos. Si la
+       pagina ya los creo, se usan esos; si no, se crean donde van en
+       Scout en Vivo. Eso ya estaba previsto, no hace falta tocarlo. */
+    var SOLO = !!window.PE_SOLO_PANELES;
+
+    try { estilo(SOLO); }    catch (e) { try { console.error('[estilo]', e); } catch (_) {} }
+    if (!SOLO) {
+      try { agrupar(); }     catch (e) { try { console.error('[barra]', e); } catch (_) {} }
+      try { redes(); }       catch (e) { try { console.error('[red]', e); } catch (_) {} }
+    }
     try { panelesPulso(); pintarPulso(); }
     catch (e) { try { console.error('[pulso]', e); } catch (_) {} }
-    try { unaCancha(); pintarNombresEq(); }
-    catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
-    try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
+    if (!SOLO) {
+      try { unaCancha(); pintarNombresEq(); }
+      catch (e) { try { console.error('[cancha]', e); } catch (_) {} }
+      try { barraAcciones(); } catch (e) { try { console.error('[acciones]', e); } catch (_) {} }
+    }
     try { panelAtajos(); pintarAtajos(false); }
     catch (e) { try { console.error('[atajos]', e); } catch (_) {} }
 
     /* se repinta con lo que vas cargando. Medio segundo alcanza: no es un
        videojuego y no vale la pena hacer trabajar al navegador de más. */
     setInterval(function () {
-      try { redes(); pintarPulso(); pintarAtajos(false); pintarNombresEq(); } catch (e) {}
+      try {
+        if (!SOLO) { redes(); pintarNombresEq(); }
+        pintarPulso(); pintarAtajos(false);
+      } catch (e) {}
     }, 700);
   }
 

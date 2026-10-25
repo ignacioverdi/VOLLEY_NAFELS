@@ -16,42 +16,42 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261025-1619" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261025-1619" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261025-1619"></script>
-<script src="filtro_tipo.js?v=20261025-1619" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261025-1619" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261025-1630" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261025-1630" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261025-1630"></script>
+<script src="filtro_tipo.js?v=20261025-1630" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261025-1630" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261025-1619" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261025-1619" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261025-1630" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261025-1630" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
   <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
-<script src="liga_data.js.enc?v=621e68d6" onerror="void 0"></script>
+<script src="liga_data.js.enc?v=f00401d2" onerror="void 0"></script>
 
 
 
 
   
-  <script src="datos_baterias.js.enc?v=bb487622" onerror="void 0"></script>
+  <script src="datos_baterias.js.enc?v=43558264" onerror="void 0"></script>
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261025-1619" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261025-1630" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261025-1619" onerror="void 0"></script>
-  <script src="datos_historial_ent.js.enc?v=5e80d87a" onerror="void 0"></script>
-  <script src="datos_entrenamientos.js.enc?v=d747b15d" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261025-1630" onerror="void 0"></script>
+  <script src="datos_historial_ent.js.enc?v=829b573c" onerror="void 0"></script>
+  <script src="datos_entrenamientos.js.enc?v=4dd894df" onerror="void 0"></script>
   
-  <script src="datos_equipo.js.enc?v=21162d32" onerror="void 0"></script>
+  <script src="datos_equipo.js.enc?v=7b7173fc" onerror="void 0"></script>
 <!-- Los cortes se guardan en un archivo por temporada. Se piden todas:
      las que no existen las descarta el onerror, sin ruido. Y todas con
      .enc, que es como se publican los datos del club. -->
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261025-1619" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261025-1619"></script>
+<script src="firebase.js?v=20261025-1630" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261025-1630"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261025-1619">
+<link rel="stylesheet" href="movil.css?v=20261025-1630">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261025-1619" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261025-1630" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,9 +782,9 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261025-1619" defer></script>
+<script src="iconos.js?v=20261025-1630" defer></script>
 
-<script src="nav.js?v=20261025-1619" defer></script>
+<script src="nav.js?v=20261025-1630" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -2750,11 +2750,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261025-1619"></script>
-<script src="lang.js?v=20261025-1619"></script>
-<script src="temporadas_menu.js?v=20261025-1619"></script>
-<script src="ayuda.js?v=20261025-1619"></script>
-<script src="velocidades_saque.js?v=20261025-1619" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261025-1630"></script>
+<script src="lang.js?v=20261025-1630"></script>
+<script src="temporadas_menu.js?v=20261025-1630"></script>
+<script src="ayuda.js?v=20261025-1630"></script>
+<script src="velocidades_saque.js?v=20261025-1630" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2804,7 +2804,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261025-1619" defer></script>
+<script src="volver_inicio.js?v=20261025-1630" defer></script>
 </body>
 </html>
 
