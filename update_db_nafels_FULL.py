@@ -723,6 +723,7 @@ def parse_dvw_both(fpath, temporada):
         atk=defaultdict(list); srv=defaultdict(list)
         rec=defaultdict(list); sets=defaultdict(list); blk=defaultdict(list); dig=defaultdict(list)
         prev_srv_orig=0; current_atype=0
+        _so_pend={'*':False,'a':False}   # ver 'LA FASE DEL ATAQUE' mas abajo
 
         for line in scout:
             l=line.strip()
@@ -775,6 +776,40 @@ def parse_dvw_both(fpath, temporada):
             if skill=='S':
                 prev_srv_orig=orig
                 current_atype=0 if t!=pfx else 1
+                _so_pend['*']=False; _so_pend['a']=False
+            elif skill=='R':
+                _so_pend[t]=True
+
+            # ══ LA FASE DEL ATAQUE: SIDE-OUT ES UNA SOLA PELOTA ══════════════
+            # Side-out es UNICAMENTE el primer ataque despues de la propia
+            # recepcion. Todo ataque posterior del mismo punto es transicion.
+            #
+            # Antes la fase se decidia en el SAQUE y quedaba fija para todo el
+            # punto: si recibiamos, los tres ataques de ese rally entraban como
+            # side-out. Medido en Nafels-St Gallen del 30/09: daba 91 ataques de
+            # side-out cuando los de verdad eran 71. Y en el partido de ayer
+            # daba 93 con 76 recepciones, o sea mas ataques de side-out que
+            # recepciones, que es imposible.
+            #
+            # DE DONDE SALE LA FASE, en este orden:
+            #   1. El propio Data Volley la escribe en cada accion (columna 3:
+            #      'r' = side-out, 's'/'p' = transicion). Es la fuente buena y
+            #      la tienen los .dvw del scout del club. Contrastado contra la
+            #      regla de arriba en el partido del 30/09: coincide en 124 de
+            #      124 ataques de Nafels y en 136 de 138 de St Gallen.
+            #   2. Si el archivo no la trae —los de Volleymetrics vienen con esa
+            #      columna vacia, 906 ataques de la temporada— se calcula con la
+            #      regla: primer ataque despues de la propia recepcion.
+            #
+            # Se guarda por LADO porque en un entrenamiento los dos lados son el
+            # mismo club y las acciones de los dos se leen en la misma pasada.
+            _at_atk=None
+            if skill=='A':
+                if fase_dv in ('r','s','p'):
+                    _at_atk = 0 if fase_dv=='r' else 1
+                else:
+                    _at_atk = 0 if _so_pend.get(t) else 1
+                _so_pend[t]=False
             # En un entrenamiento los dos lados son el mismo equipo y las
             # acciones suelen venir todas de un lado. Si se filtrara por
             # lado, la segunda vuelta las descartaria todas.
@@ -789,7 +824,8 @@ def parse_dvw_both(fpath, temporada):
             except: _vt=0
             action={'pnum':pnum,'stype':stype,'effect':effect,'combo': normalize_combo(combo),
                     'orig':orig,'dest':dest,'subz':subz,'setter_pos':setter_pos,'set_num':set_num,
-                    'date':date,'rival':rival,'atype':current_atype,'fase_dv':fase_dv,
+                    'date':date,'rival':rival,
+                    'atype':(_at_atk if _at_atk is not None else current_atype),'fase_dv':fase_dv,
                     'srv_orig':prev_srv_orig,'temporada':temporada,'vt':_vt}
 
             # ══ LA MAQUINA DE SAQUE NO ES UNA JUGADORA ═══════════════════
@@ -1178,7 +1214,12 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     # 9: cada armado guarda ademas la zona (y el cuarto A/B/C/D) desde la
     #    que el armador toco la pelota, que es donde cayo la recepcion. El
     #    dato estaba en el .dvw desde siempre y se tiraba.
-    _ESQUEMA = 9          # subir este numero cuando el parser lea algo nuevo
+    # 10: la fase del ataque (side-out / transicion) se decide por ATAQUE y no
+    #    por punto: side-out es solo el primer ataque despues de la propia
+    #    recepcion. Las bases anteriores tienen marcados como side-out todos
+    #    los ataques del rally, asi que los numeros de SO/TR de cualquier
+    #    pantalla estaban inflados. Al subir el numero se rehacen solas.
+    _ESQUEMA = 10         # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:

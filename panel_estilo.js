@@ -446,8 +446,30 @@
       if (!E && a.lado === pierde && (a.ev === '=' || (a.ev === '/' && (a.sk === 'A' || a.sk === 'B')))) E = a;
     }
     /* anLeer() devuelve el dorsal en .num */
-    if (W) return { jug: W.num, lado: gana, aFavor: true };
-    if (E) return { jug: E.num, lado: pierde, aFavor: false };
+    if (W) return { jug: W.num, lado: gana, aFavor: true, a: W };
+    if (E) return { jug: E.num, lado: pierde, aFavor: false, a: E };
+    return null;
+  }
+
+  /* ── EL ATACANTE AL QUE LE BLOQUEARON LA PELOTA ──────────────────────
+     Un ataque bloqueado es un punto que regala el atacante. El credito del
+     punto se lo lleva el bloqueador del otro lado -y esta bien-, pero el
+     que la tiro contra el bloqueo tambien tiene que cargar con eso: en la
+     tabla de ataque esa '/' ya le resta en la eficacia, y en este cuadro
+     faltaba.
+
+     Medido en Nafels-St Gallen de ayer: Norris aparecia +16 con 22 puntos
+     y 6 errores, cuando sus errores son 9 -3 de ataque, 3 de saque y 3
+     pelotas bloqueadas-. Son +13. Con los otros jugadores el numero no se
+     mueve: los que no tuvieron pelotas bloqueadas ya estaban bien. */
+  function atacanteBloqueado(r) {
+    var acc = (r && r.acciones) || [], gana = r && r.gano;
+    if (!gana) return null;
+    var pierde = (gana === 'home') ? 'away' : 'home';
+    for (var i = acc.length - 1; i >= 0; i--) {
+      var a = acc[i];
+      if (a && a.lado === pierde && a.ev === '/' && a.sk === 'A') return a;
+    }
     return null;
   }
 
@@ -498,6 +520,18 @@
     try { return anRallies(); } catch (e) { return null; }
   }
 
+  /* ── ¿LLEGAMOS A RECIBIR EN ESTE PUNTO? ──────────────────────────────
+     Un saque errado del rival NO es una recepcion: es un punto regalado.
+     Hace falta saberlo para contar el side-out como lo cuenta Data Volley
+     (ver abajo). */
+  function huboRecepcion(r, lado) {
+    var acc = (r && r.acciones) || [];
+    for (var i = 0; i < acc.length; i++) {
+      if (acc[i] && acc[i].lado === lado && acc[i].sk === 'R') return true;
+    }
+    return false;
+  }
+
   function calcular() {
     var rs = rallesDelPartido();
     if (!rs || !rs.length) return null;
@@ -508,7 +542,24 @@
     var porJug = {};
 
     rs.forEach(function (r) {
-      if (r.recibe === lado) { soTot++; if (r.gano === lado) soGan++; }
+      /* ══ EL SIDE-OUT VA SOBRE LAS RECEPCIONES ═══════════════════════════
+         Antes el denominador eran TODOS los puntos en los que recibiamos, o
+         sea todos los saques del rival. Eso mete adentro los saques que el
+         rival erro: puntos que se ganan sin tocar la pelota.
+
+         Medido en Nafels-St Gallen: 66 de 94 daba 70% de side-out, con 18
+         errores de saque de ellos adentro —el 19% de sus saques—. Sacandolos
+         quedan 48 de 76, que es 63%: el side-out que el equipo se gano.
+
+         76 es exactamente la cantidad de recepciones de la tabla (94 - 18),
+         asi que el numero de abajo del cuadro ahora coincide con lo que ya
+         muestra la ventana de analisis. Antes habia dos side-out distintos
+         conviviendo en la misma pantalla.
+
+         Este es el criterio de Data Volley: side-out sobre recepciones. El
+         break point no se toca: ya va sobre los saques propios, que es el
+         mismo criterio del otro lado de la red. */
+      if (r.recibe === lado && huboRecepcion(r, lado)) { soTot++; if (r.gano === lado) soGan++; }
       if (r.saca === lado)   { bpTot++; if (r.gano === lado) bpGan++; }
       (r.acciones || []).forEach(function (a) {
         if (a.lado !== lado || a.sk !== 'A') return;
@@ -520,6 +571,14 @@
       if (c && c.lado === lado && c.jug) {
         var j = porJug[c.jug] || (porJug[c.jug] = { num: c.jug, a: 0, e: 0 });
         if (c.aFavor) j.a++; else j.e++;
+      }
+      /* La pelota bloqueada, ademas del punto del bloqueador. La condicion
+         de abajo evita contarla dos veces: cuando el scout no cargo el
+         bloqueo, cierre() ya la tomo como el error que cerro el punto. */
+      var ab = atacanteBloqueado(r);
+      if (ab && ab.lado === lado && !(c && c.aFavor === false && c.a === ab)) {
+        var jb = porJug[ab.num] || (porJug[ab.num] = { num: ab.num, a: 0, e: 0 });
+        jb.e++;
       }
     });
 

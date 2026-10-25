@@ -1435,6 +1435,31 @@
     return null;
   }
 
+  /* ── EL ATACANTE AL QUE LE BLOQUEARON LA PELOTA ──────────────────────
+     cierre() le da el punto a UN solo jugador, que es lo correcto para
+     clasificar el punto: o lo gano alguien con un acierto, o lo regalo
+     alguien con un error. Pero para el SALDO de cada jugador falta un caso:
+     cuando a uno le bloquean la pelota, el punto se lo lleva el bloqueador
+     del otro lado y el atacante no cargaba con nada.
+
+     Medido en Nafels-St Gallen: Norris figuraba +16 (22 puntos, 6 errores)
+     cuando sus errores son 9: 3 de ataque, 3 de saque y 3 bloqueadas. Son
+     +13. Esa '/' ya le resta en la eficacia de ataque; faltaba aca.
+
+     Se usa SOLO en los cuadros de saldo por jugador. En "como termina el
+     punto" no se toca: ahi cada punto tiene que tener un dueno y uno solo,
+     o los totales dejan de dar. */
+  function atacanteBloqueado(r) {
+    var acc = (r && r.acciones) || [], gana = r && r.gano;
+    if (!gana) return null;
+    var pierde = (gana === 'home') ? 'away' : 'home';
+    for (var i = acc.length - 1; i >= 0; i--) {
+      var a = acc[i];
+      if (a && a.lado === pierde && a.ev === '/' && a.sk === 'A') return a;
+    }
+    return null;
+  }
+
   AV.punto = function (rs) {
     var t = L(), l = AV.lado;
     var fil = {}, sinCerrar = 0, tot = [0,0,0,0];
@@ -1520,9 +1545,16 @@
     var t = L(), l = AV.lado, por = {};
     (rs || []).forEach(function (r) {
       var c = cierre(r);
-      if (!c || c.a.lado !== l) return;
-      var e = (por[c.a.num] = por[c.a.num] || { a:[], c:[] });
-      if (c.acierto) e.a.push(c.a); else e.c.push(c.a);
+      if (c && c.a.lado === l) {
+        var e = (por[c.a.num] = por[c.a.num] || { a:[], c:[] });
+        if (c.acierto) e.a.push(c.a); else e.c.push(c.a);
+      }
+      /* la pelota bloqueada, si no la conto ya cierre() */
+      var ab = atacanteBloqueado(r);
+      if (ab && ab.lado === l && !(c && c.acierto === false && c.a === ab)) {
+        var eb = (por[ab.num] = por[ab.num] || { a:[], c:[] });
+        eb.c.push(ab);
+      }
     });
     var nums = Object.keys(por).sort(function (x, y) {
       return (por[y].a.length + por[y].c.length) - (por[x].a.length + por[x].c.length);
@@ -2547,13 +2579,20 @@
   function puntosFila(fila) {
     var l = AV.lado, gan = [], err = [], bp = 0, so = 0;
     (fila.rs || []).forEach(function (r) {
+      function dela(a){ return fila.num === null || fila.num === undefined || String(a.num) === String(fila.num); }
       var c = cierre(r);
-      if (!c || c.a.lado !== l) return;
-      if (fila.num !== null && fila.num !== undefined && String(c.a.num) !== String(fila.num)) return;
-      var signo = c.acierto ? 1 : -1;
-      if (c.acierto) gan.push(c.a); else err.push(c.a);
-      /* en que fase paso: sacabamos nosotros (transition) o recibiamos */
-      if (r.saca === l) bp += signo; else so += signo;
+      if (c && c.a.lado === l && dela(c.a)) {
+        var signo = c.acierto ? 1 : -1;
+        if (c.acierto) gan.push(c.a); else err.push(c.a);
+        /* en que fase paso: sacabamos nosotros (transition) o recibiamos */
+        if (r.saca === l) bp += signo; else so += signo;
+      }
+      /* la pelota bloqueada, si no la conto ya cierre() */
+      var ab = atacanteBloqueado(r);
+      if (ab && ab.lado === l && dela(ab) && !(c && c.acierto === false && c.a === ab)) {
+        err.push(ab);
+        if (r.saca === l) bp -= 1; else so -= 1;
+      }
     });
     return [gan, err, bp, so];
   }
