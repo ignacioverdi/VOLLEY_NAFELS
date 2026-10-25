@@ -41,6 +41,8 @@
   var TXT = {
     es: { eq:'Equipo', ju:'Jugador', fu:'Fundamento', ro:'Rotación', se:'Set',
           todo:'Todo', recib:'SIDE OUT', sacan:'TRANSITION', limpiar:'Limpiar',
+          fmPunto:'Punto completo',
+          fmNota:'SIDE OUT es unicamente el primer ataque despues de nuestra propia recepcion; todo lo que sigue es TRANSITION. Es el criterio de Data Volley. Tildando «Punto completo» se vuelve a contar el punto entero: todo lo que pasa en un punto que recibimos cuenta como side out.',
           todos:'Todos', todas:'Todas', local:'Local', visit:'Visitante',
           S:'Saque', R:'Recepción', A:'Ataque', B:'Bloqueo', D:'Defensa',
           E:'Armado', F:'Freeball',
@@ -149,6 +151,8 @@
           nota:'Jugador y fundamento filtran la tabla de arriba. Equipo, rotación, set y fase filtran todo.' },
     de: { eq:'Team', ju:'Spieler', fu:'Element', ro:'Rotation', se:'Satz',
           todo:'Alles', recib:'SIDE OUT', sacan:'TRANSITION', limpiar:'Zurücksetzen',
+          fmPunto:'Ganzer Ballwechsel',
+          fmNota:'SIDE OUT ist nur der erste Angriff nach der eigenen Annahme; alles danach ist TRANSITION. So zählt es Data Volley. Mit «Ganzer Ballwechsel» zählt wieder der ganze Punkt.',
           todos:'Alle', todas:'Alle', local:'Heim', visit:'Gast',
           S:'Aufschlag', R:'Annahme', A:'Angriff', B:'Block', D:'Abwehr',
           E:'Zuspiel', F:'Freeball',
@@ -257,6 +261,8 @@
           nota:'Spieler und Element filtern die Tabelle oben. Team, Rotation, Satz und Phase filtern alles.' },
     en: { eq:'Team', ju:'Player', fu:'Skill', ro:'Rotation', se:'Set',
           todo:'All', recib:'SIDE OUT', sacan:'TRANSITION', limpiar:'Clear',
+          fmPunto:'Whole rally',
+          fmNota:'SIDE OUT is only the first attack after our own reception; everything after it is TRANSITION. That is the Data Volley criterion. With «Whole rally» the entire point counts again.',
           todos:'All', todas:'All', local:'Home', visit:'Away',
           S:'Serve', R:'Reception', A:'Attack', B:'Block', D:'Dig',
           E:'Set', F:'Freeball',
@@ -380,6 +386,11 @@
     rot: '',      /* 1..6, '' = todas              */
     set: '',      /* 1..5, '' = todos              */
     fase: '',     /* 'so' side out · 'bp' transition · '' todo */
+    /* Como se lee esa fase. 'pelota' es el criterio de Data Volley: side out
+       es UNICAMENTE el primer ataque despues de nuestra propia recepcion y
+       todo lo que sigue es transition. 'punto' es la lectura vieja: el punto
+       entero cuenta como side out porque arranco con recepcion nuestra. */
+    faseM: 'pelota',
     tipo: '',     /* letras del tipo, p.ej. 'MH' = flotado. '' = todos */
     ev: '',       /* # + ! - / = ,  '' = todas        */
     zi: '',       /* zona de origen,  '' = todas      */
@@ -603,16 +614,59 @@
       try { Object.defineProperty(r, '_gs', { value:gano[r.set], enumerable:false, configurable:true }); }
       catch (e) {}
     });
+
+    /* ── LA FASE DE CADA ATAQUE, COMO LA ESCRIBE DATA VOLLEY ─────────────
+       Data Volley guarda la fase en la columna 3 de cada ataque y distingue
+       tres cosas:
+         'r'  el ataque de SIDE OUT: la primera pelota despues de nuestra
+              propia recepcion, y ninguna mas;
+         's'  el contraataque adentro de un punto que recibimos nosotros
+              —la recepcion no alcanzo para cerrarlo—;
+         'p'  la transicion en un punto que sacamos nosotros.
+       El informe oficial junta 's' y 'p' bajo "Transicion".
+
+       El scout en vivo no trae esa columna, asi que se reconstruye. La
+       bandera de side out se abre con la recepcion y se cierra apenas la
+       pelota vuelve a cruzar la red: con el ataque propio —ya se uso—, con
+       el ataque del rival, o con un free ball del rival. Y no llega a
+       abrirse si la recepcion fue '/', porque esa pelota se volvio sola y
+       esa posesion no existio.
+
+       Contrastado contra la columna de Data Volley en los partidos
+       scouteados: 2.430 de 2.430 ataques en el reparto side out/transicion,
+       y 2.429 de 2.430 en la division de tres. */
+    (rs || []).forEach(function (r) {
+      var abierto = { home:false, away:false };
+      (r.acciones || []).forEach(function (a) {
+        if (!a) return;
+        var otro = (a.lado === 'home') ? 'away' : 'home';
+        if (a.sk === 'S') { abierto.home = false; abierto.away = false; return; }
+        if (a.sk === 'R') { abierto[a.lado] = (a.ev !== '/'); return; }
+        if (a.sk === 'F') { abierto[otro] = false; return; }
+        if (a.sk !== 'A') return;
+        var f3 = abierto[a.lado] ? 'r' : ((a.lado === r.saca) ? 'p' : 's');
+        try { Object.defineProperty(a, '_f3', { value:f3, enumerable:false, configurable:true }); }
+        catch (e) {}
+        abierto[a.lado] = false; abierto[otro] = false;
+      });
+    });
     return rs;
   }
   AV.marcar = marcar;
 
-  AV.filtrar = function (rs) {
+  /* 'paraAcciones' lo ponen SOLO las tablas que miran pelota por pelota.
+     Con la fase por pelota, "transition" tambien vive adentro de los puntos
+     que recibimos —el contraataque de despues—, asi que esas tablas no
+     pueden descartar el punto entero: lo decide el filtro de acciones. Las
+     tablas que miran el PUNTO (quien gano cada punto) lo siguen descartando
+     igual que siempre, porque ahi la fase es del punto y no de la pelota. */
+  AV.filtrar = function (rs, paraAcciones) {
     var l = AV.lado;
     return (rs || []).filter(function (r) {
       if (AV.set && String(r.set) !== String(AV.set)) return false;
       if (AV.fase === 'so' && r.recibe !== l) return false;
-      if (AV.fase === 'bp' && r.saca   !== l) return false;
+      if (AV.fase === 'bp' && r.saca !== l &&
+          !(paraAcciones && AV.faseM === 'pelota')) return false;
       if (AV.rot) {
         var rr = 0;
         try { rr = (typeof anRot === 'function') ? anRot(r, l) : 0; } catch (e) { rr = 0; }
@@ -690,6 +744,17 @@
       }
       acts.forEach(function (a, _i) {
         if (!a || a.lado !== AV.lado) return;
+        /* ── LA FASE, PELOTA POR PELOTA ───────────────────────────────
+           El ataque trae la suya calculada en marcar(). Para el resto de
+           los fundamentos la fase sigue siendo la del punto, que es lo
+           unico que tiene sentido: un saque solo existe sacando y una
+           recepcion solo existe recibiendo. */
+        if (AV.fase && AV.faseM === 'pelota') {
+          var _ph = (a.sk === 'A' && a._f3)
+                      ? a._f3
+                      : ((a.lado === r.saca) ? 'p' : 'r');
+          if (AV.fase === 'so' ? (_ph !== 'r') : (_ph === 'r')) return;
+        }
         if (!pasaReglas(r.acciones || [], (r.acciones || []).indexOf(a))) return;
         if (AV.jug  && String(a.num) !== String(AV.jug)) return;
         if (AV.fund && a.sk !== AV.fund) return;
@@ -970,7 +1035,7 @@
       for (var rr = 1; rr <= 6; rr++) {
         (function (rr) {
           var gR = AV.rot; AV.rot = String(rr);
-          var accR = AV.acciones(AV.filtrar(AV.todos()));
+          var accR = AV.acciones(AV.filtrar(AV.todos(), true));
           AV.rot = gR;
           if (!accR.length) return;
           cuerpo += grpTab('P' + rr, accR.length);
@@ -1687,7 +1752,7 @@
       if (modo === 'eq')  { AV.lado = cl.lado; AV.jug = ''; }
       if (modo === 'rot') { AV.rot = cl.rot; }
       if (modo === 'set') { AV.set = cl.set; }
-      var acc = AV.acciones(AV.filtrar(AV.todos()));
+      var acc = AV.acciones(AV.filtrar(AV.todos(), true));
       CAMPOS.forEach(function (k) { AV[k] = g[k]; });
       return acc;
     });
@@ -1791,6 +1856,12 @@
            return '<button class="av-f' + (AV.fase === f ? ' on' : '') +
                   '" onclick="AV.set_(\'fase\',\'' + f + '\')">' + esc(r) + '</button>';
          }).join('') + '</div>';
+
+    /* El interruptor de las dos lecturas. Apagado —que es como arranca— la
+       fase se cuenta como la cuenta Data Volley: pelota por pelota. */
+    h += '<button class="av-fm' + (AV.faseM === 'punto' ? ' on' : '') +
+         '" title="' + esc(t.fmNota) + '" onclick="AV.faseModo()">' +
+         esc(t.fmPunto) + '</button>';
 
     h += '<button class="av-limpiar" onclick="AV.limpiar()">' + esc(t.limpiar) + '</button>';
     h += '</div>';
@@ -2017,7 +2088,8 @@
     var partes = [];
     if (AV.set)  partes.push(t.se + ' ' + AV.set);
     if (AV.rot)  partes.push(t.ro + ' P' + AV.rot);
-    if (AV.fase) partes.push(AV.fase === 'so' ? t.recib : t.sacan);
+    if (AV.fase) partes.push((AV.fase === 'so' ? t.recib : t.sacan) +
+                             (AV.faseM === 'punto' ? ' (' + t.fmPunto + ')' : ''));
     if (AV.jug)  partes.push('#' + AV.jug);
     if (AV.fund) partes.push(t[AV.fund] || '');
     if (AV.tipo) {
@@ -2110,8 +2182,13 @@
     AV[cual] = (String(AV[cual]) === String(z)) ? '' : String(z);
     AV.pintar();
   };
+  /* Cambia como se lee la fase, sin tocar ningun otro filtro. */
+  AV.faseModo = function () {
+    AV.faseM = (AV.faseM === 'punto') ? 'pelota' : 'punto';
+    AV.pintar();
+  };
   AV.limpiar = function () {
-    AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = '';
+    AV.jug = ''; AV.fund = ''; AV.rot = ''; AV.set = ''; AV.fase = ''; AV.faseM = 'pelota';
     AV.tipo = ''; AV.ev = ''; AV.zi = ''; AV.zf = '';
     AV.sres = ''; AV.fila = ''; AV.d1 = ''; AV.d2 = ''; AV.marc = ''; AV.pt1 = false;
     AV.reglas = []; AV.regY = true; AV.earm = ''; AV.erec = ''; AV.zrec = ''; AV.zarm = '';
@@ -2877,7 +2954,7 @@
     var canchaRot = function (i) {
       var gR = AV.rot, gF2 = AV.fund;
       AV.rot = String(i); AV.fund = 'A';
-      var sub = AV.acciones(AV.filtrar(rs)).filter(function (a) { return a.zi; });
+      var sub = AV.acciones(AV.filtrar(rs, true)).filter(function (a) { return a.zi; });
       AV.rot = gR; AV.fund = gF2;
       return sub;
     };
@@ -3393,7 +3470,8 @@
     _dentro = true;
     var todo = marcar(AV.todos());
     _dentro = false;
-    var fil = AV.filtrar(todo);
+    var fil  = AV.filtrar(todo);          /* el punto entero: para AV.punto */
+    var filA = AV.filtrar(todo, true);    /* pelota por pelota: todo el resto */
 
     var caja = document.getElementById('av-bar');
     if (!caja) {
@@ -3403,7 +3481,7 @@
       cont.parentNode.insertBefore(caja, cont);
     }
     caja.innerHTML = AV.barra(todo) + AV.avanzado() + AV.chips() +
-                     AV.resumen(todo, fil) + AV.solapas();
+                     AV.resumen(todo, filA) + AV.solapas();
 
     /* la tabla arriba de todo, que es donde se mira primero, y abajo la
        cancha; los bloques de siempre quedan despues, intactos */
@@ -3413,15 +3491,15 @@
       var viejo = cont.innerHTML;
       cont.innerHTML =
           panel('resumen', AV.punto(fil) + viejo)
-        + panel('jug',     AV.tabla(fil) + AV.ultimos(fil))
-        + panel('cancha',  AV.mapa(fil))
-        + panel('dir',     AV.direcciones(fil))
-        + panel('ataque',  AV.combis(fil) + AV.trasRec(fil) + AV.llamadas(fil))
+        + panel('jug',     AV.tabla(filA) + AV.ultimos(fil))
+        + panel('cancha',  AV.mapa(filA))
+        + panel('dir',     AV.direcciones(filA))
+        + panel('ataque',  AV.combis(filA) + AV.trasRec(filA) + AV.llamadas(filA))
         + panel('comp',    AV.comparar(todo))
-        + panel('arm',     AV.armador(fil))
-        + panel('graf',    AV.graficos(fil))
-        + panel('plan',    AV.planilla(fil))
-        + panel('busc',    AV.busqueda(fil));
+        + panel('arm',     AV.armador(filA))
+        + panel('graf',    AV.graficos(filA))
+        + panel('plan',    AV.planilla(filA))
+        + panel('busc',    AV.busqueda(filA));
       AV.verTab(AV.tab);
     }
   };
@@ -3545,6 +3623,11 @@
     +   'padding:8px 11px;font-size:11px;font-family:inherit;cursor:pointer;min-height:32px}'
     + '.av-f:last-child{border-right:0}'
     + '.av-f.on{background:var(--k-zone,#38bdf8);color:#04121c;font-weight:800}'
+    + '.av-fm{background:var(--card);color:var(--mut);border:1px solid var(--b);'
+    +   'border-radius:7px;padding:6px 11px;font-size:11px;font-family:inherit;'
+    +   'font-weight:700;cursor:pointer;letter-spacing:.2px;white-space:nowrap}'
+    + '.av-fm:hover{color:var(--fg,#e8edf5)}'
+    + '.av-fm.on{background:var(--k-zone,#38bdf8);color:#04121c;border-color:var(--k-zone,#38bdf8)}'
     + '.av-limpiar{margin-left:auto;align-self:center;background:transparent;color:var(--mut);'
     +   'border:1px solid var(--b);border-radius:7px;padding:8px 12px;font-size:11px;'
     +   'font-family:inherit;cursor:pointer;min-height:32px}'

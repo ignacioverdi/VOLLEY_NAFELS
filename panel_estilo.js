@@ -60,6 +60,9 @@
           venimos:'CÓMO VENIMOS', cierran:'QUIÉN ESTÁ CERRANDO',
           so:'SIDE-OUT', bp:'BREAK POINT', ef:'EFICACIA DE ATAQUE',
           de:'de', nada:'Todavía no hay puntos cargados.',
+          recT:'Todas', recB:'Buena', recR:'Rota',
+          recTT:'Todas las recepciones', recBT:'Sólo con recepción # o +',
+          recRT:'Sólo con recepción !, − o rota', conRec:'con recepción',
           leyenda:'Verde: puntos que hizo. Roja: puntos que regaló. El número es el saldo.',
           rotTit:'ROTACIONES EN CANCHA', nosotros:'LOCAL', ellos:'VISITANTE',
           red:'RED', saca:'saca',
@@ -76,6 +79,9 @@
           venimos:'HOW WE ARE DOING', cierran:'WHO IS CLOSING',
           so:'SIDE-OUT', bp:'BREAK POINT', ef:'ATTACK EFFICIENCY',
           de:'of', nada:'No points loaded yet.',
+          recT:'All', recB:'Good', recR:'Poor',
+          recTT:'All receptions', recBT:'Only with reception # or +',
+          recRT:'Only with reception !, − or broken', conRec:'on reception',
           leyenda:'Green: points won. Red: points given away. The number is the balance.',
           rotTit:'ROTATIONS ON COURT', nosotros:'HOME', ellos:'AWAY',
           red:'NET', saca:'serving',
@@ -92,6 +98,9 @@
           venimos:'WIE WIR STEHEN', cierran:'WER PUNKTET',
           so:'SIDE-OUT', bp:'BREAK POINT', ef:'ANGRIFFSEFFIZIENZ',
           de:'von', nada:'Noch keine Punkte geladen.',
+          recT:'Alle', recB:'Gut', recR:'Schlecht',
+          recTT:'Alle Annahmen', recBT:'Nur mit Annahme # oder +',
+          recRT:'Nur mit Annahme !, − oder schlecht', conRec:'bei Annahme',
           leyenda:'Grün: erzielte Punkte. Rot: verschenkte Punkte. Die Zahl ist die Bilanz.',
           rotTit:'ROTATIONEN AUF DEM FELD', nosotros:'HEIM', ellos:'GAST',
           red:'NETZ', saca:'Aufschlag',
@@ -201,6 +210,8 @@
 
       /* el cuadro de "cómo venimos" */
       '#pe-pulso .pe-fila{margin-bottom:12px}#pe-pulso .pe-fila:last-child{margin-bottom:0}',
+      '#pe-pulso .pe-recf{display:flex;gap:5px;margin:-6px 0 12px;flex-wrap:wrap}',
+      '#pe-pulso .pe-recf .pe-lb{padding:3px 9px;font-size:10.5px;letter-spacing:.8px}',
       '.pe-flbl{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:5px}',
       '.pe-flbl span{font-family:"Barlow Condensed",sans-serif;font-size:12px;font-weight:700;',
       '  letter-spacing:.8px;color:#9AA3B5}',
@@ -482,6 +493,35 @@
 
      Arranca en el local, y si la ventana de analisis ya tenia elegido un
      lado, arranca con ese. De ahi en mas manda el boton. */
+  /* ── EL SIDE-OUT SEGUN COMO VINO LA RECEPCION ────────────────────────
+     El side-out de todas las pelotas dice una cosa; el side-out con la
+     recepcion BUENA dice otra, y es la que se mira para saber si el problema
+     esta en recibir o en rematar.
+
+     Medido en Nafels-St Gallen: con recepcion # o + el side-out sube al 72%
+     (21 de 29) y con la recepcion rota baja al 53% (25 de 47). El promedio de
+     las dos -61%- no cuenta ninguna de las dos historias.
+
+     Filtra SOLO el side-out: el break point y la eficacia de ataque no
+     dependen de nuestra recepcion, asi que se dejan como estan. */
+  var PE_REC = 'todas';
+  window.peRec = function (v) {
+    PE_REC = (v === 'buena' || v === 'rota') ? v : 'todas';
+    pintarPulso();
+  };
+  function recOk(r, lado) {
+    if (PE_REC === 'todas') return true;
+    var acc = (r && r.acciones) || [];
+    for (var i = 0; i < acc.length; i++) {
+      var a = acc[i];
+      if (a && a.lado === lado && a.sk === 'R') {
+        var buena = (a.ev === '#' || a.ev === '+');
+        return (PE_REC === 'buena') ? buena : !buena;
+      }
+    }
+    return false;
+  }
+
   var PE_LADO = null;
   function ladoPulso() {
     if (PE_LADO) return PE_LADO;
@@ -559,7 +599,7 @@
          Este es el criterio de Data Volley: side-out sobre recepciones. El
          break point no se toca: ya va sobre los saques propios, que es el
          mismo criterio del otro lado de la red. */
-      if (r.recibe === lado && huboRecepcion(r, lado)) { soTot++; if (r.gano === lado) soGan++; }
+      if (r.recibe === lado && huboRecepcion(r, lado) && recOk(r, lado)) { soTot++; if (r.gano === lado) soGan++; }
       if (r.saca === lado)   { bpTot++; if (r.gano === lado) bpGan++; }
       (r.acciones || []).forEach(function (a) {
         if (a.lado !== lado || a.sk !== 'A') return;
@@ -644,9 +684,21 @@
              '<b class="pe-fdet">' + esc(det) + '</b></span></div>' +
              '<div class="pe-bar"><i style="width:' + ancho + '%;background:' + col + '"></i></div></div>';
     }
+    /* los tres botones de la recepcion previa, pegados al side-out */
+    function chipsRec() {
+      var o = [['todas', t.recT, t.recTT], ['buena', t.recB + ' # +', t.recBT],
+               ['rota', t.recR + ' ! \u2212', t.recRT]];
+      return '<div class="pe-recf" data-notr>' + o.map(function (x) {
+        return '<button type="button" class="pe-lb' + (PE_REC === x[0] ? ' on' : '') +
+               '" onclick="peRec(\'' + x[0] + '\')" title="' + esc(x[2]) + '">' +
+               esc(x[1]) + '</button>';
+      }).join('') + '</div>';
+    }
+
     var h = '<h3 data-notr>' + esc(t.venimos) + '</h3>' + interruptorLado();
     h += fila(t.so, d.so.pct + '%', d.so.n + ' ' + t.de + ' ' + d.so.t,
               d.so.pct >= 60 ? '#0E9F6E' : d.so.pct >= 45 ? '#CE7C18' : '#DC2A5A', Math.min(100, d.so.pct));
+    h += chipsRec();
     h += fila(t.bp, d.bp.pct + '%', d.bp.n + ' ' + t.de + ' ' + d.bp.t,
               d.bp.pct >= 40 ? '#0E9F6E' : d.bp.pct >= 25 ? '#CE7C18' : '#DC2A5A', Math.min(100, d.bp.pct));
     h += fila(t.ef, d.ef.pct + '%', d.ef.n + ' ' + t.de + ' ' + d.ef.t,
