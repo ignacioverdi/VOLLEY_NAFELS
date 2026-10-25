@@ -108,22 +108,43 @@
      Instalada como app no hay boton de atras del navegador, y el del
      telefono cerraba la app entera en vez de cerrar la ventana. Se mete
      una parada en el historial cuando se abre una ventana y se saca
-     cuando se cierra, asi "atras" cierra la ventana y nada mas. */
-  var enPila = false, saltando = false;
+     cuando se cierra, asi "atras" cierra la ventana y nada mas.
 
+     La parada se marca en la direccion (#ventana) a proposito. history.back()
+     es a ciegas: si la parada ya no esta arriba de la pila —porque el
+     navegador se movio por otro lado— te manda a la pagina anterior de
+     verdad y te saca del panel. Mirando el #ventana se sabe ANTES, y sin
+     esperar nada, si la parada de arriba es la nuestra: si no lo es, no se
+     toca el historial. Peor una parada de mas en la pila que una vuelta
+     atras que no pediste. */
+  var MARCA = '#ventana';
+  var saltando = false;
+
+  function enPila() {
+    try { return location.hash === MARCA; } catch (e) { return false; }
+  }
   function ponerParada() {
-    if (enPila) return;
-    try { history.pushState({ vpVentana:1 }, ''); enPila = true; } catch (e) {}
+    if (enPila()) return;
+    try {
+      history.pushState({ vpVentana:1 }, '',
+                        location.pathname + location.search + MARCA);
+    } catch (e) {}
   }
   function sacarParada() {
-    if (!enPila) return;
-    enPila = false; saltando = true;
+    /* Una sola vuelta por vez. history.back() no pasa en el momento: avisa
+       despues, por popstate, y hasta entonces la direccion sigue diciendo
+       #ventana. Sin esta tranca, el repaso que corre enseguida la veia
+       todavia puesta y pedia una segunda vuelta: esa segunda si te sacaba
+       del panel. */
+    if (saltando) return;
+    if (!enPila()) return;          /* la de arriba no es la nuestra: no se toca */
+    saltando = true;
+    setTimeout(function () { saltando = false; }, 1500);   /* por si no llega */
     try { history.back(); } catch (e) { saltando = false; }
   }
 
   window.addEventListener('popstate', function () {
     if (saltando) { saltando = false; return; }
-    enPila = false;
     var a = abierta();
     if (a) cerrarVentana(a);
   });
@@ -141,8 +162,8 @@
   window.vpVolver = function () {
     var a = abierta();
     if (!a) return;
-    if (enPila) { sacarParada(); }   /* el popstate la cierra */
     cerrarVentana(a);
+    sacarParada();
     repasar();
   };
 
@@ -173,7 +194,7 @@
       ponerParada();
     } else {
       b.classList.remove('on');
-      if (enPila) sacarParada();
+      sacarParada();
     }
   }
 
