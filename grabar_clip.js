@@ -42,7 +42,16 @@
           nada:'No se grabó nada. Probá de nuevo.',
           noVa:'Tu navegador no puede grabar la pantalla. Probá en una computadora con Chrome.',
           noPuedo:'⤓ Para bajar el clip, abrí esta página en una computadora con Chrome o Edge.',
-          soloWebm:'Tu navegador graba en .webm y no en .mp4: puede que Instagram no lo acepte. Con Chrome o Edge sale en mp4.' },
+          soloWebm:'Tu navegador graba en .webm y no en .mp4: puede que Instagram no lo acepte. Con Chrome o Edge sale en mp4.',
+          celBtn:'▶ Pantalla completa',
+          celTit:'Pone la jugada a pantalla completa para grabarla con el teléfono',
+          celPie:'Desde el celular se graba con el grabador de pantalla del teléfono.',
+          celCargando:'Preparando la jugada…',
+          celPaso1:'Poné el teléfono de costado y prendé la grabación de pantalla de tu celular.',
+          celPaso1b:'En iPhone está en el Centro de Control. En Android, en los ajustes rápidos.',
+          celEmpezar:'Ya la prendí — empezar',
+          celFin:'Listo. Apagá la grabación y recortá las puntas en Fotos.',
+          celCerrar:'Cerrar' },
     en: { btn:'⏺ Record mp4', tit:'Records the checked clips and downloads them as one file',
           sinClips:'Check at least one clip with video.',
           pidiendo:'Choose "This tab" in the browser dialog…',
@@ -54,7 +63,16 @@
           nada:'Nothing was recorded. Try again.',
           noVa:'Your browser cannot record the screen. Try on a computer with Chrome.',
           noPuedo:'⤓ To download the clip, open this page on a computer with Chrome or Edge.',
-          soloWebm:'Your browser records .webm, not .mp4: Instagram may reject it. Chrome or Edge record mp4.' },
+          soloWebm:'Your browser records .webm, not .mp4: Instagram may reject it. Chrome or Edge record mp4.',
+          celBtn:'▶ Full screen',
+          celTit:'Plays the action full screen so you can record it with the phone',
+          celPie:'On a phone, record it with your phone screen recorder.',
+          celCargando:'Getting the action ready…',
+          celPaso1:'Turn the phone sideways and start your phone screen recording.',
+          celPaso1b:'On iPhone it is in Control Centre. On Android, in the quick settings.',
+          celEmpezar:'Started — go',
+          celFin:'Done. Stop the recording and trim the ends in Photos.',
+          celCerrar:'Close' },
     de: { btn:'⏺ mp4 aufnehmen', tit:'Nimmt die markierten Clips auf und lädt sie als eine Datei',
           sinClips:'Mindestens einen Clip mit Video markieren.',
           pidiendo:'Wähle „Dieser Tab" im Browser-Dialog…',
@@ -66,7 +84,16 @@
           nada:'Es wurde nichts aufgenommen. Nochmal versuchen.',
           noVa:'Dein Browser kann den Bildschirm nicht aufnehmen. Probiere es an einem Computer mit Chrome.',
           noPuedo:'⤓ Zum Herunterladen des Clips diese Seite an einem Computer mit Chrome oder Edge öffnen.',
-          soloWebm:'Dein Browser nimmt .webm statt .mp4 auf: Instagram akzeptiert das evtl. nicht. Chrome oder Edge nehmen mp4 auf.' }
+          soloWebm:'Dein Browser nimmt .webm statt .mp4 auf: Instagram akzeptiert das evtl. nicht. Chrome oder Edge nehmen mp4 auf.',
+          celBtn:'▶ Vollbild',
+          celTit:'Spielt die Aktion im Vollbild, zum Aufnehmen mit dem Handy',
+          celPie:'Am Handy mit der Bildschirmaufnahme des Telefons aufnehmen.',
+          celCargando:'Aktion wird vorbereitet…',
+          celPaso1:'Handy quer halten und die Bildschirmaufnahme des Telefons starten.',
+          celPaso1b:'Beim iPhone im Kontrollzentrum, bei Android in den Schnelleinstellungen.',
+          celEmpezar:'Läuft — los',
+          celFin:'Fertig. Aufnahme stoppen und die Enden in Fotos kürzen.',
+          celCerrar:'Schliessen' }
   };
   function L() {
     var l = 'es';
@@ -96,6 +123,15 @@
       try { if (MediaRecorder.isTypeSupported(ops[i])) return ops[i]; } catch (e) {}
     }
     return '';
+  }
+
+  /* Escapar, porque los textos van adentro de innerHTML. Son textos
+     nuestros, pero un modulo que arma HTML sin escapar es una puerta que
+     tarde o temprano alguien empuja. */
+  function esc(v) {
+    return String(v == null ? '' : v)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   }
 
   function aviso(t) {
@@ -133,8 +169,13 @@
        ventana, y queda centrada. Asi el reproductor la llena entera y no
        quedan bandas negras adentro: el recorte es la caja y punto, sin
        tener que adivinar donde cae el video dentro del iframe. */
+    /* Se centra con margin:auto y NO con transform. Un elemento con
+       transform se vuelve el marco de referencia de todo lo que tenga
+       position:fixed adentro, y el panel de instrucciones del celular
+       quedaria encerrado en la franja del video en vez de tapar la
+       pantalla. */
     caja.style.cssText = previo + sep +
-      'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);' +
+      'position:fixed;left:0;right:0;top:0;bottom:0;margin:auto;' +
       'width:min(100vw,calc(100vh * 16 / 9));height:min(100vh,calc(100vw * 9 / 16));' +
       'max-width:none;max-height:none;min-width:0;z-index:2147483000;' +
       'background:#000;margin:0;border-radius:0;aspect-ratio:16/9';
@@ -361,6 +402,145 @@
   }
   window.vbGrabarClip = grabar;
 
+  /* ══ DESDE EL CELULAR ═══════════════════════════════════════════════════
+     En el telefono la puerta de grabar pantalla no existe —ni en Chrome de
+     Android ni en Safari de iPhone— y no hay forma de programarla.
+
+     Pero el telefono TRAE su propio grabador de pantalla, y ese si graba
+     cualquier cosa. Asi que la app hace la parte que el jugador no puede
+     hacer solo: deja la jugada a pantalla completa, sin controles y sin el
+     cartel de YouTube, y la arranca recien cuando el ya esta grabando.
+
+     El orden importa: la entrada —los segundos en que YouTube muestra el
+     titulo— se reproduce ANTES de avisarle que empiece, y la jugada queda
+     congelada en su primer cuadro esperandolo. Asi lo que el graba arranca
+     limpio, y lo unico que le queda por hacer es recortar las puntas. */
+  var enCel = false;
+
+  /* El panel va por encima del reproductor. No alcanza con el z-index: el
+     iframe de YouTube se pinta aparte y en algunos navegadores se queda
+     arriba igual. Asi que mientras el panel esta puesto, la caja deja de
+     recibir toques —pointer-events:none— y los clics llegan si o si. */
+  function tocableCaja(si) {
+    try {
+      var VB = window.VBCortes, c = VB && VB.caja && VB.caja();
+      if (c) c.style.pointerEvents = si ? '' : 'none';
+    } catch (e) {}
+  }
+
+  function panelCel(html) {
+    var d = document.getElementById('vb-cel');
+    if (!d) {
+      d = document.createElement('div');
+      d.id = 'vb-cel';
+      d.style.cssText = 'position:fixed;inset:0;z-index:2147483647;display:flex;' +
+        'align-items:center;justify-content:center;padding:22px;text-align:center;' +
+        'background:rgba(4,5,10,.93);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);' +
+        'color:#e8e8f0;font-family:inherit;font-size:15px;line-height:1.5;' +
+        /* explicito: el panel cuelga de la caja, y a la caja se le apagan
+           los toques mientras esto esta puesto. Sin esto lo hereda y los
+           botones del panel no se pueden tocar. */
+        'pointer-events:auto';
+      /* Va COLGADO DE LA CAJA, no del body. Cuando el navegador pone algo a
+         pantalla completa deja de dibujar todo lo que no cuelgue de ese
+         elemento: puesto en el body, el panel estaba en la pagina, medía
+         bien y no se veia ni se podia tocar. Costo una hora encontrarlo. */
+      var dueno = null;
+      try { dueno = window.VBCortes && window.VBCortes.caja && window.VBCortes.caja(); } catch (e) {}
+      (dueno || document.body).appendChild(d);
+    }
+    d.innerHTML = html;
+    d.style.display = html ? 'flex' : 'none';
+    tocableCaja(!html);
+    return d;
+  }
+  function cerrarPanel() {
+    var d = document.getElementById('vb-cel');
+    if (d) d.style.display = 'none';
+    tocableCaja(true);
+  }
+
+  async function verEnCel() {
+    if (enCel) return;
+    var t = L(), VB = window.VBCortes;
+    if (!VB) return;
+    var clips = [];
+    try { clips = (VB.clips() || []).filter(function (c) { return c && c.video && c.fin_seg > c.inicio_seg; }); }
+    catch (e) { clips = []; }
+    if (!clips.length) { aviso(t.sinClips); setTimeout(function(){aviso('');}, 3000); return; }
+
+    var pl = VB.player && VB.player(), caja = VB.caja && VB.caja();
+    if (!pl || !pl.seekTo || !caja) return;
+
+    enCel = true;
+    var devolver = agrandar(caja);
+    try { if (caja.requestFullscreen) caja.requestFullscreen().catch(function(){}); } catch (e) {}
+    try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(function(){}); } catch (e) {}
+
+    function salir() {
+      enCel = false;
+      cerrarPanel();
+      try { if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen(); } catch (e) {}
+      try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+      try { pl.pauseVideo && pl.pauseVideo(); } catch (e) {}
+      tocableCaja(true);
+      try { devolver(); } catch (e) {}   /* ultimo: repone el estilo tal cual estaba */
+    }
+
+    var boton = 'display:inline-block;margin-top:16px;padding:13px 22px;border-radius:12px;' +
+                'border:0;background:#E8192C;color:#fff;font:inherit;font-size:16px;font-weight:700;cursor:pointer';
+    panelCel('<div>' + esc(t.celCargando) + '</div>');
+
+    /* la entrada, con el panel tapando: el cartel de YouTube se desvanece aca */
+    var c0 = clips[0];
+    try { pl.loadVideoById ? pl.loadVideoById({ videoId: c0.video, startSeconds: Math.max(0, c0.inicio_seg - ENTRADA) })
+                           : pl.seekTo(Math.max(0, c0.inicio_seg - ENTRADA), true);
+          pl.playVideo(); } catch (e) {}
+    var t0 = Date.now();
+    while (Date.now() - t0 < (ENTRADA + 8) * 1000) {
+      await esperar(100);
+      var ah = 0; try { ah = pl.getCurrentTime ? pl.getCurrentTime() : 0; } catch (e) {}
+      if (ah >= c0.inicio_seg - 0.10) break;
+    }
+    try { pl.pauseVideo && pl.pauseVideo(); } catch (e) {}
+
+    var d = panelCel('<div style="max-width:460px">' +
+      '<div style="font-size:17px;font-weight:700;margin-bottom:8px">' + esc(t.celPaso1) + '</div>' +
+      '<div style="font-size:13px;opacity:.75">' + esc(t.celPaso1b) + '</div>' +
+      '<button type="button" id="vb-cel-go" style="' + boton + '">' + esc(t.celEmpezar) + '</button>' +
+      '<div><button type="button" id="vb-cel-x" style="margin-top:14px;background:none;border:0;' +
+      'color:#94a3b8;font:inherit;font-size:13px;text-decoration:underline;cursor:pointer">' +
+      esc(t.celCerrar) + '</button></div></div>');
+
+    var seguir = new Promise(function (res) {
+      d.querySelector('#vb-cel-go').onclick = function () { res(true); };
+      d.querySelector('#vb-cel-x').onclick  = function () { res(false); };
+    });
+    if (!(await seguir)) { salir(); return; }
+
+    cerrarPanel();
+    for (var i = 0; i < clips.length && enCel; i++) {
+      var c = clips[i];
+      if (i > 0) {
+        try { pl.seekTo(Math.max(0, c.inicio_seg), true); } catch (e) {}
+      }
+      try { pl.playVideo(); } catch (e) {}
+      while (enCel) {
+        await esperar(100);
+        var cur = 0; try { cur = pl.getCurrentTime ? pl.getCurrentTime() : 0; } catch (e) { break; }
+        if (cur >= c.fin_seg) break;
+      }
+    }
+    try { pl.pauseVideo && pl.pauseVideo(); } catch (e) {}
+    if (!enCel) return;
+
+    var d2 = panelCel('<div style="max-width:460px"><div style="font-size:17px;font-weight:700">' +
+      esc(t.celFin) + '</div><button type="button" id="vb-cel-x2" style="' + boton + '">' +
+      esc(t.celCerrar) + '</button></div>');
+    d2.querySelector('#vb-cel-x2').onclick = salir;
+  }
+  window.vbVerEnCel = verEnCel;
+
   /* ── EL BOTON ─────────────────────────────────────────────────────────
      Al lado de los que ya estan. Si el navegador no puede grabar —el
      celular— no se dibuja: mejor que no este a que este y no haga nada. */
@@ -376,12 +556,20 @@
        jugador se quedaba buscando un boton que nadie le iba a explicar
        por que no esta. Ahora, en su lugar, dice que hacer. */
     if (!puede() || !formato()) {
+      var cel = document.createElement('button');
+      cel.id = 'vbNoPuedo'; cel.type = 'button';
+      cel.setAttribute('data-notr', '');
+      cel.title = t.celTit;
+      cel.textContent = t.celBtn;
+      cel.addEventListener('click', function () { verEnCel(); });
+      ref.parentNode.insertBefore(cel, ref);
+
       var n = document.createElement('span');
-      n.id = 'vbNoPuedo';
+      n.id = 'vbCelPie';
       n.setAttribute('data-notr', '');
-      n.textContent = t.noPuedo;
-      n.style.cssText = 'font-size:11px;color:var(--muted,#94a3b8);opacity:.9;' +
-                        'line-height:1.35;max-width:320px';
+      n.textContent = t.celPie;
+      n.style.cssText = 'font-size:11px;color:var(--muted,#94a3b8);opacity:.85;' +
+                        'line-height:1.35;max-width:300px';
       ref.parentNode.insertBefore(n, ref);
       return;
     }
