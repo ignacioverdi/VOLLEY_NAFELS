@@ -773,12 +773,18 @@ def parse_dvw_both(fpath, temporada):
             try: set_num=int(sc[8].strip()) if len(sc)>8 and sc[8].strip().isdigit() else 1
             except: set_num=1
 
+            _otro = 'a' if t=='*' else '*'
             if skill=='S':
                 prev_srv_orig=orig
                 current_atype=0 if t!=pfx else 1
                 _so_pend['*']=False; _so_pend['a']=False
             elif skill=='R':
-                _so_pend[t]=True
+                # Una recepcion '/' es un overpass: la pelota se vuelve sola y
+                # esa posesion nunca existio. No abre side-out.
+                _so_pend[t] = (effect != '/')
+            elif skill=='F':
+                # Un free ball que cruza la red le termina el side-out al otro.
+                _so_pend[_otro]=False
 
             # ══ LA FASE DEL ATAQUE: SIDE-OUT ES UNA SOLA PELOTA ══════════════
             # Side-out es UNICAMENTE el primer ataque despues de la propia
@@ -801,6 +807,13 @@ def parse_dvw_both(fpath, temporada):
             #      columna vacia, 906 ataques de la temporada— se calcula con la
             #      regla: primer ataque despues de la propia recepcion.
             #
+            # La regla del punto 2, afinada contra la columna de Data Volley de
+            # los 12 partidos scouteados por el club: 2.430 de 2.430 ataques.
+            # La bandera de side-out se abre con la recepcion y se cierra apenas
+            # la pelota vuelve a cruzar: con el ataque propio —ya se uso—, con
+            # el ataque del rival, o con un free ball del rival. Y no llega a
+            # abrirse si la recepcion fue '/', porque esa pelota se volvio sola.
+            #
             # Se guarda por LADO porque en un entrenamiento los dos lados son el
             # mismo club y las acciones de los dos se leen en la misma pasada.
             _at_atk=None
@@ -809,7 +822,9 @@ def parse_dvw_both(fpath, temporada):
                     _at_atk = 0 if fase_dv=='r' else 1
                 else:
                     _at_atk = 0 if _so_pend.get(t) else 1
-                _so_pend[t]=False
+                # Se cierran los DOS: el propio porque ya se uso, y el del
+                # rival porque la pelota cruzo y su side-out quedo atras.
+                _so_pend[t]=False; _so_pend[_otro]=False
             # En un entrenamiento los dos lados son el mismo equipo y las
             # acciones suelen venir todas de un lado. Si se filtrara por
             # lado, la segunda vuelta las descartaria todas.
@@ -1219,7 +1234,7 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
     #    recepcion. Las bases anteriores tienen marcados como side-out todos
     #    los ataques del rally, asi que los numeros de SO/TR de cualquier
     #    pantalla estaban inflados. Al subir el numero se rehacen solas.
-    _ESQUEMA = 10         # subir este numero cuando el parser lea algo nuevo
+    _ESQUEMA = 11         # subir este numero cuando el parser lea algo nuevo
     try:
         _v = db.get('_esquema', 1)
     except Exception:
