@@ -40,7 +40,9 @@
           listo:'Listo: {arch}',
           sinPestana:'Compartiste una ventana y no la pestaña: grabo igual, pero sale la pantalla entera.',
           nada:'No se grabó nada. Probá de nuevo.',
-          noVa:'Tu navegador no puede grabar la pantalla. Probá en una computadora con Chrome.' },
+          noVa:'Tu navegador no puede grabar la pantalla. Probá en una computadora con Chrome.',
+          noPuedo:'⤓ Para bajar el clip, abrí esta página en una computadora con Chrome o Edge.',
+          soloWebm:'Tu navegador graba en .webm y no en .mp4: puede que Instagram no lo acepte. Con Chrome o Edge sale en mp4.' },
     en: { btn:'⏺ Record mp4', tit:'Records the checked clips and downloads them as one file',
           sinClips:'Check at least one clip with video.',
           pidiendo:'Choose "This tab" in the browser dialog…',
@@ -50,7 +52,9 @@
           listo:'Done: {arch}',
           sinPestana:'You shared a window, not the tab: it will record the whole screen.',
           nada:'Nothing was recorded. Try again.',
-          noVa:'Your browser cannot record the screen. Try on a computer with Chrome.' },
+          noVa:'Your browser cannot record the screen. Try on a computer with Chrome.',
+          noPuedo:'⤓ To download the clip, open this page on a computer with Chrome or Edge.',
+          soloWebm:'Your browser records .webm, not .mp4: Instagram may reject it. Chrome or Edge record mp4.' },
     de: { btn:'⏺ mp4 aufnehmen', tit:'Nimmt die markierten Clips auf und lädt sie als eine Datei',
           sinClips:'Mindestens einen Clip mit Video markieren.',
           pidiendo:'Wähle „Dieser Tab" im Browser-Dialog…',
@@ -60,7 +64,9 @@
           listo:'Fertig: {arch}',
           sinPestana:'Du hast ein Fenster statt des Tabs geteilt: es wird der ganze Bildschirm aufgenommen.',
           nada:'Es wurde nichts aufgenommen. Nochmal versuchen.',
-          noVa:'Dein Browser kann den Bildschirm nicht aufnehmen. Probiere es an einem Computer mit Chrome.' }
+          noVa:'Dein Browser kann den Bildschirm nicht aufnehmen. Probiere es an einem Computer mit Chrome.',
+          noPuedo:'⤓ Zum Herunterladen des Clips diese Seite an einem Computer mit Chrome oder Edge öffnen.',
+          soloWebm:'Dein Browser nimmt .webm statt .mp4 auf: Instagram akzeptiert das evtl. nicht. Chrome oder Edge nehmen mp4 auf.' }
   };
   function L() {
     var l = 'es';
@@ -359,15 +365,34 @@
      Al lado de los que ya estan. Si el navegador no puede grabar —el
      celular— no se dibuja: mejor que no este a que este y no haga nada. */
   function poner() {
-    if (document.getElementById('vbGrabar')) return;
+    if (document.getElementById('vbGrabar') || document.getElementById('vbNoPuedo')) return;
     var ref = document.getElementById('expCsv');
     if (!ref || !ref.parentNode) return;
-    if (!puede() || !formato()) return;
     var t = L();
+
+    /* ── SI ESTE APARATO NO PUEDE ─────────────────────────────────────
+       En el celular la puerta de grabar pantalla no existe, y en algun
+       navegador de escritorio tampoco. Antes no se dibujaba nada y el
+       jugador se quedaba buscando un boton que nadie le iba a explicar
+       por que no esta. Ahora, en su lugar, dice que hacer. */
+    if (!puede() || !formato()) {
+      var n = document.createElement('span');
+      n.id = 'vbNoPuedo';
+      n.setAttribute('data-notr', '');
+      n.textContent = t.noPuedo;
+      n.style.cssText = 'font-size:11px;color:var(--muted,#94a3b8);opacity:.9;' +
+                        'line-height:1.35;max-width:320px';
+      ref.parentNode.insertBefore(n, ref);
+      return;
+    }
+
+    /* graba, pero no en mp4: se avisa en el globito, no se esconde nada */
+    var webm = formato().indexOf('mp4') < 0;
 
     var b = document.createElement('button');
     b.id = 'vbGrabar'; b.type = 'button';
-    b.title = t.tit; b.textContent = t.btn;
+    b.title = webm ? (t.tit + ' — ' + t.soloWebm) : t.tit;
+    b.textContent = webm ? t.btn.replace('mp4', 'webm') : t.btn;
     b.setAttribute('data-notr', '');
     b.addEventListener('click', function () { grabar(document.getElementById('vbVert').checked); });
 
