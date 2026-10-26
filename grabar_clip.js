@@ -150,6 +150,20 @@
     var h2 = w * 9 / 16;  return { x: r.left, y: r.top + (h - h2) / 2, w: w, h: h2 };
   }
 
+  /* Cuanto se acerca la imagen en el formato vertical. 1 = el clip entero. */
+  var ZOOM_9_16 = 1.5;
+
+  /* ── LOS SEGUNDOS QUE NO SE GRABAN ────────────────────────────────────
+     YouTube muestra el titulo del video arriba a la izquierda cada vez que
+     se salta a otro segundo, y tarda unos tres en borrarse. En un reel esos
+     son justo los segundos que mira todo el mundo.
+
+     Asi que el video arranca ANTES de la accion y la grabacion recien
+     empieza cuando llega al punto: el cartel se desvanece durante esa
+     entrada, que no queda en el archivo. De paso se come el salto del
+     buscador, asi que el clip empieza con la pelota ya en movimiento. */
+  var ENTRADA = 3.2;
+
   var grabando = false;
 
   async function grabar(vertical) {
@@ -208,8 +222,6 @@
       var anchoCap = fuente.videoWidth || st.width || window.innerWidth;
       var escala = anchoCap / window.innerWidth;
 
-      var chico = document.createElement('canvas');   /* el fondo del 9:16 */
-      chico.width = 160; chico.height = 90;
       var negro = true;                   /* tapa los saltos entre clips */
       function pintar() {
         rafId = requestAnimationFrame(pintar);
@@ -223,25 +235,23 @@
         var sh = Math.min(fuente.videoHeight - sy, r.h * escala);
         if (sw <= 0 || sh <= 0) return;
         if (!vertical) { g.drawImage(fuente, sx, sy, sw, sh, 0, 0, lienzo.width, lienzo.height); return; }
-        /* vertical: el mismo clip ampliado y borroso de fondo, y el clip
-           entero centrado adelante. Es como se ven los reels y evita las
-           dos franjas negras gigantes.
-
-           El fondo se arma en DOS pasos y no en uno: primero se achica el
-           cuadro a 96 pixeles de ancho y recien eso se agranda a pantalla
-           completa: el estirado lo desenfoca solo. El filtro blur() del
-           navegador hace lo mismo pero cuesta carisimo —medido aca, la
-           grabacion caia de 23 a 6 cuadros por segundo—, asi que no se usa.
-           Encima va una capa negra al 45% para que el fondo no le compita
-           al clip. */
-        try {
-          chico.getContext('2d').drawImage(fuente, sx, sy, sw, sh, 0, 0, 96, 54);
-          g.drawImage(chico, 0, 0, 96, 54, -270, 0, 1620, 1920);
-          g.globalAlpha = 0.45; g.fillStyle = '#000';
-          g.fillRect(0, 0, 1080, 1920); g.globalAlpha = 1;
-        } catch (e) { g.globalAlpha = 1; }
+        /* vertical: el clip centrado sobre negro, y nada mas.
+           Hubo una version con el mismo clip ampliado y borroso de fondo,
+           que es como se ven muchos reels. Se saco: arriba y abajo quedaba
+           una mancha movida que le robaba la atencion a la jugada. El
+           negro no compite con nada y es el mismo fondo que tiene la app
+           de Instagram cuando reproduce. */
+        /* ── EL ACERCAMIENTO ──────────────────────────────────────────
+           Un 16:9 metido en un 9:16 ocupa un tercio del alto y los
+           jugadores quedan diminutos. Se recorta el centro y se agranda:
+           con 1,5 los jugadores se leen y siguen entrando las dos lineas
+           laterales, la red y la jugada entera. Lo que se pierde a los
+           costados es tribuna y cancha vacia. Comprobado sobre un clip
+           real del partido con St Gallen. */
+        var zw = sw / ZOOM_9_16, zh = sh / ZOOM_9_16;
+        var zx = sx + (sw - zw) / 2, zy = sy + (sh - zh) / 2;
         var alto = Math.round(1080 * 9 / 16);
-        g.drawImage(fuente, sx, sy, sw, sh, 0, (1920 - alto) / 2, 1080, alto);
+        g.drawImage(fuente, zx, zy, zw, zh, 0, (1920 - alto) / 2, 1080, alto);
       }
       pintar();
 
@@ -272,22 +282,26 @@
       for (var i = 0; i < clips.length && !corte; i++) {
         var c = clips[i];
         negro = true;
+        var desde = Math.max(0, c.inicio_seg - ENTRADA);
         try {
           if (pl.getVideoData && (pl.getVideoData().video_id !== c.video)) {
-            pl.loadVideoById({ videoId: c.video, startSeconds: c.inicio_seg });
-          } else { pl.seekTo(c.inicio_seg, true); }
+            pl.loadVideoById({ videoId: c.video, startSeconds: desde });
+          } else { pl.seekTo(desde, true); }
           pl.playVideo();
           if (pl.setPlaybackRate) pl.setPlaybackRate(1);
         } catch (e) {}
 
-        /* hasta 4 segundos esperando que arranque donde corresponde */
-        var t0 = Date.now();
-        while (Date.now() - t0 < 4000) {
-          await esperar(120);
+        /* Se espera a que el video pase la entrada y llegue al segundo de
+           la accion. El tope contempla la entrada entera mas lo que tarde
+           en cargar; si se vence igual se graba, que es mejor que no hacer
+           nada. */
+        var t0 = Date.now(), tope = (ENTRADA + 8) * 1000;
+        while (Date.now() - t0 < tope) {
+          await esperar(100);
           var ahora = 0;
           try { ahora = pl.getCurrentTime ? pl.getCurrentTime() : 0; } catch (e) {}
           var est = 1; try { est = pl.getPlayerState ? pl.getPlayerState() : 1; } catch (e) {}
-          if (est === 1 && ahora >= c.inicio_seg - 0.35) break;
+          if (est === 1 && ahora >= c.inicio_seg - 0.10) break;
         }
         if (!arranco) { rec.start(); arranco = true; }
         negro = false;
