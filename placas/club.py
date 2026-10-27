@@ -24,11 +24,65 @@ CAMPO_EF = {'ataque': 'atk_eff', 'recepcion': 'rec_eff',
             'saque': 'srv_eff', 'bloqueo': 'blk_eff'}
 
 
+# ══ EL NOMBRE DEL CLUB, COMO VENGA ═════════════════════════════════════
+# Dos cosas rompian el nombre de los clubes suizos, y las dos se veian en la
+# misma placa:
+#
+# 1) Los .dvw de VolleyMetrics estan en UTF-8 y el lector los abre como
+#    cp1252, asi que 'Chenois' llega escrito 'ChÃªnois'. Con ese texto no
+#    coincide ni el escudo ni el rotulo: la placa del partido del 24/10
+#    salia titulada "MEN)" —la ultima palabra de "Chenois Geneve Volleyball
+#    (NLA Men)"— y sin escudo.
+#
+# 2) En aleman la dieresis se escribe de las dos maneras y cada fuente elige
+#    una: el .dvw dice "Schonenwerd" con dieresis y el escudo se llama
+#    schoenenwerd.png. Buscando una sola forma, ese club tampoco aparecia.
+#
+# Se arregla una vez, aca, y lo usan el escudo y el rotulo.
+_UML = (('ä', 'ae'), ('ö', 'oe'), ('ü', 'ue'), ('ß', 'ss'))
+
+
+def arreglar_texto(s):
+    """Repara el texto leido con la codificacion equivocada."""
+    s = str(s or '')
+    if 'Ã' in s or 'Â' in s:
+        try:
+            return s.encode('cp1252').decode('utf-8')
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            return s
+    return s
+
+
 def _slug(s):
     """'Näfels' -> 'nafels'. Los archivos de escudos/ están sin acentos."""
-    s = unicodedata.normalize('NFKD', str(s))
+    s = unicodedata.normalize('NFKD', arreglar_texto(s))
     s = ''.join(c for c in s if not unicodedata.combining(c))
     return re.sub(r'[^a-z0-9]', '', s.lower())
+
+
+def _sin_e(sl):
+    """'schoenenwerd' -> 'schonenwerd'. La vuelta de _UML, ya en slug.
+
+    Hace falta porque el nombre llega de las dos puntas: el .dvw escribe
+    "Schönenwerd" y el lector del motor lo deja en "Schonenwerd", mientras
+    que el escudo del club se llama schoenenwerd.png."""
+    for _a, b in _UML:
+        sl = sl.replace(b, b[0])
+    return sl
+
+
+def slugs(s):
+    """Las formas en que puede estar escrito ese club. Al menos una."""
+    s = arreglar_texto(s)
+    formas = []
+    base = _slug(s)
+    largo = s
+    for a, b in _UML:
+        largo = largo.replace(a, b).replace(a.upper(), b.upper())
+    for x in (base, _slug(largo), _sin_e(base)):
+        if x and x not in formas:
+            formas.append(x)
+    return formas
 
 
 def escudos(repo):
@@ -58,12 +112,24 @@ def escudo_de(esc, equipo):
     contención, que es lo que resuelve los nombres largos."""
     if not esc or not equipo:
         return ''
-    s = _slug(equipo)
-    if s in esc:
-        return esc[s]
-    for k in sorted(esc, key=len, reverse=True):
-        if len(k) >= 4 and (k in s or s in k):
-            return esc[k]
+    formas = slugs(equipo)
+    for s in formas:
+        if s in esc:
+            return esc[s]
+    for s in formas:
+        for k in sorted(esc, key=len, reverse=True):
+            if len(k) >= 4 and (k in s or s in k):
+                return esc[k]
+    # ultimo intento: las dos puntas reducidas a la misma forma. El motor
+    # devuelve 'Schonenwerd' —ya sin dieresis— y el archivo se llama
+    # schoenenwerd.png: ninguno de los dos contiene al otro, y ese club se
+    # quedaba sin escudo en la placa de rotaciones.
+    for s in formas:
+        rs = _sin_e(s)
+        for k in sorted(esc, key=len, reverse=True):
+            rk = _sin_e(k)
+            if len(rk) >= 4 and (rk in rs or rs in rk):
+                return esc[k]
     return ''
 
 

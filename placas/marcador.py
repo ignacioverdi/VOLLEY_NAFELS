@@ -55,7 +55,8 @@ POR_SLUG = {
 
 def _slug(s):
     import unicodedata
-    s = unicodedata.normalize('NFKD', str(s))
+    import club
+    s = unicodedata.normalize('NFKD', club.arreglar_texto(s))
     s = ''.join(c for c in s if not unicodedata.combining(c))
     return re.sub(r'[^a-z0-9]', '', s.lower())
 
@@ -64,7 +65,8 @@ LARGO_MAX = 14
 
 def corto(nombre):
     """El nombre para el rótulo: corto, sin sponsor ni palabra de relleno."""
-    n = (nombre or '').strip()
+    import club
+    n = club.arreglar_texto((nombre or '').strip())
     if not n:
         return ''
     if n.upper() in NOMBRE_CORTO:
@@ -72,11 +74,13 @@ def corto(nombre):
     if n in NOMBRE_CORTO:
         return NOMBRE_CORTO[n]
     # por slug: 'TV Rottenburg' -> 'tvrottenburg'; se busca el club cuyo slug
-    # esté contenido, que es como resuelve los escudos club.escudo_de
-    sl = _slug(n)
-    for k, v in POR_SLUG.items():
-        if k in sl:
-            return v
+    # esté contenido, que es como resuelve los escudos club.escudo_de.
+    # Las DOS formas de la dieresis: el .dvw escribe "Schönenwerd" y el
+    # escudo se llama schoenenwerd.png.
+    for sl in club.slugs(n):
+        for k, v in POR_SLUG.items():
+            if k in sl:
+                return v
     partes = [p for p in n.upper().replace('.', ' ').split() if p]
     utiles = [p for p in partes if p not in GENERICOS] or partes
     r = ' '.join(utiles)

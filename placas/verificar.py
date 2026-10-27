@@ -23,7 +23,7 @@ Tres cosas que no se ven mirando el PNG y que arruinan una publicación:
 Uso:
     python verificar.py --repo .. --fecha 3
 """
-import argparse, json, pathlib, sys
+import argparse, json, pathlib, re, sys
 
 import fechas, liga, placas2, seis_placas
 
@@ -87,19 +87,49 @@ def desborde(piezas):
     return malas
 
 
-def coherencia(repo, carpeta, temporada, archivos):
-    """K1 y transición de las placas contra los de nla_stats.json."""
-    try:
-        d = json.loads((pathlib.Path(repo) / 'nla_stats.json').read_text(encoding='utf-8'))
-    except (OSError, ValueError):
-        print('   no encuentro nla_stats.json, salteo el contraste')
+def coherencia(repo, carpeta, temporada, archivos=None):
+    """K1 y transición de las placas contra los de nla_stats.json.
+
+    Se compara SIEMPRE la temporada entera, no la fecha que se está
+    armando. nla_stats.json tiene el acumulado de la temporada: mientras
+    hubo una sola fecha cargada las dos cosas coincidían de casualidad, y
+    desde la segunda el chequeo empezó a marcar a los 54 jugadores como
+    distintos aunque estuviera todo bien. Un chequeo que siempre grita no
+    lo mira nadie, que es como se cuela el error de verdad.
+
+    El parámetro `archivos` queda por compatibilidad con quien ya la
+    llamaba; no se usa."""
+    # ══ CONTRA QUE SE COMPARA ══════════════════════════════════════════
+    # Contra nla_full_stats.json, que lo escribe update_db_nafels_FULL.py:
+    # ESE es el motor que le da los numeros a la app —liga_data, el game
+    # plan, la ficha del jugador—. nla_stats.json lo escribe otro programa
+    # (gen_liga_stats.py, por update_db_nafels.py, sin el FULL) que todavia
+    # corta el side-out con la regla vieja: ahi Jona #99 figura 74/24 y en
+    # la app 50/48. Comparar contra el archivo equivocado hacia que el
+    # chequeo marcara mal a todos los jugadores.
+    #
+    # La etiqueta de temporada tampoco se escribe igual en los dos
+    # ('2026/27' y '26-27'), asi que se comparan los dos ultimos digitos de
+    # cada mitad.
+    def _temp(x):
+        g = re.findall(r'\d+', str(x or ''))
+        return tuple(n[-2:] for n in g)
+    d = None
+    for nombre in ('nla_full_stats.json', 'nla_stats.json'):
+        try:
+            d = json.loads((pathlib.Path(repo) / nombre).read_text(encoding='utf-8'))
+            break
+        except (OSError, ValueError):
+            d = None
+    if d is None:
+        print('   no encuentro nla_full_stats.json, salteo el contraste')
         return []
     M = {(p['team'], '%02d' % p['num']): p
-         for p in d.get('players', []) if p.get('temporada') == temporada}
+         for p in d.get('players', []) if _temp(p.get('temporada')) == _temp(temporada)}
     if not M:
-        print('   nla_stats.json todavía no tiene la temporada %s, salteo' % temporada)
+        print('   %s todavía no tiene la temporada %s, salteo' % (nombre, temporada))
         return []
-    EQ = liga.leer(repo, carpeta, archivos)
+    EQ = liga.leer(repo, carpeta, None)      # la temporada entera
     ok, malas = 0, []
     for (eq, dor), p in sorted(M.items()):
         J = EQ.get(eq, {}).get('jug', {}).get(dor)

@@ -1295,6 +1295,62 @@ def render(p, alto=1350):
                TXT['firma'], TXT['fuente'], esc(p.get('fuente', ''))))
 
 
+# ══ NINGUNA PLACA SALE CORTADA ═════════════════════════════════════════
+# La placa mide 1080x1350 y lo que sobra lo recorta el navegador sin avisar:
+# en el PNG no se ve un corte, se ve una fila metida abajo del pie.
+#
+# Paso de verdad con el bloqueo de la fecha 2: la tabla tenia un tope fijo de
+# 12 filas, elegido cuando la fecha era un amistoso de tres equipos. Con los
+# ocho de la NLA entran mas jugadores, la fila 12 se montaba sobre el pie y
+# el titulo pisaba la primera. Un numero fijo escrito a mano no puede servir
+# para las dos cosas, y menos cuando el texto ademas cambia de idioma.
+#
+# Ahora la placa se mide YA DIBUJADA y, si no entra, se le saca la ultima
+# fila y se vuelve a medir. Nunca saca mas de la mitad de la tabla: si con
+# eso todavia no entra el problema es otro, y verificar.py la sigue marcando
+# igual que antes.
+_MEDIR = """() => {
+  const r = s => { const e = document.querySelector(s);
+                   return e ? e.getBoundingClientRect() : null; };
+  const arriba = r('.bj') || r('h1');
+  const abajo  = r('.pi') || r('.ct');
+  if (!arriba || !abajo) return null;
+  const hijos = [...document.querySelectorAll('.zn>*')];
+  let top = Infinity, bot = -Infinity;
+  for (const h of hijos) { const b = h.getBoundingClientRect();
+                           if (b.height || b.width) { top = Math.min(top, b.top);
+                                                      bot = Math.max(bot, b.bottom); } }
+  if (!hijos.length || top === Infinity) { const z = r('.zn'); if (!z) return null;
+                                           top = z.top; bot = z.bottom; }
+  return {arriba: Math.round(top - arriba.bottom),
+          abajo:  Math.round(abajo.top - bot)};
+}"""
+AJUSTE_MIN = 6          # por menos de esto una tabla ya no es una tabla
+
+
+def _acomodar(pg, p, archivo, alto):
+    """Dibuja la pieza y le saca filas hasta que entre. Devuelve cuantas saco."""
+    sacadas = 0
+    minimo = max(AJUSTE_MIN, (len(p.get('filas') or []) + 1) // 2)
+    while True:
+        archivo.write_text(render(p, alto), encoding='utf-8')
+        pg.goto(archivo.resolve().as_uri()); pg.wait_for_timeout(300)
+        if p.get('tipo') in ('apertura', 'cierre', 'portada') or not p.get('filas'):
+            return sacadas
+        try:
+            m = pg.evaluate(_MEDIR)
+        except Exception:
+            return sacadas
+        if not m or (m['arriba'] >= 8 and m['abajo'] >= 8):
+            return sacadas
+        if len(p['filas']) <= minimo:
+            return sacadas
+        p['filas'] = p['filas'][:-1]
+        sacadas += 1
+        if p.get('_bajada'):
+            p['bajada'] = idioma.t(p['_bajada'], len(p['filas']))
+
+
 def generar(piezas, destino, alto=1350):
     """alto 1350 = el vertical de feed. 1920 = historias, reels y TikTok."""
     destino = pathlib.Path(destino); destino.mkdir(parents=True, exist_ok=True)
@@ -1307,8 +1363,10 @@ def generar(piezas, destino, alto=1350):
             p.setdefault('total', len(piezas))
             nom = '%s-%s' % (chr(64 + i), p.get('slug', p['tipo']))
             t = destino / (nom + '.html')
-            t.write_text(render(p, alto), encoding='utf-8')
-            pg.goto(t.resolve().as_uri()); pg.wait_for_timeout(300)
+            n = _acomodar(pg, p, t, alto)
+            if n:
+                print('   (%s: saque %d fila%s para que entrara)'
+                      % (p.get('slug', p['tipo']), n, '' if n == 1 else 's'))
             pg.screenshot(path=str(destino / (nom + '.png')))
             t.unlink()
             out.append(nom + '.png')

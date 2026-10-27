@@ -1,0 +1,47 @@
+# ARGUMENTOS EXTRA PARA YT-DLP
+#
+# Todo lo que escribas aca (sin #) se le agrega a yt-dlp en cada descarga,
+# tanto cuando baja el partido entero como cuando corta tramo por tramo.
+#
+# ══════════════════════════════════════════════════════════════════════
+# ACTIVO HOY  ·  el motor de JavaScript
+#
+# YouTube le pide a yt-dlp que resuelva un desafio en JavaScript, y para
+# eso yt-dlp necesita un motor de JS. Sin motor solo puede probar el
+# cliente 'visionos', que no ve los videos sin listar: de ahi el
+# "This video is not available" del 27/10, que suena a que el video no
+# existe y en realidad esta perfecto.
+#
+# Esta maquina tiene Node v24.17.0 instalado, muy por arriba del minimo
+# que pide yt-dlp (22.0.0), asi que se usa ese y no hace falta instalar
+# nada mas. Deno seria la otra opcion.
+
+--js-runtimes node
+
+# ══════════════════════════════════════════════════════════════════════
+# POR SI ALGUN DIA HACE FALTA  (todo esto esta apagado)
+#
+# 1 · "Sign in to confirm you're not a bot"
+#     Hace que YouTube te reconozca a vos, dueno de los partidos.
+#     Cerra Chrome antes de correrlo.
+#
+# --cookies-from-browser chrome
+#
+#     Con otro navegador, cambia 'chrome' por: edge, firefox, brave u opera.
+#
+# 2 · Si Node se rompe o lo desinstalas, el otro motor es Deno:
+#
+#       winget install DenoLand.Deno
+#
+#     Deno viene habilitado por defecto: alcanza con borrar la linea
+#     --js-runtimes node de arriba. Si lo instalas y no lo encuentra:
+#
+# --js-runtimes deno:C:\Users\User\.deno\bin\deno.exe
+#
+# 3 · Actualizar yt-dlp (lo que YouTube rompe mas seguido):
+#
+#       python -m pip install -U --pre "yt-dlp[default]"
+#
+# 4 · Para probar a mano, sin bajar nada:
+#
+#       python -m yt_dlp --js-runtimes node --simulate https://youtu.be/XhbREOWZM8I

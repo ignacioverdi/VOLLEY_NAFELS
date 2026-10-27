@@ -23,13 +23,93 @@ Los partidos de entre semana son postergados, no fechas propias: sobre los
 miercoles vienen de a uno o dos. Por eso cada uno se engancha al fin de
 semana mas cercano, que es la fecha de la que se corrio.
 
-Los archivos sin fecha en el nombre (amistosos, copa) quedan afuera de toda
-fecha, pero siguen contando para el acumulado de temporada.
+Las fechas que se numeran son las de la LIGA. Los amistosos, la Supercopa y
+los archivos sin fecha en el nombre quedan afuera: salen listados aparte,
+con el motivo, y no entran en ninguna placa de fecha ni en el acumulado.
 """
-import datetime, pathlib, re
+import datetime, json, pathlib, re
 
 RX_NUM = re.compile(r'#\s*(\d{1,2})')
 RX_DIA = re.compile(r'(\d{4})-(\d{2})-(\d{2})')
+
+
+# ══ LOS AMISTOSOS Y LA SUPERCOPA NO LLEVAN NUMERO DE FECHA ══════════════
+# La numeracion salia de contar fines de semana, y contaba TODO. Con la
+# carpeta de la 26-27 daba esto:
+#
+#     fecha 1   25/09 - 28/09   2 partidos   amistosos
+#     fecha 2   30/09 - 04/10   3 partidos   amistosos
+#     fecha 3   19/09           3 partidos   amistosos
+#     fecha 4   07/10 - 09/10   3 partidos   amistosos
+#     fecha 5   15/10 - 20/10   6 partidos   1 amistoso + Supercopa + fecha 1
+#     fecha 6   24/10           4 partidos   la fecha 2 de la liga
+#
+# O sea: la placa de la fecha 2 iba a salir diciendo "ROUND 6", y la de la
+# fecha 1 iba a salir con seis partidos que no son una fecha.
+#
+# El dato para arreglarlo ya existe y es el MISMO que usa el motor de la
+# app: fases_temporada.json dice desde que dia empieza lo oficial y cuales
+# son los dias de Supercopa. Lo que queda afuera no se pierde: se lista
+# aparte con el motivo, y la Supercopa ya tiene su propio supercup.py.
+#
+# Si el archivo no esta, o ninguna temporada suya alcanza a estos partidos,
+# no se filtra nada y la numeracion queda exactamente como antes.
+_FASES = {}
+_MOTIVO = {}          # ruta -> por que ese archivo quedo afuera
+
+
+def _lee_fases(carpeta):
+    """fases_temporada.json, buscado al lado de la carpeta de .dvw."""
+    clave = str(carpeta)
+    if clave in _FASES:
+        return _FASES[clave]
+    cfg = {}
+    for base in (carpeta.parent, carpeta.parent.parent,
+                 pathlib.Path(__file__).resolve().parent.parent):
+        try:
+            f = base / 'fases_temporada.json'
+            if f.is_file():
+                cfg = json.loads(f.read_text(encoding='utf-8')) or {}
+                break
+        except Exception:
+            cfg = {}
+    _FASES[clave] = cfg
+    return cfg
+
+
+def _fecha_txt(s):
+    try:
+        return datetime.date(*map(int, str(s)[:10].split('-')))
+    except Exception:
+        return None
+
+
+def fases_de(carpeta, dias):
+    """(oficial_desde, {dias de Supercopa}) para los partidos de esa carpeta.
+
+    De todas las temporadas del archivo elige la del 'oficial_desde' mas
+    nuevo que no sea posterior al ultimo partido de la carpeta. Asi no hace
+    falta pasarle el nombre de la temporada ni mantener dos formatos: aca se
+    escribe '26-27' y en el json '2026/27', y nadie se tiene que acordar.
+    """
+    cfg = _lee_fases(pathlib.Path(carpeta).resolve())
+    if not isinstance(cfg, dict) or not dias:
+        return None, set()
+    ultimo, mejor = max(dias), None
+    for _, v in cfg.items():
+        if not isinstance(v, dict):
+            continue
+        d = _fecha_txt(v.get('oficial_desde'))
+        if d and d <= ultimo and (mejor is None or d > mejor[0]):
+            mejor = (d, v)
+    if not mejor:
+        return None, set()
+    sc = set()
+    for z in (mejor[1].get('supercopa') or []):
+        x = _fecha_txt(z)
+        if x:
+            sc.add(x)
+    return mejor[0], sc
 
 
 def _dia(nombre):
@@ -70,10 +150,23 @@ def detectar(carpeta):
     (pasaba con los tres .dvw del 19/09/2026).
     """
     carpeta = pathlib.Path(carpeta)
+    archivos = sorted(carpeta.glob('*.dvw'))
+    dias = [d for d in (_dia(f.name) for f in archivos) if d]
+    desde, supercopa = fases_de(carpeta, dias)
+
     grupos, sueltos = {}, []
-    for f in sorted(carpeta.glob('*.dvw')):
+    for f in archivos:
         d = _dia(f.name)
         if d is None:
+            _MOTIVO[str(f)] = 'sin fecha en el nombre'
+            sueltos.append(f)
+            continue
+        if desde and d < desde:
+            _MOTIVO[str(f)] = 'amistoso de pretemporada'
+            sueltos.append(f)
+            continue
+        if d in supercopa:
+            _MOTIVO[str(f)] = 'Supercopa'
             sueltos.append(f)
             continue
         grupos.setdefault(sabado_de(d), []).append((d, f))
@@ -124,13 +217,17 @@ def archivos_de(carpeta, fecha=None, hasta=None):
         if not g:
             return None, grupos, sueltos
         return list(g[0]['archivos']), grupos, sueltos
+    # El acumulado es de LIGA. Antes sumaba tambien los sueltos, que cuando
+    # esto se escribio eran solo los archivos sin fecha en el nombre; ahora
+    # ahi caen los amistosos y la Supercopa, y una placa que diga "la
+    # temporada" no puede estar contando partidos de septiembre.
     if hasta:
         arch = []
         for x in grupos:
             if x['n'] <= int(hasta):
                 arch += x['archivos']
-        return arch + sueltos, grupos, sueltos
-    return sorted(pathlib.Path(carpeta).glob('*.dvw')), grupos, sueltos
+        return arch, grupos, sueltos
+    return sorted(f for x in grupos for f in x['archivos']), grupos, sueltos
 
 
 def resumen(grupos, sueltos):
@@ -149,8 +246,8 @@ def resumen(grupos, sueltos):
                        % (' y #'.join(str(c) for c in x['conflicto']), x['n']))
     if sueltos:
         out.append('')
-        out.append('%d archivos sin fecha en el nombre (no entran en ninguna fecha,' % len(sueltos))
-        out.append('pero sí en el acumulado de temporada):')
+        out.append('%d archivos fuera de las fechas de liga '
+                   '(no entran en ninguna placa):' % len(sueltos))
         for f in sueltos:
-            out.append('  ' + f.name)
+            out.append('  %-52s %s' % (f.name, _MOTIVO.get(str(f), '')))
     return '\n'.join(out)

@@ -18,6 +18,10 @@
 (function () {
   var aqui = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
   if (aqui === '' || aqui === 'index.html' || aqui === 'bienvenida.html') return;
+  /* En una pagina publica el escudo seria una puerta a la pantalla de
+     ingreso: el de afuera no tiene con que entrar y el boton solo lo lleva
+     a un cartel. Al que ya entro en este dispositivo se le muestra igual. */
+  try { if (window.VB_PUBLICA && !localStorage.getItem('nla_sesion')) return; } catch (e) {}
 
   // Dentro de una temporada archivada (temporadas/AAAA-AA/) el inicio esta
   // dos carpetas mas arriba.

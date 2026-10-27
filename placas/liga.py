@@ -18,15 +18,31 @@ TIPO_SQ = {'Q': 'potencia', 'T': 'potencia', 'M': 'flotado', 'H': 'flotado'}
 POSITIVO = {'saque': '#/+', 'recepcion': '#+', 'ataque': '#+',
             'bloqueo': '#+', 'defensa': '#+', 'armado': '#+'}
 
-# Fase del ataque, campo 3 de la linea del [3SCOUT]. DataVolley la scoutea:
-#   'r'  ataque directo de la recepcion
-#   's'  segunda oportunidad dentro del mismo rally recibido
-#   'p'  contraataque: el equipo estaba sacando
-# K1 (side-out) = el rally lo recibimos nosotros, o sea 'r' mas 's'. Esa es
-# la definicion que usa update_db_nafels_FULL.py para atk_so/atk_tr, y hay
-# que respetarla: si las placas cortaran distinto que la app, el mismo
-# jugador tendria dos numeros y se cae el argumento de venta entero.
-FASE_K1 = ('r', 's')
+# ══ K1 Y TRANSICION ════════════════════════════════════════════════════
+# El campo 3 de la linea del [3SCOUT] trae la fase, cuando el scout la
+# carga:
+#   'r'  ataque directo de la recepcion        -> K1 (side-out)
+#   's'  segunda pelota del mismo rally recibido -> transicion
+#   'p'  contraataque: el equipo estaba sacando  -> transicion
+#
+# Dos cosas que estaban mal y se publicaban:
+#
+# 1) Aca 's' contaba como K1 y en el motor de la app no. El mismo jugador
+#    tenia dos numeros segun donde se lo mirara, que es lo peor que nos
+#    puede pasar. Manda el motor: K1 es solo 'r'.
+#
+# 2) Los .dvw de VolleyMetrics traen ese campo VACIO —los 301 ataques del
+#    Chenois-Jona del 24/10, todos en blanco—, y como vacio no es 'r', TODO
+#    caia en transicion. Cada partido oficial de la NLA sale de ahi: las
+#    placas de ataque de la liga entera iban a salir con el side-out en
+#    CERO para los ocho equipos.
+#
+# Cuando el archivo no trae la fase se deduce igual que en
+# update_db_nafels_FULL.py: el saque limpia la marca de los dos equipos, la
+# recepcion la abre para el que recibio salvo que sea '/', un free ball la
+# cierra para el otro, y el ataque es K1 si su marca esta abierta. Despues
+# del ataque se cierran las dos. Esa regla se valido contra la columna del
+# propio DataVolley: 2430 ataques, 2430 iguales.
 
 
 def _gl(repo):
@@ -124,6 +140,8 @@ def leer(repo, carpeta, archivos=None):
         # Lo único que sí hay que seguir del rally es el TIPO del saque, para
         # poder partir la recepción en "contra potencia" y "contra flotado".
         srv_tipo, rec_pfx = None, None
+        so_pend = {'*': False, 'a': False}      # recepcion abierta, por equipo
+        ant = None                              # (equipo, gesto) de la accion previa
         for l in scout:
             sc = l.split(';')
             cod = sc[0].strip()
@@ -137,12 +155,52 @@ def leer(repo, carpeta, archivos=None):
                 continue
             sk = cuerpo[2]
             pfx = cod[0]
+            otro = 'a' if pfx == '*' else '*'
             fase = sc[2].strip().lower() if len(sc) > 2 else ''
+            ev_ = cuerpo[4] if len(cuerpo) > 4 else ''
+
+            # el rally se sigue SIEMPRE, aunque el gesto no entre en SKILLS:
+            # el free ball no es un fundamento que se cuente, pero cierra la
+            # jugada de side-out del otro equipo
+            if sk == 'S':
+                so_pend['*'] = so_pend['a'] = False
+            elif sk == 'R':
+                so_pend[pfx] = (ev_ != '/')
+            elif sk == 'F':
+                so_pend[otro] = False
+            # ══ LA COBERTURA NO ES DEFENSA ════════════════════════════
+            # Levantar el bloqueo del rival sobre el ataque PROPIO se
+            # scoutea con el mismo gesto que defender un ataque: 'D'. Son
+            # dos cosas distintas y se estaban sumando juntas.
+            #
+            # Paso de verdad en la fecha 2: el mejor defensor salia Nathan
+            # Lietzke, el armador de Jona, con 11 de 11 pelotas jugables...
+            # y seis de esas once eran coberturas, por eso estaban todas
+            # pegadas a la red, en las zonas 3 y 4. Sacando la cobertura le
+            # quedan cinco defensas, por debajo del piso de la placa.
+            # En toda la fecha, 106 de las 574 'D' son cobertura: el 18%.
+            #
+            # Se reconoce por la accion anterior: si la pelota viene del
+            # bloqueo del rival, el que la levanta esta cubriendo a su
+            # propio atacante, no defendiendo.
+            es_cob = (sk == 'D' and ant is not None
+                      and ant[0] != pfx and ant[1] == 'B')
+            if sk in SKILLS or sk == 'F':
+                ant = (pfx, sk)
+            es_k1 = None
+            if sk == 'A':
+                es_k1 = (fase == 'r') if fase in ('r', 's', 'p') \
+                        else bool(so_pend.get(pfx))
+                so_pend[pfx] = False
+                so_pend[otro] = False
+
             if sk not in SKILLS:
                 continue
             dorsal, tipo, ev = cuerpo[:2], cuerpo[3], cuerpo[4]
             J = eq[equipo]['jug'][dorsal]
-            nom = SKILLS[sk]
+            # la cobertura se guarda aparte: no suma a la defensa, pero no
+            # se tira —es un dato que un entrenador mira—
+            nom = 'cobertura' if es_cob else SKILLS[sk]
             J[nom][ev] += 1
             J[nom]['T'] += 1
 
@@ -158,7 +216,7 @@ def leer(repo, carpeta, archivos=None):
                     J['rec_vs_' + srv_tipo][ev] += 1
                     J['rec_vs_' + srv_tipo]['T'] += 1
             elif sk == 'A':
-                k = 'atk_k1' if fase in FASE_K1 else 'atk_k2'
+                k = 'atk_k1' if es_k1 else 'atk_k2'
                 J[k][ev] += 1
                 J[k]['T'] += 1
             o, d = _trayectoria(sk, cuerpo[5:])

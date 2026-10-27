@@ -342,6 +342,9 @@ def construir(repo, carpeta, temporada, fecha, archivos=None, fecha_n=None):
                            {'t': idioma.c('control'), 'k': 'pos'},
                            {'t': idioma.c('error'), 'k': 'err', 'color': '#EF4444', 'fuerte': True}],
               'filas': filas[:TOPE_TABLA], 'fuente': fuente,
+              # la bajada dice cuantos entran: si la placa no da para
+              # tantos, placas2 saca filas y reescribe el numero
+              '_bajada': 'baj_bloqueo',
               'jugador': (filas[0]['equipo'], filas[0]['_dor']) if filas else None,
               'quien': filas[0]['nombre'] if filas else '',
               'nombre_archivo': 'bloqueo',

@@ -270,6 +270,56 @@ def ytdlp():
         return None
 
 
+# ══ CUANDO YOUTUBE LE CIERRA LA PUERTA A YT-DLP ════════════════════════
+# YouTube le rompe el bajador cada pocas semanas. El 27/10 los cuatro
+# partidos de la fecha 2 fallaron los cuatro con el mismo mensaje:
+#
+#     [youtube] XhbREOWZM8I: Downloading visionos player API JSON
+#     ERROR: [youtube] XhbREOWZM8I: This video is not available
+#
+# 'visionos' es el cliente que yt-dlp pide por defecto, y hay videos que ese
+# cliente no puede ver. Los partidos estan SIN LISTAR, que es uno de esos
+# casos. El video esta perfecto: lo que no sirve es por donde entra.
+#
+# Dos redes, en este orden:
+#
+#  1. Si el intento por defecto falla, se reintenta pidiendo otro cliente.
+#     Cuesta segundos y resuelve solo el 90% de estas roturas.
+#
+#  2. Si al lado de este archivo hay un ytdlp_extra.txt, lo que diga se le
+#     pasa a yt-dlp en TODAS las descargas. Ahi va, en una linea:
+#
+#         --cookies-from-browser chrome
+#
+#     que hace que YouTube te reconozca a vos, que sos el dueno de los
+#     videos. Es lo que destraba los casos de "confirma que no sos un bot".
+#
+# Si ninguna anda, lo que hay que hacer es actualizar yt-dlp:
+#     yt-dlp --update-to nightly
+#     (o:  python -m pip install -U --pre "yt-dlp[default]"  )
+CLIENTES = [None, 'tv_samsung', 'web_safari', 'android_vr']
+
+
+def _extra_args():
+    """Lo que diga ytdlp_extra.txt, al lado de este archivo. Vacio si no esta."""
+    p = pathlib.Path(__file__).resolve().parent / 'ytdlp_extra.txt'
+    try:
+        if not p.is_file():
+            return []
+        out = []
+        for linea in p.read_text(encoding='utf-8').splitlines():
+            linea = linea.strip()
+            if linea and not linea.startswith('#'):
+                out += linea.split()
+        return out
+    except OSError:
+        return []
+
+
+def _cliente(c):
+    return [] if not c else ['--extractor-args', 'youtube:player_client=%s' % c]
+
+
 def bajar_partido(url, destino):
     """Baja el partido entero, una sola vez.
 
@@ -287,36 +337,64 @@ def bajar_partido(url, destino):
     base = ytdlp()
     if not base:
         return None
-    cmd = base + ['--no-playlist', '--no-warnings', '--no-part',
-                  '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
-                  '--merge-output-format', 'mp4',
-                  '-o', str(destino), url]
-    try:
-        # a propósito SIN silenciar: una descarga de 40 minutos sin ninguna
-        # señal en pantalla parece un cuelgue
-        subprocess.run(cmd, check=True)
-    except (subprocess.CalledProcessError, FileNotFoundError, KeyboardInterrupt):
-        return None
-    return destino if destino.exists() and destino.stat().st_size > 0 else None
+    extra = _extra_args()
+    for i, cli in enumerate(CLIENTES):
+        cmd = base + ['--no-playlist', '--no-warnings', '--no-part',
+                      '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
+                      '--merge-output-format', 'mp4',
+                      '-o', str(destino), url] + _cliente(cli) + extra
+        if i:
+            print('   reintento pidiendo el cliente %s' % cli)
+        try:
+            # a propósito SIN silenciar: una descarga de 40 minutos sin ninguna
+            # señal en pantalla parece un cuelgue
+            subprocess.run(cmd, check=True)
+        except KeyboardInterrupt:
+            return None
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            continue
+        if destino.exists() and destino.stat().st_size > 0:
+            return destino
+    return None
+
+
+_AVISADO = set()
 
 
 def _bajar_tramo(url, ini, dur, destino):
-    """Baja solo ese pedacito del video de YouTube, con yt-dlp."""
+    """Baja solo ese pedacito del video de YouTube, con yt-dlp.
+
+    El error de yt-dlp ya NO se tira. Antes esto corria con la salida y los
+    errores tapados, asi que cuando YouTube cambiaba algo el script se
+    quedaba mudo y solo decia "no se pudo cortar": el motivo no aparecia por
+    ningun lado y no habia forma de arreglarlo. Ahora el primer error de
+    cada video se muestra una vez -una sola, para no llenar la pantalla con
+    treinta copias del mismo mensaje-."""
     base = ytdlp()
     if not base:
         return None
-    cmd = base + ['--quiet', '--no-warnings', '--no-playlist',
-           '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
-           '--download-sections', '*%.2f-%.2f' % (ini, ini + dur),
-           '--force-keyframes-at-cuts',
-           '--merge-output-format', 'mp4',
-           '-o', str(destino), url]
-    try:
-        subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL,
-                       stderr=subprocess.DEVNULL)
-    except (subprocess.CalledProcessError, FileNotFoundError):
-        return None
-    return destino if destino.exists() and destino.stat().st_size > 0 else None
+    extra = _extra_args()
+    ultimo = ''
+    for cli in CLIENTES:
+        cmd = base + ['--quiet', '--no-warnings', '--no-playlist',
+               '-f', 'bv*[height<=1080]+ba/b[height<=1080]/b',
+               '--download-sections', '*%.2f-%.2f' % (ini, ini + dur),
+               '--force-keyframes-at-cuts',
+               '--merge-output-format', 'mp4',
+               '-o', str(destino), url] + _cliente(cli) + extra
+        try:
+            p = subprocess.run(cmd, stdout=subprocess.DEVNULL,
+                               stderr=subprocess.PIPE)
+        except (FileNotFoundError, OSError) as e:
+            ultimo = str(e)
+            break
+        if p.returncode == 0 and destino.exists() and destino.stat().st_size > 0:
+            return destino
+        ultimo = (p.stderr or b'').decode('utf-8', 'replace').strip()
+    if ultimo and url not in _AVISADO:
+        _AVISADO.add(url)
+        print('   yt-dlp: ' + ultimo.splitlines()[-1][:160])
+    return None
 
 
 def cortar(pack, videos, links, destino, vertical=False):
