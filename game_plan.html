@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261027-0953"></script>
-<script src="selector_categoria.js?v=20261027-0953"></script>
-<script src="objetivos_config.js?v=20261027-0953"></script>
+<script src="categorias_club.js?v=20261027-1550"></script>
+<script src="selector_categoria.js?v=20261027-1550"></script>
+<script src="objetivos_config.js?v=20261027-1550"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261027-0953" onerror="void 0"></script>
+<script src="lang.js?v=20261027-1550" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261027-0953"></script>
+<script src="datos_seguros.js?v=20261027-1550"></script>
 <script src="liga_data.js.enc?v=ec54bd6c"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=7b22b2f3" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261027-0953" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261027-0953"></script>
-<script src="videos.js?v=20261027-0953" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261027-1550" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261027-1550"></script>
+<script src="videos.js?v=20261027-1550" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261027-0953">
+<link rel="stylesheet" href="movil.css?v=20261027-1550">
 
-<script src="iconos.js?v=20261027-0953" defer></script>
+<script src="iconos.js?v=20261027-1550" defer></script>
 </head>
 <body>
 
@@ -4289,7 +4289,10 @@ function gpArmIndice(){
       var ta=r[14]||0, an=r[17]||0;
       if(!ta||!an) return;
       var mc=M[r[12]]||null;
-      idx[(mc?(mc.code||''):'')+'|'+ta+'|'+an]=s.num;
+      /* el dorsal del armador viene a veces como texto -"10"- y a veces como
+         numero: se guarda SIEMPRE como numero. Si no, el filtro compara "10"
+         con 10 y no encuentra una sola pelota. */
+      idx[(mc?(mc.code||''):'')+'|'+ta+'|'+an]=(+s.num||0);
     });
   });
   GP_ARM_IDX=idx; GP_ARM_IDX_TD=td;
@@ -4323,7 +4326,7 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
     var z=gpGetZone(GP_COMBOS[r[8]]||'',r[11],r[6]);
     if(z!==zone) return;
     var mc=matches[r[12]]||null, code=mc?(mc.code||''):'';
-    out.push({code:code,t_start:r[13]||0,t_atk:r[14]||0,ev:RES[r[9]]||'=',combo:GP_COMBOS[r[8]]||'',orig:r[11],dest:r[10],date:mc?mc.date:'',rival:mc?mc.rival:'',num:r[17]||0,arm:(setterObj.num||0)});
+    out.push({code:code,t_start:r[13]||0,t_atk:r[14]||0,ev:RES[r[9]]||'=',combo:GP_COMBOS[r[8]]||'',orig:r[11],dest:r[10],date:mc?mc.date:'',rival:mc?mc.rival:'',num:r[17]||0,arm:(+setterObj.num||0)});
   });
   return out;
 }
@@ -4508,7 +4511,7 @@ function gpnArmadorSel(){
   var base=gpV.list.filter(function(c){ return !gpV.ev||c.ev===gpV.ev; });
   var cuenta={}, orden=[];
   base.forEach(function(c){
-    var a=c.arm||0;
+    var a=+c.arm||0;
     if(!(a in cuenta)){ cuenta[a]=0; orden.push(a); }
     cuenta[a]++;
   });
@@ -4527,7 +4530,7 @@ function gpnArmadorSel(){
   caja.style.display='inline-flex';
 }
 
-function gpVidVisible(){ return gpV.list.filter(function(c){ return (!gpV.ev||c.ev===gpV.ev) && (gpV.arm==null||(c.arm||0)===gpV.arm) && (!gpV.oficial||c._sel); }); }
+function gpVidVisible(){ return gpV.list.filter(function(c){ return (!gpV.ev||c.ev===gpV.ev) && (gpV.arm==null||(+c.arm||0)===gpV.arm) && (!gpV.oficial||c._sel); }); }
 /* ══ LA LISTA, EN DOS BLOQUES ════════════════════════════════════════════
    Arriba las tildadas —con ▲▼ para ordenarlas— y abajo, plegadas, las
    descartadas. El entrenador ve de un saque que queda y que no, sin perder
@@ -4603,7 +4606,7 @@ function gpVidRender(){
   // chips de valoración
   var box=document.getElementById('gpVidChips'); box.style.display=gpVidChipsOn()?'flex':'none'; box.innerHTML='';
   var order=['#','+','!','-','=','/'], lbl={'#':'# punto','+':'+ bueno','!':'! neutro','-':'- malo','=':'= error','/':'/ bloq'};
-  var counts={}; gpV.list.forEach(function(c){ if(gpV.arm!=null&&(c.arm||0)!==gpV.arm) return; counts[c.ev]=(counts[c.ev]||0)+1; });
+  var counts={}; gpV.list.forEach(function(c){ if(gpV.arm!=null&&(+c.arm||0)!==gpV.arm) return; counts[c.ev]=(counts[c.ev]||0)+1; });
   order.forEach(function(ev){ if(!counts[ev]) return; var b=document.createElement('button'); var on=gpV.ev===ev;
     b.style.cssText='border:1px solid '+(on?gpEvColor(ev):'#243044')+';background:'+(on?gpEvColor(ev)+'22':'transparent')+';color:'+(on?'#fff':'#94a3b8')+';font-weight:800;font-size:13px;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:inherit';
     b.textContent=lbl[ev]+' ('+counts[ev]+')'; b.onclick=function(){ gpV.ev=(gpV.ev===ev?null:ev); gpVidRender(); }; box.appendChild(b); });
@@ -6751,9 +6754,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261027-0953"></script>
-<script src="ayuda.js?v=20261027-0953"></script>
-<script src="volver_inicio.js?v=20261027-0953" defer></script>
+<script src="temporadas_menu.js?v=20261027-1550"></script>
+<script src="ayuda.js?v=20261027-1550"></script>
+<script src="volver_inicio.js?v=20261027-1550" defer></script>
 </body>
 </html>
 
