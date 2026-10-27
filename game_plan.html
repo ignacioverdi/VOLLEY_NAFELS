@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261026-2343"></script>
-<script src="selector_categoria.js?v=20261026-2343"></script>
-<script src="objetivos_config.js?v=20261026-2343"></script>
+<script src="categorias_club.js?v=20261027-0936"></script>
+<script src="selector_categoria.js?v=20261027-0936"></script>
+<script src="objetivos_config.js?v=20261027-0936"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261026-2343" onerror="void 0"></script>
+<script src="lang.js?v=20261027-0936" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,8 +474,8 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261026-2343"></script>
-<script src="liga_data.js.enc?v=03602cad"></script>
+<script src="datos_seguros.js?v=20261027-0936"></script>
+<script src="liga_data.js.enc?v=ec54bd6c"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
      cifrado anotado y abrirDatos() es quien lo abre. Si el .enc se carga
@@ -485,17 +485,17 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 
      plan_partido.html lo tiene en este orden y por eso siempre anduvo.
      Es el mismo arreglo, nada mas. -->
-<script src="mapa_videos.js.enc?v=533fa66b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
+<script src="mapa_videos.js.enc?v=7b22b2f3" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261026-2343" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261026-2343"></script>
-<script src="videos.js?v=20261026-2343" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261027-0936" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261027-0936"></script>
+<script src="videos.js?v=20261027-0936" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261026-2343">
+<link rel="stylesheet" href="movil.css?v=20261027-0936">
 
-<script src="iconos.js?v=20261026-2343" defer></script>
+<script src="iconos.js?v=20261027-0936" defer></script>
 </head>
 <body>
 
@@ -4455,6 +4455,29 @@ function gpVidVisible(){ return gpV.list.filter(function(c){ return (!gpV.ev||c.
 function gpVidEditable(){ return gpV.coach && !gpV.readonly && !gpV.oficial; }
 /* El filtro por valoracion si lo usan los dos. */
 function gpVidChipsOn(){ return !gpV.readonly && !gpV.oficial; }
+/* ══ EL CORTE ES LA ACCION, NO EL RALLY ═════════════════════════════════
+   El video arrancaba en el COMIENZO DE LA JUGADA -t_start- y terminaba en la
+   accion mas "Despues". En un rally largo eso son veinte o treinta segundos
+   de video aunque los dos casilleros digan 2 y 4: el remate del #99 del
+   24/10 salia 94:29 -> 94:52, veintitres segundos para una sola pelota.
+
+   El comienzo de la jugada se habia puesto para que el video no entrara con
+   la pelota ya en el aire. Pero eso lo resuelve el casillero "Antes", que lo
+   elige el que mira: fijar ADEMAS el arranque en el inicio del rally le
+   sacaba el control y mostraba el punto entero.
+
+   Ahora el corte es exactamente lo que dicen los casilleros: desde "Antes"
+   segundos antes de la accion hasta "Despues" segundos despues. Lo unico
+   que queda del inicio del rally es un tope: si se pide mas "Antes" del que
+   dura la jugada, el corte se frena ahi y no se mete en el punto anterior.
+
+   En saque y recepcion no cambia nada: ahi el inicio de la jugada ES la
+   accion, y el corte ya salia de los casilleros.                          */
+function gpCorte(c){
+  var ini = (c.t_atk||0) - gpV.PRE;
+  if (c.t_start > 0 && c.t_start < c.t_atk && ini < c.t_start) ini = c.t_start;
+  return [Math.max(0, ini), (c.t_atk||0) + gpV.POST];
+}
 function gpVidFila(c,editable){
   var i=gpV.list.indexOf(c);
   var row=document.createElement('div');
@@ -4474,7 +4497,10 @@ function gpVidFila(c,editable){
   }
   var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
   var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
-  var _tm=c.t_atk>0?(gpMmss(c.t_start)+'→'+gpMmss(c.t_atk)):'—';
+  /* el renglon decia inicio-de-jugada -> accion, que no era lo que se veia:
+     ahora dice el corte, los mismos segundos que va a durar el video */
+  var _tm='—';
+  if(c.t_atk>0){ var _ct=gpCorte(c); _tm=gpMmss(_ct[0])+'→'+gpMmss(_ct[1]); }
   row.style.opacity=_play?'1':'.5';
   row.innerHTML=flechas+chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
   if(puedeTildar){
@@ -4586,7 +4612,7 @@ function gpVidPlayAt(i){
   var vid=gpVidUrl(c.code);
   if(!vid){ gpVidErr(0); gpVidRender(); return; }
   gpVidEnsurePlayer(function(){
-    var start=Math.max(0,c.t_start-gpV.PRE), end=c.t_atk+gpV.POST;
+    var _co=gpCorte(c), start=_co[0], end=_co[1];
     gpV.fin=end; gpV.manual=false;
     try{
       if(gpV.vid===vid && gpV.player.seekTo){
@@ -6637,9 +6663,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261026-2343"></script>
-<script src="ayuda.js?v=20261026-2343"></script>
-<script src="volver_inicio.js?v=20261026-2343" defer></script>
+<script src="temporadas_menu.js?v=20261027-0936"></script>
+<script src="ayuda.js?v=20261027-0936"></script>
+<script src="volver_inicio.js?v=20261027-0936" defer></script>
 </body>
 </html>
 

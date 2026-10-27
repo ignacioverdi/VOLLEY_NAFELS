@@ -457,6 +457,59 @@ def _plantel_maestro():
     _PM_CACHE = out
     return out
 
+def _calidad_nombre(info):
+    """Cuanto vale el nombre que trae un .dvw: 2 de verdad / 1 relleno / 0 nada.
+
+    No todos los scouts cargan la lista del rival. Algunos la dejan VACIA
+    —solo los numeros— y otros ponen relleno: "Setter 2", "MB 3". Los dos
+    casos llegaban a la pantalla como si fueran el apellido del jugador.
+    """
+    if not info:
+        return -1
+    ap = (info.get('apellido') or '').strip()
+    nm = (info.get('name') or '').strip()
+    if not ap and not nm:
+        return 0
+    base = ap or nm
+    if base.isdigit():
+        return 0
+    resto = nm[len(ap):].strip() if (ap and nm.startswith(ap)) else ''
+    if len(base) <= 6 and resto.isdigit():
+        return 1          # "Setter 2" / "MB 3": sigla corta y un numero de pila
+    return 2
+
+
+def _info_mejor(viejo, nuevo):
+    """El nombre que queda cuando el mismo dorsal viene en varios archivos.
+
+    Antes mandaba el PRIMER archivo que lo traia, y los partidos se leen por
+    orden de nombre, o sea por fecha: el mas viejo gana siempre.
+
+    Paso de verdad con Jona en el game plan. El scout del 19/09 trae sus doce
+    dorsales con el apellido EN BLANCO, y es el primer archivo de Jona que se
+    lee. Esos doce quedaban sin nombre para siempre —la pantalla mostraba el
+    numero, "1", "5", "99"— aunque los partidos siguientes los trajeran
+    completos. El 9 y el 10 salian bien de casualidad: no estaban en esa lista.
+
+    Ahora gana el mejor nombre, no el primero. Entre dos iguales sigue
+    quedando el que ya estaba, asi que nada se mueve sin motivo.
+    """
+    if not viejo:
+        return nuevo
+    if not nuevo:
+        return viejo
+    if _calidad_nombre(nuevo) > _calidad_nombre(viejo):
+        _n = dict(nuevo)
+        # El puesto conocido no se pierde. Los .dvw de VolleyMetrics traen el
+        # nombre completo pero el campo de puesto vacio, y el scout del club
+        # suele traerlo cargado: el nombre sale del mejor archivo y el puesto
+        # del que lo tenga.
+        if (_n.get('pos') or '?') in ('', '?') and (viejo.get('pos') or '?') not in ('', '?'):
+            _n['pos'] = viejo['pos']
+        return _n
+    return viejo
+
+
 def get_players(lines, section, equipo=None):
     # 'equipo' sirve para saber si es NUESTRO club: solo a los nuestros se les
     # aplica el plantel maestro. De los rivales se lee el .dvw tal cual, que es
@@ -1301,8 +1354,8 @@ def update_database(dvw_dir, temporada, db_path='nla_players_db.json'):
                 ns = str(num)
                 if ns not in teams_data[team]:
                     teams_data[team][ns] = {'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dig':[]}
-                if teams_data[team][ns]['info'] is None:
-                    teams_data[team][ns]['info'] = {**p, 'team':team}
+                teams_data[team][ns]['info'] = _info_mejor(
+                    teams_data[team][ns]['info'], {**p, 'team':team})
             for num, acts in data['atk'].items():
                 teams_data[team].setdefault(str(num),{'info':None,'atk':[],'srv':[],'rec':[],'sets':[],'blk':[],'dig':[]})
                 teams_data[team][str(num)]['atk'].extend(acts)
