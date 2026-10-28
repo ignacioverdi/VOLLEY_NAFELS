@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-0834"></script>
-<script src="selector_categoria.js?v=20261028-0834"></script>
-<script src="objetivos_config.js?v=20261028-0834"></script>
+<script src="categorias_club.js?v=20261028-0853"></script>
+<script src="selector_categoria.js?v=20261028-0853"></script>
+<script src="objetivos_config.js?v=20261028-0853"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-0834" onerror="void 0"></script>
+<script src="lang.js?v=20261028-0853" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-0834"></script>
+<script src="datos_seguros.js?v=20261028-0853"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-0834" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-0834"></script>
-<script src="videos.js?v=20261028-0834" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261028-0853" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-0853"></script>
+<script src="videos.js?v=20261028-0853" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-0834">
+<link rel="stylesheet" href="movil.css?v=20261028-0853">
 
-<script src="iconos.js?v=20261028-0834" defer></script>
+<script src="iconos.js?v=20261028-0853" defer></script>
 </head>
 <body>
 
@@ -4336,11 +4336,25 @@ function gpVidDom(){
   var d=document.createElement('div'); d.id='gpVidOverlay';
   d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(4,8,14,.86);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:14px';
   d.innerHTML=''
-   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(960px,96vw);max-height:94vh;overflow:auto;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
+   /* ══ LA VENTANA CRECE, EL REPRODUCTOR NO ════════════════════════════
+      La lista de acciones estaba DEBAJO del video: para ver que venia
+      despues habia que bajar, y ahi el video quedaba fuera de pantalla.
+      Mirar y leer la lista al mismo tiempo era imposible.
+
+      Ahora la lista va en una columna a la derecha, al lado del video. La
+      ventana se ensancha lo justo para que entre esa columna: el video
+      sigue midiendo los mismos 928x522 de antes —columna izquierda fija— y
+      lo que se agrega es ancho nuevo, no espacio robado al reproductor.
+
+      En una pantalla angosta la columna no entra y vuelve sola abajo del
+      video, que es como estaba. */
+   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(1400px,97vw);max-height:94vh;overflow:auto;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
    +'<b id="gpVidTitle" style="font-size:16px;color:#e2e8f0;font-family:Barlow,sans-serif">Reproductor</b>'
    +'<div style="display:flex;gap:6px"><button id="gpVidMax" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">⛶ Maximizar</button>'
    +'<button id="gpVidClose" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div></div>'
+   +'<div id="gpVidCuerpo" style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">'
+   +'<div id="gpVidIzq" style="flex:0 0 928px;max-width:100%;min-width:0">'
    +'<div id="gpVidWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:11px;overflow:hidden;margin-bottom:10px"></div>'
    +'<div id="gpVidChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>'
    /* ══ LOS CONTROLES, SIEMPRE EN UNA SOLA FILA ════════════════════════
@@ -4368,7 +4382,11 @@ function gpVidDom(){
    /* el texto entero queda en el globito, que es donde no estorba */
    +'<span title="+ y \u2212 mueven el video 2 segundos \u00b7 un clic en el video lo pausa" style="flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#55657a;font-size:10px;letter-spacing:.2px">+/\u2212 2 seg \u00b7 clic = pausa</span>'
    +'<span id="gpVidNow" style="flex:none;white-space:nowrap;color:#7689a1;font-size:12px"></span></div>'
-   +'<div id="gpVidList" style="max-height:min(52vh,430px);overflow:auto;border-top:1px solid #1f2c3d"></div>'
+   +'</div>'   /* cierra gpVidIzq */
+   +'<div id="gpVidDer" style="flex:1 1 360px;min-width:250px;display:flex;flex-direction:column;min-height:0">'
+   +'<div id="gpVidList" style="flex:1 1 auto;min-height:120px;max-height:min(78vh,628px);overflow:auto;border:1px solid #1f2c3d;border-radius:11px;padding:0 8px"></div>'
+   +'</div>'   /* cierra gpVidDer */
+   +'</div>'   /* cierra gpVidCuerpo */
    +'<div style="display:flex;gap:8px;margin-top:10px">'
    +'<button id="gpVidSave" style="flex:1;background:#3b82f6;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit">💾 Guardar esta secuencia para el equipo</button>'
    +'<button id="gpVidOfi" style="flex:none;background:transparent;border:1px solid #334155;color:#94a3b8;padding:11px 14px;border-radius:9px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:.06em">👁 VERSIÓN OFICIAL</button>'
@@ -6769,9 +6787,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-0834"></script>
-<script src="ayuda.js?v=20261028-0834"></script>
-<script src="volver_inicio.js?v=20261028-0834" defer></script>
+<script src="temporadas_menu.js?v=20261028-0853"></script>
+<script src="ayuda.js?v=20261028-0853"></script>
+<script src="volver_inicio.js?v=20261028-0853" defer></script>
 </body>
 </html>
 
