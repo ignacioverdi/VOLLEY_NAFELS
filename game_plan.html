@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-2158"></script>
-<script src="selector_categoria.js?v=20261028-2158"></script>
-<script src="objetivos_config.js?v=20261028-2158"></script>
+<script src="categorias_club.js?v=20261028-2356"></script>
+<script src="selector_categoria.js?v=20261028-2356"></script>
+<script src="objetivos_config.js?v=20261028-2356"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -359,7 +359,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-vacio{font-size:12px;color:#64748b;font-style:italic;padding:14px 2px}
 @media(max-width:700px){.gpn-chip{font-size:11px;padding:3px 7px}}
 /* ── la ficha en grilla ── */
-#jug-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(400px,1fr));gap:14px;align-items:start}
+#jug-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(600px,1fr));gap:14px;align-items:start}
 .gpn-card{background:var(--card,#0d0e1a);border:1px solid rgba(255,255,255,.08);border-radius:16px;
   overflow:hidden;display:flex;flex-direction:column}
 .gpn-card .gpn-cols{grid-template-columns:1fr;gap:12px}
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-2158" onerror="void 0"></script>
+<script src="lang.js?v=20261028-2356" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-2158"></script>
+<script src="datos_seguros.js?v=20261028-2356"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-2158" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-2158"></script>
-<script src="videos.js?v=20261028-2158" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261028-2356" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-2356"></script>
+<script src="videos.js?v=20261028-2356" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-2158">
+<link rel="stylesheet" href="movil.css?v=20261028-2356">
 
-<script src="iconos.js?v=20261028-2158" defer></script>
+<script src="iconos.js?v=20261028-2356" defer></script>
 </head>
 <body>
 
@@ -2342,76 +2342,164 @@ function gpnEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
         ocol:{zona:[rgb,txt,ink]}, cellCol:{zona:rgb}, cellInk:{zona:hex},
         focus:'bottom'|'top', fmt, labelIn:{zona:txt}, ramp:{zona:v}, hideVal:[zonas],
         cuenta:{zona:n} -> cuantas acciones hay detras del % de esa celda} */
+/* ══ LA CANCHA ════════════════════════════════════════════════════════
+   El gimnasio de Nafels, con su perspectiva real. La cancha ENTERA entra
+   en la foto: el campo nuestro abajo y el del rival arriba de la red, los
+   dos con sus nueve zonas en su lugar de verdad.
+
+   Las cuatro esquinas estan medidas sobre los pixeles del naranja, y la
+   comprobacion es que las lineas calculadas caen sobre las pintadas:
+   los 3 m nuestros en y=321 y los 3 m de ellos en y=248, que es
+   exactamente donde estan en la foto.
+
+   Dentro de cada cuadrante el numero es la CANTIDAD y abajo el
+   porcentaje, los dos centrados y TODOS DEL MISMO CUERPO: la jerarquia
+   la da la luz del cuadrante y la opacidad, nunca el tamanio de la
+   letra. El campo del rival es demasiado bajo para meterle numeros
+   adentro, asi que cada zona de origen manda su dato a una burbuja que
+   flota arriba, atada al piso por una linea de puntos.
+   ══════════════════════════════════════════════════════════════════ */
+var GPC_IMG='cancha_gp.jpg', GPC_W=960, GPC_H=520, GPC_DY=585, GPC_FONDO='#0d0e1a';
+function gpcHomo(p0,p1,p2,p3){
+  var x0=p0[0],y0=p0[1],x1=p1[0],y1=p1[1],x2=p2[0],y2=p2[1],x3=p3[0],y3=p3[1];
+  var dx1=x1-x2,dx2=x3-x2,dx3=x0-x1+x2-x3, dy1=y1-y2,dy2=y3-y2,dy3=y0-y1+y2-y3;
+  var den=dx1*dy2-dy1*dx2, g=(dx3*dy2-dy3*dx2)/den, h=(dx1*dy3-dy1*dx3)/den;
+  var a=x1-x0+g*x1,b=x3-x0+h*x3,c=x0, d=y1-y0+g*y1,e=y3-y0+h*y3,f=y0;
+  return function(u,v){ var w=g*u+h*v+1; return [(a*u+b*v+c)/w,(d*u+e*v+f)/w-GPC_DY]; };
+}
+/* v=0 en la linea central (la red), v=1 en nuestro fondo, v=-1 en el de ellos */
+var gpcP=gpcHomo([201.0,864.0],[734.3,864.0],[941.8,1054.0],[2.6,1054.0]);
+var GPC_COL={
+  ataque:   {rgb:'255,38,118', lin:'255,150,192'},
+  saque:    {rgb:'0,150,255',  lin:'130,206,255'},
+  recepcion:{rgb:'150,70,255', lin:'200,164,255'}
+};
+var GPC_N=0;
+function gpcQ(ps){ return ps.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' '); }
+
 function gpnCancha(cfg){
-  var W=400,ROW=76,PAD=6,GAP=7;
-  var down=(cfg.focus!=='top');
-  var hT=down?ROW*0.6:ROW, hB=down?ROW:ROW*0.6;
-  var netY=PAD+hT*3, pyB=netY+GAP, H=pyB+hB*3+4, cw=W/3;
   var cells=cfg.cells||{}, ramp=cfg.ramp||cells, orig=cfg.origins||{}, ocol=cfg.ocol||{};
+  var cuenta=cfg.cuenta||null, hide=cfg.hideVal||[];
+  /* cada dibujo necesita ids propios: en la pagina hay una cancha por
+     jugador y los degradados se pisarian entre si */
+  var id='k'+(++GPC_N);
+  var BC=GPC_COL[cfg.tipo]||GPC_COL.ataque, AC=BC.rgb, LN=BC.lin;
   var mx=0; for(var k in ramp) if(ramp[k]>mx) mx=ramp[k];
-  var omx=0; for(var k2 in orig) if(orig[k2]>omx) omx=orig[k2];
-  var S=['<svg viewBox="0 0 '+W+' '+H.toFixed(1)+'" width="100%" style="display:block;width:100%" role="img" aria-hidden="true">'];
-  function media(rows,y0,rh,detalle){
-    if(!detalle) S.push('<rect x="0" y="'+y0+'" width="'+W+'" height="'+(rh*3).toFixed(1)+'" rx="8" fill="rgba(255,255,255,.016)"/>');
-    rows.forEach(function(row,r){ row.forEach(function(z,c){
-      var x=c*cw,y=y0+r*rh;
-      if(detalle){
-        var rgb=(cfg.cellCol&&cfg.cellCol[z])||(ocol[z]&&ocol[z][0])||'201,132,21';
-        if(!cfg.cellCol && cfg.cellSrc && cfg.cellSrc[z]){ var dm=null,best=-1;
-          for(var o in cfg.cellSrc[z]) if(cfg.cellSrc[z][o]>best){best=cfg.cellSrc[z][o];dm=o;}
-          if(dm&&ocol[dm]) rgb=ocol[dm][0]; }
-        var f=gpnAlpha(ramp[z]||0,mx,rgb)||'rgba(255,255,255,.028)';
-        S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="7" fill="'+f+'"/>');
-      } else {
-        var ov=orig[z]||0;
-        if(ov){ var cc=(ocol[z]&&ocol[z][0])||'201,132,21';
-          S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="6" fill="rgba('+cc+',.30)" stroke="rgba('+cc+',.85)" stroke-width="1.6"/>');
-        } else S.push('<rect x="'+(x+1.5)+'" y="'+(y+1.5).toFixed(1)+'" width="'+(cw-3)+'" height="'+(rh-3).toFixed(1)+'" rx="6" fill="rgba(255,255,255,.022)"/>');
-        S.push('<text x="'+(x+8)+'" y="'+(y+14).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="'+(ov?((ocol[z]&&ocol[z][1])||'#C08A2E'):'#333C4A')+'">'+z+'</text>');
-      }
-    });});
-    var y3=(rows===GPN_RIVAL_ROWS)?y0+rh*2:y0+rh;
-    S.push('<line x1="2" y1="'+y3.toFixed(1)+'" x2="'+(W-2)+'" y2="'+y3.toFixed(1)+'" stroke="rgba(255,255,255,.07)" stroke-width="1" stroke-dasharray="4 5"/>');
+  var omx=0,tO=0; for(var k2 in orig){ if(orig[k2]>omx) omx=orig[k2]; tO+=orig[k2]; }
+  /* fila 0 = la de la red ; el campo de ellos es el mismo mapa en negativo */
+  function celda(z,propio){
+    var R=propio?GPN_PROPIO_ROWS:GPN_RIVAL_ROWS;
+    for(var r=0;r<3;r++) for(var c=0;c<3;c++) if(R[r][c]==z){
+      var a,b;
+      if(propio){ a=r/3; b=(r+1)/3; }
+      else { a=-(3-r)/3; b=-(2-r)/3; }          /* r=0 es su fondo */
+      return {pol:[gpcP(c/3,a),gpcP((c+1)/3,a),gpcP((c+1)/3,b),gpcP(c/3,b)],
+              cen:gpcP((c+0.5)/3,(a+b)/2), yT:gpcP(.5,a)[1], yB:gpcP(.5,b)[1],
+              xL:gpcP(c/3,a)[0], xR:gpcP((c+1)/3,a)[0], fila:(propio?r:(2-r))};
+    }
+    return null;
   }
-  media(GPN_RIVAL_ROWS,PAD,hT,!down);
-  media(GPN_PROPIO_ROWS,pyB,hB,down);
-  function ctr(z,arriba){ return arriba?[GPN_RCOL[z]*cw+cw/2,PAD+GPN_RROW[z]*hT+hT/2]:[GPN_PCOL[z]*cw+cw/2,pyB+GPN_PROW[z]*hB+hB/2]; }
-  var fl=cfg.flows||[];
-  if(fl.length){
-    var mf=0; fl.forEach(function(f){ if(f[2]>mf) mf=f[2]; }); if(!mf) mf=1;
-    fl.forEach(function(f){
-      var a=ctr(f[0],down), b=ctr(f[1],!down), col=f[3]||((ocol[f[0]]&&ocol[f[0]][0])||'201,132,21');
-      var kk=f[2]/mf, sw=(1.7+5.3*kk).toFixed(2), op=(0.3+0.45*kk).toFixed(2);
-      S.push('<path d="M'+a[0].toFixed(1)+' '+a[1].toFixed(1)+' Q '+((a[0]+b[0])/2+(b[0]-a[0])*0.06).toFixed(1)+' '+((a[1]+b[1])/2).toFixed(1)+' '+b[0].toFixed(1)+' '+b[1].toFixed(1)+'" fill="none" stroke="rgba('+col+','+op+')" stroke-width="'+sw+'" stroke-linecap="round"/>');
-      S.push('<circle cx="'+b[0].toFixed(1)+'" cy="'+b[1].toFixed(1)+'" r="'+(2.4+2*kk).toFixed(1)+'" fill="rgba('+col+','+Math.min(0.95,(+op)+0.28).toFixed(2)+')"/>');
-    });
+  var S=['<svg viewBox="0 0 '+GPC_W+' '+GPC_H+'" width="100%" style="display:block;width:100%">'];
+  var D=['<defs><clipPath id="cp'+id+'"><rect x="0" y="0" width="'+GPC_W+'" height="'+GPC_H+'" rx="18"/></clipPath>'
+   +'<linearGradient id="ar'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+GPC_FONDO+'" stop-opacity=".9"/><stop offset="1" stop-color="'+GPC_FONDO+'" stop-opacity="0"/></linearGradient>'
+   +'<linearGradient id="ab'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+GPC_FONDO+'" stop-opacity="0"/><stop offset="1" stop-color="'+GPC_FONDO+'" stop-opacity=".95"/></linearGradient>'
+   +'<radialGradient id="vg'+id+'" cx=".5" cy=".64" r=".8"><stop offset=".42" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".6"/></radialGradient>'
+   +'<linearGradient id="cl'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="rgb('+AC+')" stop-opacity=".95"/><stop offset="1" stop-color="rgb('+AC+')" stop-opacity=".42"/></linearGradient>'
+   +'<filter id="so'+id+'" x="-60%" y="-60%" width="220%" height="220%"><feDropShadow dx="0" dy="1.4" stdDeviation="2.4" flood-color="#000" flood-opacity=".95"/></filter>'];
+  S.push('');  /* el hueco de los defs, se rellena al final */
+  S.push('<g clip-path="url(#cp'+id+')">');
+  S.push('<image href="'+GPC_IMG+'" xlink:href="'+GPC_IMG+'" x="0" y="0" width="'+GPC_W+'" height="'+GPC_H+'" preserveAspectRatio="xMidYMid slice"/>');
+  S.push('<rect x="0" y="0" width="'+GPC_W+'" height="'+GPC_H+'" fill="url(#vg'+id+')"/>');
+  S.push('<rect x="0" y="0" width="'+GPC_W+'" height="'+GPC_H+'" fill="#0A0C16" opacity=".40"/>');
+
+  /* ── el campo de ellos: de donde sale la pelota ── */
+  for(var ro=0;ro<3;ro++) for(var co=0;co<3;co++){
+    var zo=GPN_RIVAL_ROWS[ro][co], vo=orig[zo]||0, go=celda(zo,false);
+    var cc=(ocol[zo]&&ocol[zo][0])||'245,165,36', to=vo?Math.pow(vo/omx,.7):0;
+    S.push('<polygon points="'+gpcQ(go.pol)+'" fill="rgba('+cc+','+(vo?(0.10+0.42*to).toFixed(3):'0.03')+')" stroke="rgba('+cc+','+(vo?(0.40+0.42*to).toFixed(2):0.13)+')" stroke-width="1"/>');
   }
-  var yn=netY+GAP/2;
-  S.push('<line x1="0" y1="'+yn.toFixed(1)+'" x2="'+W+'" y2="'+yn.toFixed(1)+'" stroke="rgba(245,165,36,.6)" stroke-width="2.6" stroke-dasharray="7 6" stroke-linecap="round"/>');
-  [1.6,W-1.6].forEach(function(px){ S.push('<line x1="'+px+'" y1="'+(netY-4).toFixed(1)+'" x2="'+px+'" y2="'+(netY+GAP+4).toFixed(1)+'" stroke="rgba(245,165,36,.75)" stroke-width="3" stroke-linecap="round"/>'); });
-  var ofs=Math.max(11,Math.round((down?hT:hB)*0.42));
-  for(var z in orig){ if(!orig[z]) continue; var p=ctr(+z,down);
-    S.push('<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+ofs*0.36).toFixed(1)+'" text-anchor="middle" font-family="Anton,sans-serif" font-size="'+ofs+'" fill="'+((ocol[z]&&ocol[z][1])||'#F5A524')+'">'+orig[z]+'</text>'); }
-  var rowsD=down?GPN_PROPIO_ROWS:GPN_RIVAL_ROWS, rhD=down?hB:hT, y0D=down?pyB:PAD;
-  var hide=cfg.hideVal||[];
-  rowsD.forEach(function(row,r){ row.forEach(function(z,c){
-    var x=c*cw,y=y0D+r*rhD,v=cells[z]||0, strong=(mx>0&&(ramp[z]||0)>=0.58*mx);
-    var ink=(cfg.cellInk&&cfg.cellInk[z])||'#17120A';
-    if(!cfg.cellInk && cfg.cellSrc && cfg.cellSrc[z]){ var dm2=null,b2=-1;
-      for(var o2 in cfg.cellSrc[z]) if(cfg.cellSrc[z][o2]>b2){b2=cfg.cellSrc[z][o2];dm2=o2;}
-      if(dm2&&ocol[dm2]) ink=ocol[dm2][2]; }
-    S.push('<text x="'+(x+9)+'" y="'+(y+16).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="700" fill="'+(strong?ink:'#49566A')+'">'+z+'</text>');
-    var lbl=(hide.indexOf(z)>=0)?'·':(v?((cfg.fmt||'%d%')).replace('%d',v):'·');
-    S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD/2+9).toFixed(1)+'" text-anchor="middle" font-family="Anton,sans-serif" font-size="25" fill="'+(strong?ink:(v?'#C6D2E0':'#2F3845'))+'">'+lbl+'</text>');
-    if(cfg.labelIn&&cfg.labelIn[z]) S.push('<text x="'+(x+cw/2).toFixed(1)+'" y="'+(y+rhD-10).toFixed(1)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-size="11" font-weight="600" fill="'+(strong?ink:'#C6D2E0')+'">'+gpnEsc(cfg.labelIn[z])+'</text>');
-    /* == CUANTAS ACCIONES SON ESE PORCENTAJE ==============================
-       El numero grande del medio es el % y solo con eso no se sabe sobre
-       cuantas pelotas esta hecho: 44% de 9 remates no es 44% de 60.
-       La cuenta va en la esquina de ABAJO A LA DERECHA, la opuesta a la del
-       numero de zona, asi no se confunde una con la otra. */
-    if(cfg.cuenta&&cfg.cuenta[z]) S.push('<text x="'+(x+cw-9).toFixed(1)+'" y="'+(y+rhD-9).toFixed(1)+'" text-anchor="end" font-family="Barlow Condensed,sans-serif" font-size="12" font-weight="700" fill="'+(strong?ink:'#8494A8')+'" opacity="'+(strong?'.85':'1')+'">'+cfg.cuenta[z]+' acc</text>');
-  });});
-  S.push('</svg>');
+  /* ── nuestro campo: donde cae ── */
+  for(var r2=0;r2<3;r2++) for(var c2=0;c2<3;c2++){
+    var z2=GPN_PROPIO_ROWS[r2][c2], v2=ramp[z2]||0, t2=v2?Math.pow(v2/mx,.75):0, g2=celda(z2,true);
+    var cr2=(cfg.cellCol&&cfg.cellCol[z2])||null;
+    var relleno = cr2 ? ('rgba('+cr2+','+(v2?(0.07+0.42*t2).toFixed(3):'0.03')+')') : ('url(#cl'+id+')');
+    S.push('<polygon points="'+gpcQ(g2.pol)+'" fill="'+relleno+'"'+(cr2?'':' fill-opacity="'+(v2?(0.07+0.42*t2).toFixed(3):'0.025')+'"')
+      +' stroke="rgba('+LN+','+(0.18+0.5*t2).toFixed(2)+')" stroke-width="1.1"/>');
+  }
+  /* ── las lineas que se ven: fondo, laterales, 3 m de cada lado, 6 m y la red ── */
+  function linea(v,op,gu,an){ var a=gpcP(0,v), b=gpcP(1,v);
+    S.push('<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'" stroke="rgba('+LN+','+op+')" stroke-width="'+an+'"'+(gu?' stroke-dasharray="'+gu+'"':'')+'/>'); }
+  S.push('<polygon points="'+gpcQ([gpcP(0,-1),gpcP(1,-1),gpcP(1,1),gpcP(0,1)])+'" fill="none" stroke="rgba('+LN+',.42)" stroke-width="1.2"/>');
+  S.push('<polygon points="'+gpcQ([gpcP(0,0),gpcP(1,0),gpcP(1,1),gpcP(0,1)])+'" fill="none" stroke="rgba('+LN+',.8)" stroke-width="1.8"/>');
+  linea(-1/3,'.34','6 7','1.1');       /* los 3 m de ellos */
+  linea(1/3,'.5','7 7','1.3');         /* nuestros 3 m */
+  linea(2/3,'.34','4 8','1.1');        /* los 6 m: no esta pintada, es la que separa 7-8-9 de 5-6-1 */
+  linea(0,'.9','','2');                /* la red */
+  for(var uu=1;uu<3;uu++){ var a1=gpcP(uu/3,-1), b1=gpcP(uu/3,1);
+    S.push('<line x1="'+a1[0].toFixed(1)+'" y1="'+a1[1].toFixed(1)+'" x2="'+b1[0].toFixed(1)+'" y2="'+b1[1].toFixed(1)+'" stroke="rgba('+LN+',.30)" stroke-width="1.1"/>'); }
+
+  /* ── hilos y burbujas del origen ── */
+  var pins={}, burb=[];
+  var zo2=Object.keys(orig).filter(function(z){return orig[z];})
+    .map(function(z){ return {z:z,v:orig[z],g:celda(z,false)}; })
+    .filter(function(o){return !!o.g;})
+    .sort(function(a,b){ return b.g.fila-a.g.fila; });
+  /* Cada fila de ellos manda su burbuja un escalon mas arriba, para que no
+     se toquen. Pero cuando hay un solo escalon —el saque y la recepcion
+     salen siempre del fondo de ellos— esa burbuja quedaba pegada al borde
+     de arriba. Asi que despues de armarlas se baja el conjunto entero
+     hasta que la mas alta quede a 118, sin pasarse: la mas baja nunca
+     invade la cancha de ellos, y el arco del remate sigue cruzando por
+     arriba de la red, que en la foto termina en y=132. */
+  var bBase=86, bPaso=48, CY_TOPE=118, CY_PISO=200;
+  var cys=zo2.map(function(o){ return o.g.cen[1]-(bBase+bPaso*o.g.fila); });
+  var bajar=0;
+  if(cys.length){
+    var mn=Math.min.apply(null,cys), mx2=Math.max.apply(null,cys);
+    bajar=Math.max(0, Math.min(CY_TOPE-mn, CY_PISO-22-mx2));
+  }
+  zo2.forEach(function(o,i){
+    var cc=(ocol[o.z]&&ocol[o.z][0])||'245,165,36';
+    var cx=o.g.cen[0], cy=cys[i]+bajar;
+    pins[o.z]=[cx,cy];
+    S.push('<line x1="'+cx.toFixed(1)+'" y1="'+o.g.cen[1].toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+(cy+17).toFixed(1)+'" stroke="rgba('+cc+',.6)" stroke-width="1.1" stroke-dasharray="3 4"/>');
+    S.push('<circle cx="'+cx.toFixed(1)+'" cy="'+o.g.cen[1].toFixed(1)+'" r="2.6" fill="rgba('+cc+',.95)"/>');
+    burb.push({o:o,cx:cx,cy:cy,cc:cc});
+  });
+  /* ── los remates ── */
+  var fl=cfg.flows||[], mf=0; fl.forEach(function(f){ if(f[2]>mf) mf=f[2]; }); if(!mf) mf=1;
+  fl.forEach(function(f,n){
+    var a=pins[f[0]]; if(!a) return; var g=celda(f[1],true); if(!g) return; var b=g.cen;
+    var cc=f[3]||((ocol[f[0]]&&ocol[f[0]][0])||'245,165,36'), kk=f[2]/mf;
+    var yA=a[1]+15, cY=(3*yA-130-b[1])/2;
+    D.push('<linearGradient id="f'+id+'_'+n+'" gradientUnits="userSpaceOnUse" x1="'+a[0].toFixed(1)+'" y1="'+yA.toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'"><stop offset="0" stop-color="rgb('+cc+')" stop-opacity=".07"/><stop offset=".55" stop-color="rgb('+cc+')" stop-opacity="'+(0.28+0.30*kk).toFixed(2)+'"/><stop offset="1" stop-color="rgb('+LN+')" stop-opacity="'+(0.55+0.4*kk).toFixed(2)+'"/></linearGradient>');
+    S.push('<path d="M'+a[0].toFixed(1)+' '+yA.toFixed(1)+' Q '+((a[0]+b[0])/2).toFixed(1)+' '+cY.toFixed(1)+' '+b[0].toFixed(1)+' '+b[1].toFixed(1)+'" fill="none" stroke="url(#f'+id+'_'+n+')" stroke-width="'+(0.9+2.2*kk).toFixed(1)+'" stroke-linecap="round"/>');
+  });
+  burb.forEach(function(B){
+    var sub='Z'+B.o.z+(tO?('  '+Math.round(100*B.o.v/tO)+'%'):''), w=Math.max(62,7.2*sub.length+22), h=44;
+    S.push('<g filter="url(#so'+id+')"><rect x="'+(B.cx-w/2).toFixed(1)+'" y="'+(B.cy-h/2).toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h+'" rx="9" fill="rgba(10,12,22,.84)" stroke="rgba(255,255,255,.17)" stroke-width="1"/></g>');
+    S.push('<rect x="'+(B.cx-w/2).toFixed(1)+'" y="'+(B.cy-h/2).toFixed(1)+'" width="3" height="'+h+'" rx="1.5" fill="rgb('+B.cc+')"/>');
+    S.push('<text x="'+B.cx.toFixed(1)+'" y="'+(B.cy-1).toFixed(1)+'" text-anchor="middle" font-family="Bebas Neue, Arial Narrow, sans-serif" font-size="25" letter-spacing=".5" fill="#FFFFFF">'+B.o.v+'</text>');
+    S.push('<text x="'+B.cx.toFixed(1)+'" y="'+(B.cy+13).toFixed(1)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="11" letter-spacing="1.2" fill="rgba(255,255,255,.62)">'+sub+'</text>');
+  });
+  /* ── los numeros de donde cae: mismo cuerpo en los nueve ── */
+  for(var r3=0;r3<3;r3++) for(var c3=0;c3<3;c3++){
+    var z3=GPN_PROPIO_ROWS[r3][c3], g3=celda(z3,true);
+    var fuerte=(mx>0&&(ramp[z3]||0)>=0.55*mx);
+    S.push('<text x="'+(g3.xL+11).toFixed(1)+'" y="'+(g3.yT+15).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="12" letter-spacing="1.1" fill="rgba(255,255,255,.45)">Z'+z3+'</text>');
+    var vv=cells[z3]||0, cu=cuenta?(cuenta[z3]||0):0;
+    if(hide.indexOf(z3)>=0 || (!vv&&!cu)) continue;
+    var grande=cuenta?(''+cu):(''+vv), chico=cuenta?(vv+'%'):'';
+    var cx3=g3.cen[0], yc=(g3.yT+g3.yB)/2;
+    S.push('<g filter="url(#so'+id+')">'
+      +'<text x="'+cx3.toFixed(1)+'" y="'+(yc+2).toFixed(1)+'" text-anchor="middle" font-family="Bebas Neue, Arial Narrow, sans-serif" font-size="29" letter-spacing=".5" fill="rgba(255,255,255,'+(fuerte?1:0.78)+')">'+grande+'</text>'
+      +(chico?('<text x="'+cx3.toFixed(1)+'" y="'+(yc+16).toFixed(1)+'" text-anchor="middle" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="12" letter-spacing="1.2" fill="rgba(255,255,255,'+(fuerte?0.9:0.6)+')">'+chico+'</text>'):'')
+      +'</g>');
+  }
+  S.push('<rect x="0" y="0" width="'+GPC_W+'" height="40" fill="url(#ar'+id+')"/>');
+  S.push('<rect x="0" y="'+(GPC_H-44)+'" width="'+GPC_W+'" height="44" fill="url(#ab'+id+')"/>');
+  S.push('</g><rect x="1" y="1" width="'+(GPC_W-2)+'" height="'+(GPC_H-2)+'" rx="17" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.6"/></svg>');
+  S[1]=D.join('')+'</defs>';
   return S.join('');
 }
 
@@ -2850,7 +2938,7 @@ function gpnPanel(j,cont,tipo){
     if(!flows) flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
     var rot={ataque:'Dónde caen sus remates',saque:'Dónde pone sus saques',recepcion:'Dónde se para y de dónde le sacan'}[tipo];
     var svg=gpnCancha({cells:m.cells,origins:m.orig,flows:flows,ocol:ocol,cellSrc:m.src,
-                       cuenta:m.crudo,
+                       cuenta:m.crudo,tipo:tipo,
                        cellCol:cellCol,cellInk:cellInk,focus:(tipo==='recepcion'?'top':'bottom')});
     zona.innerHTML='<div class="gpn-rot">'+rot+' · <b>'+acc.length+'</b> acciones'
       +(m.conDest<acc.length?(' <span style="color:#5E6B7D">('+(acc.length-m.conDest)+' sin destino)</span>'):'')
@@ -6979,9 +7067,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-2158"></script>
-<script src="ayuda.js?v=20261028-2158"></script>
-<script src="volver_inicio.js?v=20261028-2158" defer></script>
+<script src="temporadas_menu.js?v=20261028-2356"></script>
+<script src="ayuda.js?v=20261028-2356"></script>
+<script src="volver_inicio.js?v=20261028-2356" defer></script>
 </body>
 </html>
 
