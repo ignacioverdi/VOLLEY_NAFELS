@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-0001"></script>
-<script src="selector_categoria.js?v=20261029-0001"></script>
-<script src="objetivos_config.js?v=20261029-0001"></script>
+<script src="categorias_club.js?v=20261029-0010"></script>
+<script src="selector_categoria.js?v=20261029-0010"></script>
+<script src="objetivos_config.js?v=20261029-0010"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261029-0001" onerror="void 0"></script>
+<script src="lang.js?v=20261029-0010" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261029-0001"></script>
+<script src="datos_seguros.js?v=20261029-0010"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261029-0001" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-0001"></script>
-<script src="videos.js?v=20261029-0001" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-0010" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-0010"></script>
+<script src="videos.js?v=20261029-0010" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-0001">
+<link rel="stylesheet" href="movil.css?v=20261029-0010">
 
-<script src="iconos.js?v=20261029-0001" defer></script>
+<script src="iconos.js?v=20261029-0010" defer></script>
 </head>
 <body>
 
@@ -2380,6 +2380,9 @@ function gpcQ(ps){ return ps.map(function(p){return p[0].toFixed(1)+','+p[1].toF
 function gpnCancha(cfg){
   var cells=cfg.cells||{}, ramp=cfg.ramp||cells, orig=cfg.origins||{}, ocol=cfg.ocol||{};
   var cuenta=cfg.cuenta||null, hide=cfg.hideVal||[];
+  /* los cuadrantes que no llegan al minimo no se pintan ni llevan numero */
+  var minAcc=parseInt(cfg.minAcc,10)||0;
+  function _bajo(z){ return minAcc>0 && ((cuenta?(cuenta[z]||0):(cells[z]||0))<minAcc); }
   /* cada dibujo necesita ids propios: en la pagina hay una cancha por
      jugador y los degradados se pisarian entre si */
   var id='k'+(++GPC_N);
@@ -2420,7 +2423,7 @@ function gpnCancha(cfg){
   }
   /* ── nuestro campo: donde cae ── */
   for(var r2=0;r2<3;r2++) for(var c2=0;c2<3;c2++){
-    var z2=GPN_PROPIO_ROWS[r2][c2], v2=ramp[z2]||0, t2=v2?Math.pow(v2/mx,.75):0, g2=celda(z2,true);
+    var z2=GPN_PROPIO_ROWS[r2][c2], v2=_bajo(z2)?0:(ramp[z2]||0), t2=v2?Math.pow(v2/mx,.75):0, g2=celda(z2,true);
     var cr2=(cfg.cellCol&&cfg.cellCol[z2])||null;
     var relleno = cr2 ? ('rgba('+cr2+','+(v2?(0.07+0.42*t2).toFixed(3):'0.03')+')') : ('url(#cl'+id+')');
     S.push('<polygon points="'+gpcQ(g2.pol)+'" fill="'+relleno+'"'+(cr2?'':' fill-opacity="'+(v2?(0.07+0.42*t2).toFixed(3):'0.025')+'"')
@@ -2469,7 +2472,7 @@ function gpnCancha(cfg){
   /* ── los remates ── */
   var fl=cfg.flows||[], mf=0; fl.forEach(function(f){ if(f[2]>mf) mf=f[2]; }); if(!mf) mf=1;
   fl.forEach(function(f,n){
-    var a=pins[f[0]]; if(!a) return; var g=celda(f[1],true); if(!g) return; var b=g.cen;
+    var a=pins[f[0]]; if(!a) return; if(_bajo(f[1])) return; var g=celda(f[1],true); if(!g) return; var b=g.cen;
     var cc=f[3]||((ocol[f[0]]&&ocol[f[0]][0])||'245,165,36'), kk=f[2]/mf;
     var yA=a[1]+15, cY=(3*yA-130-b[1])/2;
     D.push('<linearGradient id="f'+id+'_'+n+'" gradientUnits="userSpaceOnUse" x1="'+a[0].toFixed(1)+'" y1="'+yA.toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+'"><stop offset="0" stop-color="rgb('+cc+')" stop-opacity=".07"/><stop offset=".55" stop-color="rgb('+cc+')" stop-opacity="'+(0.28+0.30*kk).toFixed(2)+'"/><stop offset="1" stop-color="rgb('+LN+')" stop-opacity="'+(0.55+0.4*kk).toFixed(2)+'"/></linearGradient>');
@@ -2488,7 +2491,7 @@ function gpnCancha(cfg){
     var fuerte=(mx>0&&(ramp[z3]||0)>=0.55*mx);
     S.push('<text x="'+(g3.xL+11).toFixed(1)+'" y="'+(g3.yT+15).toFixed(1)+'" font-family="Barlow Condensed,sans-serif" font-weight="600" font-size="12" letter-spacing="1.1" fill="rgba(255,255,255,.45)">Z'+z3+'</text>');
     var vv=cells[z3]||0, cu=cuenta?(cuenta[z3]||0):0;
-    if(hide.indexOf(z3)>=0 || (!vv&&!cu)) continue;
+    if(hide.indexOf(z3)>=0 || (!vv&&!cu) || _bajo(z3)) continue;
     var grande=cuenta?(''+cu):(''+vv), chico=cuenta?(vv+'%'):'';
     var cx3=g3.cen[0], yc=(g3.yT+g3.yB)/2;
     S.push('<g filter="url(#so'+id+')">'
@@ -2681,14 +2684,15 @@ function gpnCfgGuardar(num){
   if(!gpEsEntrenador()) return;
   var c=GPN_CFG[num]||{};
   try{ gpEdGuardar(gpnCfgClave(num), JSON.stringify({
-    tab:c.tab||'', cat:(c.cat||[]).slice(), ev:(c.ev||[]).slice() })); }catch(e){}
+    tab:c.tab||'', cat:(c.cat||[]).slice(), ev:(c.ev||[]).slice(), min:c.min||0 })); }catch(e){}
 }
 function gpnCfgParse(txt){
   try{
     var o=JSON.parse(txt);
     if(o&&typeof o==='object') return { tab:String(o.tab||''),
       cat:(o.cat instanceof Array)?o.cat.slice():[],
-      ev:(o.ev instanceof Array)?o.ev.slice():[] };
+      ev:(o.ev instanceof Array)?o.ev.slice():[],
+      min:(parseInt(o.min,10)||0) };
   }catch(e){}
   return null;
 }
@@ -2743,12 +2747,54 @@ function gpnDesplegable(opts){
   return {el:dd, sel:function(){return sel;}};
 }
 
+/* ══ EL MINIMO DE ACCIONES POR CUADRANTE ══════════════════════════════
+   Con un filtro fino —una sola combinacion, un solo resultado— la cancha
+   se llena de cuadrantes de una y dos pelotas: nueve zonas con 17% cada
+   una no dicen nada y encima tapan lo poco que si dice algo. Con esto
+   quedan pintados solo los cuadrantes que llegan al minimo.
+
+   Los porcentajes NO se recalculan: siguen siendo sobre el total de la
+   seleccion. Si se recalcularan sobre lo que queda a la vista, un 33%
+   pasaria a ser 50% por esconder un cuadrante, y el numero mentiria. */
+var GPN_MINS=[0,2,3,4,5,6,8,10,15,20];
+function gpnDespMin(valor,onChange){
+  var v=parseInt(valor,10)||0;
+  var dd=document.createElement('div'); dd.className='gpn-dd';
+  var bt=document.createElement('button'); bt.type='button'; bt.className='gpn-ddb';
+  var menu=document.createElement('div'); menu.className='gpn-ddm';
+  function texto(){
+    bt.innerHTML=(v?('<b style="color:#E6EDF6">\u2265 '+v+'</b>'):'Todos')+' <span class="car">\u25be</span>';
+    bt.classList.toggle('act', v>0);
+  }
+  GPN_MINS.forEach(function(x){
+    var row=document.createElement('label'); row.className='gpn-ddi';
+    row.innerHTML='<input type="checkbox"'+(x===v?' checked':'')+'>'
+      +'<span>'+(x?('Desde '+x):'Todos los cuadrantes')+'</span>'
+      +'<span class="nn">'+(x?(x+'+'):'\u2014')+'</span>';
+    row.onclick=function(e){ e.stopPropagation(); };
+    row.querySelector('input').onchange=function(){
+      v=x;
+      [].forEach.call(menu.querySelectorAll('input'),function(c,i){ c.checked=(GPN_MINS[i]===v); });
+      texto(); dd.classList.remove('open'); onChange(v);
+    };
+    menu.appendChild(row);
+  });
+  bt.onclick=function(e){ e.stopPropagation();
+    var ab=dd.classList.contains('open');
+    [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');});
+    if(!ab) dd.classList.add('open'); };
+  dd.appendChild(bt); dd.appendChild(menu);
+  texto();
+  return {el:dd};
+}
+
 function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
   var acc=gpnClips(num,tipo,'all',null);
   var cuentaCat={},cuentaEv={};
   acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
   var estado={ cat:(ini&&ini.cat instanceof Array)?ini.cat.slice():[],
-               ev :(ini&&ini.ev  instanceof Array)?ini.ev.slice() :[] };
+               ev :(ini&&ini.ev  instanceof Array)?ini.ev.slice() :[],
+               min:(ini&&parseInt(ini.min,10))||0 };
   /* el plantel abre con el resultado ya puesto y sin poder cambiarlo */
   var _plantel=!gpEsEntrenador();
   if(_plantel && GPN_EV_PLANTEL[tipo]) estado.ev=GPN_EV_PLANTEL[tipo].slice();
@@ -2779,8 +2825,13 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     init:estado.ev
   });
 
+  var lblM=document.createElement('span'); lblM.className='gpn-lbl';
+  lblM.setAttribute('data-t','M\u00edn. acciones'); lblM.textContent='M\u00edn. acciones';
+  var ddM=gpnDespMin(estado.min,function(v){ estado.min=v; onPick(estado); });
+
   fila.appendChild(lblC); fila.appendChild(ddC.el);
   if(!_plantel){ fila.appendChild(lblE); fila.appendChild(ddE.el); }
+  fila.appendChild(lblM); fila.appendChild(ddM.el);
   barra.appendChild(fila);
   cont.appendChild(barra);
   return estado;
@@ -2887,7 +2938,7 @@ function gpnPanel(j,cont,tipo){
   var ini=(cfg&&cfg.tab===tipo)?cfg:null;
   var estado=gpnFiltros(caja,num,tipo,cats,escala,function(st){
     dibujar(st); if(btn&&btn._txt) btn._txt();
-    GPN_CFG[num]={tab:tipo,cat:st.cat.slice(),ev:st.ev.slice()};
+    GPN_CFG[num]={tab:tipo,cat:st.cat.slice(),ev:st.ev.slice(),min:st.min||0};
     gpnCfgGuardar(num);
   }, ini);
   /* El SVG lleva width:100%. Suelto en el panel se estiraba a 1400 px de ancho
@@ -2938,7 +2989,7 @@ function gpnPanel(j,cont,tipo){
     if(!flows) flows=m.flows.map(function(f){ return [f[0],f[1],f[2],(ocol[f[0]]||GPN_CAT[0])[0]]; });
     var rot={ataque:'Dónde caen sus remates',saque:'Dónde pone sus saques',recepcion:'Dónde se para y de dónde le sacan'}[tipo];
     var svg=gpnCancha({cells:m.cells,origins:m.orig,flows:flows,ocol:ocol,cellSrc:m.src,
-                       cuenta:m.crudo,tipo:tipo,
+                       cuenta:m.crudo,tipo:tipo,minAcc:(st.min||0),
                        cellCol:cellCol,cellInk:cellInk,focus:(tipo==='recepcion'?'top':'bottom')});
     zona.innerHTML='<div class="gpn-rot">'+rot+' · <b>'+acc.length+'</b> acciones'
       +(m.conDest<acc.length?(' <span style="color:#5E6B7D">('+(acc.length-m.conDest)+' sin destino)</span>'):'')
@@ -3023,7 +3074,9 @@ function gpnFichaJugador(j,idx){
       [].forEach.call(tabs.children,function(x){x.classList.remove('on');});
       b.classList.add('on');
       /* cambiar de solapa empieza de cero: los filtros eran los de la otra */
-      GPN_CFG[j.num]={tab:t,cat:[],ev:[]};
+      /* el minimo se mantiene al cambiar de solapa: es como queres MIRAR
+         la cancha, no que estabas mirando */
+      GPN_CFG[j.num]={tab:t,cat:[],ev:[],min:(GPN_CFG[j.num]&&GPN_CFG[j.num].min)||0};
       gpnCfgGuardar(j.num);
       pintar(t); }; }
     tabs.appendChild(b);
@@ -7110,9 +7163,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261029-0001"></script>
-<script src="ayuda.js?v=20261029-0001"></script>
-<script src="volver_inicio.js?v=20261029-0001" defer></script>
+<script src="temporadas_menu.js?v=20261029-0010"></script>
+<script src="ayuda.js?v=20261029-0010"></script>
+<script src="volver_inicio.js?v=20261029-0010" defer></script>
 </body>
 </html>
 
