@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-0018"></script>
-<script src="selector_categoria.js?v=20261029-0018"></script>
-<script src="objetivos_config.js?v=20261029-0018"></script>
+<script src="categorias_club.js?v=20261029-0026"></script>
+<script src="selector_categoria.js?v=20261029-0026"></script>
+<script src="objetivos_config.js?v=20261029-0026"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261029-0018" onerror="void 0"></script>
+<script src="lang.js?v=20261029-0026" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261029-0018"></script>
+<script src="datos_seguros.js?v=20261029-0026"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261029-0018" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-0018"></script>
-<script src="videos.js?v=20261029-0018" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-0026" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-0026"></script>
+<script src="videos.js?v=20261029-0026" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-0018">
+<link rel="stylesheet" href="movil.css?v=20261029-0026">
 
-<script src="iconos.js?v=20261029-0018" defer></script>
+<script src="iconos.js?v=20261029-0026" defer></script>
 </head>
 <body>
 
@@ -2777,7 +2777,7 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     chip:function(k){ return '<b style="color:#E6EDF6">'+k+'</b>'; },
     items:cats.filter(function(c){return c.k!=='all';}).map(function(c){
       return {k:c.k, n:cuentaCat[c.k]||0, html:'<span>'+c.html+'</span>'}; }),
-    onChange:function(s){ estado.cat=s.slice(); onPick(estado); },
+    onChange:function(s){ estado.cat=s.slice(); _pick(); },
     init:estado.cat
   });
 
@@ -2789,7 +2789,7 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     items:escala.filter(function(p){return cuentaEv[p[0]];}).map(function(p){
       return {k:p[0], n:cuentaEv[p[0]],
               html:'<span class="ev" style="color:'+GPN_EVCOL[p[0]]+'">'+p[0]+'</span><span>'+p[1]+'</span>'}; }),
-    onChange:function(s){ estado.ev=s.slice(); onPick(estado); },
+    onChange:function(s){ estado.ev=s.slice(); _pick(); },
     init:estado.ev
   });
 
@@ -2806,6 +2806,33 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
 
      Espera 220 ms antes de repintar: asi escribir "15" es un solo dibujo
      y una sola escritura, no una por tecla. */
+  /* ══ GUARDAR LA VISTA PARA LOS JUGADORES ═════════════════════════
+     Lo que el entrenador deja aca —solapa, combinacion, resultado y
+     minimo— es lo que les abre a ellos. Se guarda cuando se aprieta, no
+     mientras se toquetea: asi se puede mirar cualquier cosa sin miedo a
+     pisar lo que ya se dejo listo. El boton avisa en que estado esta. */
+  function _mismo(a,b){
+    a=(a||[]).slice().sort(); b=(b||[]).slice().sort();
+    return a.length===b.length && a.every(function(x,i){ return x===b[i]; });
+  }
+  function _guardadoIgual(){
+    var g=GPN_CFG[num];
+    if(!g) return !estado.cat.length && !estado.ev.length && !estado.min;
+    return g.tab===tipo && _mismo(g.cat,estado.cat) && _mismo(g.ev,estado.ev)
+        && (g.min||0)===(estado.min||0);
+  }
+  var btnG=null;
+  function _refG(){
+    if(!btnG) return;
+    var ig=_guardadoIgual();
+    btnG.innerHTML=ig?'\u2713 Guardado':'\ud83d\udcbe Guardar';
+    btnG.style.borderColor=ig?'rgba(255,255,255,.10)':'rgba(245,165,36,.85)';
+    btnG.style.color=ig?'#5E6B7D':'#F5A524';
+    btnG.title=ig?'Los jugadores ya ven esta vista'
+                 :'Guardar esta vista: la ficha les abre asi a los jugadores';
+  }
+  function _pick(){ _refG(); onPick(estado); }
+
   var lblM=document.createElement('span'); lblM.className='gpn-lbl';
   lblM.title='M\u00edn. pelotas por cuadrante'; lblM.textContent='M\u00edn.';
   var inpM=document.createElement('input');
@@ -2820,12 +2847,24 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     var v=parseInt(inpM.value,10); estado.min=(isNaN(v)||v<0)?0:v;
     _bordeMin();
     if(_tMin) clearTimeout(_tMin);
-    _tMin=setTimeout(function(){ onPick(estado); },220);
+    _tMin=setTimeout(function(){ _pick(); },220);
   };
 
   fila.appendChild(lblC); fila.appendChild(ddC.el);
   if(!_plantel){ fila.appendChild(lblE); fila.appendChild(ddE.el); }
   fila.appendChild(lblM); fila.appendChild(inpM);
+  if(!_plantel){
+    btnG=document.createElement('button'); btnG.type='button';
+    btnG.style.cssText='margin-left:10px;background:#161C27;border:1px solid rgba(255,255,255,.10);'
+      +'border-radius:7px;padding:5px 10px;font-family:inherit;font-weight:700;font-size:12px;'
+      +'cursor:pointer;white-space:nowrap';
+    btnG.onclick=function(e){ e.stopPropagation();
+      GPN_CFG[num]={tab:tipo,cat:estado.cat.slice(),ev:estado.ev.slice(),min:estado.min||0};
+      gpnCfgGuardar(num);
+      _refG();
+    };
+    fila.appendChild(btnG); _refG();
+  }
   barra.appendChild(fila);
   cont.appendChild(barra);
   return estado;
@@ -2930,10 +2969,13 @@ function gpnPanel(j,cont,tipo){
      el guardo la secuencia. */
   var cfg=GPN_CFG[num];
   var ini=(cfg&&cfg.tab===tipo)?cfg:null;
+  /* Tocar un filtro YA NO guarda. Antes si, y por eso lo que el entrenador
+     dejaba preseleccionado se perdia al tocar otra solapa: ese click
+     guardaba la solapa nueva, vacia, encima de lo que habia dejado. Ahora
+     mover filtros solo cambia lo que se ve; lo que ven los jugadores lo
+     fija el boton de guardar. */
   var estado=gpnFiltros(caja,num,tipo,cats,escala,function(st){
     dibujar(st); if(btn&&btn._txt) btn._txt();
-    GPN_CFG[num]={tab:tipo,cat:st.cat.slice(),ev:st.ev.slice(),min:st.min||0};
-    gpnCfgGuardar(num);
   }, ini);
   /* El SVG lleva width:100%. Suelto en el panel se estiraba a 1400 px de ancho
      por 1350 de alto —una cancha por pantalla—. Va en una columna con techo y
@@ -3059,11 +3101,9 @@ function gpnFichaJugador(j,idx){
     if(n){ tabBtn[t]=b; b.type='button'; b.onclick=function(ev){ ev.stopPropagation();
       [].forEach.call(tabs.children,function(x){x.classList.remove('on');});
       b.classList.add('on');
-      /* cambiar de solapa empieza de cero: los filtros eran los de la otra */
-      /* el minimo se mantiene al cambiar de solapa: es como queres MIRAR
-         la cancha, no que estabas mirando */
-      GPN_CFG[j.num]={tab:t,cat:[],ev:[],min:(GPN_CFG[j.num]&&GPN_CFG[j.num].min)||0};
-      gpnCfgGuardar(j.num);
+      /* Cambiar de solapa no toca lo guardado. La solapa nueva abre con sus
+         filtros en blanco si no es la guardada, y si volves a la guardada
+         vuelve tal cual la dejaste. */
       pintar(t); }; }
     tabs.appendChild(b);
   });
@@ -7118,9 +7158,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261029-0018"></script>
-<script src="ayuda.js?v=20261029-0018"></script>
-<script src="volver_inicio.js?v=20261029-0018" defer></script>
+<script src="temporadas_menu.js?v=20261029-0026"></script>
+<script src="ayuda.js?v=20261029-0026"></script>
+<script src="volver_inicio.js?v=20261029-0026" defer></script>
 </body>
 </html>
 
