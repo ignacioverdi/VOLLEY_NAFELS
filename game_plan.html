@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-2109"></script>
-<script src="selector_categoria.js?v=20261028-2109"></script>
-<script src="objetivos_config.js?v=20261028-2109"></script>
+<script src="categorias_club.js?v=20261028-2119"></script>
+<script src="selector_categoria.js?v=20261028-2119"></script>
+<script src="objetivos_config.js?v=20261028-2119"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-2109" onerror="void 0"></script>
+<script src="lang.js?v=20261028-2119" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-2109"></script>
+<script src="datos_seguros.js?v=20261028-2119"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-2109" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-2109"></script>
-<script src="videos.js?v=20261028-2109" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261028-2119" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-2119"></script>
+<script src="videos.js?v=20261028-2119" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-2109">
+<link rel="stylesheet" href="movil.css?v=20261028-2119">
 
-<script src="iconos.js?v=20261028-2109" defer></script>
+<script src="iconos.js?v=20261028-2119" defer></script>
 </head>
 <body>
 
@@ -2451,7 +2451,7 @@ function gpnVideo(num,tipo,cat,ev){
   };
   gpV._rot=_rotulo;
   _rotulo(clips.length);
-  document.getElementById('gpVidOverlay').style.display='flex';
+  document.getElementById('gpVidOverlay').style.display='flex'; gpVidAncho();
   try{ gpnTiempos(); }catch(e){}
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
   /* ══ LA SECUENCIA GUARDADA ══════════════════════════════════════════
@@ -4331,8 +4331,37 @@ function gpZoneClips(setterObj,pos,phase,rec,zone){
   return out;
 }
 
+/* ══ EL ANCHO DE LA VENTANA ═══════════════════════════════════════════════
+   La ventana mide exactamente lo que ocupa su contenido: el video que entra
+   a lo alto (es 16:9, asi que su ancho sale del alto disponible) mas la
+   columna de la lista, la barrita del medio, la separacion y el relleno.
+   Asi no queda espacio vacio a la derecha, que es lo que pasaba cuando el
+   ancho era un numero fijo de 1600.
+
+   Se la llama al abrir, al soltar la barrita y al cambiar el tamanio de la
+   ventana del navegador. Si por lo que sea no corre, el calc del CSS deja
+   el mismo resultado con la columna en su ancho de fabrica. */
+function gpVidAncho(){
+  var box=document.getElementById('gpVidBox'); if(!box) return;
+  var col=parseInt(box.style.getPropertyValue('--gpcol'),10)||215;
+  var alto=window.innerHeight*0.97;
+  var video=Math.max(320,(alto-218))*1.777;
+  box.style.width=Math.min(window.innerWidth*0.97, video+col+43)+'px';
+}
+window.addEventListener('resize',function(){ gpVidAncho(); });
+
 function gpVidDom(){
   if(document.getElementById('gpVidOverlay')) return;
+  if(!document.getElementById('gpVidAsaEstilo')){
+    var _e=document.createElement('style'); _e.id='gpVidAsaEstilo';
+    _e.textContent='#gpVidAsa{flex:0 0 7px;align-self:stretch;min-height:120px;cursor:col-resize;'
+      +'border-radius:4px;background:#1b2634;transition:background .15s}'
+      +'#gpVidAsa:hover,#gpVidAsa.gpAgarrada{background:#3b82f6}'
+      /* en una pantalla angosta la lista cae abajo del video: ahi la barrita
+         no tiene sentido y seria una raya de punta a punta */
+      +'@media(max-width:900px){#gpVidAsa{display:none}}';
+    document.head.appendChild(_e);
+  }
   var d=document.createElement('div'); d.id='gpVidOverlay';
   d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(4,8,14,.86);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;padding:8px';
   d.innerHTML=''
@@ -4348,12 +4377,12 @@ function gpVidDom(){
 
       En una pantalla angosta la columna no entra y vuelve sola abajo del
       video, que es como estaba. */
-   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(97vw,calc((97vh - 218px) * 1.777 + 249px));max-height:97vh;overflow:auto;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
+   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;--gpcol:215px;width:min(97vw,calc((97vh - 218px) * 1.777 + var(--gpcol) + 43px));max-height:97vh;overflow:auto;padding:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
    +'<b id="gpVidTitle" style="font-size:16px;color:#e2e8f0;font-family:Barlow,sans-serif">Reproductor</b>'
    +'<div style="display:flex;gap:6px"><button id="gpVidMax" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">⛶ Maximizar</button>'
    +'<button id="gpVidClose" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div></div>'
-   +'<div id="gpVidCuerpo" style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">'
+   +'<div id="gpVidCuerpo" style="display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap">'
    /* ══ EL REPRODUCTOR SE QUEDA CON TODO LO QUE SOBRA ══════════════════
       Antes estaba clavado en 928 px para que no se achicara al meterle la
       columna al lado. Ahora que el renglon de la lista pide mucho menos
@@ -4394,7 +4423,9 @@ function gpVidDom(){
    +'<span title="\u2190 \u2192 pasan de accion \u00b7 la barra espaciadora pausa y sigue \u00b7 + y \u2212 mueven el video 2 segundos \u00b7 un clic en el video tambien lo pausa" style="flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#55657a;font-size:10px;letter-spacing:.2px">\u2190\u2192 acci\u00f3n \u00b7 espacio = pausa \u00b7 +/\u2212 2 seg</span>'
    +'<span id="gpVidNow" style="flex:none;white-space:nowrap;color:#7689a1;font-size:12px"></span></div>'
    +'</div>'   /* cierra gpVidIzq */
-   +'<div id="gpVidDer" style="flex:0 0 215px;min-width:0;max-width:215px;display:flex;flex-direction:column;min-height:0">'
+   /* la barrita que se arrastra para ensanchar o achicar la lista */
+   +'<div id="gpVidAsa" title="Arrastr\u00e1 para ensanchar o achicar la lista \u00b7 doble clic vuelve al ancho normal"></div>'
+   +'<div id="gpVidDer" style="flex:0 0 var(--gpcol,215px);min-width:0;max-width:none;display:flex;flex-direction:column;min-height:0">'
    +'<div id="gpVidList" style="flex:1 1 auto;min-height:120px;max-height:calc(97vh - 218px);overflow:auto;border:1px solid #1f2c3d;border-radius:11px;padding:0 8px"></div>'
    +'</div>'   /* cierra gpVidDer */
    +'</div>'   /* cierra gpVidCuerpo */
@@ -4452,6 +4483,57 @@ function gpVidDom(){
       else if(k===' '||k==='Spacebar'||k==='Space'){ e.preventDefault(); gpVidToggle(); }
     });
   }
+  /* ══ LA LISTA SE ENSANCHA Y SE ACHICA ════════════════════════════════
+     Con la columna fija, un nombre largo se cortaba —"#9 Wermelinger ·
+     X5 -..."— y no se veia desde donde y hacia donde ataca.
+
+     Ahora la barrita entre el video y la lista se arrastra. Mientras se
+     arrastra la ventana NO se mueve: lo que la lista gana se lo saca al
+     video y al reves, asi la barrita sigue al mouse exactamente. Al soltar,
+     la ventana se reacomoda a su contenido.
+
+     El ancho elegido queda guardado en este navegador, asi que se elige una
+     sola vez. Doble clic en la barrita vuelve al ancho de fabrica. */
+  (function(){
+    var asa=document.getElementById('gpVidAsa');
+    var box=document.getElementById('gpVidBox');
+    if(!asa||!box) return;
+    var MIN=170, MAX=620, DEF=215;
+    function ancho(){ return parseInt(box.style.getPropertyValue('--gpcol'),10)||DEF; }
+    function poner(px,guardar){
+      px=Math.max(MIN,Math.min(MAX,Math.round(px)));
+      box.style.setProperty('--gpcol',px+'px');
+      if(guardar){ try{ localStorage.setItem('vb_gp_vid_col',px); }catch(e){} }
+    }
+    var _g; try{ _g=parseInt(localStorage.getItem('vb_gp_vid_col'),10); }catch(e){}
+    poner(_g>0?_g:DEF,false);
+
+    var arrastrando=false, x0=0, col0=0;
+    asa.addEventListener('pointerdown',function(e){
+      arrastrando=true; x0=e.clientX; col0=ancho();
+      asa.classList.add('gpAgarrada');
+      try{ asa.setPointerCapture(e.pointerId); }catch(_){}
+      document.body.style.userSelect='none';
+      e.preventDefault();
+    });
+    asa.addEventListener('pointermove',function(e){
+      if(!arrastrando) return;
+      poner(col0 + (x0 - e.clientX), false);   /* a la izquierda = mas ancha */
+    });
+    function soltar(e){
+      if(!arrastrando) return;
+      arrastrando=false;
+      asa.classList.remove('gpAgarrada');
+      try{ asa.releasePointerCapture(e.pointerId); }catch(_){}
+      document.body.style.userSelect='';
+      poner(ancho(),true);
+      gpVidAncho();
+    }
+    asa.addEventListener('pointerup',soltar);
+    asa.addEventListener('pointercancel',soltar);
+    asa.addEventListener('dblclick',function(){ poner(DEF,true); gpVidAncho(); });
+  })();
+
   // cargar YouTube API una sola vez
   if(!window.YT){ var s=document.createElement('script'); s.src='https://www.youtube.com/iframe_api'; document.head.appendChild(s); }
 }
@@ -4523,7 +4605,7 @@ function gpOpenVideo(rot,zone,sidx){
   if(gpOcActivo()) faseLbl+=' · en cancha '+gpOcEtiqueta();
   var _rotA=function(n){ document.getElementById('gpVidTitle').textContent='P'+rot+' · Zona '+zone+' · '+faseLbl+' — '+n+' ataques'; };
   gpV._rot=_rotA; _rotA(clips.length);
-  document.getElementById('gpVidOverlay').style.display='flex';
+  document.getElementById('gpVidOverlay').style.display='flex'; gpVidAncho();
   clips.forEach(function(c){ c._key=c.code+'_'+c.t_atk; });
   // cargar selección guardada del entrenador
   var apply=function(saved){
@@ -6816,9 +6898,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-2109"></script>
-<script src="ayuda.js?v=20261028-2109"></script>
-<script src="volver_inicio.js?v=20261028-2109" defer></script>
+<script src="temporadas_menu.js?v=20261028-2119"></script>
+<script src="ayuda.js?v=20261028-2119"></script>
+<script src="volver_inicio.js?v=20261028-2119" defer></script>
 </body>
 </html>
 
