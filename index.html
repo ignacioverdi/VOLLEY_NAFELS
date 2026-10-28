@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-0904"></script>
-<script src="selector_categoria.js?v=20261028-0904"></script>
+<script src="categorias_club.js?v=20261028-1243"></script>
+<script src="selector_categoria.js?v=20261028-1243"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261028-0904"></script>
-<script src="firebase.js?v=20261028-0904" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-0904"></script>
-<script src="lang.js?v=20261028-0904"></script>
-<script src="plantel_nafels.js?v=20261028-0904"></script>
+<script src="datos_seguros.js?v=20261028-1243"></script>
+<script src="firebase.js?v=20261028-1243" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-1243"></script>
+<script src="lang.js?v=20261028-1243"></script>
+<script src="plantel_nafels.js?v=20261028-1243"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261028-0904" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261028-1243" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=6b78f555" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=840410f6" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=82ac48dd" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261028-0904" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261028-1243" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-0904">
+<link rel="stylesheet" href="movil.css?v=20261028-1243">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,128 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261028-0904" defer></script>
+<script src="iconos.js?v=20261028-1243" defer></script>
 
-<script src="nav.js?v=20261028-0904" defer></script>
+<script src="nav.js?v=20261028-1243" defer></script>
+<style id="encabezado-2026">
+/* ══ EL ENCABEZADO ═════════════════════════════════════════
+   Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
+   que esta mas arriba tambien pinta el header con !important, asi que si
+   esto fuera antes, ganaria aquel.
+
+   Todo el disenio nuevo esta dentro de @media(min-width:769px): en el
+   celular NO cambia nada, ahi siguen mandando movil.css y el bloque
+   "celular-encabezado". Lo unico que se ajusta en pantallas chicas es el
+   tamanio de la letra, porque el nombre nuevo es mas largo que el viejo.
+   ══════════════════════════════════════════════════════════ */
+@media(min-width:769px){
+
+  header{
+    margin:18px 30px 6px!important;
+    padding:clamp(26px,2.9vw,46px) clamp(26px,2.6vw,40px) clamp(25px,2.8vw,44px)!important;
+    border:1px solid rgba(255,255,255,.10)!important;
+    border-radius:26px!important;
+    overflow:hidden!important;
+    position:relative!important;
+    display:flex!important;align-items:center!important;
+    gap:30px!important;
+    isolation:isolate;
+    background:#0b0810!important;
+    box-shadow:0 24px 64px rgba(0,0,0,.55)!important;
+  }
+  /* La foto va en ::before (no en el fondo del header) para poder apilar
+     encima el oscurecido y el resplandor rojo sin pelearle a ::after. */
+  header::before{
+    content:''!important;position:absolute!important;inset:0!important;
+    z-index:0!important;pointer-events:none!important;
+    background:
+      radial-gradient(620px 300px at 5% 50%,rgba(232,25,44,.26),transparent 72%),
+      radial-gradient(520px 280px at 95% 50%,rgba(120,60,220,.18),transparent 74%),
+      linear-gradient(90deg,rgba(7,6,11,.95) 0%,rgba(7,6,11,.86) 34%,rgba(7,6,11,.42) 56%,rgba(7,6,11,.34) 78%,rgba(7,6,11,.80) 100%),linear-gradient(180deg,rgba(7,6,11,.30),rgba(7,6,11,.52)),
+      url('fondo_axpo_nafels.jpg') center/cover no-repeat!important;
+  }
+  /* la linea de color de abajo */
+  header::after{
+    content:''!important;position:absolute!important;left:0!important;right:0!important;
+    bottom:0!important;top:auto!important;height:3px!important;z-index:3!important;
+    background:linear-gradient(90deg,#e8192c,#ff4d6d 34%,#b94bff 68%,#6f7bff)!important;
+  }
+  header>*{position:relative;z-index:2}
+
+  .logo-wrap{
+    width:clamp(78px,7vw,112px)!important;height:clamp(78px,7vw,112px)!important;
+    border:2px solid rgba(255,255,255,.22)!important;
+    box-shadow:0 0 0 7px rgba(232,25,44,.09),0 0 46px rgba(232,25,44,.34),
+               inset 0 0 24px rgba(0,0,0,.65)!important;
+    background:radial-gradient(circle at 50% 32%,#16131d,#08060b)!important;
+  }
+  .logo-wrap img{padding:9px!important}
+
+  .header-text{
+    padding-left:26px;
+    border-left:1px solid rgba(255,255,255,.13);
+    min-width:0;
+  }
+  .club-name{
+    font-family:'Barlow Condensed',sans-serif!important;
+    font-weight:800!important;
+    font-size:clamp(34px,3.6vw,54px)!important;
+    line-height:.98!important;
+    letter-spacing:1.4px!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    color:#f6f2ec!important;
+    background:none!important;
+    -webkit-text-fill-color:#f6f2ec!important;
+    -webkit-background-clip:border-box!important;background-clip:border-box!important;
+    text-shadow:0 2px 24px rgba(0,0,0,.8);
+  }
+  .club-name .cn-hi{
+    background:linear-gradient(95deg,#ff2b3f 0%,#ff4d6d 32%,#b94bff 68%,#6f7bff 100%)!important;
+    -webkit-background-clip:text!important;background-clip:text!important;
+    -webkit-text-fill-color:transparent!important;color:transparent!important;
+    filter:drop-shadow(0 0 20px rgba(185,75,255,.35));
+  }
+  .club-sub{
+    font-family:'Barlow Condensed',sans-serif!important;
+    font-size:13px!important;font-weight:600!important;
+    letter-spacing:4.2px!important;color:#cdbfae!important;
+    margin-top:8px!important;text-transform:uppercase!important;
+  }
+
+  .header-right{
+    margin-left:auto!important;
+    gap:9px!important;
+    padding:13px 16px;
+    border-radius:16px;
+    background:rgba(9,7,11,.58);
+    border:1px solid rgba(255,255,255,.09);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  }
+  .live-badge{background:rgba(34,197,94,.13)!important;border-color:rgba(34,197,94,.32)!important}
+  .fecha-txt{color:#b9ad9e!important;font-size:11px!important;letter-spacing:1.2px!important}
+}
+
+/* En el celular: el nombre nuevo es mas largo, asi que baja un punto, y se
+   pinta igual que en la computadora (crema + NAFELS con el degrade). El
+   resto del encabezado del celular queda como estaba. */
+@media(max-width:768px){
+  .club-name{
+    font-size:19px!important;letter-spacing:1.6px!important;
+    background:none!important;color:#f3ede4!important;
+    -webkit-text-fill-color:#f3ede4!important;
+    -webkit-background-clip:border-box!important;background-clip:border-box!important;
+  }
+  .club-name .cn-hi{
+    background:linear-gradient(95deg,#ff2b3f 0%,#ff4d6d 32%,#b94bff 68%,#6f7bff 100%)!important;
+    -webkit-background-clip:text!important;background-clip:text!important;
+    -webkit-text-fill-color:transparent!important;color:transparent!important;
+  }
+}
+@media(max-width:400px){
+  .club-name{font-size:17px!important;letter-spacing:1.1px!important}
+}
+</style>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -606,7 +725,7 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
     <img src="escudo.png" alt="Volley Näfels" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'font-family:Bebas Neue,sans-serif;font-size:20px;color:#e8192c;letter-spacing:1px\'>CA<br>SL</div>'">
   </div>
   <div class="header-text">
-    <div class="club-name">NAFELS VOLEY</div>
+    <div class="club-name">AXPO VOLLEY <span class="cn-hi">NÄFELS</span></div>
     <div class="club-sub"><span data-t="club_sub"><span data-t="Sistema de Análisis · NLA Suiza 2026/27">Sistema de Análisis · NLA Suiza 2026/27</span></span></div>
   </div>
   <div class="header-right">
@@ -1713,9 +1832,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261028-0904"></script>
+<script src="chat_nafels.js?v=20261028-1243"></script>
 
-<script src="proximo_rival.js?v=20261028-0904" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261028-1243" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1781,13 +1900,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261028-0904" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261028-0904"></script>
+<script src="fixture_auto.js?v=20261028-1243" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261028-1243"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261028-0904" defer></script>
+<script src="onesignal_push.js?v=20261028-1243" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2470,7 +2589,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261028-0904"></script>
+<script src="ayuda.js?v=20261028-1243"></script>
 </body>
 </html>
 
