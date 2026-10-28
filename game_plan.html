@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-2356"></script>
-<script src="selector_categoria.js?v=20261028-2356"></script>
-<script src="objetivos_config.js?v=20261028-2356"></script>
+<script src="categorias_club.js?v=20261029-0001"></script>
+<script src="selector_categoria.js?v=20261029-0001"></script>
+<script src="objetivos_config.js?v=20261029-0001"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-2356" onerror="void 0"></script>
+<script src="lang.js?v=20261029-0001" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-2356"></script>
+<script src="datos_seguros.js?v=20261029-0001"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-2356" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-2356"></script>
-<script src="videos.js?v=20261028-2356" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-0001" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-0001"></script>
+<script src="videos.js?v=20261029-0001" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-2356">
+<link rel="stylesheet" href="movil.css?v=20261029-0001">
 
-<script src="iconos.js?v=20261028-2356" defer></script>
+<script src="iconos.js?v=20261029-0001" defer></script>
 </head>
 <body>
 
@@ -2990,14 +2990,26 @@ function gpnFichaJugador(j,idx){
      una solapa que con el filtro queda en cero —un sacador que nunca hizo
      punto, por ejemplo— no se le muestra en vez de abrirse vacia. */
   var _plantel=!gpEsEntrenador();
+  var _cc={};
   function _cuenta(t){
-    if(!_plantel) return gpnCuenta(j.num,t);
-    try{ return gpnClips(j.num,t,'all',GPN_EV_PLANTEL[t]).length; }catch(e){ return 0; }
+    if(_cc[t]!=null) return _cc[t];
+    var n;
+    if(!_plantel) n=gpnCuenta(j.num,t);
+    else { try{ n=gpnClips(j.num,t,'all',GPN_EV_PLANTEL[t]).length; }catch(e){ n=0; } }
+    return (_cc[t]=n);
   }
   if(_plantel) disponibles=disponibles.filter(function(t){ return _cuenta(t)>0; });
   /* abre en el fundamento donde mas aparece */
   var activo=disponibles.slice().sort(function(a,b){ return _cuenta(b)-_cuenta(a); })[0];
   if(j.pos==='LIBERO' && disponibles.indexOf('recepcion')>=0) activo='recepcion';
+
+  /* ── CUANTAS PELOTAS TIENE ──────────────────────────────────────────
+     Lo que mira el filtro de minimo de acciones: su MEJOR fundamento.
+     Asi un sacador no desaparece por no recibir: se esconde solo el que
+     esta por debajo del minimo en los tres. */
+  var _maxAcc=0;
+  ['ataque','saque','recepcion'].forEach(function(t){ var n=_cuenta(t); if(n>_maxAcc) _maxAcc=n; });
+  card.setAttribute('data-gpn-max', _maxAcc);
 
   /* si al plantel no le queda nada de este jugador, la ficha no se muestra */
   if(_plantel && !activo) card.classList.add('gpn-sin-atk');
@@ -3480,14 +3492,33 @@ function gpnFiltroJugadores(cont){
     var num=(c.id||'').replace('jug-','');
     var dorsal=(c.querySelector('.gpn-chapa')||{}).textContent||'';
     var nom=(c.querySelector('.gpn-nom')||{}).textContent||'';
-    return {card:c, k:dorsal, nom:nom};
+    var mx=parseInt(c.getAttribute('data-gpn-max')||'0',10);
+    return {card:c, k:dorsal, nom:nom, max:(isNaN(mx)?0:mx)};
   });
   function visible(k){ return !guardado || guardado.indexOf(k)>=0; }
+  /* ══ MINIMO DE ACCIONES ═══════════════════════════════════════════
+     El mismo que tiene Detalle por acciones. En 0 se ve todo; subiendolo
+     se sacan de la vista los jugadores con pocas pelotas, que es lo que
+     hace falta cuando mirás a un rival con una temporada entera encima:
+     una cancha armada sobre tres remates no dice nada.
+
+     Se compara contra su mejor fundamento, no contra la solapa abierta,
+     asi una ficha no aparece y desaparece al cambiar de solapa. Lo
+     elegido queda guardado para la proxima vez. */
+  var MIN=0, inp=null;
+  try{ var m0=parseInt(localStorage.getItem('vb_gp_minacc'),10); if(m0>0&&m0<9999) MIN=m0; }catch(e){}
   function aplicar(){
-    var n=0;
-    items.forEach(function(it){ var v=visible(it.k); it.card.style.display=v?'':'none'; if(v) n++; });
+    var n=0, porMin=0;
+    items.forEach(function(it){
+      var vJ=visible(it.k), v=vJ&&it.max>=MIN;
+      if(vJ&&!v) porMin++;
+      it.card.style.display=v?'':'none'; if(v) n++;
+    });
     bt.innerHTML='Jugadores <i class="gpn-n">'+n+' de '+items.length+'</i> <span class="car">▾</span>';
-    bt.classList.toggle('act', !!guardado && n<items.length);
+    bt.classList.toggle('act', (!!guardado||MIN>0) && n<items.length);
+    if(inp){ inp.style.borderColor=porMin?'rgba(245,165,36,.85)':'rgba(255,255,255,.10)';
+             inp.title=porMin?(porMin+' jugador'+(porMin>1?'es':'')+' escondido'+(porMin>1?'s':'')+' por este m\u00ednimo')
+                             :'Oculta a los jugadores con menos acciones que este n\u00famero'; }
   }
   function guardar(){
     try{ if(guardado) localStorage.setItem(clave, JSON.stringify(guardado));
@@ -3526,6 +3557,18 @@ function gpnFiltroJugadores(cont){
   cont.innerHTML=''; 
   var lb=document.createElement('span'); lb.className='gpn-lbl'; lb.textContent='Mostrar';
   cont.appendChild(lb); cont.appendChild(dd);
+  var lb2=document.createElement('span'); lb2.className='gpn-lbl';
+  lb2.style.marginLeft='8px'; lb2.setAttribute('data-t','M\u00edn. acciones'); lb2.textContent='M\u00edn. acciones';
+  inp=document.createElement('input');
+  inp.type='number'; inp.min='0'; inp.step='1'; inp.value=MIN;
+  inp.style.cssText='width:58px;background:#161C27;border:1px solid rgba(255,255,255,.10);color:#E6EDF6;'
+    +'border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:12px';
+  inp.oninput=function(){
+    var v=parseInt(inp.value,10); MIN=(isNaN(v)||v<0)?0:v;
+    try{ if(MIN>0) localStorage.setItem('vb_gp_minacc',MIN); else localStorage.removeItem('vb_gp_minacc'); }catch(e){}
+    aplicar();
+  };
+  cont.appendChild(lb2); cont.appendChild(inp);
   aplicar();
 }
 
@@ -7067,9 +7110,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-2356"></script>
-<script src="ayuda.js?v=20261028-2356"></script>
-<script src="volver_inicio.js?v=20261028-2356" defer></script>
+<script src="temporadas_menu.js?v=20261029-0001"></script>
+<script src="ayuda.js?v=20261029-0001"></script>
+<script src="volver_inicio.js?v=20261029-0001" defer></script>
 </body>
 </html>
 
