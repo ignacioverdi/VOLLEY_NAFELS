@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-0853"></script>
-<script src="selector_categoria.js?v=20261028-0853"></script>
-<script src="objetivos_config.js?v=20261028-0853"></script>
+<script src="categorias_club.js?v=20261028-0904"></script>
+<script src="selector_categoria.js?v=20261028-0904"></script>
+<script src="objetivos_config.js?v=20261028-0904"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-0853" onerror="void 0"></script>
+<script src="lang.js?v=20261028-0904" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-0853"></script>
+<script src="datos_seguros.js?v=20261028-0904"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-0853" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-0853"></script>
-<script src="videos.js?v=20261028-0853" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261028-0904" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-0904"></script>
+<script src="videos.js?v=20261028-0904" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-0853">
+<link rel="stylesheet" href="movil.css?v=20261028-0904">
 
-<script src="iconos.js?v=20261028-0853" defer></script>
+<script src="iconos.js?v=20261028-0904" defer></script>
 </head>
 <body>
 
@@ -4348,13 +4348,24 @@ function gpVidDom(){
 
       En una pantalla angosta la columna no entra y vuelve sola abajo del
       video, que es como estaba. */
-   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(1400px,97vw);max-height:94vh;overflow:auto;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
+   +'<div id="gpVidBox" style="background:#0e151f;border:1px solid #243044;border-radius:16px;width:min(1600px,97vw);max-height:94vh;overflow:auto;padding:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)">'
    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
    +'<b id="gpVidTitle" style="font-size:16px;color:#e2e8f0;font-family:Barlow,sans-serif">Reproductor</b>'
    +'<div style="display:flex;gap:6px"><button id="gpVidMax" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">⛶ Maximizar</button>'
    +'<button id="gpVidClose" style="border:1px solid #243044;background:transparent;color:#94a3b8;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer">✕</button></div></div>'
    +'<div id="gpVidCuerpo" style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">'
-   +'<div id="gpVidIzq" style="flex:0 0 928px;max-width:100%;min-width:0">'
+   /* ══ EL REPRODUCTOR SE QUEDA CON TODO LO QUE SOBRA ══════════════════
+      Antes estaba clavado en 928 px para que no se achicara al meterle la
+      columna al lado. Ahora que el renglon de la lista pide mucho menos
+      ancho, lo que se libera se lo lleva el video en vez de quedar en
+      blanco.
+
+      El tope no es un numero fijo sino el ALTO de la pantalla: un video
+      16:9 de ancho X mide X*9/16 de alto, asi que el ancho se limita a lo
+      que entre a lo alto descontando titulo, fichas, controles y pie. En
+      una pantalla alta el video crece; en una baja se achica solo, y la
+      ventana nunca necesita scroll para verlo entero. */
+   +'<div id="gpVidIzq" style="flex:1 1 auto;min-width:0;max-width:calc((94vh - 250px) * 1.777)">'
    +'<div id="gpVidWrap" style="position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:11px;overflow:hidden;margin-bottom:10px"></div>'
    +'<div id="gpVidChips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>'
    /* ══ LOS CONTROLES, SIEMPRE EN UNA SOLA FILA ════════════════════════
@@ -4383,8 +4394,8 @@ function gpVidDom(){
    +'<span title="+ y \u2212 mueven el video 2 segundos \u00b7 un clic en el video lo pausa" style="flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#55657a;font-size:10px;letter-spacing:.2px">+/\u2212 2 seg \u00b7 clic = pausa</span>'
    +'<span id="gpVidNow" style="flex:none;white-space:nowrap;color:#7689a1;font-size:12px"></span></div>'
    +'</div>'   /* cierra gpVidIzq */
-   +'<div id="gpVidDer" style="flex:1 1 360px;min-width:250px;display:flex;flex-direction:column;min-height:0">'
-   +'<div id="gpVidList" style="flex:1 1 auto;min-height:120px;max-height:min(78vh,628px);overflow:auto;border:1px solid #1f2c3d;border-radius:11px;padding:0 8px"></div>'
+   +'<div id="gpVidDer" style="flex:0 1 268px;min-width:212px;max-width:310px;display:flex;flex-direction:column;min-height:0">'
+   +'<div id="gpVidList" style="flex:1 1 auto;min-height:120px;max-height:calc(94vh - 250px);overflow:auto;border:1px solid #1f2c3d;border-radius:11px;padding:0 8px"></div>'
    +'</div>'   /* cierra gpVidDer */
    +'</div>'   /* cierra gpVidCuerpo */
    +'<div style="display:flex;gap:8px;margin-top:10px">'
@@ -4617,13 +4628,18 @@ function gpVidFila(c,editable){
       +'<button data-d="1" title="Bajar" style="'+est+'">▼</button></span>';
   }
   var _nm=gpPlayerName(c.num), _who=c.num?('#'+c.num+(_nm?' '+_nm:'')):'';
-  var _tag=_play?'<span style="color:#22c55e;font-size:11px;margin-left:4px">▶ video</span>':(c.t_atk>0?'<span style="color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
-  /* el renglon decia inicio-de-jugada -> accion, que no era lo que se veia:
-     ahora dice el corte, los mismos segundos que va a durar el video */
-  var _tm='—';
-  if(c.t_atk>0){ var _ct=gpCorte(c); _tm=gpMmss(_ct[0])+'→'+gpMmss(_ct[1]); }
+  /* ══ EL RENGLON, AL HUESO ══════════════════════════════════════════
+     Con la lista al costado del video el ancho es oro, y el renglon traia
+     tres cosas que no se usan para elegir una accion: la fecha del
+     partido, los segundos del corte y el cartelito "video".
+     Se van las tres. Lo que queda es lo unico que mirabas: la valoracion,
+     quien, el combo y de que zona a que zona.
+     El aviso SI se queda cuando el clip NO se puede ver —"sin link" o
+     "sin sync"—: eso no es decoracion, es la diferencia entre un clip que
+     anda y uno que no. En los que andan no se dibuja nada. */
+  var _tag=_play?'':(c.t_atk>0?'<span style="flex:none;color:#64748b;font-size:10px;margin-left:4px">sin link</span>':'<span style="flex:none;color:#475569;font-size:10px;margin-left:4px">sin sync</span>');
   row.style.opacity=_play?'1':'.5';
-  row.innerHTML=flechas+chk+'<span style="font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'<span style="color:#52617a;font-size:11px"> · '+(c.date||'')+'</span></span><span style="color:#7689a1;font-size:12px;font-variant-numeric:tabular-nums">'+_tm+'</span>'+_tag;
+  row.innerHTML=flechas+chk+'<span style="flex:none;font-weight:900;width:16px;text-align:center;color:'+gpEvColor(c.ev)+'">'+c.ev+'</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(_who?'<b style="color:#f1f5f9">'+_who+'</b> · ':'')+c.combo+' · '+c.orig+'→'+c.dest+'</span>'+_tag;
   if(puedeTildar){
     var cb=row.querySelector('input[type=checkbox]');
     if(cb) cb.onclick=function(e){ e.stopPropagation(); gpSelTildar(c,this.checked); };
@@ -6787,9 +6803,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-0853"></script>
-<script src="ayuda.js?v=20261028-0853"></script>
-<script src="volver_inicio.js?v=20261028-0853" defer></script>
+<script src="temporadas_menu.js?v=20261028-0904"></script>
+<script src="ayuda.js?v=20261028-0904"></script>
+<script src="volver_inicio.js?v=20261028-0904" defer></script>
 </body>
 </html>
 
