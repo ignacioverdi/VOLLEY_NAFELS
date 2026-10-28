@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261028-2119"></script>
-<script src="selector_categoria.js?v=20261028-2119"></script>
-<script src="objetivos_config.js?v=20261028-2119"></script>
+<script src="categorias_club.js?v=20261028-2152"></script>
+<script src="selector_categoria.js?v=20261028-2152"></script>
+<script src="objetivos_config.js?v=20261028-2152"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -463,7 +463,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261028-2119" onerror="void 0"></script>
+<script src="lang.js?v=20261028-2152" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -474,7 +474,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261028-2119"></script>
+<script src="datos_seguros.js?v=20261028-2152"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -487,15 +487,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261028-2119" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261028-2119"></script>
-<script src="videos.js?v=20261028-2119" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261028-2152" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261028-2152"></script>
+<script src="videos.js?v=20261028-2152" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261028-2119">
+<link rel="stylesheet" href="movil.css?v=20261028-2152">
 
-<script src="iconos.js?v=20261028-2119" defer></script>
+<script src="iconos.js?v=20261028-2152" defer></script>
 </head>
 <body>
 
@@ -988,6 +988,47 @@ GP_TD = gpPartFiltra(GP_TD);
    La funcion que SI existe es VB_esEditor, de firebase.js: devuelve false
    solo cuando el rol guardado es 'player'. Si no hay sesion, es editor —
    igual que en el resto de la app. */
+/* ══ LO QUE VE EL PLANTEL ═════════════════════════════════════════════════
+   El Game Plan completo es el cuaderno del cuerpo tecnico. Al jugador, la
+   misma pantalla con todo adentro lo satura: termina sin ver nada.
+
+   Con el rol 'player' se le deja lo que le sirve para jugar —distribucion
+   del armador, las fichas de los rivales, como recibe el rival y el plan— y
+   se le sacan las rotaciones, "como vamos a jugar" (que es planificacion
+   nuestra), el PDF y el selector de rival, que lo dejaba pasearse por el
+   dossier de toda la liga en vez de mirar el del sabado.
+
+   Es filtro visual, no una caja fuerte: los datos viajan igual al navegador.
+   Alcanza de sobra para el problema real, que es el exceso de informacion.
+
+   TODO esto es no-op para el cuerpo tecnico: si gpEsEntrenador() da true, la
+   clase no se pone y la pantalla queda exactamente como estaba. */
+(function(){
+  var e=document.createElement('style'); e.id='vb-plantel-css';
+  e.textContent=
+     'html.vb-plantel #anchor-juego,'
+    +'html.vb-plantel #seccion-rotaciones,'
+    +'html.vb-plantel #pdf-btn,'
+    +'html.vb-plantel #rival-select{display:none!important}'
+    +'html.vb-plantel .gpn-card.gpn-sin-atk{display:none!important}'
+    /* las claves del jugador las escribe el cuerpo tecnico: el plantel las lee */
+    +'html.vb-plantel .gpn-cle{pointer-events:none;cursor:default}';
+  (document.head||document.documentElement).appendChild(e);
+  function marcar(){
+    var jug=false;
+    try{ jug = !gpEsEntrenador(); }catch(_){}
+    document.documentElement.classList.toggle('vb-plantel', jug);
+    if(jug){
+      try{ [].forEach.call(document.querySelectorAll('.gpn-cle'),function(x){
+        x.setAttribute('contenteditable','false'); }); }catch(_){}
+    }
+  }
+  window.gpMarcarPlantel=marcar;
+  /* el rol puede llegar despues del login: se repasa un par de veces */
+  document.addEventListener('DOMContentLoaded',marcar);
+  setTimeout(marcar,1200); setTimeout(marcar,3000);
+})();
+
 function gpEsEntrenador(){
   try{ if(typeof VB_esEditor==='function') return !!VB_esEditor(); }catch(e){}
   try{ return (localStorage.getItem('vb_role')||'').toLowerCase()!=='player'; }catch(e){}
@@ -2282,6 +2323,16 @@ var GPN_COMBO_COL=[GPN_CAT[0],GPN_CAT[1],
 var GPN_EVCOL={'#':'#8FDCF8','+':'#C6D2E0','!':'#8C9AAC','-':'#7C8A9E','/':'#FF8AC4','=':'#FF8A99'};
 var GPN_RESS=[['#','Punto'],['+','Buena'],['!','Media'],['-','Mala'],['/','Bloqueado'],['=','Error']];
 var GPN_RESS_REC=[['#','Perfecta'],['+','Buena'],['!','Media'],['-','Mala'],['/','Sobrepase'],['=','Error']];
+/* ══ LO QUE VE EL PLANTEL DE CADA FUNDAMENTO ═════════════════════════════
+   ATAQUE      #            de donde te hace el punto
+   SAQUE       # + /        con que saque hace punto o complica
+   RECEPCION   ! - / =      las que no le salen bien: las atacables
+
+   La ficha completa son tres fundamentos por catorce jugadores. Con todo
+   adentro, el que la mira no se queda con nada —y la lista de video se
+   vuelve inmanejable—. Con esto cada solapa trae UNA sola cosa.
+   El cuerpo tecnico sigue viendo y filtrando todo. */
+var GPN_EV_PLANTEL={ ataque:['#'], saque:['#','+','/'], recepcion:['!','-','/','='] };
 
 function gpnColores(zonas){ var o={}; zonas.slice().sort(function(a,b){return a-b;}).forEach(function(z,i){ o[z]=GPN_CAT[i%3]; }); return o; }
 function gpnAlpha(v,mx,rgb){ if(mx<=0||v<=0) return null; return 'rgba('+rgb+','+(0.09+0.63*(v/mx)).toFixed(3)+')'; }
@@ -2469,7 +2520,22 @@ function gpnVideo(num,tipo,cat,ev){
     _rotulo(gpV.list.length);
     gpVidRender();
   };
-  if(typeof fbGet==='function'){ fbGet(gpSelRuta(),aplicar); } else { aplicar(null); }
+  if(typeof fbGet==='function'){
+    /* ══ QUE NO SE PIERDA LA SECUENCIA PREPARADA ═══════════════════════
+       La secuencia se guarda con una clave que incluye el filtro. El plantel
+       abre con el resultado fijo, asi que su clave lo lleva adentro. Si el
+       entrenador la guardo con otro filtro —o sin ninguno— ahi no hay nada:
+       antes de darla por perdida se prueba la clave sin el resultado, que es
+       la de "todas". */
+    fbGet(gpSelRuta(),function(g){
+      if(!gpV.coach && !gpSelLista(g)){
+        var k0=(GP_RIVAL_SLUG||'rival')+'__j'+num+'_'+tipo+'_'+(catTxt||'all');
+        fbGet('gp_video_sel/'+k0.replace(/[^a-zA-Z0-9_]/g,'_'), aplicar);
+        return;
+      }
+      aplicar(g);
+    });
+  } else { aplicar(null); }
 }
 
 /* ── los filtros, con la misma escala que plan de partido ── */
@@ -2595,6 +2661,9 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
   acc.forEach(function(c){ cuentaCat[c.combo]=(cuentaCat[c.combo]||0)+1; cuentaEv[c.ev]=(cuentaEv[c.ev]||0)+1; });
   var estado={ cat:(ini&&ini.cat instanceof Array)?ini.cat.slice():[],
                ev :(ini&&ini.ev  instanceof Array)?ini.ev.slice() :[] };
+  /* el plantel abre con el resultado ya puesto y sin poder cambiarlo */
+  var _plantel=!gpEsEntrenador();
+  if(_plantel && GPN_EV_PLANTEL[tipo]) estado.ev=GPN_EV_PLANTEL[tipo].slice();
   var barra=document.createElement('div'); barra.className='gpn-flt';
   var fila=document.createElement('div'); fila.className='gpn-row';
 
@@ -2623,7 +2692,7 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
   });
 
   fila.appendChild(lblC); fila.appendChild(ddC.el);
-  fila.appendChild(lblE); fila.appendChild(ddE.el);
+  if(!_plantel){ fila.appendChild(lblE); fila.appendChild(ddE.el); }
   barra.appendChild(fila);
   cont.appendChild(barra);
   return estado;
@@ -2828,13 +2897,25 @@ function gpnFichaJugador(j,idx){
   var cuerpo=document.createElement('div'); cuerpo.className='gpn-cuerpo';
   var ETQ={ataque:'Ataque',saque:'Saque',recepcion:'Recepción'};
   var disponibles=['ataque','saque','recepcion'].filter(function(t){ return gpnTieneDatos(j.num,t); });
+  /* Para el plantel cada solapa se cuenta YA filtrada (ver GPN_EV_PLANTEL).
+     Asi el numero de la solapa es el que de verdad va a encontrar adentro, y
+     una solapa que con el filtro queda en cero —un sacador que nunca hizo
+     punto, por ejemplo— no se le muestra en vez de abrirse vacia. */
+  var _plantel=!gpEsEntrenador();
+  function _cuenta(t){
+    if(!_plantel) return gpnCuenta(j.num,t);
+    try{ return gpnClips(j.num,t,'all',GPN_EV_PLANTEL[t]).length; }catch(e){ return 0; }
+  }
+  if(_plantel) disponibles=disponibles.filter(function(t){ return _cuenta(t)>0; });
   /* abre en el fundamento donde mas aparece */
-  var activo=disponibles.slice().sort(function(a,b){ return gpnCuenta(j.num,b)-gpnCuenta(j.num,a); })[0];
+  var activo=disponibles.slice().sort(function(a,b){ return _cuenta(b)-_cuenta(a); })[0];
   if(j.pos==='LIBERO' && disponibles.indexOf('recepcion')>=0) activo='recepcion';
 
+  /* si al plantel no le queda nada de este jugador, la ficha no se muestra */
+  if(_plantel && !activo) card.classList.add('gpn-sin-atk');
   var tabBtn={};
-  ['ataque','saque','recepcion'].forEach(function(t){
-    var n=gpnCuenta(j.num,t);
+  (_plantel?disponibles:['ataque','saque','recepcion']).forEach(function(t){
+    var n=_cuenta(t);
     var b=document.createElement(n?'button':'span');
     b.className='gpn-tab'+(n?'':' off')+(t===activo?' on':'');
     b.textContent=ETQ[t]+' '+(n||'—');
@@ -3300,8 +3381,44 @@ function gpnArmGrid(distObj,blqData,rot,sidx){
 /* ══ QUE JUGADORES ENTRAN AL GAME PLAN ═══════════════════════════════
    Son diez fichas y para un partido no hacen falta todas. Se eligen una
    vez y queda guardado por rival en este navegador. */
+/* ══ DEJAR TODAS LAS FICHAS EN ATAQUE · PUNTO ════════════════════════════
+   Lo que el plantel ve en cada ficha es la configuracion que dejo el cuerpo
+   tecnico (gpnCfgGuardar): esa misma configuracion es la que hace que el
+   boton de video caiga en la clave donde esta guardada la secuencia. Por eso
+   NO se le fuerza el filtro al jugador por nuestra cuenta: se lo dejamos
+   puesto desde aca, y asi la ficha y la secuencia coinciden solas.
+
+   Este boton hace eso de una: Ataque, resultado #, todas las combinaciones.
+   No pisa las fichas que ya tengan algo puesto. Solo lo ve el cuerpo
+   tecnico. */
+function gpnDejarEnPunto(){
+  if(!gpEsEntrenador()) return;
+  var n=0, saltadas=0;
+  (window.JUGADORES||[]).forEach(function(j){
+    if(!gpnTieneDatos(j.num,'ataque')) return;
+    var ya=GPN_CFG[j.num];
+    if(ya && (ya.tab || (ya.cat&&ya.cat.length) || (ya.ev&&ya.ev.length))){ saltadas++; return; }
+    GPN_CFG[j.num]={tab:'ataque',cat:[],ev:['#']};
+    gpnCfgGuardar(j.num); n++;
+  });
+  alert('Listo: '+n+' ficha(s) quedaron en Ataque \u00b7 # para el plantel.'
+    +(saltadas?('\n'+saltadas+' ya ten\u00edan filtros puestos y no se tocaron.'):'')
+    +'\n\nRecarg\u00e1 la p\u00e1gina para verlas as\u00ed.');
+}
+
 function gpnFiltroJugadores(cont){
   if(!cont) return;
+  if(gpEsEntrenador() && !document.getElementById('gpn-btn-punto')){
+    var bp=document.createElement('button');
+    bp.id='gpn-btn-punto'; bp.type='button';
+    bp.title='Deja todas las fichas en Ataque con el resultado # (punto), que es lo que ve el plantel. No toca las que ya tengan filtros puestos.';
+    bp.style.cssText='margin-left:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);'
+      +'color:#C6D2E0;font-family:inherit;font-size:11px;font-weight:700;letter-spacing:.06em;'
+      +'padding:5px 10px;border-radius:8px;cursor:pointer';
+    bp.textContent='Dejar fichas en Ataque \u00b7 #';
+    bp.onclick=function(e){ e.stopPropagation(); gpnDejarEnPunto(); };
+    cont.appendChild(bp);
+  }
   var cards=[].slice.call(document.querySelectorAll('#jug-grid .gpn-card'));
   if(!cards.length) return;
   var clave='vb_gp_jugsel_'+GP_RIVAL_SLUG;
@@ -6898,9 +7015,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261028-2119"></script>
-<script src="ayuda.js?v=20261028-2119"></script>
-<script src="volver_inicio.js?v=20261028-2119" defer></script>
+<script src="temporadas_menu.js?v=20261028-2152"></script>
+<script src="ayuda.js?v=20261028-2152"></script>
+<script src="volver_inicio.js?v=20261028-2152" defer></script>
 </body>
 </html>
 
