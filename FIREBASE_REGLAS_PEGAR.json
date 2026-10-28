@@ -5,6 +5,9 @@
     "calendario": {
       ".read": true
     },
+    "cal_masc_horarios": {
+      ".read": true
+    },
     "sesiones": {
       "dispositivos": {
         "$uid": {
@@ -17,6 +20,25 @@
       "accesos": {
         "$id": {
           ".write": "auth != null && !data.exists()"
+        }
+      },
+      "pantallas": {
+        "$dia": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && $dia.length === 8"
+          }
+        }
+      },
+      "videos": {
+        "$dia": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && $dia.length === 8"
+          }
+        }
+      },
+      "activo": {
+        "$uid": {
+          ".write": "auth != null && auth.uid === $uid"
         }
       },
       "corte": {
@@ -107,9 +129,15 @@
         ".read": true,
         ".write": "!data.exists()",
         ".validate": "$llave.length === 32 && newData.hasChildren(['ini','sig'])",
-        "ini": { ".validate": "newData.isNumber()" },
-        "sig": { ".validate": "newData.isString() && newData.val().length <= 32" },
-        "$otro": { ".validate": false }
+        "ini": {
+          ".validate": "newData.isNumber()"
+        },
+        "sig": {
+          ".validate": "newData.isString() && newData.val().length <= 32"
+        },
+        "$otro": {
+          ".validate": false
+        }
       }
     },
     "demo_ip": {

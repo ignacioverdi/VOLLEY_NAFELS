@@ -33,12 +33,25 @@
     "leer, jugadores incluidos. En RTDB un .read concedido arriba no se puede",
     "revocar mas abajo, asi que esto no se arregla sin tocar la raiz. La pantalla",
     "de actividad igual se les esconde a los jugadores.",
-    "Lo demas quedo EXACTAMENTE igual: verificado nodo por nodo abajo."
+    "Lo demas quedo EXACTAMENTE igual: verificado nodo por nodo abajo.",
+    "",
+    "28/10 - cal_masc_horarios PASA A LECTURA PUBLICA.",
+    "El calendario masculino se abre desde un link, sin pedir usuario: es el",
+    "fixture de la federacion y el que lo recibe no es del club. Las",
+    "correcciones de horario y gimnasio que se cargan a mano viven en esa",
+    "rama, y sin esta regla el de afuera veia el fixture SIN corregir.",
+    "Solo se abre la LECTURA. Escribir sigue pidiendo sesion y no ser",
+    "jugador, igual que antes: lo hereda del .write de la raiz.",
+    "Es la misma forma que ya tenia 'calendario'.",
+    "Lo demas quedo EXACTAMENTE igual."
   ],
   "rules": {
     ".read": "auth != null && root.child('usuarios').child(auth.uid).exists()",
     ".write": "auth != null && root.child('usuarios').child(auth.uid).exists() && root.child('roles').child(auth.uid).val() != 'player'",
     "calendario": {
+      ".read": true
+    },
+    "cal_masc_horarios": {
       ".read": true
     },
     "sesiones": {

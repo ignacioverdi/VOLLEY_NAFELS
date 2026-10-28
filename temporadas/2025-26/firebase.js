@@ -641,12 +641,50 @@ function _fbHayLlaveGuardada(){
   try{ return !!localStorage.getItem('club_llave'); }catch(e){ return false; }
 }
 
+/* ══ UNA PAGINA PUBLICA NO PIDE USUARIO ══════════════════════════════════
+   El calendario de la liga tiene que poder abrirse desde un link, sin
+   entrar: es informacion de la federacion y el que lo recibe no es del
+   club.
+
+   Una pagina que declara  window.VB_PUBLICA = true  antes de cargar este
+   archivo se salta la pantalla de ingreso. Lo que NO se saltea:
+
+    · No se pide la llave del club. _fbTraerLlave() solo corre despues de
+      un ingreso valido, asi que una pagina publica nunca la recibe y los
+      archivos .enc le siguen siendo ilegibles. Por eso una pagina publica
+      no puede cargar datos cifrados: el calendario no carga ninguno.
+    · No hay sesion, asi que los pedidos salen sin token y la base contesta
+      SOLO lo que sus reglas dejan leer sin entrar. Lo demas no existe para
+      esa pagina.
+    · Se apaga fbSet. Las pantallas preguntan "existe fbSet?" para decidir
+      si muestran el boton de editar: sin el, la pagina queda de solo
+      lectura sola, sin tocar una linea de la pantalla.
+
+   Si el que abre la pagina YA entro al club en ese dispositivo, nada de
+   esto corre: ve la pagina como siempre, con su sesion y pudiendo editar. */
+function _fbModoPublico(){
+  try{ window.fbSet  = null; }catch(e){}
+  try{ window.fbPush = null; }catch(e){}
+  try{ window.VB_PUBLICA_ACTIVA = true; }catch(e){}
+}
+
+
 function _fbArrancar(){
   if(_fbListo) return _fbListo;
   FB_SES = _fbLeerSes();
   _fbSincronizarRol(); _fbCategoriaJugador();
   _fbListo = new Promise(function(resolve){
+    /* Publica y este dispositivo no entro nunca: se abre de una, sin pedir
+       nada. Se chequea ACA ARRIBA y no mas abajo a proposito: el que SI
+       tiene sesion sigue por el camino de siempre —renueva el token, carga
+       su rol y su llave— y en esta pagina edita como edito siempre. */
+    if(window.VB_PUBLICA && !(FB_SES && FB_SES.refreshToken)){
+      _fbModoPublico(); resolve(true); return;
+    }
     function pedir(){
+      /* la pagina se declaro publica y este dispositivo no entro nunca:
+         se abre sin pedir nada, de solo lectura (ver arriba) */
+      if(window.VB_PUBLICA){ _fbModoPublico(); resolve(true); return; }
       if(document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', function(){
           _fbPantalla().then(function(){ return _fbCargarRol(); })
