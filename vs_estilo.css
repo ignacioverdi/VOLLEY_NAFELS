@@ -352,3 +352,36 @@ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot:hover td{
  html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:first-child{
   background:#1C1D23!important;box-shadow:8px 0 15px -9px rgba(0,0,0,.95)!important}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL CONTROL SELECCIONADO
+   ---------------------------------------------------------------------------
+   "Esto es lo que elegiste" se pintaba de seis colores distintos segun la
+   pantalla: rojo en las solapas del plan de partido, AZUL en el selector de
+   equipo, VIOLETA en los controles del armador, INDIGO en los modos de
+   bloqueo, CELESTE en el panel. Cuatro de esos colores no existen en ninguna
+   otra parte de la marca y ninguno significaba nada distinto del rojo: los
+   cinco querian decir lo mismo.
+
+   Un solo lenguaje, el mismo que la fila elegida de las tablas: el rojo es
+   para una cosa sola, lo que esta seleccionado.
+
+   No se tocan los estados activos que SI dicen algo propio: los puntos de
+   seccion del encabezado (ambar), las solapas de destreza del game plan
+   (ambar) ni los graficos.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) .teambtn.active,
+html:not([data-vs="off"]) .skill-pill.active,
+html:not([data-vs="off"]) .armctrl button.on,
+html:not([data-vs="off"]) .mbtn.on{
+ background:var(--red,#E8192C)!important;
+ border-color:var(--red,#E8192C)!important;
+ color:#ffffff!important;
+ box-shadow:0 3px 14px -4px rgba(232,25,44,.55)!important;
+}
+html:not([data-vs="off"]) .teambtn:not(.active):hover,
+html:not([data-vs="off"]) .skill-pill:not(.active):hover,
+html:not([data-vs="off"]) .armctrl button:not(.on):hover,
+html:not([data-vs="off"]) .mbtn:not(.on):hover{
+ border-color:rgba(232,25,44,.45);
+}
