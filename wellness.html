@@ -2,11 +2,11 @@
 <html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>WELLNESS — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261029-2333"></script>
-<script src="selector_categoria.js?v=20261029-2333"></script>
-<script src="datos_seguros.js?v=20261029-2333"></script>
-<script src="firebase.js?v=20261029-2333" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-2333"></script>
+<script src="categorias_club.js?v=20261029-2342"></script>
+<script src="selector_categoria.js?v=20261029-2342"></script>
+<script src="datos_seguros.js?v=20261029-2342"></script>
+<script src="firebase.js?v=20261029-2342" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-2342"></script>
 <style>
   /* En esta app los controles no heredan la tipografia: sin esta linea
      los botones y los desplegables salen en Arial. */
@@ -206,16 +206,112 @@
   .wp-nota{width:100%;background:var(--card2);border:1px solid var(--b2);color:var(--text);border-radius:9px;
     padding:9px 11px;font-family:'Barlow Condensed';font-size:13.5px}
   @media(max-width:600px){ .wp-anclas{font-size:9.5px} .wp-tj-vs{width:100%} }
-</style><link rel="stylesheet" href="movil.css?v=20261029-2333">
-<script src="mi_fila.js?v=20261029-2333" onerror="void 0"></script>
+</style><link rel="stylesheet" href="movil.css?v=20261029-2342">
+<script src="mi_fila.js?v=20261029-2342" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261029-2333" defer></script>
+<script src="iconos.js?v=20261029-2342" defer></script>
 
-<script src="nav.js?v=20261029-2333" defer></script>
+<script src="nav.js?v=20261029-2342" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261029-2333">
-<script src="vs_tabla.js?v=20261029-2333" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261029-2342">
+<script src="vs_tabla.js?v=20261029-2342" defer></script>
+<style id="nv-wl">
+/* ═══════════════════════════════════════════════════════════════════════════
+   WELLNESS · al mismo idioma que el resto
+   ---------------------------------------------------------------------------
+   Esta pantalla traia un acento propio, turquesa (--acc #2dd4bf), que no
+   existe en ninguna otra parte de la app. Se usaba en tres lugares y ninguno
+   significaba nada: la linea de arriba, la solapa activa y el chip activo.
+   Los tres querian decir "esto es lo que elegiste", que en toda la app se
+   dice en rojo.
+
+   LO QUE NO SE TOCA: el numero grande de la derecha. Ese color SI significa
+   —colFor() lo pinta verde, ambar o rojo segun que tan bien esta esa
+   respuesta— y es lo que te deja barrer la columna de un vistazo. Misma regla
+   que el puesto en la tabla de la liga y las zonas del game plan.
+
+   Y el circulito del deslizador queda BLANCO, no rojo: hay siete preguntas a
+   la vez, y siete circulos rojos convierten el rojo en decoracion. El rojo
+   marca una cosa por pantalla, no siete.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* la solapa y el chip elegidos: el rojo de siempre */
+html:not([data-vs="off"]) .tab.on,
+html:not([data-vs="off"]) .chip.on{
+ background:var(--red,#E8192C)!important;
+ border-color:var(--red,#E8192C)!important;
+ color:#ffffff!important;
+ box-shadow:0 3px 14px -4px rgba(232,25,44,.55)!important;
+}
+html:not([data-vs="off"]) .tab,
+html:not([data-vs="off"]) .chip{
+ border-radius:8px!important;
+ font-family:'Barlow Condensed','Barlow',sans-serif!important;
+ font-weight:700!important;
+ transition:background .15s,border-color .15s,color .15s!important;
+}
+html:not([data-vs="off"]) .tab:not(.on),
+html:not([data-vs="off"]) .chip:not(.on){
+ background:rgba(255,255,255,.035)!important;
+ border:1px solid rgba(255,255,255,.10)!important;
+ color:rgba(255,255,255,.62)!important;
+}
+html:not([data-vs="off"]) .tab:not(.on):hover,
+html:not([data-vs="off"]) .chip:not(.on):hover{
+ border-color:rgba(232,25,44,.45)!important;color:rgba(255,255,255,.92)!important;
+}
+
+/* la linea de arriba: el mismo degradado que la linea del encabezado */
+html:not([data-vs="off"]) .topline{
+ background:linear-gradient(90deg,#e8192c,#ff4d6d 34%,#b94bff 68%,#6f7bff)!important;
+}
+
+/* cada pregunta es una tarjeta, igual que las filas de las tablas */
+html:not([data-vs="off"]) .q{
+ padding:15px 17px!important;
+ margin-bottom:5px!important;
+ border:1px solid rgba(255,255,255,.05)!important;
+ border-radius:10px!important;
+ background:rgba(255,255,255,.022)!important;
+ transition:background .15s,border-color .15s!important;
+}
+html:not([data-vs="off"]) .q:hover{
+ background:rgba(255,255,255,.04)!important;border-color:rgba(255,255,255,.13)!important;
+}
+html:not([data-vs="off"]) .q-lb{
+ font-family:'Barlow Condensed','Barlow',sans-serif!important;
+ font-size:16px!important;font-weight:700!important;letter-spacing:.02em!important;
+ color:rgba(255,255,255,.94)!important;
+}
+html:not([data-vs="off"]) .q-hint{
+ font-size:11.5px!important;color:rgba(255,255,255,.58)!important;line-height:1.45!important;
+}
+/* el numero conserva su color: ahi el color dice algo */
+html:not([data-vs="off"]) .q-val{
+ font-family:'IBM Plex Mono',ui-monospace,Consolas,monospace!important;
+ font-size:23px!important;font-weight:400!important;font-variant-numeric:tabular-nums!important;
+ min-width:42px!important;
+}
+
+/* el deslizador: riel neutro y circulito blanco */
+html:not([data-vs="off"]) input[type=range]{
+ background:rgba(255,255,255,.07)!important;height:6px!important;
+}
+html:not([data-vs="off"]) input[type=range]::-webkit-slider-thumb{
+ background:#ffffff!important;border:3px solid #0A0D16!important;
+ box-shadow:0 2px 10px -2px rgba(0,0,0,.9)!important;
+}
+html:not([data-vs="off"]) input[type=range]::-moz-range-thumb{
+ background:#ffffff!important;border:3px solid #0A0D16!important;
+}
+/* el 1 / 5 / 10 de abajo, con el rotulo de la casa */
+html:not([data-vs="off"]) .scalemark{
+ font-family:'Barlow Condensed','Barlow',sans-serif!important;
+ font-size:10px!important;letter-spacing:.14em!important;text-transform:uppercase!important;
+ color:rgba(255,255,255,.52)!important;
+}
+</style>
 </head>
 <body>
 <div class="wrap">
@@ -314,7 +410,7 @@
   </div>
 </div>
 
-<script src="plantel_nafels.js?v=20261029-2333" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261029-2342" onerror="void 0"></script>
 <script>
 /* ============================================================================
    CAPA DE DATOS  —  local + nube (Firebase) usando el mismo fbSet/fbGet que ya
@@ -648,13 +744,13 @@ function jugadorConectado(){
      Va DESPUES del script de la pantalla, a proposito: vuelve a declarar
      las pocas funciones que cambian. Sacando esta linea, la pantalla queda
      exactamente como estaba antes. -->
-<script src="wellness_idioma.js?v=20261029-2333"></script>
-<script src="wellness_cuerpo.js?v=20261029-2333"></script>
-<script src="wellness_plus.js?v=20261029-2333"></script>
-<script src="lang.js?v=20261029-2333" onerror="void 0"></script>
-<script src="onesignal_push.js?v=20261029-2333" defer></script>
-<script src="ayuda.js?v=20261029-2333"></script>
-<script src="volver_inicio.js?v=20261029-2333" defer></script>
+<script src="wellness_idioma.js?v=20261029-2342"></script>
+<script src="wellness_cuerpo.js?v=20261029-2342"></script>
+<script src="wellness_plus.js?v=20261029-2342"></script>
+<script src="lang.js?v=20261029-2342" onerror="void 0"></script>
+<script src="onesignal_push.js?v=20261029-2342" defer></script>
+<script src="ayuda.js?v=20261029-2342"></script>
+<script src="volver_inicio.js?v=20261029-2342" defer></script>
 </body></html>
 
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->
