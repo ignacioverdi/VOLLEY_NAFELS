@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="PREPARACIÓN FÍSICA — Axpo Volley Näfels">PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261029-1425"></script>
-<script src="selector_categoria.js?v=20261029-1425"></script>
-<script src="plantel_nafels.js?v=20261029-1425" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261029-1425"></script>
+<script src="categorias_club.js?v=20261029-1633"></script>
+<script src="selector_categoria.js?v=20261029-1633"></script>
+<script src="plantel_nafels.js?v=20261029-1633" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261029-1633"></script>
   <script src="datos_equipo.js.enc?v=840410f6" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc?v=bdf654f9" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc?v=8baaf1f3" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20261029-1425" onerror="void 0"></script>
-<script src="firebase.js?v=20261029-1425" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-1425"></script>
+<script src="lang.js?v=20261029-1633" onerror="void 0"></script>
+<script src="firebase.js?v=20261029-1633" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-1633"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -239,17 +239,66 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-1425">
+<link rel="stylesheet" href="movil.css?v=20261029-1633">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261029-1425" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261029-1633" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261029-1425" defer></script>
+<script src="iconos.js?v=20261029-1633" defer></script>
 
-<script src="nav.js?v=20261029-1425" defer></script>
+<script src="nav.js?v=20261029-1633" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261029-1425">
+<link rel="stylesheet" href="vs_estilo.css?v=20261029-1633">
+<style id="nv-pf">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREP. FISICA · el selector, la calculadora y el jugador que entra solo
+   ---------------------------------------------------------------------------
+   Nada de esto reemplaza codigo de la pantalla: el muro de botones sigue
+   existiendo, escondido, y el desplegable los clickea. Asi selectJugador()
+   queda intacta y si algo falla se borran estos dos bloques y vuelve todo.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* el muro de botones se esconde: lo maneja el desplegable */
+#player-btns{ display:none!important; }
+
+/* el selector queda pegado arriba: la rutina es larga y hay que poder cambiar
+   de jugador sin volver al principio */
+.player-selector{ position:sticky; top:0; z-index:30;
+  background:rgba(7,8,15,.88)!important; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+
+#nv-pfwrap{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+#nv-pfsel{
+  appearance:none; -webkit-appearance:none;
+  min-width:280px; max-width:100%; padding:11px 38px 11px 14px; border-radius:11px;
+  background:rgba(255,255,255,.04)!important; border:1px solid rgba(255,255,255,.14)!important;
+  color:#fff!important; -webkit-text-fill-color:#fff!important;
+  font-family:'Barlow Condensed','Barlow',sans-serif; font-size:15px; font-weight:700;
+  letter-spacing:.8px; text-transform:uppercase; cursor:pointer; transition:.15s;
+  background-image:linear-gradient(45deg,transparent 50%,rgba(255,255,255,.55) 50%),
+                   linear-gradient(135deg,rgba(255,255,255,.55) 50%,transparent 50%)!important;
+  background-position:calc(100% - 19px) 50%, calc(100% - 13px) 50%!important;
+  background-size:6px 6px, 6px 6px!important; background-repeat:no-repeat!important;
+}
+#nv-pfsel:hover{ border-color:rgba(255,255,255,.26)!important; background-color:rgba(255,255,255,.06)!important; }
+#nv-pfsel:focus{ outline:none; border-color:rgba(232,25,44,.55)!important; box-shadow:0 0 0 3px rgba(232,25,44,.14); }
+#nv-pfsel option{ background:#0C0E18!important; color:#fff!important; text-transform:none; }
+#nv-pfsel option:checked{ background:#E8192C!important; color:#fff!important; }
+
+/* la calculadora sube al tope y arranca plegada: se usa, pero no todos los
+   dias, y abajo de la rutina no la encontraba nadie */
+.calc-section{ margin-top:0!important; margin-bottom:22px; }
+.calc-header{ cursor:pointer; user-select:none; -webkit-user-select:none; }
+.calc-section.nv-cerrada .calc-body{ display:none; }
+#nv-pfchev{ margin-left:12px; font-size:11px; color:rgba(255,255,255,.55);
+  transition:transform .18s ease; display:inline-block; }
+.calc-section.nv-cerrada #nv-pfchev{ transform:rotate(-90deg); }
+
+@media (max-width:760px){
+  #nv-pfsel{ min-width:0; width:100%; font-size:14px; padding:10px 34px 10px 12px; }
+  .player-selector{ padding:12px 16px!important; }
+}
+</style>
 </head>
 <body>
 <div class="page-header header">
@@ -1241,9 +1290,168 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20261029-1425"></script>
-<script src="ayuda.js?v=20261029-1425"></script>
-<script src="volver_inicio.js?v=20261029-1425" defer></script>
+<script src="temporadas_menu.js?v=20261029-1633"></script>
+<script src="ayuda.js?v=20261029-1633"></script>
+<script src="volver_inicio.js?v=20261029-1633" defer></script>
+<script id="nv-pf-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREP. FISICA · desplegable, calculadora arriba, y el jugador que entra solo
+   ---------------------------------------------------------------------------
+   TRES COSAS, NINGUNA INVASIVA
+
+   1. El muro de botones (uno por jugadora) se esconde y en su lugar va un
+      desplegable. Al elegir, el desplegable CLICKEA el boton escondido: asi
+      selectJugador() se ejecuta tal cual estaba y no hay que tocarla.
+
+   2. Si quien entra es una jugadora (vb_role) y sabemos su dorsal
+      (vb_player_num), se elige sola y el selector entero desaparece: abre la
+      pantalla y ya esta su rutina. Si el dorsal no coincide con nadie, no
+      pasa nada y sigue viendo el desplegable.
+
+   3. La calculadora de carga sube justo debajo de la ficha de la jugadora y
+      arranca plegada. Abajo de toda la rutina no la encontraba nadie.
+
+   Los botones los arma la pantalla DESPUES de bajar los datos, asi que esto
+   espera con un observador y se rearma si la lista cambia.
+
+   PARA SACARLO: borrar este bloque y el <style id="nv-pf"> del encabezado.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  if(window.NV_PF) return; window.NV_PF = 1;
+
+  var sel = null, yaEntroSolo = false;
+
+  function botones(){
+    var c = document.getElementById('player-btns');
+    return c ? [].slice.call(c.children).filter(function(b){ return b.tagName === 'BUTTON'; }) : [];
+  }
+
+  function desplegable(){
+    var cont = document.getElementById('player-btns');
+    if(!cont) return;
+    var bs = botones();
+    if(!bs.length) return;
+
+    if(!sel){
+      var wrap = document.createElement('div');
+      wrap.id = 'nv-pfwrap';
+      sel = document.createElement('select');
+      sel.id = 'nv-pfsel';
+      sel.setAttribute('aria-label', 'Jugadora');
+      wrap.appendChild(sel);
+      cont.parentNode.insertBefore(wrap, cont);
+      sel.addEventListener('change', function(){
+        var i = parseInt(sel.value, 10);
+        var lista = botones();
+        if(!isNaN(i) && lista[i]) lista[i].click();
+      });
+    }
+
+    /* se rearma solo si la lista de jugadoras cambio */
+    if(sel.options.length === bs.length + 1) return;
+
+    /* si ya habia una elegida, se la devuelve despues de rearmar: la pantalla
+       puede volver a dibujar la lista (al cambiar de categoria, por ejemplo)
+       y perder la seleccion seria sacarle la rutina de la pantalla */
+    var elegida = (sel.selectedIndex > 0 && sel.options[sel.selectedIndex])
+      ? sel.options[sel.selectedIndex].textContent : '';
+
+    sel.innerHTML = '';
+    var o0 = document.createElement('option');
+    o0.value = '';
+    o0.setAttribute('data-t', 'Seleccioná un jugador');
+    o0.textContent = 'Seleccioná un jugador';
+    sel.appendChild(o0);
+    bs.forEach(function(b, i){
+      var o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = (b.textContent || '').trim();
+      sel.appendChild(o);
+    });
+    if(elegida){
+      for(var k = 1; k < sel.options.length; k++){
+        if(sel.options[k].textContent === elegida){ sel.selectedIndex = k; break; }
+      }
+    }
+    try{ if(window.applyLang) window.applyLang(); }catch(e){}
+  }
+
+  function entrarSolo(){
+    if(yaEntroSolo || !sel) return;
+    var rol = '', num = '';
+    try{
+      rol = localStorage.getItem('vb_role') || '';
+      num = (localStorage.getItem('vb_player_num') || '').trim();
+    }catch(e){}
+    if(rol !== 'player' || !num) return;
+    var n = parseInt(num, 10); if(isNaN(n)) return;
+
+    var bs = botones();
+    for(var i = 0; i < bs.length; i++){
+      var m = (bs[i].textContent || '').match(/#\s*(\d+)/);
+      if(m && parseInt(m[1], 10) === n){
+        yaEntroSolo = true;
+        sel.value = String(i);
+        bs[i].click();
+        var ps = document.querySelector('.player-selector');
+        if(ps) ps.style.display = 'none';
+        return;
+      }
+    }
+  }
+
+  function calculadora(){
+    var cs = document.querySelector('.calc-section');
+    var jh = document.querySelector('.jug-header');
+    if(!cs || !jh || cs.dataset.nvPf) return;
+    cs.dataset.nvPf = '1';
+
+    jh.parentNode.insertBefore(cs, jh.nextSibling);
+    cs.classList.add('nv-cerrada');
+
+    var h = cs.querySelector('.calc-header');
+    if(!h) return;
+    var chev = document.createElement('span');
+    chev.id = 'nv-pfchev';
+    chev.textContent = '▾';
+    chev.setAttribute('aria-hidden', 'true');
+    h.appendChild(chev);
+    h.setAttribute('role', 'button');
+    h.setAttribute('tabindex', '0');
+    h.setAttribute('aria-expanded', 'false');
+    function alternar(){
+      var abierta = !cs.classList.toggle('nv-cerrada');
+      h.setAttribute('aria-expanded', abierta ? 'true' : 'false');
+    }
+    h.addEventListener('click', alternar);
+    h.addEventListener('keydown', function(ev){
+      if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); alternar(); }
+    });
+  }
+
+  var pendiente = null;
+  function repasar(){
+    if(pendiente) return;
+    pendiente = setTimeout(function(){
+      pendiente = null;
+      try{ desplegable(); entrarSolo(); calculadora(); }catch(e){}
+    }, 80);
+  }
+
+  function arrancar(){
+    repasar();
+    try{
+      new MutationObserver(repasar).observe(document.body, { childList:true, subtree:true });
+    }catch(e){}
+    /* red de seguridad por si los datos tardan y el observador no dispara */
+    var n = 0, t = setInterval(function(){ repasar(); if(++n > 40) clearInterval(t); }, 300);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

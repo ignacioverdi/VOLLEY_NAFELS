@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-1425"></script>
-<script src="selector_categoria.js?v=20261029-1425"></script>
-<script src="objetivos_config.js?v=20261029-1425"></script>
+<script src="categorias_club.js?v=20261029-1633"></script>
+<script src="selector_categoria.js?v=20261029-1633"></script>
+<script src="objetivos_config.js?v=20261029-1633"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -485,7 +485,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261029-1425" onerror="void 0"></script>
+<script src="lang.js?v=20261029-1633" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -496,7 +496,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261029-1425"></script>
+<script src="datos_seguros.js?v=20261029-1633"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -509,18 +509,77 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261029-1425" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-1425"></script>
-<script src="videos.js?v=20261029-1425" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-1633" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-1633"></script>
+<script src="videos.js?v=20261029-1633" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-1425">
+<link rel="stylesheet" href="movil.css?v=20261029-1633">
 
-<script src="iconos.js?v=20261029-1425" defer></script>
+<script src="iconos.js?v=20261029-1633" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261029-1425">
+<link rel="stylesheet" href="vs_estilo.css?v=20261029-1633">
+<style id="nv-gp">
+/* ═══════════════════════════════════════════════════════════════════════════
+   GAME PLAN · MODO EQUIPO
+   ---------------------------------------------------------------------------
+   La pantalla esta hecha para que VOS la armes: filtros arriba de cada cancha,
+   campos para escribir la clave de cada jugadora, selectores. Cuando la
+   proyectas para el equipo todo eso es ruido, y lo unico que importa —la
+   clave que decis en voz alta— es el texto mas chico de la pantalla: 12 px.
+
+   Este modo no cambia ningun dato ni ningun comportamiento: esconde los
+   controles de edicion y agranda lo que el equipo tiene que leer de lejos.
+   Se prende y se apaga con un boton y arranca SIEMPRE apagado.
+
+   Las canchas y sus colores no se tocan: ahi el color dice la zona de ataque
+   (4 punta, 3 central, 2 opuesto, 8 pipe, 9 zaguero) y sacarlo seria sacar
+   informacion.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#nv-gpbtn{
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.16);
+  color:#C6D2E0; border-radius:10px; padding:7px 13px; cursor:pointer;
+  font-family:'Barlow Condensed','Barlow',sans-serif; font-size:12px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; transition:.15s;
+}
+#nv-gpbtn:hover{ border-color:rgba(255,255,255,.3); color:#fff; }
+#nv-gpbtn:focus-visible{ outline:2px solid #FF5468; outline-offset:2px; }
+#nv-gpbtn .nv-pt{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,.3); transition:.15s; }
+body.nv-equipo #nv-gpbtn{ background:rgba(232,25,44,.16); border-color:rgba(232,25,44,.55); color:#fff; }
+body.nv-equipo #nv-gpbtn .nv-pt{ background:#E8192C; box-shadow:0 0 9px rgba(232,25,44,.9); }
+
+/* ── lo que se esconde: controles de edicion ───────────────────────────── */
+body.nv-equipo .gpn-flt{ display:none!important; }   /* filtros arriba de cada cancha */
+body.nv-equipo .gpn-nota{ display:none!important; }  /* "la clave de este jugador..." */
+body.nv-equipo #ayuda-btn,
+body.nv-equipo #vb-nov-btn{ display:none!important; }
+
+/* ── lo que se agranda: lo que el equipo lee de lejos ──────────────────── */
+/*   la clave de cada jugadora: de 12 px a 17 px y en blanco */
+body.nv-equipo .gpn-cli{ font-size:17px!important; line-height:1.45!important; color:#E6EDF6!important; margin-top:5px!important; }
+body.nv-equipo .gpn-clg{ font-size:12px!important; letter-spacing:.14em!important; color:#9FB0C4!important; margin-top:11px!important; }
+body.nv-equipo .gpn-claves{ padding:16px 15px!important; }
+/*   sus mejores direcciones */
+body.nv-equipo .gpn-dir{ font-size:17px!important; color:#C6D2E0!important; gap:10px!important; }
+/*   los rotulos chicos, legibles */
+body.nv-equipo .gpn-sub{ font-size:13px!important; color:#9FB0C4!important; letter-spacing:.14em!important; }
+body.nv-equipo .gpn-lbl{ font-size:12px!important; color:#9FB0C4!important; letter-spacing:.14em!important; }
+/*   el nombre de la jugadora */
+body.nv-equipo .gpn-nom{ font-size:27px!important; }
+body.nv-equipo .gpn-chip{ font-size:13px!important; padding:5px 10px!important; }
+body.nv-equipo .gpn-tab{ font-size:14px!important; }
+
+@media (max-width:760px){
+  #nv-gpbtn{ padding:6px 10px; font-size:11px; }
+  body.nv-equipo .gpn-cli{ font-size:15px!important; }
+  body.nv-equipo .gpn-dir{ font-size:15px!important; }
+  body.nv-equipo .gpn-nom{ font-size:23px!important; }
+}
+</style>
 </head>
 <body>
 
@@ -7308,9 +7367,96 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261029-1425"></script>
-<script src="ayuda.js?v=20261029-1425"></script>
-<script src="volver_inicio.js?v=20261029-1425" defer></script>
+<script src="temporadas_menu.js?v=20261029-1633"></script>
+<script src="ayuda.js?v=20261029-1633"></script>
+<script src="volver_inicio.js?v=20261029-1633" defer></script>
+<script id="nv-gp-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   GAME PLAN · MODO EQUIPO  (el boton)
+   ---------------------------------------------------------------------------
+   Pone un boton en la barra de arriba, al lado de DESCARGAR PDF, que prende y
+   apaga la clase nv-equipo en el <body>. Todo lo demas lo hace el CSS.
+
+   NO guarda el estado: cada vez que abris la pantalla arranca apagada, en modo
+   trabajo. Asi nunca te sorprende con los filtros escondidos cuando la abris
+   para armar el plan.
+
+   El rotulo sale en los tres idiomas y se vuelve a escribir si cambias de
+   idioma mientras estas en la pantalla.
+
+   PARA SACARLO: borrar este bloque y el <style id="nv-gp"> del encabezado.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  if(window.NV_GP) return; window.NV_GP = 1;
+
+  var TXT = {
+    es: 'Modo equipo',
+    en: 'Team mode',
+    de: 'Team-Modus'
+  };
+
+  function idioma(){
+    var l = '';
+    try{ l = (localStorage.getItem('vb_lang') || '').toLowerCase(); }catch(e){}
+    if(!l){ l = (document.documentElement.lang || 'es').toLowerCase(); }
+    l = l.slice(0, 2);
+    return TXT[l] ? l : 'es';
+  }
+
+  var btn = null, etq = null;
+
+  function rotular(){
+    if(etq) etq.textContent = TXT[idioma()];
+  }
+
+  function poner(){
+    if(btn) return true;
+    var pdf = document.getElementById('pdf-btn');
+    if(!pdf || !pdf.parentNode) return false;
+
+    btn = document.createElement('button');
+    btn.id = 'nv-gpbtn';
+    btn.type = 'button';
+    btn.setAttribute('aria-pressed', 'false');
+
+    var pt = document.createElement('span');
+    pt.className = 'nv-pt';
+    pt.setAttribute('aria-hidden', 'true');
+    etq = document.createElement('span');
+    btn.appendChild(pt);
+    btn.appendChild(etq);
+    rotular();
+
+    btn.addEventListener('click', function(){
+      var on = document.body.classList.toggle('nv-equipo');
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      /* algunas canchas se dibujan midiendo su caja: al cambiar el alto de las
+         claves conviene avisarle al navegador que recalcule */
+      try{ window.dispatchEvent(new Event('resize')); }catch(e){}
+    });
+
+    pdf.parentNode.insertBefore(btn, pdf.nextSibling);
+
+    /* si cambia el idioma desde la barra, el rotulo se reescribe */
+    var lw = document.getElementById('lang-wrap');
+    if(lw) lw.addEventListener('click', function(){ setTimeout(rotular, 150); });
+
+    return true;
+  }
+
+  function arrancar(){
+    if(poner()) return;
+    /* la barra la arma nav.js: se espera a que exista */
+    var n = 0, t = setInterval(function(){
+      if(poner() || ++n > 60) clearInterval(t);
+    }, 250);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
 </body>
 </html>
 
