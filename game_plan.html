@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-0834"></script>
-<script src="selector_categoria.js?v=20261029-0834"></script>
-<script src="objetivos_config.js?v=20261029-0834"></script>
+<script src="categorias_club.js?v=20261029-0851"></script>
+<script src="selector_categoria.js?v=20261029-0851"></script>
+<script src="objetivos_config.js?v=20261029-0851"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -485,7 +485,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261029-0834" onerror="void 0"></script>
+<script src="lang.js?v=20261029-0851" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -496,7 +496,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261029-0834"></script>
+<script src="datos_seguros.js?v=20261029-0851"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -509,15 +509,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261029-0834" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-0834"></script>
-<script src="videos.js?v=20261029-0834" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-0851" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-0851"></script>
+<script src="videos.js?v=20261029-0851" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-0834">
+<link rel="stylesheet" href="movil.css?v=20261029-0851">
 
-<script src="iconos.js?v=20261029-0834" defer></script>
+<script src="iconos.js?v=20261029-0851" defer></script>
 </head>
 <body>
 
@@ -2702,23 +2702,85 @@ try{ gpSelsCargar(); }catch(e){}
 
 var GPN_CFG={};
 function gpnCfgClave(num){ return 'vb_gp_cfg_'+(GP_RIVAL_SLUG||'rival')+'_'+num; }
+/* ══ UNA VISTA GUARDADA POR COMBINACION ══════════════════════════════
+   Primero era UNA vista por jugador: guardar el saque le borraba el
+   ataque. Despues una por fundamento. Pero adentro de ataque tampoco
+   alcanza: la X5 y la V5 son dos lecturas distintas y cada una necesita
+   su resultado y su minimo.
+
+   Entonces la combinacion es parte de la LLAVE, no del contenido:
+
+     { tab:'ataque',
+       sel:{ ataque:'X5', saque:'FLOTADO' },      con cual abre cada una
+       v:{ ataque:{ 'X5':{ev,min}, 'V5':{ev,min}, '':{ev,min} },
+           saque :{ 'FLOTADO':{ev,min} } } }
+
+   La llave vacia '' es "Todas". Con varias combinaciones tildadas la
+   llave son las dos, ordenadas: 'V5+X5'.
+
+   Se siguen leyendo los dos formatos anteriores y se acomodan solos, asi
+   no se pierde nada de lo que ya estaba preparado. */
+var GPN_FUND=['ataque','saque','recepcion'];
+function gpnCfgCombo(cat){ return (cat||[]).slice().sort().join('+'); }
+function gpnCfgVista(num,tipo,clave){
+  var c=GPN_CFG[num];
+  return (c&&c.v&&c.v[tipo]&&c.v[tipo][clave])?c.v[tipo][clave]:null;
+}
+/* con que abre este fundamento: su combinacion elegida y la vista de esa */
+function gpnCfgIni(num,tipo){
+  var c=GPN_CFG[num]; if(!c||!c.sel||typeof c.sel[tipo]!=='string') return null;
+  var clave=c.sel[tipo], x=gpnCfgVista(num,tipo,clave);
+  if(!x) return null;
+  return { cat:(clave?clave.split('+'):[]), ev:(x.ev||[]).slice(), min:x.min||0 };
+}
 function gpnCfgGuardar(num){
   if(!gpEsEntrenador()) return;
-  var c=GPN_CFG[num]||{};
-  try{ gpEdGuardar(gpnCfgClave(num), JSON.stringify({
-    tab:c.tab||'', cat:(c.cat||[]).slice(), ev:(c.ev||[]).slice(), min:c.min||0 })); }catch(e){}
+  var c=GPN_CFG[num]||{}, lim={}, sel={};
+  GPN_FUND.forEach(function(t){
+    var m=(c.v&&c.v[t])||null;
+    if(m){ var o={},hay=false;
+      Object.keys(m).forEach(function(k){
+        var x=m[k]; if(!x||typeof x!=='object') return;
+        o[k]={ ev:(x.ev||[]).slice(), min:x.min||0 }; hay=true; });
+      if(hay) lim[t]=o;
+    }
+    if(c.sel&&typeof c.sel[t]==='string') sel[t]=c.sel[t];
+  });
+  try{ gpEdGuardar(gpnCfgClave(num), JSON.stringify({ tab:c.tab||'', sel:sel, v:lim })); }catch(e){}
 }
 function gpnCfgParse(txt){
   try{
     var o=JSON.parse(txt);
-    if(o&&typeof o==='object') return { tab:String(o.tab||''),
-      cat:(o.cat instanceof Array)?o.cat.slice():[],
-      ev:(o.ev instanceof Array)?o.ev.slice():[],
-      min:(parseInt(o.min,10)||0) };
+    if(!o||typeof o!=='object') return null;
+    var tab=String(o.tab||''), v={}, sel={};
+    if(o.v&&typeof o.v==='object'){
+      GPN_FUND.forEach(function(t){
+        var m=o.v[t]; if(!m||typeof m!=='object') return;
+        /* formato anterior: v[t] era UNA vista con la combinacion adentro */
+        if((m.cat instanceof Array)||(m.ev instanceof Array)){
+          var k=(m.cat instanceof Array)?gpnCfgCombo(m.cat):'';
+          v[t]={}; v[t][k]={ ev:(m.ev instanceof Array)?m.ev.slice():[], min:(parseInt(m.min,10)||0) };
+          sel[t]=k; return;
+        }
+        var o2={};
+        Object.keys(m).forEach(function(k){
+          var x=m[k]; if(!x||typeof x!=='object') return;
+          o2[k]={ ev:(x.ev instanceof Array)?x.ev.slice():[], min:(parseInt(x.min,10)||0) }; });
+        v[t]=o2;
+      });
+      if(o.sel&&typeof o.sel==='object')
+        GPN_FUND.forEach(function(t){ if(typeof o.sel[t]==='string') sel[t]=o.sel[t]; });
+    } else {
+      /* el mas viejo de todos: una sola vista plana */
+      var t0=(GPN_FUND.indexOf(tab)>=0)?tab:'ataque';
+      var k0=(o.cat instanceof Array)?gpnCfgCombo(o.cat):'';
+      v[t0]={}; v[t0][k0]={ ev:(o.ev instanceof Array)?o.ev.slice():[], min:(parseInt(o.min,10)||0) };
+      sel[t0]=k0;
+    }
+    return { tab:tab, sel:sel, v:v };
   }catch(e){}
   return null;
 }
-
 function gpnDesplegable(opts){
   /* lo que venia guardado entra ya marcado, y sin avisar: el aviso es para
      los cambios de la persona, no para el estado inicial */
@@ -2765,8 +2827,16 @@ function gpnDesplegable(opts){
     if(!ab) dd.classList.add('open'); };
   if(!window.__gpnDDcerrar){ window.__gpnDDcerrar=1;
     document.addEventListener('click',function(){ [].forEach.call(document.querySelectorAll('.gpn-dd.open'),function(x){x.classList.remove('open');}); }); }
+  /* poner una seleccion desde afuera, sin avisar: lo usa el cambio de
+     combinacion para traer el resultado guardado de esa combinacion */
+  function poner(nueva){
+    sel=(nueva instanceof Array)?nueva.filter(function(k){return _hay[k];}):[];
+    [].forEach.call(menu.querySelectorAll('input'),function(c){
+      c.checked=(sel.indexOf(c.parentElement.dataset.k)>=0); });
+    texto();
+  }
   dd.appendChild(bt); dd.appendChild(menu); texto();
-  return {el:dd, sel:function(){return sel;}};
+  return {el:dd, sel:function(){return sel;}, set:poner};
 }
 
 /* ══ EL MINIMO DE ACCIONES POR CUADRANTE ══════════════════════════════
@@ -2799,7 +2869,19 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     chip:function(k){ return '<b style="color:#E6EDF6">'+k+'</b>'; },
     items:cats.filter(function(c){return c.k!=='all';}).map(function(c){
       return {k:c.k, n:cuentaCat[c.k]||0, html:'<span>'+c.html+'</span>'}; }),
-    onChange:function(s){ estado.cat=s.slice(); _pick(); },
+    onChange:function(s){
+      estado.cat=s.slice();
+      /* cada combinacion tiene su vista: al elegirla vuelven su resultado
+         y su minimo. Si esa combinacion no tiene nada guardado, se deja lo
+         que habia puesto, que es lo menos molesto. */
+      var g=(!_plantel)?gpnCfgVista(num,tipo,gpnCfgCombo(estado.cat)):null;
+      if(g){
+        estado.ev=(g.ev||[]).slice(); estado.min=g.min||0;
+        try{ ddE.set(estado.ev); }catch(e){}
+        try{ inpM.value=estado.min; _bordeMin(); }catch(e){}
+      }
+      _pick();
+    },
     init:estado.cat
   });
 
@@ -2838,10 +2920,9 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
     return a.length===b.length && a.every(function(x,i){ return x===b[i]; });
   }
   function _guardadoIgual(){
-    var g=GPN_CFG[num];
-    if(!g||!g.tab) return false;
-    return g.tab===tipo && _mismo(g.cat,estado.cat) && _mismo(g.ev,estado.ev)
-        && (g.min||0)===(estado.min||0);
+    var g=gpnCfgVista(num,tipo,gpnCfgCombo(estado.cat));
+    if(!g) return false;
+    return _mismo(g.ev,estado.ev) && (g.min||0)===(estado.min||0);
   }
   /* El boton solo se pone en amarillo cuando TOCASTE algo en esta visita.
      Abrir una ficha que ya tenia una vista guardada no es un cambio: ahi
@@ -2892,7 +2973,14 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
       +'border-radius:7px;padding:5px 10px;font-family:inherit;font-weight:700;font-size:12px;'
       +'cursor:pointer;white-space:nowrap';
     btnG.onclick=function(e){ e.stopPropagation();
-      GPN_CFG[num]={tab:tipo,cat:estado.cat.slice(),ev:estado.ev.slice(),min:estado.min||0};
+      /* se toca SOLO la casilla de este fundamento; las otras dos quedan
+         como estaban. 'tab' pasa a ser este, que es con el que va a abrir
+         la ficha: lo ultimo que preparaste es lo primero que se ve. */
+      var g=GPN_CFG[num]||{}; g.v=g.v||{}; g.sel=g.sel||{};
+      g.v[tipo]=g.v[tipo]||{};
+      var clave=gpnCfgCombo(estado.cat);
+      g.v[tipo][clave]={ev:estado.ev.slice(),min:estado.min||0};
+      g.sel[tipo]=clave; g.tab=tipo; GPN_CFG[num]=g;
       gpnCfgGuardar(num);
       _tocado=false; _refG();
     };
@@ -3000,8 +3088,7 @@ function gpnPanel(j,cont,tipo){
   /* Si el entrenador dejo esta solapa con filtros puestos, se abre asi: es la
      unica forma de que el boton de video caiga en la misma clave con la que
      el guardo la secuencia. */
-  var cfg=GPN_CFG[num];
-  var ini=(cfg&&cfg.tab===tipo)?cfg:null;
+  var ini=gpnCfgIni(num,tipo);
   /* Tocar un filtro YA NO guarda. Antes si, y por eso lo que el entrenador
      dejaba preseleccionado se perdia al tocar otra solapa: ese click
      guardaba la solapa nueva, vacia, encima de lo que habia dejado. Ahora
@@ -7209,9 +7296,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261029-0834"></script>
-<script src="ayuda.js?v=20261029-0834"></script>
-<script src="volver_inicio.js?v=20261029-0834" defer></script>
+<script src="temporadas_menu.js?v=20261029-0851"></script>
+<script src="ayuda.js?v=20261029-0851"></script>
+<script src="volver_inicio.js?v=20261029-0851" defer></script>
 </body>
 </html>
 
