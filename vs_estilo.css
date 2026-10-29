@@ -487,7 +487,11 @@ html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody tr.vs-vid td:nth-chi
    La clase .vs-cab esta en la lista para poder sumar a mano una pantalla que
    arme su encabezado por JavaScript.
    ═══════════════════════════════════════════════════════════════════════════ */
-html:not([data-vs="off"]) body > header,
+/* "header" a secas y no "body > header": el de Plan de Partido es
+   <header class="masthead"> ADENTRO de .wrap, asi que el selector de hijo
+   directo no lo alcanzaba. Se verifico que ninguna pantalla tiene mas de
+   un <header>, asi que relajarlo no puede tocar nada que no sea la barra. */
+html:not([data-vs="off"]) header,
 html:not([data-vs="off"]) .page-header,
 html:not([data-vs="off"]) .header,
 html:not([data-vs="off"]) .head,
