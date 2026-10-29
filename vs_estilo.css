@@ -463,3 +463,46 @@ html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody tr.vs-vid td:nth-chi
  text-decoration-color:rgba(255,255,255,.35);
  text-underline-offset:3px;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL ENCABEZADO
+   ---------------------------------------------------------------------------
+   Las pantallas resolvian su barra superior de seis maneras distintas:
+   .page-header, .header, <header>, .head, .top y .hdr-in. Ninguna se parecia
+   a otra ni a la portada.
+
+   Ahora todas llevan la MISMA receta que la portada: la foto de la red y la
+   pelota, los dos resplandores, el oscurecido en degradado y la linea de
+   color abajo. Lo unico que cambia de una pantalla a otra es el texto, que
+   es lo que siempre las distinguio de verdad.
+
+   DOS DECISIONES DE SEGURIDAD, y son el motivo de que nada se mueva:
+   1. NO se fija altura, ni padding, ni position. Cada encabezado conserva
+      exactamente la caja que ya tenia; los nueve que estan pegados arriba
+      (sticky) siguen pegados y no tapan contenido.
+   2. Todo entra por UNA sola propiedad background, por capas, con la linea
+      de color como una capa mas anclada abajo. Sin ::before, sin ::after y
+      sin tocar position: no hay forma de que pise el layout de nadie.
+
+   La clase .vs-cab esta en la lista para poder sumar a mano una pantalla que
+   arme su encabezado por JavaScript.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body > header,
+html:not([data-vs="off"]) .page-header,
+html:not([data-vs="off"]) .header,
+html:not([data-vs="off"]) .head,
+html:not([data-vs="off"]) .top,
+html:not([data-vs="off"]) .hdr-in,
+html:not([data-vs="off"]) .vs-cab{
+ background:
+  linear-gradient(90deg,#e8192c,#ff4d6d 34%,#b94bff 68%,#6f7bff) left bottom / 100% 3px no-repeat,
+  radial-gradient(620px 300px at 5% 50%,rgba(232,25,44,.26),transparent 72%),
+  radial-gradient(520px 280px at 95% 50%,rgba(120,60,220,.18),transparent 74%),
+  linear-gradient(90deg,rgba(7,6,11,.95) 0%,rgba(7,6,11,.86) 34%,rgba(7,6,11,.42) 56%,rgba(7,6,11,.34) 78%,rgba(7,6,11,.80) 100%),
+  linear-gradient(180deg,rgba(7,6,11,.30),rgba(7,6,11,.52)),
+  url('fondo_axpo_nafels.jpg') center / cover no-repeat,
+  #0B0810
+  !important;
+ border-bottom:0!important;
+ box-shadow:0 10px 34px -20px rgba(0,0,0,.9)!important;
+}
