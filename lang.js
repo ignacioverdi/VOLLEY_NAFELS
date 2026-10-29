@@ -852,6 +852,49 @@
   //  Traduce cualquier texto en español que esté en este diccionario, incluso
   //  el contenido generado dinámicamente por JS (tablas, etiquetas, etc.).
   var PHRASES_EXTRA = {
+    /* ══ PORTADA 2026/27 · "DATOS QUE GENERAN DECISIONES" ══════════
+       La portada nueva la dibuja JavaScript, asi que sus textos van aca
+       y no en el diccionario de claves. Dias y meses sirven para la
+       fecha del proximo partido. */
+    "FIXTURE \u2014 NLA SUIZA 2026/27": { en:"FIXTURE \u2014 NLA SWITZERLAND 2026/27", de:"SPIELPLAN \u2014 NLA SCHWEIZ 2026/27" },
+    "DATOS QUE GENERAN": { en:"DATA THAT DRIVES", de:"DATEN F\u00dcR" },
+    "DECISIONES.": { en:"DECISIONS.", de:"ENTSCHEIDUNGEN." },
+    "Plataforma de inteligencia de rendimiento en voleibol": { en:"Volleyball performance intelligence platform", de:"Plattform f\u00fcr Leistungsanalyse im Volleyball" },
+    "EXPLORAR HERRAMIENTAS": { en:"EXPLORE TOOLS", de:"WERKZEUGE ENTDECKEN" },
+    "Rendimiento": { en:"Performance", de:"Leistung" },
+    "Rendimiento del equipo": { en:"Team performance", de:"Teamleistung" },
+    "Ver todos los partidos": { en:"See all matches", de:"Alle Spiele ansehen" },
+    "Ver todo": { en:"See all", de:"Alle ansehen" },
+    "Ver todas": { en:"See all", de:"Alle ansehen" },
+    "Ver menos": { en:"See less", de:"Weniger anzeigen" },
+    "Ver an\u00e1lisis": { en:"See analysis", de:"Analyse ansehen" },
+    "Acceso exclusivo": { en:"Exclusive access", de:"Exklusiver Zugang" },
+    "Puntos de ataque": { en:"Attack points", de:"Angriffspunkte" },
+    "Eficiencia de ataque por sesi\u00f3n": { en:"Attack efficiency per session", de:"Angriffseffizienz pro Einheit" },
+    "\u00b7 \u00faltimas": { en:"\u00b7 last", de:"\u00b7 letzte" },
+    "d\u00eda": { en:"day", de:"Tag" },
+    "d\u00edas": { en:"days", de:"Tage" },
+    "Todav\u00eda no hay partidos cargados": { en:"No matches loaded yet", de:"Noch keine Spiele eingetragen" },
+    "Todav\u00eda no hay sesiones cargadas para mostrar tu rendimiento": { en:"No sessions loaded yet to show your performance", de:"Noch keine Einheiten vorhanden, um deine Leistung zu zeigen" },
+    "lunes": { en:"Monday", de:"Montag" },
+    "martes": { en:"Tuesday", de:"Dienstag" },
+    "mi\u00e9rcoles": { en:"Wednesday", de:"Mittwoch" },
+    "jueves": { en:"Thursday", de:"Donnerstag" },
+    "viernes": { en:"Friday", de:"Freitag" },
+    "s\u00e1bado": { en:"Saturday", de:"Samstag" },
+    "domingo": { en:"Sunday", de:"Sonntag" },
+    "enero": { en:"January", de:"Januar" },
+    "febrero": { en:"February", de:"Februar" },
+    "marzo": { en:"March", de:"M\u00e4rz" },
+    "abril": { en:"April", de:"April" },
+    "mayo": { en:"May", de:"Mai" },
+    "junio": { en:"June", de:"Juni" },
+    "julio": { en:"July", de:"Juli" },
+    "agosto": { en:"August", de:"August" },
+    "septiembre": { en:"September", de:"September" },
+    "octubre": { en:"October", de:"Oktober" },
+    "noviembre": { en:"November", de:"November" },
+    "diciembre": { en:"December", de:"Dezember" },
     /* ══ GAME PLAN Y DETALLE POR ACCIONES · 10-10-2026 ══════════════
        La pestaña que antes decia "Plan de Partido" quedaba al lado del
        Game Plan y se confundian: ahora dice "Detalle por acciones".

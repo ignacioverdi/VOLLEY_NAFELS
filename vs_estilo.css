@@ -1,0 +1,221 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   vs_estilo.css · LA PIEL DE TODA LA APP
+   ---------------------------------------------------------------------------
+   QUE ES
+   Un solo archivo que le da a las 60 pantallas el mismo fondo, el mismo rojo,
+   los mismos bordes y los mismos campos de formulario. Hasta ahora cada
+   pantalla traia su propia paleta: ocho tonos de negro distintos, dos rojos
+   que no eran el mismo rojo, y los desplegables en blanco sobre fondo negro.
+
+   COMO FUNCIONA, Y POR QUE NO ROMPE NADA
+   Todas las pantallas ya pintan con variables: body{background:var(--bg)},
+   los paneles con var(--card), el acento con var(--red). Este archivo NO
+   reescribe reglas: solamente vuelve a definir esas variables. Como se carga
+   ultimo, gana el suyo, y cada pantalla se repinta sola sin tocarle una linea.
+
+   EL FONDO
+   Va en <html>, detras de todo, con las capas fijas a la pantalla: dos focos
+   rojos, una grilla tecnica que se desvanece, dos haces en diagonal, grano
+   fino y viñeta. El <body> queda transparente para dejarlo ver.
+
+   APAGARLO SIN DESINSTALAR NADA
+       En la consola del navegador:  localStorage.setItem('vs_estilo','off')
+       y recargar. Todo vuelve a como estaba.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── las variables que ya usan todas las pantallas ────────────────────────── */
+html:not([data-vs="off"]){
+  /* marca */
+  --red:#E8192C;  --red2:#FF5468;  --redd:#B00C22;
+  /* fondos */
+  --bg:#07080F;
+  --card:rgba(13,14,26,.72);   --card2:rgba(19,22,42,.72);  --elev:rgba(23,26,48,.76);
+  --pan:rgba(13,16,32,.72);    --pan2:rgba(17,21,42,.72);
+  /* lineas */
+  --line:rgba(255,255,255,.085);   --border:rgba(255,255,255,.085);  --b:rgba(255,255,255,.085);
+  --border2:rgba(255,255,255,.145); --b2:rgba(255,255,255,.145);
+  /* texto */
+  --txt:#E8EDF7;  --mut:#8E9AB4;  --mut2:#AEB9CE;  --dim:#8A94A6;
+  /* avisos: un solo juego para toda la app */
+  --green:#2BBF72; --amber:#E0A32F; --teal:#2AA9A0; --indigo:#7C8BE8; --orange:#E8762C;
+  --vsUI:'Barlow','Barlow Condensed',system-ui,-apple-system,sans-serif;
+}
+
+/* ── el fondo, fijo detras de todo ────────────────────────────────────────── */
+/*   Va en <html> y no en <body>: asi cada pantalla puede seguir usando su
+     propio body sin pelearse con esto. Las capas quedan fijas a la ventana,
+     o sea que el fondo no se mueve cuando scrolleas — como en la portada.    */
+html:not([data-vs="off"]){ background:linear-gradient(180deg,#0A0B14 0%,#07080F 42%,#05060B 100%) #06070E; }
+html:not([data-vs="off"]) body{ background:transparent!important; }
+/*   focos rojos + grilla tecnica, que se desvanece hacia abajo               */
+html:not([data-vs="off"])::before{
+  content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(900px 520px at 8% -8%,rgba(232,25,44,.20),transparent 62%),
+    radial-gradient(760px 480px at 102% 6%,rgba(120,20,60,.17),transparent 60%),
+    radial-gradient(1100px 700px at 50% 112%,rgba(232,25,44,.09),transparent 64%),
+    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:auto,auto,auto,54px 54px,54px 54px;
+  background-repeat:no-repeat,no-repeat,no-repeat,repeat,repeat;
+  -webkit-mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
+          mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
+}
+/*   viñeta                                                                    */
+html:not([data-vs="off"])::after{
+  content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 42%,transparent 42%,rgba(0,0,0,.62) 100%);
+}
+
+/* ── campos de formulario: se terminaron las cajas blancas ───────────────── */
+html:not([data-vs="off"]) select,
+html:not([data-vs="off"]) input[type="text"],
+html:not([data-vs="off"]) input[type="number"],
+html:not([data-vs="off"]) input[type="search"],
+html:not([data-vs="off"]) input[type="date"],
+html:not([data-vs="off"]) input[type="time"],
+html:not([data-vs="off"]) input[type="email"],
+html:not([data-vs="off"]) input[type="tel"],
+html:not([data-vs="off"]) textarea{
+  background:linear-gradient(165deg,rgba(255,255,255,.065),rgba(255,255,255,.018))!important;
+  color:var(--txt)!important; -webkit-text-fill-color:var(--txt)!important;
+  border:1px solid rgba(255,255,255,.12)!important; border-radius:10px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07)!important;
+  font-family:var(--vsUI);
+}
+html:not([data-vs="off"]) select:hover,
+html:not([data-vs="off"]) input:hover,
+html:not([data-vs="off"]) textarea:hover{ border-color:rgba(255,255,255,.22)!important; }
+html:not([data-vs="off"]) select:focus,
+html:not([data-vs="off"]) input:focus,
+html:not([data-vs="off"]) textarea:focus{
+  outline:0!important; border-color:var(--red2)!important;
+  box-shadow:0 0 0 3px rgba(232,25,44,.22)!important;
+}
+html:not([data-vs="off"]) option{ background:#0A0B14!important; color:#fff!important; }
+html:not([data-vs="off"]) option:checked{ background:var(--red)!important; color:#fff!important; }
+html:not([data-vs="off"]) ::placeholder{ color:rgba(255,255,255,.34)!important; opacity:1; }
+
+/* ── foco visible con teclado ─────────────────────────────────────────────── */
+html:not([data-vs="off"]) a:focus-visible,
+html:not([data-vs="off"]) button:focus-visible,
+html:not([data-vs="off"]) [tabindex]:focus-visible{
+  outline:2px solid var(--red2); outline-offset:3px; border-radius:9px;
+}
+
+/* ── barra de scroll ──────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) *{ scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.18) transparent; }
+html:not([data-vs="off"]) ::-webkit-scrollbar{ width:10px; height:10px; }
+html:not([data-vs="off"]) ::-webkit-scrollbar-track{ background:transparent; }
+html:not([data-vs="off"]) ::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.16); border-radius:999px; border:2px solid transparent; background-clip:content-box;
+}
+html:not([data-vs="off"]) ::-webkit-scrollbar-thumb:hover{ background:rgba(232,25,44,.55); background-clip:content-box; }
+
+/* ── seleccion de texto y suavizado ──────────────────────────────────────── */
+html:not([data-vs="off"]) ::selection{ background:rgba(232,25,44,.38); color:#fff; }
+html:not([data-vs="off"]) body{ -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+
+/* ── el emoji de respaldo de los iconos propios, escondido ───────────────── */
+/*   iconos.js deja el emoji detras del dibujo; en varias pantallas falta la
+     regla que lo esconde y se ven los dos encimados (titulo de Prep. Fisica). */
+html:not([data-vs="off"]) .vs-i > i{ display:none!important; }
+html:not([data-vs="off"]) .vs-i{ display:inline-flex!important; align-items:center; justify-content:center; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA TABLA
+   ---------------------------------------------------------------------------
+   Tinta blanca y cero semaforo: el ranking lo dice la barrita que va debajo de
+   cada numero, que mide donde esta esa fila respecto de las demas en ESA
+   columna. El color se guarda para una sola cosa: la fila que tocas se
+   enciende entera. Quien arma las barras y pasa el color del club al punto es
+   vs_tabla.js — aca solo esta como se ve.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) .vs-tablaw{position:relative;border-radius:18px;overflow:auto;max-width:100%;padding:0 12px 12px;
+ border:1px solid rgba(255,255,255,.075);
+ background:linear-gradient(170deg,rgba(255,255,255,.034),rgba(255,255,255,.008) 48%,rgba(255,255,255,.004));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 22px 48px -30px rgba(0,0,0,.95)}
+html:not([data-vs="off"]) .vs-tablaw::before{content:'';position:absolute;left:20px;right:20px;top:0;height:1px;z-index:5;
+ background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
+html:not([data-vs="off"]) table.vs-tabla{width:100%;border-collapse:separate;border-spacing:0;font-family:var(--vsUI)}
+
+/* encabezado pegado arriba */
+html:not([data-vs="off"]) table.vs-tabla thead th{position:sticky;top:0;z-index:4;white-space:nowrap;
+ padding:14px 12px 11px;text-align:right;
+ font:600 9px/1.1 var(--vsUI);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.34);
+ background:linear-gradient(180deg,#090B14 0%,#090B14 70%,rgba(9,11,20,0) 100%)}
+html:not([data-vs="off"]) table.vs-tabla thead th:first-child{text-align:left}
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto thead th:nth-child(2){text-align:left}
+html:not([data-vs="off"]) table.vs-tabla thead th.vs-orden{color:rgba(255,255,255,.92)}
+
+/* celdas: hairline, sin relleno */
+html:not([data-vs="off"]) table.vs-tabla tbody td{position:relative;padding:14px 12px 16px;text-align:right;
+ vertical-align:middle;background:transparent;transition:background .15s;
+ font:700 15px/1.1 var(--vsUI);color:#fff;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;
+ border-bottom:1px solid rgba(255,255,255,.055)}
+html:not([data-vs="off"]) table.vs-tabla tbody tr:last-child td{border-bottom:0}
+/* el puesto */
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:first-child{text-align:left;width:1%;white-space:nowrap;
+ padding-left:14px;font:600 12px/1 var(--vsUI);color:rgba(255,255,255,.30);letter-spacing:.1em}
+/* el nombre */
+html:not([data-vs="off"]) table.vs-tabla tbody td:first-child,
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:nth-child(2){text-align:left;white-space:nowrap;
+ font:600 13.5px/1.2 var(--vsUI);letter-spacing:.05em}
+
+/* el color del club queda en un punto, no en el nombre */
+html:not([data-vs="off"]) table.vs-tabla .t-name{color:rgba(255,255,255,.90)!important;position:relative;padding-left:14px}
+html:not([data-vs="off"]) table.vs-tabla .t-name::before{content:'';position:absolute;left:0;top:50%;
+ transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--club,rgba(255,255,255,.35))}
+/* todos los valores del mismo color: la barra dice quien es mejor */
+html:not([data-vs="off"]) table.vs-tabla .tval{color:rgba(255,255,255,.94)!important}
+html:not([data-vs="off"]) table.vs-tabla .ttot,
+html:not([data-vs="off"]) table.vs-tabla tbody td small{color:rgba(255,255,255,.26)!important;font-weight:500}
+
+/* la barra de dato */
+html:not([data-vs="off"]) table.vs-tabla .vs-bar{position:absolute;left:12px;right:12px;bottom:7px;height:2px;
+ border-radius:2px;background:rgba(255,255,255,.055);overflow:hidden;display:block}
+html:not([data-vs="off"]) table.vs-tabla .vs-bar s{display:block;height:100%;border-radius:2px;text-decoration:none;
+ background:rgba(255,255,255,.30);transition:width .5s cubic-bezier(.2,.8,.3,1),background .18s}
+html:not([data-vs="off"]) table.vs-tabla td.vs-neg .vs-bar s{background:rgba(255,255,255,.14)}
+
+/* al pasar el mouse se insinua, nada mas */
+html:not([data-vs="off"]) table.vs-tabla tbody tr:hover td{background:rgba(255,255,255,.035);cursor:pointer}
+html:not([data-vs="off"]) table.vs-tabla tbody tr:hover .vs-bar s{background:rgba(255,255,255,.46)}
+
+/* la columna ordenada: dos hilos */
+html:not([data-vs="off"]) table.vs-tabla tbody td.active-col,
+html:not([data-vs="off"]) table.vs-tabla tbody td.vs-orden{
+ box-shadow:inset 1px 0 0 rgba(255,255,255,.10),inset -1px 0 0 rgba(255,255,255,.10)}
+
+/* EL ACENTO: la fila elegida */
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td{border-bottom-color:rgba(232,25,44,.32);
+ background:linear-gradient(90deg,rgba(232,25,44,.20),rgba(232,25,44,.06) 60%,rgba(232,25,44,.02))}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td:first-child{box-shadow:inset 3px 0 0 #E8192C;color:#FF8392}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name{color:#fff!important;letter-spacing:.07em}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name::before{background:#FF5468;
+ box-shadow:0 0 10px rgba(255,84,104,.95)}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .vs-bar s{box-shadow:0 0 10px -2px rgba(255,84,104,.85);
+ background:linear-gradient(90deg,rgba(232,25,44,.65),#FF5468)}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td.active-col{
+ box-shadow:inset 1px 0 0 rgba(255,92,112,.35),inset -1px 0 0 rgba(255,92,112,.35)}
+
+/* el club propio: un hilo, no un relleno */
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel),
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) td,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td{background:transparent!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) td:first-child,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td:first-child{
+ box-shadow:inset 2px 0 0 rgba(232,25,44,.6)!important;color:rgba(255,255,255,.72)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) .t-name,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) .t-name{color:#fff!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:hover td,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:hover td{background:rgba(255,255,255,.035)!important}
+
+@media (max-width:760px){
+ html:not([data-vs="off"]) .vs-tablaw{border-radius:15px;padding:0 8px 10px}
+ html:not([data-vs="off"]) table.vs-tabla tbody td{padding:11px 9px 14px;font-size:13px}
+ html:not([data-vs="off"]) table.vs-tabla thead th{padding:11px 9px 9px;font-size:8.2px;letter-spacing:.16em}
+ html:not([data-vs="off"]) table.vs-tabla tbody td:first-child,
+ html:not([data-vs="off"]) table.vs-tabla thead th:first-child{position:sticky;left:0;z-index:2;background:#090B14}
+ html:not([data-vs="off"]) table.vs-tabla thead th:first-child{z-index:5}
+}

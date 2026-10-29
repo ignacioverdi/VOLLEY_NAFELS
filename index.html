@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-0856"></script>
-<script src="selector_categoria.js?v=20261029-0856"></script>
+<script src="categorias_club.js?v=20261029-1316"></script>
+<script src="selector_categoria.js?v=20261029-1316"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261029-0856"></script>
-<script src="firebase.js?v=20261029-0856" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-0856"></script>
-<script src="lang.js?v=20261029-0856"></script>
-<script src="plantel_nafels.js?v=20261029-0856"></script>
+<script src="datos_seguros.js?v=20261029-1316"></script>
+<script src="firebase.js?v=20261029-1316" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-1316"></script>
+<script src="lang.js?v=20261029-1316"></script>
+<script src="plantel_nafels.js?v=20261029-1316"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261029-0856" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261029-1316" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=6b78f555" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=840410f6" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=82ac48dd" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261029-0856" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261029-1316" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-0856">
+<link rel="stylesheet" href="movil.css?v=20261029-1316">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,9 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261029-0856" defer></script>
+<script src="iconos.js?v=20261029-1316" defer></script>
 
-<script src="nav.js?v=20261029-0856" defer></script>
+<script src="nav.js?v=20261029-1316" defer></script>
 <style id="encabezado-2026">
 /* ══ EL ENCABEZADO ═════════════════════════════════════════
    Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
@@ -734,6 +734,304 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 @media(max-width:400px){
   .club-name{font-size:17px!important;letter-spacing:1.1px!important}
 }
+</style>
+
+<!-- ══ PORTADA 2026/27 ══ -->
+<style id="nv-portada">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTADA 2026/27 · "DATOS QUE GENERAN DECISIONES"
+   Rediseño de la pantalla de inicio: una sola pantalla en escritorio,
+   columna única en el teléfono. No toca ninguna otra pantalla.
+   Los textos nuevos están en lang.js (ES/EN/DE).
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --nvR:#E8192C; --nvR2:#FF5468;
+  --nvInk:rgba(255,255,255,.92); --nvInk2:rgba(255,255,255,.52);
+  --nvUI:'Barlow','Barlow Condensed',system-ui,sans-serif;
+}
+html{background:#06070E!important}
+body{background:transparent!important}
+body::before{display:none!important}
+/* el contenido original queda en el DOM; la portada nueva lo reubica */
+body > main{display:none!important}
+.section,.sec-head{display:none!important}
+#tablero{display:none!important}
+.nv-huerfano{display:none!important}
+#fx{opacity:.14!important;filter:saturate(.5) hue-rotate(-12deg)!important}
+
+/* ── fondo con textura ──────────────────────────────────────────────────── */
+#nv-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden;
+ background:
+  radial-gradient(900px 520px at 8% -8%,rgba(232,25,44,.20),transparent 62%),
+  radial-gradient(760px 480px at 102% 6%,rgba(120,20,60,.17),transparent 60%),
+  radial-gradient(1100px 700px at 50% 112%,rgba(232,25,44,.09),transparent 64%),
+  linear-gradient(180deg,#0A0B14 0%,#07080F 42%,#05060B 100%)}
+#nv-bg i{position:absolute;display:block}
+#nv-bg .g{inset:0;background-image:
+  linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+ background-size:54px 54px,54px 54px;
+ -webkit-mask-image:radial-gradient(130% 95% at 50% 0%,#000 25%,transparent 78%);
+ mask-image:radial-gradient(130% 95% at 50% 0%,#000 25%,transparent 78%)}
+#nv-bg .r1{top:-30%;left:-12%;width:70%;height:190%;transform:rotate(-19deg);opacity:.70;filter:blur(26px);
+ background:linear-gradient(90deg,transparent,rgba(232,25,44,.26),rgba(255,120,138,.10),transparent)}
+#nv-bg .r2{top:-40%;right:-18%;width:46%;height:200%;transform:rotate(-19deg);opacity:.58;filter:blur(34px);
+ background:linear-gradient(90deg,transparent,rgba(232,25,44,.20),transparent)}
+#nv-bg .n{inset:0;background-size:180px 180px;opacity:.040;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='180' height='180' filter='url(%23n)' opacity='.5'/></svg>")}
+#nv-bg .vg{inset:0;background:radial-gradient(120% 90% at 50% 42%,transparent 42%,rgba(0,0,0,.62) 100%)}
+
+/* ── encabezado en una sola fila ────────────────────────────────────────── */
+body > header{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;
+ gap:14px!important;padding:3px 20px!important;min-height:0!important;height:auto!important;position:relative!important;z-index:3!important;
+ background:linear-gradient(180deg,rgba(10,11,20,.96),rgba(7,8,15,.92))!important;
+ border-bottom:1px solid rgba(255,255,255,.07)!important}
+body > header::before,body > header::after{display:none!important}
+/* el PNG del logo trae 76% de lienzo vacío: se recorta a su contenido real */
+body > header > .logo-wrap{order:1!important;width:79px!important;height:48px!important;flex:0 0 79px!important;
+ overflow:hidden!important;position:relative!important;display:block!important;border:0!important;background:none!important;
+ box-shadow:none!important;padding:0!important;max-height:none!important;border-radius:0!important}
+body > header > .logo-wrap img{position:absolute!important;width:324px!important;height:101.3px!important;
+ max-width:none!important;max-height:none!important;left:-124px!important;top:-24.8px!important;object-fit:fill!important;
+ padding:0!important;margin:0!important;border:0!important}
+body > header > .header-text{order:2!important;display:flex!important;flex-direction:row!important;align-items:baseline!important;
+ gap:12px!important;white-space:nowrap!important;flex:0 0 auto!important;text-align:left!important}
+body > header .header-text .club-name{font-size:16px!important;line-height:1!important;margin:0!important;
+ letter-spacing:.09em!important;white-space:nowrap!important}
+body > header .header-text .club-sub{font-size:10px!important;line-height:1!important;margin:0!important;
+ letter-spacing:.20em!important;white-space:nowrap!important;position:relative!important;padding-left:13px!important}
+body > header .header-text .club-sub::before{content:''!important;position:absolute!important;left:0!important;top:50%!important;
+ transform:translateY(-50%)!important;width:3px!important;height:3px!important;border-radius:50%!important;
+ background:var(--nvR)!important;box-shadow:0 0 6px rgba(232,25,44,.9)!important}
+body > header > .header-right{order:3!important;margin-left:auto!important;display:flex!important;flex-direction:row!important;
+ align-items:center!important;gap:11px!important;flex-wrap:nowrap!important}
+body > header .header-right *{font-size:10px!important}
+body > header .header-right #fecha-txt{white-space:nowrap!important}
+
+/* ── zona ───────────────────────────────────────────────────────────────── */
+#nv-zona{display:flex;flex-direction:column;gap:7px;padding:7px 18px 3px}
+.nv-rowA,.nv-rowB,.nv-rowC{display:flex;gap:12px;align-items:stretch}
+
+/* ── hero ───────────────────────────────────────────────────────────────── */
+#nv-hero{position:relative;overflow:hidden;border-radius:16px;flex:1 1 auto;min-height:200px;
+ display:flex;align-items:center;background:#0a0b12;border:1px solid rgba(255,255,255,.07)}
+#nv-hero .bg{position:absolute;inset:0;filter:saturate(1.06) contrast(1.05);
+ background:url('fondo_axpo_nafels.jpg') center 44%/cover no-repeat}
+#nv-hero .lux{position:absolute;inset:0;background:radial-gradient(62% 120% at 76% 52%,rgba(232,25,44,.30),transparent 62%)}
+#nv-hero .shade{position:absolute;inset:0;
+ background:linear-gradient(90deg,rgba(6,7,14,.97) 0%,rgba(6,7,14,.90) 26%,rgba(6,7,14,.40) 58%,rgba(6,7,14,.10) 100%)}
+#nv-hero .txt{position:relative;z-index:2;padding:0 0 0 48px;max-width:70%}
+#nv-hero .k{font:700 10px/1 var(--nvUI);letter-spacing:.40em;color:var(--nvR2);text-transform:uppercase;margin-bottom:10px}
+#nv-hero h2{margin:0;text-transform:uppercase;font:400 46px/1.02 'Anton','Barlow Condensed',sans-serif;letter-spacing:.012em;
+ background:linear-gradient(92deg,#E8192C 0%,#FF4D63 48%,#FF7AA0 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#nv-hero h2 span{-webkit-text-fill-color:#fff;color:#fff}
+#nv-hero p{font:500 11px/1.4 var(--nvUI);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.50);margin:13px 0 0}
+#nv-hero .cta{display:inline-flex;align-items:center;gap:9px;margin-top:17px;padding:11px 22px;border-radius:9px;
+ font:700 11.5px/1 var(--nvUI);letter-spacing:.16em;text-transform:uppercase;color:#fff;text-decoration:none;
+ background:linear-gradient(135deg,#E8192C,#B00C22);transition:transform .16s,box-shadow .16s;
+ box-shadow:0 12px 30px -12px rgba(232,25,44,.95),inset 0 1px 0 rgba(255,255,255,.25)}
+#nv-hero .cta:hover{transform:translateY(-2px);box-shadow:0 18px 38px -12px rgba(232,25,44,1),inset 0 1px 0 rgba(255,255,255,.35)}
+#nv-hero .edge{position:absolute;left:0;right:0;bottom:0;height:2px;
+ background:linear-gradient(90deg,#E8192C,rgba(232,25,44,.35) 46%,transparent)}
+#nv-cd{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:0 18px 8px;
+ background:linear-gradient(180deg,rgba(7,8,15,0),rgba(7,8,15,.80))}
+#nv-cd .countdown-bar{margin:0!important;background:rgba(7,8,15,.55)!important;border:1px solid rgba(255,255,255,.09)!important;
+ border-radius:10px!important;padding:5px 12px!important}
+#nv-cd.vacio,#nv-cd:empty{display:none!important}
+
+/* ── paneles ────────────────────────────────────────────────────────────── */
+#nv-rival{flex:0 0 420px}
+.nv-pan{position:relative;min-width:0;display:flex;flex-direction:column;padding:9px 12px 10px;border-radius:18px;
+ border:1px solid rgba(255,255,255,.085);
+ background:
+  radial-gradient(130% 100% at 0% 0%,rgba(232,25,44,.075),transparent 58%),
+  linear-gradient(170deg,rgba(255,255,255,.060),rgba(255,255,255,.014) 46%,rgba(255,255,255,.008));
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 18px 40px -26px rgba(0,0,0,.9)}
+.nv-pan::before{content:'';position:absolute;left:18px;right:18px;top:0;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(232,25,44,.75),transparent)}
+.nv-ph{display:flex;align-items:center;gap:9px;margin:0 0 9px;min-height:26px}
+.nv-pic{width:26px;height:26px;flex:0 0 26px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#FF8392;
+ background:linear-gradient(145deg,rgba(232,25,44,.26),rgba(232,25,44,.05));border:1px solid rgba(232,25,44,.42);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 14px -2px rgba(232,25,44,.45)}
+.nv-pic svg{width:14px;height:14px;display:block;stroke:currentColor;fill:none}
+.nv-pt{font:700 10.5px/1 var(--nvUI);letter-spacing:.17em;text-transform:uppercase;color:var(--nvInk);
+ white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nv-pv{margin-left:auto;font:600 9.2px/1 var(--nvUI);letter-spacing:.06em;color:var(--nvInk2);text-decoration:none;white-space:nowrap}
+.nv-pv b{color:var(--nvR)}
+.nv-pv:hover{color:#fff}
+.nv-lock{font:700 8px/1 var(--nvUI);letter-spacing:.1em;text-transform:uppercase;color:#f0b24a;white-space:nowrap;
+ background:rgba(240,178,74,.12);border:1px solid rgba(240,178,74,.35);border-radius:999px;padding:3px 7px}
+.nv-pb{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.nv-gt{display:grid;gap:7px}
+
+/* ── fichas ─────────────────────────────────────────────────────────────── */
+a.card.nv-tile{position:relative!important;display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;text-align:center!important;gap:9px!important;height:92px!important;min-height:0!important;
+ margin:0!important;padding:12px 8px 11px!important;border-radius:15px!important;overflow:hidden!important;
+ background:linear-gradient(165deg,rgba(255,255,255,.062),rgba(255,255,255,.016))!important;
+ border:1px solid rgba(255,255,255,.085)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.065)!important;
+ transition:transform .18s cubic-bezier(.2,.8,.3,1),border-color .18s,box-shadow .18s,background .18s!important}
+a.card.nv-tile:hover{transform:translateY(-3px)!important;border-color:rgba(232,25,44,.60)!important;
+ background:linear-gradient(165deg,rgba(232,25,44,.17),rgba(255,255,255,.02))!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 16px 34px -14px rgba(232,25,44,.60)!important}
+a.card.nv-tile::before{content:''!important;position:absolute!important;top:0!important;left:16px!important;right:16px!important;
+ width:auto!important;height:2px!important;z-index:2!important;opacity:0!important;transition:opacity .2s!important;
+ background:linear-gradient(90deg,transparent,rgba(255,86,106,.85),transparent)!important;background-color:transparent!important}
+a.card.nv-tile:hover::before{opacity:1!important}
+a.card.nv-tile::after{display:none!important}
+a.card.nv-tile > *:not(.card-top):not(.card-body):not(.card-title):not(.card-fav){display:none!important}
+a.card.nv-tile .card-body > *:not(.card-title){display:none!important}
+a.card.nv-tile .card-top > *:not(.card-icon){display:none!important}
+a.card.nv-tile .card-top{display:block!important;margin:0!important;padding:0!important;border:0!important;background:none!important}
+a.card.nv-tile .card-body{margin:0!important;padding:0!important;display:block!important}
+a.card.nv-tile .card-icon.nv-chip{width:40px!important;height:40px!important;border-radius:13px!important;margin:0!important;
+ padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important;font-size:0!important;
+ color:#FF8392!important;filter:none!important;border:1px solid rgba(255,92,112,.42)!important;
+ background:radial-gradient(70% 70% at 50% 18%,rgba(255,120,138,.40),transparent 70%),
+            linear-gradient(150deg,rgba(232,25,44,.34),rgba(232,25,44,.07))!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -6px 12px -8px rgba(0,0,0,.6),0 7px 18px -9px rgba(232,25,44,.85)!important;
+ transition:all .18s cubic-bezier(.2,.8,.3,1)!important}
+a.card.nv-tile:hover .card-icon.nv-chip{color:#fff!important;transform:translateY(-1px) scale(1.04)!important;
+ background:linear-gradient(145deg,rgba(232,25,44,.95),rgba(180,12,32,.78))!important;
+ border-color:rgba(255,120,138,.78)!important;
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.30),0 10px 22px -8px rgba(232,25,44,.95)!important}
+a.card.nv-tile .card-icon.nv-chip .vs-i{display:flex!important;align-items:center!important;justify-content:center!important;
+ width:21px!important;height:21px!important;flex:0 0 21px!important;margin:0!important;padding:0!important;color:inherit!important}
+a.card.nv-tile .card-icon.nv-chip .vs-i svg,a.card.nv-tile .card-icon.nv-chip > svg{width:21px!important;height:21px!important;
+ display:block!important;stroke:currentColor!important;fill:none!important;stroke-width:1.75!important}
+a.card.nv-tile .card-title,a.card.nv-tile > .card-title{display:-webkit-box!important;width:100%!important;text-align:center!important;
+ font:600 11px/1.25 var(--nvUI)!important;color:var(--nvInk)!important;margin:0!important;letter-spacing:.005em!important;
+ -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:normal!important;word-break:normal!important}
+a.card.nv-tile .card-fav{display:block!important;position:absolute!important;top:5px!important;right:6px!important;
+ width:15px!important;height:15px!important;padding:0!important;margin:0!important;background:none!important;border:0!important;
+ font-size:11px!important;line-height:15px!important;z-index:3!important;opacity:.30;transition:opacity .15s}
+a.card.nv-tile:hover .card-fav{opacity:1}
+a.card.nv-tile:focus-visible{outline:2px solid #FF5468;outline-offset:3px;border-color:rgba(232,25,44,.7)!important;
+ background:linear-gradient(165deg,rgba(232,25,44,.14),rgba(255,255,255,.02))!important}
+.nv-pv:focus-visible,.nv-fxr:focus-visible,#nv-hero .cta:focus-visible{outline:2px solid #FF5468;outline-offset:3px;border-radius:9px}
+
+/* herramientas del entrenador */
+#nv-coach a.card.nv-tile{height:72px!important;padding:9px 10px 8px!important;gap:6px!important}
+#nv-coach a.card.nv-tile .card-icon.nv-chip{width:34px!important;height:34px!important;border-radius:11px!important}
+#nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i,
+#nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i svg{width:18px!important;height:18px!important;flex-basis:18px!important}
+#nv-coach a.card.nv-tile .card-title{font-size:10.5px!important}
+#nv-coach{gap:8px!important}
+#nv-coach-mas{display:none!important;margin-top:8px}
+#nv-coach-mas.abierto{display:grid!important}
+#nv-coach-mas a.card.nv-tile{height:74px!important;padding:9px 6px 8px!important;gap:6px!important;border-radius:13px!important}
+#nv-coach-mas a.card.nv-tile .card-icon.nv-chip{width:32px!important;height:32px!important;border-radius:10px!important}
+#nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i,
+#nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i svg{width:17px!important;height:17px!important;flex-basis:17px!important}
+#nv-coach-mas a.card.nv-tile .card-title{font-size:9.4px!important}
+
+/* ── próximo partido ────────────────────────────────────────────────────── */
+#nv-prox{display:flex;align-items:center;gap:10px;padding:8px 10px;margin:0 0 8px;border-radius:12px;
+ background:linear-gradient(90deg,rgba(232,25,44,.16),rgba(232,25,44,.04));border:1px solid rgba(232,25,44,.30)}
+#nv-prox > img{width:34px;height:34px;object-fit:contain}
+.nv-pxr{font:700 15px/1.1 var(--nvUI);color:#fff}
+.nv-pxf{font:500 9.5px/1.2 var(--nvUI);color:rgba(255,255,255,.58);margin-top:2px;text-transform:capitalize}
+.nv-pxd{margin-left:auto;text-align:center;line-height:1}
+.nv-pxd b{display:block;font:400 22px/1 'Anton',var(--nvUI);color:var(--nvR)}
+.nv-pxd span{font:600 8px/1 var(--nvUI);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+
+/* ── fixture ────────────────────────────────────────────────────────────── */
+.nv-fx{display:flex;flex-direction:column;gap:2px}
+.nv-fxr{display:flex;align-items:center;gap:7px;padding:2px 6px;border-radius:9px;text-decoration:none;
+ border-bottom:1px solid rgba(255,255,255,.05)}
+.nv-fxr:last-child{border-bottom:0}
+.nv-fxr:hover{background:rgba(232,25,44,.09)}
+.nv-fxr img{width:17px;height:17px;object-fit:contain}
+.nv-vs{color:rgba(255,255,255,.3);font-size:10px}
+.nv-fxn{font:600 10.5px/1 var(--nvUI);color:var(--nvInk);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nv-fxd{margin-left:auto;font:500 9.8px/1 var(--nvUI);color:var(--nvInk2);white-space:nowrap}
+.nv-fxr b{color:var(--nvR);font-size:13px;line-height:1}
+.nv-cond{flex:0 0 auto;margin-left:7px;padding:2px 6px;border-radius:999px;font:700 7.5px/1 var(--nvUI);
+ letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.52);
+ background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12)}
+.nv-cond.loc{color:#FF8392;background:rgba(232,25,44,.14);border-color:rgba(232,25,44,.38)}
+
+/* ── hub de favoritos ───────────────────────────────────────────────────── */
+.nv-hubw{margin-top:7px;padding-top:7px;border-top:1px solid rgba(255,255,255,.07)}
+.nv-hubw #hub-top{margin:0!important}
+.nv-hubw #hub-top input{height:28px!important;padding:0 10px!important;font-size:10px!important}
+.nv-hubw #hub-top button{padding:5px 10px!important;font-size:10px!important}
+
+/* ── panel del jugador (gráfico + números) ──────────────────────────────── */
+.nv-jg{display:flex;gap:12px;align-items:stretch;flex:1 1 auto;min-height:0}
+.nv-kpis{flex:0 0 232px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:7px}
+.nv-kpi{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:8px 10px;border-radius:12px;
+ background:linear-gradient(165deg,rgba(255,255,255,.055),rgba(255,255,255,.014));
+ border:1px solid rgba(255,255,255,.08);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.nv-kpi span{font:600 8px/1.1 var(--nvUI);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.nv-kpi b{font:400 24px/1 'Anton',var(--nvUI);color:#fff;letter-spacing:.01em}
+.nv-kpi b i{font-style:normal;font-size:12px;color:var(--nvR);margin-left:2px}
+.nv-graf{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;padding:7px 56px 4px 9px;border-radius:12px;
+ background:linear-gradient(180deg,rgba(255,255,255,.030),rgba(255,255,255,.008));border:1px solid rgba(255,255,255,.07)}
+.nv-grafT{font:600 8.5px/1 var(--nvUI);letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.46);margin-bottom:3px}
+.nv-grafT em{font-style:normal;color:rgba(255,255,255,.3)}
+.nv-svg{flex:1 1 auto;min-height:0;display:flex;align-items:stretch}
+.nv-svg svg{display:block;width:100%;height:100%}
+.nv-vacio{display:flex;align-items:center;justify-content:center;min-height:62px;padding:12px;border-radius:12px;
+ border:1px dashed rgba(255,255,255,.14);background:rgba(255,255,255,.015);text-align:center;
+ font:500 10px/1.4 var(--nvUI);letter-spacing:.06em;color:rgba(255,255,255,.38)}
+
+/* ── entrada escalonada ─────────────────────────────────────────────────── */
+@keyframes nvIn{from{opacity:0;transform:translateY(11px)}to{opacity:1;transform:none}}
+.nv-anim{animation:nvIn .52s cubic-bezier(.2,.8,.3,1) both}
+@media (prefers-reduced-motion:reduce){.nv-anim{animation:none!important}}
+
+/* ── notebook y tablet ──────────────────────────────────────────────────── */
+@media (max-width:1200px){
+ .nv-rowA,.nv-rowB,.nv-rowC{flex-wrap:wrap!important}
+ #nv-hero{flex:1 1 100%!important;min-height:180px!important}
+ #nv-rival{flex:1 1 100%!important}
+ #nv-zona .nv-rowA .nv-gt{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ .nv-rowB .nv-pan{flex:1 1 calc(50% - 6px)!important}
+ #nv-zona .nv-rowB .nv-gt{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))!important}
+ #nv-fixp{flex:1 1 100%!important}
+ #nv-coachp,#nv-jugp,#nv-jugbox{flex:1 1 100%!important}
+ #nv-hero h2{font-size:38px!important}
+}
+/* ── teléfono ───────────────────────────────────────────────────────────── */
+@media (max-width:760px){
+ body > header{flex-wrap:wrap!important;gap:9px!important;padding:7px 14px!important}
+ body > header > .header-text{flex-direction:column!important;align-items:flex-start!important;gap:3px!important}
+ body > header .header-text .club-sub{padding-left:0!important}
+ body > header .header-text .club-sub::before{display:none!important}
+ body > header > .header-right{margin-left:0!important;flex-wrap:wrap!important;gap:8px!important;width:100%!important}
+ #nv-zona{padding:10px 12px 8px!important;gap:10px!important}
+ .nv-rowA,.nv-rowB,.nv-rowC{flex-direction:column!important;gap:10px!important}
+ .nv-rowA .nv-pan,.nv-rowB .nv-pan,.nv-rowC .nv-pan{flex:1 1 auto!important;width:100%!important}
+ #nv-hero{min-height:168px!important;border-radius:14px!important}
+ #nv-hero .txt{max-width:100%!important;padding:0 18px!important}
+ #nv-hero h2{font-size:30px!important}
+ #nv-hero .k{font-size:9px!important;letter-spacing:.3em!important}
+ #nv-hero p{font-size:9.5px!important;letter-spacing:.16em!important;margin-top:9px!important}
+ #nv-hero .cta{margin-top:13px!important;padding:10px 17px!important;font-size:10.5px!important}
+ #nv-hero .shade{background:linear-gradient(180deg,rgba(6,7,14,.92),rgba(6,7,14,.70) 55%,rgba(6,7,14,.90))!important}
+ #nv-zona .nv-rowA .nv-gt,#nv-zona .nv-rowB .nv-gt,#nv-zona .nv-rowC .nv-gt{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #nv-zona #nv-coach{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #nv-zona #nv-coach-mas{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ a.card.nv-tile{height:84px!important}
+ #nv-coach a.card.nv-tile{height:76px!important}
+ .nv-ph{flex-wrap:wrap!important;row-gap:5px!important}
+ .nv-pt{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;font-size:10px!important}
+ .nv-pv{font-size:9px!important}
+ .nv-jg{flex-direction:column!important}
+ .nv-kpis{flex:0 0 auto!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:auto!important}
+ .nv-kpi b{font-size:20px!important}
+ .nv-graf{min-height:118px!important;padding-right:9px!important}
+ .nv-fxn{font-size:11px!important}
+ .nv-cond{display:none!important}
+}
+@media (max-width:430px){
+ #nv-zona .nv-rowA .nv-gt,#nv-zona .nv-rowB .nv-gt,#nv-zona .nv-rowC .nv-gt{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #nv-zona #nv-coach,#nv-zona #nv-coach-mas{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .nv-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #nv-hero h2{font-size:26px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1853,9 +2151,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261029-0856"></script>
+<script src="chat_nafels.js?v=20261029-1316"></script>
 
-<script src="proximo_rival.js?v=20261029-0856" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261029-1316" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -1921,13 +2219,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261029-0856" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261029-0856"></script>
+<script src="fixture_auto.js?v=20261029-1316" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261029-1316"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261029-0856" defer></script>
+<script src="onesignal_push.js?v=20261029-1316" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2610,7 +2908,386 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261029-0856"></script>
+<script src="ayuda.js?v=20261029-1316"></script>
+
+<script id="nv-portada-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTADA 2026/27 · reubica las tarjetas que ya existen en paneles nuevos.
+   NO crea accesos nuevos ni cambia permisos: las tarjetas que el bloque de
+   rol de mas arriba oculta para los jugadores se dejan donde estan y no se
+   adoptan, asi un jugador nunca termina viendo una herramienta del staff.
+   Corre una sola vez por carga (guarda NV_HECHO).
+   Los textos van por lang.js -> gnT() los traduce a EN/DE.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  function nvPortada(){
+  if(window.NV_HECHO) return; window.NV_HECHO = 1;
+
+  function T(s){
+    try{ if(typeof translateString === 'function')
+      return translateString(s, (typeof getLang === 'function' ? getLang() : 'es')); }catch(e){}
+    return s;
+  }
+  function sv(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '+
+    'stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; }
+  var IC = {
+    rival: sv('<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="1" fill="currentColor"/>'),
+    rend:  sv('<path d="M4 19V11"/><path d="M10 19V5"/><path d="M16 19v-6"/><path d="M22 19H2"/>'),
+    fis:   sv('<path d="M3 12h3l2-5 4 10 2.5-6 1.8 3H21"/>'),
+    agen:  sv('<rect x="3.2" y="4.6" width="17.6" height="16" rx="3"/><path d="M8 2.6v4M16 2.6v4M3.2 10h17.6"/>'),
+    video: sv('<rect x="2.6" y="5" width="18.8" height="14" rx="3.2"/><path d="M10.2 9.4l4.6 2.6-4.6 2.6z" fill="currentColor" stroke="none"/>'),
+    coach: sv('<path d="M12 2.8l7.4 3v5.5c0 4.3-3 8.2-7.4 9.9-4.4-1.7-7.4-5.6-7.4-9.9V5.8z"/><path d="M9.3 12.2l1.9 1.9 3.6-3.8"/>'),
+    fix:   sv('<rect x="3.2" y="4.6" width="17.6" height="16" rx="3"/><path d="M8 2.6v4M16 2.6v4M3.2 10h17.6"/>'+
+              '<path d="M7.4 14h2M11 14h2M14.6 14h2M7.4 17.2h2M11 17.2h2"/>')
+  };
+  /* las 6 herramientas que mas se usaron (sesiones/pantallas, 5 al 29-10-2026) */
+  var TOP6 = ['panel_voley','panel_vivo','importar_video','camara','objetivos_equipo','actividad'];
+
+  /* ── fondo ─────────────────────────────────────────────────────────────── */
+  var bg = document.createElement('div'); bg.id = 'nv-bg';
+  bg.innerHTML = '<i class="g"></i><i class="r1"></i><i class="r2"></i><i class="n"></i><i class="vg"></i>';
+  document.body.insertBefore(bg, document.body.firstChild);
+
+  /* ── hero ──────────────────────────────────────────────────────────────── */
+  var hero = document.createElement('div'); hero.id = 'nv-hero';
+  hero.innerHTML =
+    '<div class="bg"></div><div class="lux"></div><div class="shade"></div>' +
+    '<div class="txt">' +
+      '<div class="k"><span>' + T('Análisis') + '</span> · <span>' + T('Estrategia') + '</span> · <span>' + T('Rendimiento') + '</span></div>' +
+      '<h2><span>' + T('DATOS QUE GENERAN') + '</span><br>' + T('DECISIONES.') + '</h2>' +
+      '<p>' + T('Plataforma de inteligencia de rendimiento en voleibol') + '</p>' +
+      '<a class="cta" href="#nv-zona">' + T('EXPLORAR HERRAMIENTAS') + ' <b>&rarr;</b></a>' +
+    '</div><div class="edge"></div>';
+  var hd = document.querySelector('body > header');
+  hd.parentNode.insertBefore(hero, hd.nextSibling);
+
+  var zona = document.createElement('div'); zona.id = 'nv-zona';
+  hero.parentNode.insertBefore(zona, hero.nextSibling);
+
+  /* ── de donde salen las tarjetas ───────────────────────────────────────── */
+  var TITS = [].map.call(document.querySelectorAll('body > main .sec-head .sec-title'),
+    function(t){ return t.textContent.replace(/\u{1F512}[\s\S]*$/u, '').trim(); });
+  var grids = [].slice.call(document.querySelectorAll('.cards-grid'));
+  /* una tarjeta oculta (rol jugador) no se toca: se queda donde esta */
+  var cartas = grids.map(function(g){
+    return [].slice.call(g.querySelectorAll('a.card')).filter(function(c){
+      try{ return getComputedStyle(c).display !== 'none'; }catch(e){ return true; }
+    });
+  });
+
+  function pan(ico, tit, extra){
+    var p = document.createElement('div'); p.className = 'nv-pan';
+    var h = document.createElement('div'); h.className = 'nv-ph';
+    h.innerHTML = '<span class="nv-pic">' + ico + '</span><span class="nv-pt">' + tit + '</span>';
+    if(extra){
+      var a = document.createElement(extra.href ? 'a' : 'span');
+      a.className = 'nv-pv';
+      if(extra.href) a.href = extra.href;
+      a.innerHTML = extra.txt + ' <b>&rarr;</b>';
+      h.appendChild(a);
+    }
+    var b = document.createElement('div'); b.className = 'nv-pb';
+    p.appendChild(h); p.appendChild(b); p.cuerpo = b;
+    return p;
+  }
+  function rejilla(cards, n){
+    var g = document.createElement('div'); g.className = 'nv-gt';
+    g.style.gridTemplateColumns = 'repeat(' + n + ',minmax(0,1fr))';
+    cards.forEach(function(c){
+      c.classList.add('nv-tile');
+      var ic = c.querySelector('.card-icon'); if(ic) ic.classList.add('nv-chip');
+      g.appendChild(c);
+    });
+    return g;
+  }
+
+  /* ── fila A: hero + proximo rival ──────────────────────────────────────── */
+  var A = document.createElement('div'); A.className = 'nv-rowA';
+  A.appendChild(hero);
+  var pR = pan(IC.rival, T(TITS[1] || 'El próximo rival').toUpperCase(),
+               { txt: T('Ver todos los partidos'), href: 'calendario.html' });
+  pR.id = 'nv-rival';
+
+  var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  var DIA = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  function pintarRival(){
+    var vie = document.getElementById('nv-prox'); if(vie) vie.remove();
+    var prx = (window.FIXTURE_DATA && FIXTURE_DATA.proximo) || null;
+    if(!prx) return;
+    var d = new Date(prx.fecha + 'T12:00:00');
+    var dias = Math.max(0, Math.ceil((d - new Date()) / 86400000));
+    var box = document.createElement('div'); box.id = 'nv-prox';
+    box.innerHTML =
+      '<img src="escudos/' + prx.slug + '.png" onerror="this.style.visibility=\'hidden\'">' +
+      '<div class="nv-px"><div class="nv-pxr">' + prx.rival + '</div>' +
+      '<div class="nv-pxf"><span>' + T(DIA[d.getDay()]) + '</span> ' + d.getDate() + ' <span>' + T(MES[d.getMonth()]) +
+      '</span> · <span>' + T(prx.cond === 'local' ? 'Local' : 'Visitante') + '</span></div></div>' +
+      '<div class="nv-pxd"><b>' + dias + '</b><span>' + T(dias === 1 ? 'día' : 'días') + '</span></div>';
+    pR.cuerpo.insertBefore(box, pR.cuerpo.firstChild);
+  }
+  pintarRival();
+  if((cartas[1] || []).length) pR.cuerpo.appendChild(rejilla(cartas[1], cartas[1].length));
+  var hub = document.getElementById('hub-top');
+  if(hub){ var hb = document.createElement('div'); hb.className = 'nv-hubw'; hb.appendChild(hub); pR.cuerpo.appendChild(hb); }
+  A.appendChild(pR); zona.appendChild(A);
+
+  /* ── fila B: las cuatro secciones ──────────────────────────────────────── */
+  var B = document.createElement('div'); B.className = 'nv-rowB';
+  [[2, IC.rend], [3, IC.fis], [4, IC.agen], [5, IC.video]].forEach(function(par){
+    var cs = cartas[par[0]] || []; if(!cs.length) return;
+    var pp = pan(par[1], T(TITS[par[0]] || '').toUpperCase(), null);
+    pp.style.flex = cs.length + ' 1 0';
+    pp.cuerpo.appendChild(rejilla(cs, cs.length));
+    B.appendChild(pp);
+  });
+  zona.appendChild(B);
+
+  /* ── fila C: fixture + (staff) herramientas / (jugador) su rendimiento ─── */
+  var C = document.createElement('div'); C.className = 'nv-rowC';
+  var pF = pan(IC.fix, T('FIXTURE — NLA SUIZA 2026/27'),
+               { txt: T('Ver todo'), href: 'calendario.html' });
+  pF.id = 'nv-fixp'; pF.style.flex = '0 0 31%';
+  var M3 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  function pintarFixture(){
+  var vieja = pF.cuerpo.querySelector('.nv-fx, .nv-vacio'); if(vieja) vieja.remove();
+  var lista = document.createElement('div'); lista.className = 'nv-fx';
+  var fd = (window.FIXTURE_DATA && FIXTURE_DATA.fixture) || [];
+  var hoy = new Date().toISOString().slice(0, 10);
+  var prox = fd.filter(function(q){ return q.fecha >= hoy; }).slice(0, 5);
+  if(!prox.length) prox = fd.slice(-5);
+  prox.forEach(function(q){
+    var dd = q.fecha.split('-'), f = (+dd[2]) + ' ' + M3[(+dd[1]) - 1] + ' ' + dd[0];
+    var loc = (q.cond === 'local');
+    var a = document.createElement('a'); a.className = 'nv-fxr'; a.href = 'calendario.html';
+    a.innerHTML =
+      '<img src="escudos/' + (loc ? 'nafels' : q.slug) + '.png" onerror="this.style.visibility=\'hidden\'">' +
+      '<span class="nv-vs">–</span>' +
+      '<img src="escudos/' + (loc ? q.slug : 'nafels') + '.png" onerror="this.style.visibility=\'hidden\'">' +
+      '<span class="nv-fxn">' + q.rival + '</span>' +
+      '<span class="nv-cond' + (loc ? ' loc' : '') + '">' + T(loc ? 'Local' : 'Visitante') + '</span>' +
+      '<span class="nv-fxd">' + f + '</span><b>&rsaquo;</b>';
+    lista.appendChild(a);
+  });
+  if(!prox.length){
+    var vac = document.createElement('div'); vac.className = 'nv-vacio';
+    vac.textContent = T('Todavía no hay partidos cargados');
+    pF.cuerpo.appendChild(vac);
+  } else pF.cuerpo.appendChild(lista);
+  }
+  pintarFixture();
+  /* cuando el calendario de Firebase pisa el fixture, fixture_auto.js avisa */
+  var antesCambio = window.vbFixtureCambio;
+  window.vbFixtureCambio = function(){
+    try{ if(typeof antesCambio === 'function') antesCambio(); }catch(e){}
+    try{ pintarRival(); pintarFixture(); }catch(e){}
+  };
+  C.appendChild(pF);
+
+  var coach = cartas[0] || [];
+  function slug(c){ return String(c.getAttribute('href') || '').split('?')[0].replace(/\.html$/, ''); }
+  if(coach.length){
+    var pC = pan(IC.coach, T(TITS[0] || 'Herramientas del entrenador').toUpperCase(),
+                 { txt: T('Ver todas'), href: null });
+    pC.id = 'nv-coachp'; pC.style.flex = '1 1 0';
+    var lock = document.createElement('span'); lock.className = 'nv-lock';
+    lock.textContent = '\u{1F512} ' + T('Acceso exclusivo');
+    pC.querySelector('.nv-pt').after(lock);
+    var top = [], resto = [];
+    TOP6.forEach(function(s){ var c = coach.filter(function(x){ return slug(x) === s; })[0]; if(c) top.push(c); });
+    coach.forEach(function(c){ if(top.indexOf(c) < 0) resto.push(c); });
+    if(!top.length){ top = coach.slice(0, 6); resto = coach.slice(6); }
+    var gC = rejilla(top, Math.min(3, top.length)); gC.id = 'nv-coach';
+    var gM = rejilla(resto, 6); gM.id = 'nv-coach-mas';
+    pC.cuerpo.appendChild(gC); pC.cuerpo.appendChild(gM);
+    var ver = pC.querySelector('.nv-pv');
+    if(resto.length){
+      ver.style.cursor = 'pointer';
+      ver.onclick = function(e){
+        e.preventDefault();
+        var ab = gM.classList.toggle('abierto');
+        ver.innerHTML = (ab ? T('Ver menos') : T('Ver todas')) + ' <b>' + (ab ? '&uarr;' : '&rarr;') + '</b>';
+      };
+    } else ver.style.display = 'none';
+    C.appendChild(pC);
+  } else {
+    /* rol jugador: en lugar del panel del staff va su propio rendimiento.
+       datos_historial.js se carga 350 ms despues, asi que se espera. */
+    var caja = document.createElement('div'); caja.id = 'nv-jugbox'; caja.style.flex = '1 1 0';
+    caja.style.display = 'flex'; caja.style.minWidth = '0';
+    C.appendChild(caja);
+    var intentos = 0;
+    var reloj = setInterval(function(){
+      intentos++;
+      if(window.HISTORIAL_DATA && HISTORIAL_DATA.entrenamientos && HISTORIAL_DATA.entrenamientos.length){
+        clearInterval(reloj);
+        var p = panelJugador();
+        if(p){ caja.appendChild(p); p._pintar(); if(window.NV_ANIM) NV_ANIM(); }
+        else vacio();
+      } else if(intentos > 30){ clearInterval(reloj); vacio(); }
+    }, 300);
+    var vacio = function(){
+      if(caja.children.length) return;
+      var v = document.createElement('div'); v.className = 'nv-vacio'; v.style.width = '100%';
+      v.textContent = T('Todavía no hay sesiones cargadas para mostrar tu rendimiento');
+      caja.appendChild(v);
+    };
+  }
+  zona.appendChild(C);
+
+  /* ── el logo grande de axpo ────────────────────────────────────────────── */
+  var lw = document.querySelector('body > header .logo-wrap');
+  if(lw){ var im = lw.querySelector('img'); if(im) im.src = 'logo_horizontal_dark.png'; }
+
+  /* ── la cuenta regresiva entra dentro del hero; sobras, fuera ──────────── */
+  var cd = document.getElementById('countdown-bar');
+  if(cd){
+    var w = document.createElement('div'); w.id = 'nv-cd';
+    hero.appendChild(w); w.appendChild(cd);
+    if(getComputedStyle(cd).display === 'none') w.classList.add('vacio');
+  }
+  [].slice.call(document.body.children).forEach(function(e){
+    if(e.tagName === 'DIV' && !e.id && !e.className && !e.querySelector('[id]') &&
+       e.getBoundingClientRect().height > 0) e.classList.add('nv-huerfano');
+  });
+
+  /* ── grafico del jugador ───────────────────────────────────────────────── */
+  function grafico(ult, W, H){
+    var P = { t:16, r:12, b:18, l:30 };
+    var iw = W - P.l - P.r, ih = H - P.t - P.b;
+    var vals = ult.map(function(s){ return s.j.aEff || 0; });
+    var mx = Math.max(10, Math.max.apply(null, vals)), mn = Math.min(0, Math.min.apply(null, vals));
+    var top = Math.ceil(mx / 10) * 10, bot = Math.floor(mn / 10) * 10, rng = (top - bot) || 10;
+    function y(v){ return P.t + ih * (1 - (v - bot) / rng); }
+    var n = ult.length, slot = iw / n, bw = Math.min(22, slot * 0.52);
+    var prom = vals.reduce(function(a, b){ return a + b; }, 0) / (n || 1);
+    var s = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H +
+            '" xmlns="http://www.w3.org/2000/svg" font-family="Barlow, system-ui, sans-serif">';
+    [top, (top + bot) / 2, bot].forEach(function(v){
+      s += '<line x1="' + P.l + '" x2="' + (W - P.r) + '" y1="' + y(v).toFixed(1) + '" y2="' + y(v).toFixed(1) +
+           '" stroke="rgba(255,255,255,.07)" stroke-width="1"/>' +
+           '<text x="' + (P.l - 7) + '" y="' + (y(v) + 3.2).toFixed(1) +
+           '" text-anchor="end" font-size="8.5" fill="rgba(255,255,255,.35)">' + Math.round(v) + '</text>';
+    });
+    s += '<line x1="' + P.l + '" x2="' + (W - P.r) + '" y1="' + y(0).toFixed(1) + '" y2="' + y(0).toFixed(1) +
+         '" stroke="rgba(255,255,255,.22)" stroke-width="1"/>';
+    s += '<line x1="' + P.l + '" x2="' + (W - P.r) + '" y1="' + y(prom).toFixed(1) + '" y2="' + y(prom).toFixed(1) +
+         '" stroke="rgba(255,255,255,.34)" stroke-width="1" stroke-dasharray="3 3"/>';
+    s += '<text x="' + (P.l + 5) + '" y="' + (y(prom) - 5).toFixed(1) +
+         '" text-anchor="start" font-size="8" fill="rgba(255,255,255,.45)" letter-spacing=".08em">PROM ' + Math.round(prom) + '</text>';
+    ult.forEach(function(it, i){
+      var v = it.j.aEff || 0, cx = P.l + slot * i + slot / 2, y0 = y(0), y1 = y(v);
+      var h = Math.abs(y1 - y0), yy = Math.min(y0, y1), pos = (v >= 0);
+      var col = pos ? '#E8192C' : '#5F718F';
+      var r = Math.min(4, bw / 2, h), x0 = cx - bw / 2, d = '';
+      if(h >= 0.6){
+        if(pos) d = 'M'+x0+','+(yy+h)+' L'+x0+','+(yy+r)+' Q'+x0+','+yy+' '+(x0+r)+','+yy+
+                    ' L'+(x0+bw-r)+','+yy+' Q'+(x0+bw)+','+yy+' '+(x0+bw)+','+(yy+r)+' L'+(x0+bw)+','+(yy+h)+' Z';
+        else { var yb = yy + h;
+          d = 'M'+x0+','+yy+' L'+x0+','+(yb-r)+' Q'+x0+','+yb+' '+(x0+r)+','+yb+
+              ' L'+(x0+bw-r)+','+yb+' Q'+(x0+bw)+','+yb+' '+(x0+bw)+','+(yb-r)+' L'+(x0+bw)+','+yy+' Z'; }
+        s += '<path d="' + d + '" fill="' + col + '" opacity="' + (i === n - 1 ? 1 : 0.86) + '"/>';
+      }
+      if(i === n - 1)
+        s += '<text x="' + cx + '" y="' + (pos ? (y1 - 6) : (y1 + h + 11)) +
+             '" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">' + Math.round(v) + '</text>';
+      if(n <= 12 && (i % 2 === 0 || i === n - 1)){
+        var p2 = String(it.f).split('/');
+        s += '<text x="' + cx + '" y="' + (H - 5) + '" text-anchor="middle" font-size="7.6" ' +
+             'fill="rgba(255,255,255,.34)">' + p2[0] + '/' + p2[1] + '</text>';
+      }
+      if(it.tipo === 'P') s += '<circle cx="' + cx + '" cy="' + (P.t - 7) + '" r="2" fill="rgba(255,255,255,.5)"/>';
+    });
+    return s + '</svg>';
+  }
+
+  function panelJugador(){
+    var E = (window.HISTORIAL_DATA && HISTORIAL_DATA.entrenamientos) || [];
+    if(!E.length) return null;
+    var num = parseInt(localStorage.getItem('vb_player_num'), 10); if(isNaN(num)) num = null;
+    function fp(f){ var p = String(f).split('/'); return new Date(+p[2], +p[1] - 1, +p[0]); }
+    var ses = [];
+    E.forEach(function(s){
+      var js = s.jugadores || [], j = null;
+      if(num != null) j = js.filter(function(x){ return x.c === num; })[0];
+      else {
+        var a = { aT:0, rT:0, sT:0, aPunto:0, ae:0, re:0, se:0 };
+        js.forEach(function(x){
+          a.aT += x.aT||0; a.rT += x.rT||0; a.sT += x.sT||0; a.aPunto += x.aPunto||0;
+          a.ae += (x.aEff||0)*(x.aT||0); a.re += (x.rEff||0)*(x.rT||0); a.se += (x.sEff||0)*(x.sT||0);
+        });
+        j = { aT:a.aT, rT:a.rT, sT:a.sT, aPunto:a.aPunto,
+              aEff:a.aT?Math.round(a.ae/a.aT):0, rEff:a.rT?Math.round(a.re/a.rT):0, sEff:a.sT?Math.round(a.se/a.sT):0 };
+      }
+      if(j && ((j.aT||0) > 0 || (j.rT||0) > 0 || (j.sT||0) > 0))
+        ses.push({ d: fp(s.fecha), f: s.fecha, tipo: s.tipo, j: j });
+    });
+    if(!ses.length) return null;
+    ses.sort(function(a, b){ return a.d - b.d; });
+    var ult = ses.slice(-10);
+    function pond(k, t){ var a = 0, b = 0;
+      ult.forEach(function(s){ a += (s.j[k]||0) * (s.j[t]||0); b += (s.j[t]||0); });
+      return b ? Math.round(a / b) : 0; }
+    var kA = pond('aEff','aT'), kR = pond('rEff','rT'), kS = pond('sEff','sT');
+    var pts = ult.reduce(function(a, s){ return a + (s.j.aPunto || 0); }, 0);
+    var nom = '';
+    if(num != null) E.some(function(s){
+      var j = (s.jugadores||[]).filter(function(x){ return x.c === num; })[0];
+      if(j){ nom = j.n || ''; return true; } return false; });
+
+    var p = document.createElement('div'); p.className = 'nv-pan'; p.id = 'nv-jugp';
+    p.style.flex = '1 1 0'; p.style.width = '100%';
+    var tit = (num != null)
+      ? ('<span>' + T('Mi rendimiento').toUpperCase() + '</span> · #' + num + (nom ? ' ' + nom : ''))
+      : ('<span>' + T('Rendimiento del equipo').toUpperCase() + '</span>');
+    p.innerHTML =
+      '<div class="nv-ph"><span class="nv-pic">' + IC.rend + '</span><span class="nv-pt">' + tit + '</span>' +
+      '<a class="nv-pv" href="analisis.html">' + T('Ver análisis') + ' <b>&rarr;</b></a></div>' +
+      '<div class="nv-pb"><div class="nv-jg">' +
+        '<div class="nv-kpis">' +
+          '<div class="nv-kpi"><span>' + T('Ataque') + '</span><b>' + kA + '<i>%</i></b></div>' +
+          '<div class="nv-kpi"><span>' + T('Recepción') + '</span><b>' + kR + '<i>%</i></b></div>' +
+          '<div class="nv-kpi"><span>' + T('Saque') + '</span><b>' + kS + '<i>%</i></b></div>' +
+          '<div class="nv-kpi"><span>' + T('Puntos de ataque') + '</span><b>' + pts + '</b></div>' +
+        '</div>' +
+        '<div class="nv-graf"><div class="nv-grafT">' + T('Eficiencia de ataque por sesión') +
+          ' <em><span>' + T('· últimas') + '</span> ' + ult.length + '</em></div><div class="nv-svg"></div></div>' +
+      '</div></div>';
+    p._pintar = function(){
+      var c = p.querySelector('.nv-svg'); if(!c) return;
+      var w = Math.max(260, Math.round(c.getBoundingClientRect().width));
+      var h = Math.max(92, Math.round(c.getBoundingClientRect().height) || 110);
+      c.innerHTML = grafico(ult, w, h);
+    };
+    var tmr = null;
+    window.addEventListener('resize', function(){
+      clearTimeout(tmr); tmr = setTimeout(function(){ p._pintar(); }, 220);
+    });
+    return p;
+  }
+
+  /* ── entrada escalonada ────────────────────────────────────────────────── */
+  window.NV_ANIM = function(){
+    var orden = [document.getElementById('nv-hero'), document.getElementById('nv-rival')]
+      .concat([].slice.call(document.querySelectorAll('.nv-rowB .nv-pan')))
+      .concat([document.getElementById('nv-fixp'), document.getElementById('nv-coachp'), document.getElementById('nv-jugp')]);
+    var i = 0;
+    orden.forEach(function(e){
+      if(!e) return;
+      e.classList.remove('nv-anim');
+      e.style.animationDelay = (i * 70) + 'ms';
+      void e.offsetWidth;
+      e.classList.add('nv-anim');
+      i++;
+    });
+  };
+  NV_ANIM();
+  }
+  /* despues del bloque de rol y de arrancar(): su listener se registro antes */
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', nvPortada);
+  else nvPortada();
+})();
+
+</script>
 </body>
 </html>
 
