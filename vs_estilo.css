@@ -230,12 +230,27 @@ html:not([data-vs="off"]) table.vs-tabla .t-name[data-club]::before{content:'';p
  left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;
  background:var(--club,rgba(255,255,255,.35))}
 
-/* ── los numeros: todos iguales, sin semaforo ───────────────────────────── */
+/* ── los numeros: todos del mismo cuerpo ────────────────────────────────── */
 html:not([data-vs="off"]) table.vs-tabla .tval,
 html:not([data-vs="off"]) table.vs-tabla .tb-eff,
 html:not([data-vs="off"]) table.vs-tabla .tb-volN,
 html:not([data-vs="off"]) table.vs-tabla .dbat-n{display:inline!important;
- font:400 14px/1.25 var(--vsNum)!important;font-variant-numeric:tabular-nums;
+ font:400 14px/1.25 var(--vsNum)!important;font-variant-numeric:tabular-nums}
+
+/* ── y sin semaforo, SALVO donde el color dice algo ─────────────────────── */
+/*   Regla de la casa: el color se queda cuando dice algo que el numero solo
+     no dice, y se va cuando lo unico que hace es repetirlo.
+       · Dashboard: pintaba conteos crudos (remates, errores). No decia nada
+         que el numero no dijera ya. Se fue.
+       · Tabla de la liga: pinta el PUESTO de cada equipo en esa columna. Eso
+         no esta escrito en ningun lado y es lo que te deja leer una fila
+         entera de un vistazo. Se queda.
+     La pantalla que quiere conservarlo lo pide con class="vs-rango" en su
+     <body>; aca simplemente no la neutralizamos.                            */
+html:not([data-vs="off"]) body:not(.vs-rango) table.vs-tabla .tval,
+html:not([data-vs="off"]) body:not(.vs-rango) table.vs-tabla .tb-eff,
+html:not([data-vs="off"]) body:not(.vs-rango) table.vs-tabla .tb-volN,
+html:not([data-vs="off"]) body:not(.vs-rango) table.vs-tabla .dbat-n{
  color:rgba(255,255,255,.86)!important}
 html:not([data-vs="off"]) table.vs-tabla .ttot,
 html:not([data-vs="off"]) table.vs-tabla tbody td small{
