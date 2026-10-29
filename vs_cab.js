@@ -40,28 +40,68 @@
 
   /* el titulo de la barra */
   function buscarTitulo(cab){
-    /* Si hay un h1 o un h2, ESE es el titulo. Buscar "el texto mas grande"
-       fallaba en Horarios: el h1 arranca con <span class="ic">🗓️</span> y el
-       emoji, al ser el unico hijo-elemento, ganaba la busqueda; el titulo de
-       verdad vive en un nodo de texto suelto, que no es un elemento. */
+    /* Si hay un h1 o un h2, ESE es el titulo. */
     var h = cab.querySelector('h1,h2');
     if(h && (h.textContent || '').trim()) return h;
 
-    var mejor = null, max = 0;
-    var nodos = cab.querySelectorAll('*');
-    for(var i = 0; i < nodos.length; i++){
-      var n = nodos[i];
-      if(n.children.length) continue;                       /* solo hojas */
-      if(n.closest('button,a,select,input,label,textarea')) continue;
-      var t = (n.textContent || '').trim();
-      if(!t || t.length > 60) continue;
-      /* al menos tres letras o numeros: un emoji solo no es un titulo */
-      if(t.replace(/[^0-9A-Za-z\u00C0-\u024F]/g, '').length < 3) continue;
-      var s = 0;
-      try{ s = parseFloat(getComputedStyle(n).fontSize) || 0; }catch(e){}
-      if(s > max){ max = s; mejor = n; }
+    /* Si no, se recorren los NODOS DE TEXTO, no los elementos. En el
+       Dashboard el titulo "DASHBOARD ENTRENADOR" es un texto suelto al lado de
+       un <i> con el emoji: no es un elemento hoja, asi que buscando elementos
+       no aparecia y ganaba el "Actualizado: 29/10/2026" de la otra punta. */
+    var cand = [];
+    try{
+      var w = document.createTreeWalker(cab, NodeFilter.SHOW_TEXT, null, false), n;
+      while((n = w.nextNode())){
+        var t = (n.nodeValue || '').trim();
+        if(!t || t.length > 60) continue;
+        /* al menos tres letras o numeros: un emoji solo no es un titulo */
+        if(t.replace(/[^0-9A-Za-z\u00C0-\u024F]/g, '').length < 3) continue;
+        var p = n.parentElement;
+        if(!p || p.closest('button,a,select,input,label,textarea')) continue;
+        var s = 0;
+        try{ s = parseFloat(getComputedStyle(p).fontSize) || 0; }catch(e){}
+        cand.push({ n:n, s:s, t:t });
+      }
+    }catch(e){}
+    cand.sort(function(a, b){ return b.s - a.s; });
+
+    /* El nombre del CLUB no sirve de titulo: en Bienvenida, Comparador y Alta
+       de jugadores el texto mas grande de la barra era "NAFELS VOLEY", y un
+       encabezado que dice lo mismo en las 55 pantallas no dice nada. Se pasa
+       al siguiente candidato; si no queda ninguno, armar() pone el <title>. */
+    function esElClub(t){
+      var l = t.replace(/[\u00C0-\u024F]/g, function(c){
+          return 'AAAAAAACEEEEIIIIDNOOOOO.OUUUUY..aaaaaaaceeeeiiiidnooooo.ouuuuy.y'
+            .charAt(c.charCodeAt(0) - 192) || c; })
+        .toUpperCase().replace(/[^A-Z]/g, '');
+      return /^(AXPO)?(BIOGAS)?(VOLLEY)?NAFELS(VOLEY)?(VOLLEYBALL)?$/.test(l)
+          || /^NAFELSVOLEYANALISIS/.test(l);
     }
-    return mejor;
+    /* Pero se descarta SOLO si hay un reemplazo a la altura. En el Manual el
+       titulo de portada ES "NAFELS VOLEY" a 58 px, y descartarlo ascendia un
+       subtitulo de 14 px: el encabezado perdia su titulo de verdad. Regla: el
+       reemplazo tiene que medir al menos el 60% del descartado. Si no lo hay,
+       el nombre del club se queda, porque es lo que esa barra realmente dice.  */
+    var mejor = null;
+    if(cand.length){
+      if(!esElClub(cand[0].t)){
+        mejor = cand[0].n;
+      }else{
+        for(var k = 1; k < cand.length; k++){
+          if(!esElClub(cand[k].t) && cand[k].s >= cand[0].s * 0.6){ mejor = cand[k].n; break; }
+        }
+        if(!mejor) mejor = cand[0].n;   /* no hay reemplazo digno: se queda el club */
+      }
+    }
+    if(!mejor) return null;
+
+    /* a un nodo de texto no se le puede poner clase: se lo envuelve */
+    try{
+      var sp = document.createElement('span');
+      mejor.parentNode.insertBefore(sp, mejor);
+      sp.appendChild(mejor);
+      return sp;
+    }catch(e){ return null; }
   }
 
   /* el nombre de la pantalla, sacado del <title> */
