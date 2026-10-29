@@ -145,12 +145,29 @@
 
   function arrancar(){
     repasar();
-    /* las tablas se vuelven a dibujar al ordenar y al filtrar: se vigila */
+    /* Las tablas se vuelven a dibujar al ordenar y al filtrar: se vigila.
+
+       Antes solo se miraba si la mutacion habia pasado ADENTRO de una tabla.
+       Eso deja afuera el caso mas comun: la pantalla arma la tabla entera y
+       la mete en un contenedor (cont.innerHTML = '<table>...'). Ahi el blanco
+       de la mutacion es el CONTENEDOR, no la tabla, closest('table') da null
+       y la tabla nunca recibia el estilo. Le pasaba a Analisis y a Wellness:
+       la tabla quedaba con el formato viejo de la pantalla.
+
+       Ahora tambien se mira si lo que se agrego ES una tabla o TRAE una. */
     try{
       new MutationObserver(function(muts){
         for(var i = 0; i < muts.length; i++){
-          var t = muts[i].target;
+          var m = muts[i], t = m.target;
           if(t && t.closest && t.closest('table')) { repasar(); return; }
+          var ag = m.addedNodes || [];
+          for(var k = 0; k < ag.length; k++){
+            var n = ag[k];
+            if(n && n.nodeType === 1 &&
+               (n.tagName === 'TABLE' || (n.querySelector && n.querySelector('table')))){
+              repasar(); return;
+            }
+          }
         }
       }).observe(document.body, { childList:true, subtree:true });
     }catch(e){}

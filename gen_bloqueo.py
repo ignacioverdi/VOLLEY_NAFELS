@@ -360,7 +360,39 @@ def _plantel_maestro():
 _COMPLETADOS = set()
 
 
-def _nombre_de(num, nombre):
+def _slugs_propios():
+    """Los identificadores del club de la casa, sacados de plantel_<club>.js.
+
+    ══ POR QUE HACE FALTA ═══════════════════════════════════════════════════
+    _plantel_maestro() completa los apellidos que el .dvw no trae, pero lee
+    plantel_nafels.js, que es el plantel de UN solo equipo: el nuestro. Se lo
+    estaba aplicando a los jugadores de TODOS los equipos.
+
+    Resultado: el #3 de Jona, que en su .dvw viene sin apellido, salia en
+    pantalla como "#3 SCHWITTER" —el #3 de Nafels—. Y lo mismo el #1, el #5,
+    el #12 y el #17. Al elegir Jona en Detalle por acciones aparecian cinco
+    apellidos de Nafels mezclados con los de Jona, y los jugadores de verdad
+    del rival no se podian encontrar.
+
+    Ahora el plantel solo completa a los nuestros. Al jugador del rival sin
+    apellido en el .dvw se le deja el nombre vacio y la pantalla muestra su
+    numero solo, que es la verdad: no sabemos como se llama.
+    """
+    global _PROPIOS_CACHE
+    try:
+        return _PROPIOS_CACHE
+    except NameError:
+        pass
+    out = set()
+    for f in glob.glob('plantel_*.js'):
+        s = re.sub(r'[^a-z0-9]', '', os.path.basename(f)[8:-3].lower())
+        if s:
+            out.add(s)
+    _PROPIOS_CACHE = out
+    return out
+
+
+def _nombre_de(num, nombre, propio=True):
     """El nombre que va en pantalla: el del .dvw, y si no el del plantel.
 
     Se acepta cualquier cosa que parezca un nombre. Si lo que trae el .dvw es
@@ -372,6 +404,9 @@ def _nombre_de(num, nombre):
     import re as _re
     if len(_re.sub(r'[^A-Za-zÁÉÍÓÚÑáéíóúñ]', '', n)) >= 2:
         return n
+    # El plantel es el NUESTRO: no sirve para ponerle nombre a un rival.
+    if not propio:
+        return ''
     delplantel = _plantel_maestro().get(k)
     if delplantel:
         if k not in _COMPLETADOS:
@@ -554,7 +589,8 @@ def bloqueo_desde_dvw(out='datos_bloqueo.js'):
                 if not eq:
                     continue
                 BLOCK.setdefault(eq, {}).setdefault(
-                    num, {'name': _nombre_de(num, nombres.get((lado, num))), 'data': []}
+                    num, {'name': _nombre_de(num, nombres.get((lado, num)),
+                                           eq in _slugs_propios()), 'data': []}
                 )['data'].append([combo, zona, ev, '', mid, fase,
                                   'entrenamiento' if ES_ENT.get(ruta) else 'partido'])
 
@@ -712,7 +748,8 @@ def build(fuentes, out='datos_bloqueo.js'):
                 _al=info_map.get(key)
                 if _al is None or mid not in _al: fuera_temp+=1; continue  # fuera de la temporada actual / equipo no seguido
             num=str(a.get('num') or '').lstrip('0') or str(a.get('num'))
-            BLOCK.setdefault(key,{}).setdefault(num,{'name':_nombre_de(num, a.get('name')),'data':[]})['data'].append(
+            BLOCK.setdefault(key,{}).setdefault(num,{'name':_nombre_de(num, a.get('name'),
+                key in _slugs_propios()),'data':[]})['data'].append(
                 [combo, rz, a.get('ev'), t, mid, ph, TIPO_DE.get(mid,'partido')])
 
     _PUE = _puestos_del_club()
