@@ -400,3 +400,66 @@ html:not([data-vs="off"]) .armctrl button:not(.on):hover,
 html:not([data-vs="off"]) .mbtn:not(.on):hover{
  border-color:rgba(232,25,44,.45);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA FORMA DEL CONTROL
+   ---------------------------------------------------------------------------
+   El color del seleccionado ya estaba unificado; la forma no. Convivian tres
+   radios (7, 8 y 9 px), cuatro bordes distintos, cuatro fondos y la mitad de
+   los controles heredando la tipografia de la pagina en vez de la de la app.
+
+   Se unifica la FORMA, no el tamaño: el alto y el cuerpo de letra quedan como
+   estan. La fila de controles del armador y la de modos de bloqueo son
+   deliberadamente chicas y forzarles un tamaño comun las haria desbordar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) .ptab,
+html:not([data-vs="off"]) .teambtn,
+html:not([data-vs="off"]) .mbtn,
+html:not([data-vs="off"]) .skill-pill,
+html:not([data-vs="off"]) .armctrl button{
+ border-radius:8px!important;
+ border:1px solid rgba(255,255,255,.10)!important;
+ background:rgba(255,255,255,.035)!important;
+ color:rgba(255,255,255,.62)!important;
+ font-family:'Barlow Condensed','Barlow',sans-serif!important;
+ font-weight:700!important;
+ transition:background .15s,border-color .15s,color .15s!important;
+}
+/* el seleccionado vuelve a pisar al bloque de arriba */
+html:not([data-vs="off"]) .teambtn.active,
+html:not([data-vs="off"]) .skill-pill.active,
+html:not([data-vs="off"]) .armctrl button.on,
+html:not([data-vs="off"]) .mbtn.on,
+html:not([data-vs="off"]) .ptab.active{
+ background:var(--red,#E8192C)!important;
+ border-color:var(--red,#E8192C)!important;
+ color:#ffffff!important;
+ box-shadow:0 3px 14px -4px rgba(232,25,44,.55)!important;
+}
+html:not([data-vs="off"]) .ptab:not(.active):hover,
+html:not([data-vs="off"]) .teambtn:not(.active):hover,
+html:not([data-vs="off"]) .mbtn:not(.on):hover,
+html:not([data-vs="off"]) .skill-pill:not(.active):hover,
+html:not([data-vs="off"]) .armctrl button:not(.on):hover{
+ border-color:rgba(232,25,44,.45)!important;
+ color:rgba(255,255,255,.92)!important;
+}
+
+/* ── Las solapas del Game Plan ──────────────────────────────────────────── */
+/*   Ataque / Saque / Recepcion se encendian en ambar con la letra oscura: era
+     el ultimo lugar donde "lo que elegiste" no era rojo.                     */
+html:not([data-vs="off"]) .gpn-tab.on{
+ background:var(--red,#E8192C)!important;
+ color:#ffffff!important;
+ font-weight:700!important;
+}
+
+/* ── La celda que abre el video ─────────────────────────────────────────── */
+/*   En las tablas cuya fila abre los cortes, el video quedo en la primera
+     columna. Se insinua al pasar por encima para que se entienda donde tocar. */
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-vid td:first-child:hover,
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody tr.vs-vid td:nth-child(2):hover{
+ text-decoration:underline;
+ text-decoration-color:rgba(255,255,255,.35);
+ text-underline-offset:3px;
+}

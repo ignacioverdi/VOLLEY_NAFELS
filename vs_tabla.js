@@ -59,6 +59,13 @@
     if(ths[idx]) ths[idx].classList.add(cls);
   }
 
+  /* enciende una fila y apaga la que estaba */
+  function marcar(T, cuerpo, tr){
+    var ya = tr.classList.contains('vs-sel');
+    [].slice.call(T.querySelectorAll('tr.vs-sel')).forEach(function(x){ x.classList.remove('vs-sel'); });
+    if(!ya) tr.classList.add('vs-sel');
+  }
+
   function armar(T){
     var cuerpo = T.tBodies && T.tBodies[0]; if(!cuerpo) return;
     var todas = [].slice.call(cuerpo.rows).filter(function(tr){ return tr.cells.length >= MIN_COLS; });
@@ -75,6 +82,9 @@
       ult.classList.add('vs-tot');
       if(todas.length - 1 >= MIN_FILAS) filas = todas.slice(0, -1);
     }
+
+    /* las filas que abren video se marcan: el CSS subraya su primera celda */
+    todas.forEach(function(tr){ tr.classList.toggle('vs-vid', tr.hasAttribute('onclick')); });
 
     var rank = esRanking(filas);
     T.classList.toggle('vs-conpuesto', rank);
@@ -118,10 +128,49 @@
         if(ev.target.closest('a,button,input,select,label')) return;   /* los controles siguen siendo suyos */
         var tr = ev.target.closest('tr');
         if(!tr || !cuerpo.contains(tr) || tr.classList.contains('vs-tot')) return;
-        var ya = tr.classList.contains('vs-sel');
-        [].slice.call(T.querySelectorAll('tr.vs-sel')).forEach(function(x){ x.classList.remove('vs-sel'); });
-        if(!ya) tr.classList.add('vs-sel');
+        /* en una fila que abre video, la primera columna es SOLO para el video:
+           si no, tocar el nombre abria el corte y de paso apagaba la seleccion */
+        if(tr.hasAttribute('onclick')){
+          var td0 = ev.target.closest('td');
+          var id0 = T.classList.contains('vs-conpuesto') ? 1 : 0;
+          if(td0 && td0.cellIndex <= id0) return;
+        }
+        marcar(T, cuerpo, tr);
       });
+    }
+
+    /* ── Donde abre el video y donde selecciona ────────────────────────────
+       En el Dashboard cada FILA trae su propio onclick que abre los cortes de
+       esa jugadora en una pestaña nueva. Al tocar cualquier celda se abria el
+       video, la pestaña nueva se llevaba el foco, y la seleccion roja no se
+       alcanzaba a ver nunca: la tabla tenia un estado que no se podia usar.
+
+       Ahora el video vive en la PRIMERA columna —el dorsal y el apellido, que
+       es donde uno toca cuando quiere "ver a esa jugadora"— y el resto de la
+       fila selecciona, que es para lo que sirve: comparar dos jugadoras sin
+       perder de vista cual estabas mirando.
+
+       Lo que NO se toca: las celdas que ya tienen su propio onclick (los
+       conteos que abren justo esas acciones en video) siguen exactamente
+       igual, y las tablas cuyas filas no abren nada tampoco cambian.
+
+       Va en fase de CAPTURA porque hay que frenar el onclick de la fila antes
+       de que se dispare; por eso la seleccion se resuelve aca mismo. */
+    if(!T.dataset.vsVid){
+      T.dataset.vsVid = '1';
+      T.addEventListener('click', function(ev){
+        var td = ev.target.closest && ev.target.closest('td');
+        if(!td) return;
+        var tr = td.closest('tr');
+        if(!tr || !cuerpo.contains(tr) || tr.classList.contains('vs-tot')) return;
+        if(!tr.hasAttribute('onclick')) return;   /* la fila no abre nada: lo resuelve el de arriba */
+        if(td.hasAttribute('onclick')) return;    /* la celda tiene su propio video */
+        if(ev.target.closest('a,button,input,select,label')) return;
+        var ident = T.classList.contains('vs-conpuesto') ? 1 : 0;
+        if(td.cellIndex <= ident) return;         /* el nombre abre el video */
+        ev.stopPropagation();
+        marcar(T, cuerpo, tr);
+      }, true);
     }
   }
 
