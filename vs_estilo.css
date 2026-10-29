@@ -496,6 +496,10 @@ html:not([data-vs="off"]) .page-header,
 html:not([data-vs="off"]) .header,
 html:not([data-vs="off"]) .head,
 html:not([data-vs="off"]) .top,
+/* .hdr es la barra superior de 16 pantallas mas: el Dashboard, los cinco
+   heat-maps, scouting, ranking, recepcion, historial... Se verifico que en
+   todas aparece UNA sola vez y siempre como barra de arriba. */
+html:not([data-vs="off"]) .hdr,
 html:not([data-vs="off"]) .hdr-in,
 html:not([data-vs="off"]) .vs-cab{
  background:
