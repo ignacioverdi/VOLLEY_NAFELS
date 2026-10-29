@@ -50,17 +50,20 @@ html:not([data-vs="off"]){
      o sea que el fondo no se mueve cuando scrolleas — como en la portada.    */
 html:not([data-vs="off"]){ background:linear-gradient(180deg,#0A0B14 0%,#07080F 42%,#05060B 100%) #06070E; }
 html:not([data-vs="off"]) body{ background:transparent!important; }
-/*   focos rojos + grilla tecnica, que se desvanece hacia abajo               */
+/*   focos rojos + una trama de puntos que se desvanece hacia abajo.
+     Antes eran dos juegos de lineas cada 54 px: leia como hoja cuadriculada y
+     competia con las tablas, que ya son una grilla. Un punto de 1 px cada
+     30 px da la misma textura —el fondo no queda liso— sin dibujar ninguna
+     linea.                                                                   */
 html:not([data-vs="off"])::before{
   content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
   background:
     radial-gradient(900px 520px at 8% -8%,rgba(232,25,44,.20),transparent 62%),
     radial-gradient(760px 480px at 102% 6%,rgba(120,20,60,.17),transparent 60%),
     radial-gradient(1100px 700px at 50% 112%,rgba(232,25,44,.09),transparent 64%),
-    linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:auto,auto,auto,54px 54px,54px 54px;
-  background-repeat:no-repeat,no-repeat,no-repeat,repeat,repeat;
+    radial-gradient(rgba(255,255,255,.085) 1px,transparent 1px);
+  background-size:auto,auto,auto,30px 30px;
+  background-repeat:no-repeat,no-repeat,no-repeat,repeat;
   -webkit-mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
           mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
 }
@@ -173,7 +176,7 @@ html:not([data-vs="off"]) table.vs-tabla thead th.vs-corte{box-shadow:inset 1px 
 /* ── la fila-tarjeta ────────────────────────────────────────────────────── */
 html:not([data-vs="off"]) table.vs-tabla tbody td{position:relative;vertical-align:middle;
  padding:9px 10px!important;text-align:center!important;white-space:nowrap;
- font:400 13px/1.25 var(--vsNum)!important;
+ font:400 14px/1.25 var(--vsNum)!important;
  font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;
  color:rgba(255,255,255,.82)!important;
  transition:background .15s,border-color .15s;
@@ -232,16 +235,16 @@ html:not([data-vs="off"]) table.vs-tabla .tval,
 html:not([data-vs="off"]) table.vs-tabla .tb-eff,
 html:not([data-vs="off"]) table.vs-tabla .tb-volN,
 html:not([data-vs="off"]) table.vs-tabla .dbat-n{display:inline!important;
- font:400 13px/1.25 var(--vsNum)!important;font-variant-numeric:tabular-nums;
+ font:400 14px/1.25 var(--vsNum)!important;font-variant-numeric:tabular-nums;
  color:rgba(255,255,255,.86)!important}
 html:not([data-vs="off"]) table.vs-tabla .ttot,
 html:not([data-vs="off"]) table.vs-tabla tbody td small{
  font-size:10px!important;font-weight:400!important;color:rgba(255,255,255,.48)!important}
 
-/* la columna que manda: el porcentaje crece */
-html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero,
-html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero .tb-eff{
- font:300 18px/1.05 var(--vsNum)!important;color:rgba(255,255,255,.96)!important}
+/* Todos los numeros del mismo cuerpo. La primera version agrandaba el
+   porcentaje para que mandara sobre el resto; con dos tamaños conviviendo la
+   fila se leia en zigzag. Un solo cuerpo, y la jerarquia la da el orden de
+   las columnas, no el tamaño de la letra. */
 
 /* las barras se fueron */
 html:not([data-vs="off"]) table.vs-tabla .vs-bar{display:none!important}
@@ -284,19 +287,32 @@ html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) .t-name
 html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) .t-name > span:first-of-type{
  color:#fff!important}
 
-/* ── la fila de totales: no es una tarjeta, es un cierre ────────────────── */
+/* ── la fila de totales: relleno propio y negrita ──────────────────────── */
+/*   Es el unico renglon que no habla de una jugadora sino del equipo, asi que
+     deja de ser una tarjeta mas: se llena mas claro, se pone en negrita y
+     cierra la tabla. Sigue sin poder seleccionarse. */
 html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td{
- background:transparent!important;border-color:transparent!important;border-radius:0!important;
- border-top:1px solid rgba(255,255,255,.16)!important;
- padding-top:15px!important;color:rgba(255,255,255,.72)!important}
+ background:rgba(255,255,255,.085)!important;
+ border-top:1px solid rgba(255,255,255,.18)!important;
+ border-bottom:1px solid rgba(255,255,255,.18)!important;
+ border-radius:0!important;padding:13px 10px!important;
+ font-weight:700!important;font-size:15px!important;color:#ffffff!important}
 html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:first-child{box-shadow:none!important;
- font:600 11px/1.15 var(--vsUI)!important;letter-spacing:.14em;text-transform:uppercase;
- color:rgba(255,255,255,.72)!important}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td.vs-hero{
- font:400 16px/1.05 var(--vsNum)!important;color:rgba(255,255,255,.82)!important}
+ border-left:1px solid rgba(255,255,255,.18)!important;border-radius:10px 0 0 10px!important;
+ font:700 11px/1.15 var(--vsUI)!important;letter-spacing:.14em;text-transform:uppercase;
+ color:rgba(255,255,255,.92)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:last-child{
+ border-right:1px solid rgba(255,255,255,.18)!important;border-radius:0 10px 10px 0!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot .tval,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot .tb-eff,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot .tb-volN,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot .dbat-n{
+ font-weight:700!important;font-size:15px!important;color:#ffffff!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot .ttot,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td small{
+ color:rgba(255,255,255,.62)!important;font-weight:500!important}
 html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot:hover td{
- background:transparent!important;border-color:transparent!important;
- border-top-color:rgba(255,255,255,.16)!important;cursor:default}
+ background:rgba(255,255,255,.085)!important;border-color:rgba(255,255,255,.18)!important;cursor:default}
 
 @media (max-width:760px){
  /* El celular tiene 390 px y la tabla diez columnas: no entra, y achicar la
@@ -305,9 +321,8 @@ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot:hover td{
     debajo, y una sombra al borde de esa columna avisa que hay mas a la
     derecha. Lo unico que se recorta es el aire de los costados. */
  html:not([data-vs="off"]) table.vs-tabla{border-spacing:0 3px!important}
- html:not([data-vs="off"]) table.vs-tabla tbody td{padding:9px 7px!important;font-size:13px!important}
- html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero,
- html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero .tb-eff{font-size:17px!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody td{padding:9px 7px!important;font-size:13.5px!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td{padding:12px 7px!important;font-size:14px!important}
  html:not([data-vs="off"]) table.vs-tabla thead th{padding:0 7px 11px!important;
   font-size:10.5px!important;letter-spacing:.1em}
 
@@ -335,5 +350,5 @@ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot:hover td{
  html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td:first-child{
   box-shadow:inset 2px 0 0 rgba(232,25,44,.6),8px 0 15px -9px rgba(0,0,0,.95)!important}
  html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:first-child{
-  background:var(--bg,#07080F)!important;box-shadow:8px 0 15px -9px rgba(0,0,0,.95)!important}
+  background:#1C1D23!important;box-shadow:8px 0 15px -9px rgba(0,0,0,.95)!important}
 }

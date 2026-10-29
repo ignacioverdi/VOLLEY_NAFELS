@@ -5,14 +5,14 @@
    Le da a las tablas de datos el mismo lenguaje que el resto de la app: cada
    fila es una tarjeta, los encabezados van una sola vez arriba, los numeros en
    monoespaciada de ancho fijo, un hilo vertical entre quien es y cuanto hizo,
-   la primera columna de porcentaje mas grande que el resto, y UN solo acento:
+   todos los numeros del mismo cuerpo, y UN solo acento:
    la fila que tocas se enciende en rojo entera.
 
    POR QUE EN JAVASCRIPT Y NO SOLO EN CSS
-   Cuatro cosas no se pueden hacer con CSS: saber donde termina la identidad y
-   empiezan los datos (cambia si la tabla tiene puesto o no), encontrar la
-   columna de porcentaje que manda, reconocer la fila de totales, y volver a
-   armar todo cuando la pantalla redibuja la tabla al ordenar o filtrar.
+   Tres cosas no se pueden hacer con CSS: saber donde termina la identidad y
+   empiezan los datos (cambia si la tabla tiene puesto o no), reconocer la
+   fila de totales, y volver a armar todo cuando la pantalla redibuja la tabla
+   al ordenar o filtrar.
 
    SIN BARRAS
    La version anterior dibujaba una barrita debajo de cada numero. En una
@@ -93,25 +93,13 @@
     /* las barras de la version anterior se van */
     [].slice.call(T.querySelectorAll('.vs-bar')).forEach(function(b){ b.remove(); });
     [].slice.call(T.querySelectorAll('td.vs-neg')).forEach(function(td){ td.classList.remove('vs-neg'); });
+    /* y la columna protagonista tambien: ahora todos los numeros miden igual */
+    [].slice.call(T.querySelectorAll('.vs-hero')).forEach(function(td){ td.classList.remove('vs-hero'); });
 
     var nCols = filas[0].cells.length;
 
     /* el corte: el hilo entre quien es y cuanto hizo */
     columna(T, todas, (prim + 1 < nCols ? prim + 1 : -1), 'vs-corte');
-
-    /* la columna que manda: el porcentaje, pero SOLO si hay uno solo. En la
-       tabla de la liga las nueve columnas son porcentajes: ahi ninguna manda
-       sobre las otras y agrandar la primera seria arbitrario. */
-    var pct = [];
-    for(var c = prim + 1; c < nCols; c++){
-      var con = 0, tot = 0;
-      for(var i = 0; i < filas.length; i++){
-        var td = filas[i].cells[c]; if(!td) continue;
-        tot++; if(limpio(td).indexOf('%') >= 0) con++;
-      }
-      if(tot >= MIN_FILAS && con >= Math.ceil(tot * 0.66)) pct.push(c);
-    }
-    columna(T, todas, (pct.length === 1 ? pct[0] : -1), 'vs-hero');
 
     /* la columna por la que esta ordenada */
     var idx = -1;
