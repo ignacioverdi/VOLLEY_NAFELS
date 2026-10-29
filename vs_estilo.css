@@ -514,3 +514,43 @@ html:not([data-vs="off"]) .vs-cab{
  border-bottom:0!important;
  box-shadow:0 10px 34px -20px rgba(0,0,0,.9)!important;
 }
+
+/* ── el alto y la tipografia del encabezado ──────────────────────────────── */
+/*  MINIMO COMUN, NO MAXIMO. Solo las barras que median menos de 80 px suben al
+    piso y centran su contenido; eran trece, algunas de 27 px, menos que la
+    barra de navegacion que tienen encima. Las que ya llegaban conservan su
+    caja EXACTA: Game Plan tiene 103 px porque adentro hay dos filas de
+    controles, y meterlos en 80 seria rehacer la pantalla, no unificarla.
+    Quien mide cual es cual es vs_cab.js: el CSS no puede.                   */
+html:not([data-vs="off"]) .vs-cab-chica{
+ min-height:80px!important;
+ box-sizing:border-box!important;
+ display:flex!important;
+ align-items:center!important;
+ flex-wrap:wrap!important;
+}
+html:not([data-vs="off"]) .vs-cab-nueva{
+ display:flex!important;align-items:center!important;
+ min-height:80px!important;box-sizing:border-box!important;padding:13px 22px!important;
+}
+/*  EL TITULO: uno solo para las 55. Bebas Neue porque ya la usaban 38 de las
+    49, en 24 px —el tamaño mas repetido era 18 y se leia chico—, y en peso
+    normal: Bebas tiene un solo peso y pedirle negrita hace que el navegador la
+    simule y salga sucia.                                                     */
+html:not([data-vs="off"]) .vs-cab-tit{
+ font-family:'Bebas Neue','Barlow Condensed',sans-serif!important;
+ font-size:26px!important;
+ font-weight:400!important;
+ letter-spacing:.045em!important;
+ text-transform:uppercase!important;
+ line-height:1.05!important;
+ color:#ffffff!important;
+}
+html:not([data-vs="off"]) .vs-cab-tit-puesta{ margin-right:auto; }
+
+@media (max-width:760px){
+ html:not([data-vs="off"]) .vs-cab-chica,
+ html:not([data-vs="off"]) .vs-cab-nueva{ min-height:64px!important; }
+ html:not([data-vs="off"]) .vs-cab-nueva{ padding:11px 16px!important; }
+ html:not([data-vs="off"]) .vs-cab-tit{ font-size:22px!important; }
+}
