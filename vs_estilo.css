@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
 /* ═══════════════════════════════════════════════════════════════════════════
    vs_estilo.css · LA PIEL DE TODA LA APP
    ---------------------------------------------------------------------------
@@ -39,6 +40,8 @@ html:not([data-vs="off"]){
   /* avisos: un solo juego para toda la app */
   --green:#2BBF72; --amber:#E0A32F; --teal:#2AA9A0; --indigo:#7C8BE8; --orange:#E8762C;
   --vsUI:'Barlow','Barlow Condensed',system-ui,-apple-system,sans-serif;
+  /* los numeros de las tablas: ancho fijo, para que las columnas se alineen solas */
+  --vsNum:'IBM Plex Mono',ui-monospace,'SF Mono','Cascadia Mono',Consolas,monospace;
 }
 
 /* ── el fondo, fijo detras de todo ────────────────────────────────────────── */
@@ -123,99 +126,214 @@ html:not([data-vs="off"]) .vs-i > i{ display:none!important; }
 html:not([data-vs="off"]) .vs-i{ display:inline-flex!important; align-items:center; justify-content:center; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   LA TABLA
+   LA TABLA  ·  filas-tarjeta
    ---------------------------------------------------------------------------
-   Tinta blanca y cero semaforo: el ranking lo dice la barrita que va debajo de
-   cada numero, que mide donde esta esa fila respecto de las demas en ESA
-   columna. El color se guarda para una sola cosa: la fila que tocas se
-   enciende entera. Quien arma las barras y pasa el color del club al punto es
+   Cada fila es una tarjeta que flota sobre el fondo de la pagina, separada de
+   la de al lado por 4 px de aire. Los encabezados se escriben UNA sola vez
+   arriba, en 8 px con mucho aire entre letras. Los numeros van en
+   monoespaciada con cifras de ancho fijo: las columnas se alinean solas, sin
+   una sola linea de grilla. Un hilo vertical separa quien es (dorsal +
+   nombre) de cuanto hizo. La primera columna de porcentaje crece: es el dato
+   que manda y la unica jerarquia visual de la tabla.
+
+   CERO SEMAFORO. El rojo queda para una sola cosa: la fila que tocas.
+   SIN BARRAS. En una columna de conteos la barra mide partidos jugados, no
+   calidad — media tabla parecia buena solo por haber jugado mas.
+
+   Quien marca el corte, la columna protagonista y la fila de totales es
    vs_tabla.js — aca solo esta como se ve.
    ═══════════════════════════════════════════════════════════════════════════ */
-html:not([data-vs="off"]) .vs-tablaw{position:relative;border-radius:18px;overflow:auto;max-width:100%;padding:0 12px 12px;
- border:1px solid rgba(255,255,255,.075);
- background:linear-gradient(170deg,rgba(255,255,255,.034),rgba(255,255,255,.008) 48%,rgba(255,255,255,.004));
- box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 22px 48px -30px rgba(0,0,0,.95)}
-html:not([data-vs="off"]) .vs-tablaw::before{content:'';position:absolute;left:20px;right:20px;top:0;height:1px;z-index:5;
- background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent)}
-html:not([data-vs="off"]) table.vs-tabla{width:100%;border-collapse:separate;border-spacing:0;font-family:var(--vsUI)}
 
-/* encabezado pegado arriba */
+/* la envoltura deja de ser un panel: las tarjetas son las filas */
+html:not([data-vs="off"]) .vs-tablaw{position:relative;overflow:auto;max-width:100%;
+ padding:0!important;border:0!important;border-radius:0!important;
+ background:none!important;box-shadow:none!important}
+html:not([data-vs="off"]) .vs-tablaw::before{display:none}
+
+html:not([data-vs="off"]) table.vs-tabla{width:100%;border-collapse:separate!important;
+ border-spacing:0 4px!important;font-family:var(--vsUI)}
+/* el rayado de la pagina se apaga: la tarjeta de cada td es el unico fondo */
+html:not([data-vs="off"]) table.vs-tabla tbody tr{background:transparent!important}
+
+/* ── encabezado: una sola vez, arriba, pegado ───────────────────────────── */
+/* 11 px y no 8: con Barlow, que ya es angosta, 8 px con .3em de aire entre
+   letras se volvia un hilo gris ilegible. Menos aire y mas blanco: el titulo
+   tiene que poder leerse de un vistazo, no adivinarse. */
 html:not([data-vs="off"]) table.vs-tabla thead th{position:sticky;top:0;z-index:4;white-space:nowrap;
- padding:14px 12px 11px;text-align:right;
- font:600 9px/1.1 var(--vsUI);letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.34);
- background:linear-gradient(180deg,#090B14 0%,#090B14 70%,rgba(9,11,20,0) 100%)}
-html:not([data-vs="off"]) table.vs-tabla thead th:first-child{text-align:left}
-html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto thead th:nth-child(2){text-align:left}
-html:not([data-vs="off"]) table.vs-tabla thead th.vs-orden{color:rgba(255,255,255,.92)}
+ padding:0 10px 13px!important;text-align:center!important;vertical-align:bottom;
+ font:600 11px/1.15 var(--vsUI)!important;letter-spacing:.14em;text-transform:uppercase;
+ color:rgba(255,255,255,.72)!important;
+ background:var(--bg,#07080F)!important;
+ border:0!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+html:not([data-vs="off"]) table.vs-tabla thead th:first-child{text-align:left!important}
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto thead th:nth-child(2){text-align:left!important}
+html:not([data-vs="off"]) table.vs-tabla thead th.vs-orden{color:rgba(255,255,255,.95)!important}
+html:not([data-vs="off"]) table.vs-tabla thead th.vs-corte{box-shadow:inset 1px 0 0 rgba(255,255,255,.07)}
 
-/* celdas: hairline, sin relleno */
-html:not([data-vs="off"]) table.vs-tabla tbody td{position:relative;padding:14px 12px 16px;text-align:right;
- vertical-align:middle;background:transparent;transition:background .15s;
- font:700 15px/1.1 var(--vsUI);color:#fff;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;
- border-bottom:1px solid rgba(255,255,255,.055)}
-html:not([data-vs="off"]) table.vs-tabla tbody tr:last-child td{border-bottom:0}
-/* el puesto */
-html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:first-child{text-align:left;width:1%;white-space:nowrap;
- padding-left:14px;font:600 12px/1 var(--vsUI);color:rgba(255,255,255,.30);letter-spacing:.1em}
-/* el nombre */
+/* ── la fila-tarjeta ────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) table.vs-tabla tbody td{position:relative;vertical-align:middle;
+ padding:9px 10px!important;text-align:center!important;white-space:nowrap;
+ font:400 13px/1.25 var(--vsNum)!important;
+ font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;
+ color:rgba(255,255,255,.82)!important;
+ transition:background .15s,border-color .15s;
+ background:rgba(255,255,255,.022)!important;
+ border:1px solid rgba(255,255,255,.05)!important;
+ border-left:0!important;border-right:0!important}
+html:not([data-vs="off"]) table.vs-tabla tbody td:first-child{
+ border-left:1px solid rgba(255,255,255,.05)!important;border-radius:10px 0 0 10px}
+html:not([data-vs="off"]) table.vs-tabla tbody td:last-child{
+ border-right:1px solid rgba(255,255,255,.05)!important;border-radius:0 10px 10px 0}
+
+/* el hilo que separa quien es de cuanto hizo */
+html:not([data-vs="off"]) table.vs-tabla tbody td.vs-corte{box-shadow:inset 1px 0 0 rgba(255,255,255,.09)}
+
+/* ── quien es: dorsal + nombre ──────────────────────────────────────────── */
 html:not([data-vs="off"]) table.vs-tabla tbody td:first-child,
-html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:nth-child(2){text-align:left;white-space:nowrap;
- font:600 13.5px/1.2 var(--vsUI);letter-spacing:.05em}
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:nth-child(2){
+ text-align:left!important;font-family:var(--vsUI)!important;
+ font-size:13.5px!important;font-weight:500!important;letter-spacing:.025em;
+ color:rgba(255,255,255,.94)!important}
+/* el puesto, cuando la tabla es un ranking */
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:first-child{
+ width:1%;min-width:38px;text-align:center!important;padding-left:10px!important;
+ font:400 10px/1 var(--vsNum)!important;letter-spacing:.06em;
+ color:rgba(255,255,255,.58)!important}
+html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto thead th:first-child{text-align:center!important}
+/* el puesto trae su propio tamaño y peso desde la pantalla: se apaga */
+html:not([data-vs="off"]) table.vs-tabla .t-rank{
+ font:400 10px/1 var(--vsNum)!important;letter-spacing:.06em;
+ background:none!important;border:0!important;
+ color:rgba(255,255,255,.58)!important}
+/* el dorsal: una pastilla chica y apagada, no un cuadrado de color */
+html:not([data-vs="off"]) table.vs-tabla .t-cam{
+ width:22px!important;min-width:22px;height:18px!important;border-radius:3px!important;
+ background:none!important;border:0!important;flex-shrink:0;
+ font:400 10px/18px var(--vsNum)!important;letter-spacing:.04em;
+ color:rgba(255,255,255,.58)!important}
+/* inline-flex y no flex: en la tabla de la liga el boton del game plan es
+   hermano del nombre, y un flex de ancho completo lo tiraba al renglon de
+   abajo y dejaba las filas del doble de alto */
+html:not([data-vs="off"]) table.vs-tabla .t-name{display:inline-flex;align-items:center;gap:11px;
+ vertical-align:middle;text-decoration:none;
+ font-family:var(--vsUI)!important;font-size:13.5px!important;font-weight:500!important;
+ letter-spacing:.025em;color:rgba(255,255,255,.94)!important}
+html:not([data-vs="off"]) table.vs-tabla .t-name > span:first-of-type{
+ font-family:var(--vsUI)!important;font-size:13.5px!important;font-weight:500!important;
+ letter-spacing:.025em;color:rgba(255,255,255,.94)!important}
+/* el color del club queda en un punto, y SOLO cuando el club tiene color */
+html:not([data-vs="off"]) table.vs-tabla .t-name[data-club]{position:relative;padding-left:14px}
+html:not([data-vs="off"]) table.vs-tabla .t-name[data-club]::before{content:'';position:absolute;
+ left:0;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;
+ background:var(--club,rgba(255,255,255,.35))}
 
-/* el color del club queda en un punto, no en el nombre */
-html:not([data-vs="off"]) table.vs-tabla .t-name{color:rgba(255,255,255,.90)!important;position:relative;padding-left:14px}
-html:not([data-vs="off"]) table.vs-tabla .t-name::before{content:'';position:absolute;left:0;top:50%;
- transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:var(--club,rgba(255,255,255,.35))}
-/* todos los valores del mismo color: la barra dice quien es mejor */
-html:not([data-vs="off"]) table.vs-tabla .tval{color:rgba(255,255,255,.94)!important}
+/* ── los numeros: todos iguales, sin semaforo ───────────────────────────── */
+html:not([data-vs="off"]) table.vs-tabla .tval,
+html:not([data-vs="off"]) table.vs-tabla .tb-eff,
+html:not([data-vs="off"]) table.vs-tabla .tb-volN,
+html:not([data-vs="off"]) table.vs-tabla .dbat-n{display:inline!important;
+ font:400 13px/1.25 var(--vsNum)!important;font-variant-numeric:tabular-nums;
+ color:rgba(255,255,255,.86)!important}
 html:not([data-vs="off"]) table.vs-tabla .ttot,
-html:not([data-vs="off"]) table.vs-tabla tbody td small{color:rgba(255,255,255,.26)!important;font-weight:500}
+html:not([data-vs="off"]) table.vs-tabla tbody td small{
+ font-size:10px!important;font-weight:400!important;color:rgba(255,255,255,.48)!important}
 
-/* la barra de dato */
-html:not([data-vs="off"]) table.vs-tabla .vs-bar{position:absolute;left:12px;right:12px;bottom:7px;height:2px;
- border-radius:2px;background:rgba(255,255,255,.055);overflow:hidden;display:block}
-html:not([data-vs="off"]) table.vs-tabla .vs-bar s{display:block;height:100%;border-radius:2px;text-decoration:none;
- background:rgba(255,255,255,.30);transition:width .5s cubic-bezier(.2,.8,.3,1),background .18s}
-html:not([data-vs="off"]) table.vs-tabla td.vs-neg .vs-bar s{background:rgba(255,255,255,.14)}
+/* la columna que manda: el porcentaje crece */
+html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero,
+html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero .tb-eff{
+ font:300 18px/1.05 var(--vsNum)!important;color:rgba(255,255,255,.96)!important}
 
-/* al pasar el mouse se insinua, nada mas */
-html:not([data-vs="off"]) table.vs-tabla tbody tr:hover td{background:rgba(255,255,255,.035);cursor:pointer}
-html:not([data-vs="off"]) table.vs-tabla tbody tr:hover .vs-bar s{background:rgba(255,255,255,.46)}
+/* las barras se fueron */
+html:not([data-vs="off"]) table.vs-tabla .vs-bar{display:none!important}
 
-/* la columna ordenada: dos hilos */
+/* al pasar el mouse la tarjeta se levanta, nada mas */
+html:not([data-vs="off"]) table.vs-tabla tbody tr:hover td{
+ background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.13)!important;cursor:pointer}
+
+/* la columna por la que esta ordenada */
 html:not([data-vs="off"]) table.vs-tabla tbody td.active-col,
 html:not([data-vs="off"]) table.vs-tabla tbody td.vs-orden{
- box-shadow:inset 1px 0 0 rgba(255,255,255,.10),inset -1px 0 0 rgba(255,255,255,.10)}
+ background:rgba(255,255,255,.05)!important;color:#fff!important}
 
-/* EL ACENTO: la fila elegida */
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td{border-bottom-color:rgba(232,25,44,.32);
- background:linear-gradient(90deg,rgba(232,25,44,.20),rgba(232,25,44,.06) 60%,rgba(232,25,44,.02))}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td:first-child{box-shadow:inset 3px 0 0 #E8192C;color:#FF8392}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name{color:#fff!important;letter-spacing:.07em}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name::before{background:#FF5468;
- box-shadow:0 0 10px rgba(255,84,104,.95)}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .vs-bar s{box-shadow:0 0 10px -2px rgba(255,84,104,.85);
- background:linear-gradient(90deg,rgba(232,25,44,.65),#FF5468)}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td.active-col{
- box-shadow:inset 1px 0 0 rgba(255,92,112,.35),inset -1px 0 0 rgba(255,92,112,.35)}
+/* ── EL ACENTO: la fila elegida ─────────────────────────────────────────── */
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td{
+ background:rgba(232,25,44,.085)!important;border-color:rgba(232,25,44,.42)!important;
+ color:rgba(255,255,255,.96)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td:first-child{
+ box-shadow:inset 2px 0 0 var(--red,#E8192C)!important;color:#fff!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td.vs-corte{
+ box-shadow:inset 1px 0 0 rgba(255,92,112,.40)}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name > span:first-of-type,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .tval,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .tb-eff,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .tb-volN,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .dbat-n{color:#fff!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-cam{
+ background:var(--red,#E8192C)!important;color:#fff!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel .t-name[data-club]::before{
+ background:var(--red2,#FF5468);box-shadow:0 0 10px rgba(255,84,104,.9)}
 
-/* el club propio: un hilo, no un relleno */
-html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel),
-html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) td,
-html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td{background:transparent!important}
+/* el club propio: un hilo al costado, no un relleno */
 html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) td:first-child,
 html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td:first-child{
- box-shadow:inset 2px 0 0 rgba(232,25,44,.6)!important;color:rgba(255,255,255,.72)!important}
+ box-shadow:inset 2px 0 0 rgba(232,25,44,.6)!important}
 html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) .t-name,
-html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) .t-name{color:#fff!important}
-html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:hover td,
-html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:hover td{background:rgba(255,255,255,.035)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) .t-name,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) .t-name > span:first-of-type,
+html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) .t-name > span:first-of-type{
+ color:#fff!important}
+
+/* ── la fila de totales: no es una tarjeta, es un cierre ────────────────── */
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td{
+ background:transparent!important;border-color:transparent!important;border-radius:0!important;
+ border-top:1px solid rgba(255,255,255,.16)!important;
+ padding-top:15px!important;color:rgba(255,255,255,.72)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:first-child{box-shadow:none!important;
+ font:600 11px/1.15 var(--vsUI)!important;letter-spacing:.14em;text-transform:uppercase;
+ color:rgba(255,255,255,.72)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td.vs-hero{
+ font:400 16px/1.05 var(--vsNum)!important;color:rgba(255,255,255,.82)!important}
+html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot:hover td{
+ background:transparent!important;border-color:transparent!important;
+ border-top-color:rgba(255,255,255,.16)!important;cursor:default}
 
 @media (max-width:760px){
- html:not([data-vs="off"]) .vs-tablaw{border-radius:15px;padding:0 8px 10px}
- html:not([data-vs="off"]) table.vs-tabla tbody td{padding:11px 9px 14px;font-size:13px}
- html:not([data-vs="off"]) table.vs-tabla thead th{padding:11px 9px 9px;font-size:8.2px;letter-spacing:.16em}
- html:not([data-vs="off"]) table.vs-tabla tbody td:first-child,
- html:not([data-vs="off"]) table.vs-tabla thead th:first-child{position:sticky;left:0;z-index:2;background:#090B14}
- html:not([data-vs="off"]) table.vs-tabla thead th:first-child{z-index:5}
+ /* El celular tiene 390 px y la tabla diez columnas: no entra, y achicar la
+    letra hasta que entre la vuelve ilegible. Entonces no se achica nada: la
+    columna de quien es queda clavada a la izquierda, el resto se desliza por
+    debajo, y una sombra al borde de esa columna avisa que hay mas a la
+    derecha. Lo unico que se recorta es el aire de los costados. */
+ html:not([data-vs="off"]) table.vs-tabla{border-spacing:0 3px!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody td{padding:9px 7px!important;font-size:13px!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero,
+ html:not([data-vs="off"]) table.vs-tabla tbody td.vs-hero .tb-eff{font-size:17px!important}
+ html:not([data-vs="off"]) table.vs-tabla thead th{padding:0 7px 11px!important;
+  font-size:10.5px!important;letter-spacing:.1em}
+
+ /* cada pixel que gana la columna de quien es, lo pierde una columna de
+    datos. Asi que en el celular: dorsal mas chico, menos aire, el nombre
+    cortado con puntos suspensivos, y fuera la claqueta — la tienen TODAS las
+    filas, no distingue ninguna, y ocupa una columna entera de ancho. */
+ html:not([data-vs="off"]) table.vs-tabla .t-name{gap:8px}
+ html:not([data-vs="off"]) table.vs-tabla .t-cam{width:20px!important;min-width:20px;height:17px!important;
+  font-size:9.5px!important;line-height:17px!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody td .t-name > span:first-of-type{
+  display:inline-block;max-width:98px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+ html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:nth-child(2) .t-name{
+  max-width:112px;overflow:hidden;text-overflow:ellipsis}
+ html:not([data-vs="off"]) table.vs-tabla .t-name > span:nth-of-type(2){display:none!important}
+ html:not([data-vs="off"]) table.vs-tabla.vs-conpuesto tbody td:first-child{padding-left:9px!important}
+
+ /* la columna de quien es queda a la vista mientras el resto se desliza */
+ html:not([data-vs="off"]) table.vs-tabla thead th:first-child{position:sticky;left:0;z-index:5}
+ html:not([data-vs="off"]) table.vs-tabla tbody td:first-child{position:sticky;left:0;z-index:2;
+  background:#0C0D14!important;box-shadow:8px 0 15px -9px rgba(0,0,0,.95)}
+ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-sel td:first-child{background:#1C0B11!important;
+  box-shadow:inset 2px 0 0 var(--red,#E8192C),8px 0 15px -9px rgba(0,0,0,.95)!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody tr.is-nafels:not(.vs-sel) td:first-child,
+ html:not([data-vs="off"]) table.vs-tabla tbody tr.mi-fila:not(.vs-sel) td:first-child{
+  box-shadow:inset 2px 0 0 rgba(232,25,44,.6),8px 0 15px -9px rgba(0,0,0,.95)!important}
+ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td:first-child{
+  background:var(--bg,#07080F)!important;box-shadow:8px 0 15px -9px rgba(0,0,0,.95)!important}
 }

@@ -2,15 +2,23 @@
    vs_tabla.js · LA TABLA DE LA APP
    ---------------------------------------------------------------------------
    QUE HACE
-   Le da a las tablas de datos el mismo lenguaje que el resto de la app:
-   tinta blanca, cero semaforo, una barrita debajo de cada numero que dice
-   donde esta esa fila respecto de las demas en esa columna, y UN solo acento:
+   Le da a las tablas de datos el mismo lenguaje que el resto de la app: cada
+   fila es una tarjeta, los encabezados van una sola vez arriba, los numeros en
+   monoespaciada de ancho fijo, un hilo vertical entre quien es y cuanto hizo,
+   la primera columna de porcentaje mas grande que el resto, y UN solo acento:
    la fila que tocas se enciende en rojo entera.
 
    POR QUE EN JAVASCRIPT Y NO SOLO EN CSS
-   Tres cosas no se pueden hacer con CSS: medir el maximo de cada columna para
-   dibujar la barra, pasar el color del club del nombre a un punto, y volver a
+   Cuatro cosas no se pueden hacer con CSS: saber donde termina la identidad y
+   empiezan los datos (cambia si la tabla tiene puesto o no), encontrar la
+   columna de porcentaje que manda, reconocer la fila de totales, y volver a
    armar todo cuando la pantalla redibuja la tabla al ordenar o filtrar.
+
+   SIN BARRAS
+   La version anterior dibujaba una barrita debajo de cada numero. En una
+   columna de conteos (remates, errores) la barra mide partidos jugados, no
+   calidad: quien jugo mas se veia mejor. Se fueron, y si quedo alguna del
+   paso anterior, esta funcion la borra.
 
    DONDE SE METE Y DONDE NO
    Solo en tablas de datos: necesitan <thead>, 3 columnas o mas y 3 filas o
@@ -25,81 +33,85 @@
   try{ if((localStorage.getItem('vs_estilo')||'') === 'off') return; }catch(e){}
 
   var MIN_COLS = 3, MIN_FILAS = 3;
-  var RX_NUM = new RegExp('([-+]?[0-9]+(?:[.,][0-9]+)?)\\s*%');
-  var RX_SOLO = new RegExp('^[-+]?[0-9]+(?:[.,][0-9]+)?$');
+  /* la ultima fila es un cierre y no una jugadora solo si lo dice entera */
+  /* "TOTALES", pero tambien "TOTALES EQUIPO" y "PROMEDIO GENERAL" */
+  var RX_TOT = new RegExp('^(totales?|suma|promedios?|media|avg)(\\s+\\S+)?[\\s:.]*$', 'i');
 
-  function num(td){
-    var t = (td.textContent || '').replace(/ /g, ' ').trim();
-    var m = t.match(RX_NUM);
-    if(m) return parseFloat(String(m[1]).replace('+','').replace(',','.'));
-    /* un numero pelado tambien sirve, pero solo si la celda es ESE numero y
-       nada mas: asi un "(455)" suelto o un año no se cuelan como dato. */
-    var s = t.replace(/\s/g,'');
-    if(RX_SOLO.test(s)) return parseFloat(s.replace('+','').replace(',','.'));
-    return null;
-  }
+  function limpio(el){ return ((el && el.textContent) || '').replace(/ /g,' ').trim(); }
 
   function esRanking(filas){
-    /* la primera columna es un puesto si en todas las filas es un numero corto */
+    /* la primera columna es un puesto si en TODAS las filas es un numero corto */
     for(var i = 0; i < filas.length; i++){
       var c = filas[i].children[0]; if(!c) return false;
-      var t = (c.textContent || '').trim();
-      if(!/^[0-9]{1,3}$/.test(t)) return false;
+      if(!/^[0-9]{1,3}$/.test(limpio(c))) return false;
     }
     return true;
   }
 
+  /* pone una clase en una columna entera (cuerpo + encabezado) y la saca de
+     las demas, para que al redibujar no queden marcas viejas */
+  function columna(T, filas, idx, cls){
+    [].slice.call(T.querySelectorAll('td.' + cls + ', th.' + cls))
+      .forEach(function(x){ x.classList.remove(cls); });
+    if(idx < 0) return;
+    filas.forEach(function(tr){ var td = tr.cells[idx]; if(td) td.classList.add(cls); });
+    var ths = T.tHead ? [].slice.call(T.tHead.rows[T.tHead.rows.length - 1].cells) : [];
+    if(ths[idx]) ths[idx].classList.add(cls);
+  }
+
   function armar(T){
     var cuerpo = T.tBodies && T.tBodies[0]; if(!cuerpo) return;
-    var filas = [].slice.call(cuerpo.rows).filter(function(tr){ return tr.cells.length >= MIN_COLS; });
-    if(filas.length < MIN_FILAS) return;
+    var todas = [].slice.call(cuerpo.rows).filter(function(tr){ return tr.cells.length >= MIN_COLS; });
+    if(todas.length < MIN_FILAS) return;
 
     T.classList.add('vs-tabla');
-    var w = T.closest('.table-wrap') || T.parentElement;
+    var w = T.closest('.table-wrap') || T.closest('.tabla-wrap') || T.parentElement;
     if(w && w !== document.body) w.classList.add('vs-tablaw');
+
+    /* la fila de totales: solo la ultima, y solo si se llama asi */
+    todas.forEach(function(tr){ tr.classList.remove('vs-tot'); });
+    var filas = todas, ult = todas[todas.length - 1];
+    if(RX_TOT.test(limpio(ult.cells[0]))){
+      ult.classList.add('vs-tot');
+      if(todas.length - 1 >= MIN_FILAS) filas = todas.slice(0, -1);
+    }
 
     var rank = esRanking(filas);
     T.classList.toggle('vs-conpuesto', rank);
-    var prim = rank ? 1 : 0;              /* columna del nombre */
+    var prim = rank ? 1 : 0;              /* la columna del nombre */
 
-    /* el color del club pasa del nombre a un punto */
+    /* el color del club pasa del nombre a un punto; el punto solo aparece si
+       el club TIENE color propio (en la tabla del plantel no hay) */
     filas.forEach(function(tr){
       var n = tr.cells[prim] && tr.cells[prim].querySelector('.t-name');
-      if(n && !n.dataset.vsClub){
-        var c = (n.getAttribute('style') || '').match(/color\s*:\s*([^;]+)/);
-        if(c) n.style.setProperty('--club', c[1].trim());
-        n.dataset.vsClub = '1';
-      }
+      if(!n || n.dataset.vsClub) return;
+      n.dataset.vsClub = '1';
+      var c = (n.getAttribute('style') || '').match(/color\s*:\s*([^;]+)/);
+      if(c){ n.style.setProperty('--club', c[1].trim()); n.dataset.club = '1'; }
     });
 
-    /* una barra por columna numerica */
+    /* las barras de la version anterior se van */
+    [].slice.call(T.querySelectorAll('.vs-bar')).forEach(function(b){ b.remove(); });
+    [].slice.call(T.querySelectorAll('td.vs-neg')).forEach(function(td){ td.classList.remove('vs-neg'); });
+
     var nCols = filas[0].cells.length;
+
+    /* el corte: el hilo entre quien es y cuanto hizo */
+    columna(T, todas, (prim + 1 < nCols ? prim + 1 : -1), 'vs-corte');
+
+    /* la columna que manda: el porcentaje, pero SOLO si hay uno solo. En la
+       tabla de la liga las nueve columnas son porcentajes: ahi ninguna manda
+       sobre las otras y agrandar la primera seria arbitrario. */
+    var pct = [];
     for(var c = prim + 1; c < nCols; c++){
-      var tds = [], vs = [];
+      var con = 0, tot = 0;
       for(var i = 0; i < filas.length; i++){
         var td = filas[i].cells[c]; if(!td) continue;
-        var v = num(td);
-        if(v !== null){ tds.push([td, v]); vs.push(v); }
+        tot++; if(limpio(td).indexOf('%') >= 0) con++;
       }
-      /* si mas de un tercio de la columna no es numero, no es columna de dato */
-      if(vs.length < Math.max(2, Math.ceil(filas.length * 0.66))){
-        for(var k = 0; k < filas.length; k++){
-          var q = filas[k].cells[c], b0 = q && q.querySelector('.vs-bar');
-          if(b0) b0.remove();
-        }
-        continue;
-      }
-      var mx = Math.max.apply(null, vs), mn = Math.min.apply(null, vs);
-      var rango = (mx - mn) || 1, lo = mn - rango * 0.30, hi = mx + rango * 0.04;
-      tds.forEach(function(p){
-        var td = p[0], v = p[1];
-        var pct = Math.max(5, Math.min(100, Math.round((v - lo) / (hi - lo) * 100)));
-        td.classList.toggle('vs-neg', v < 0);
-        var b = td.querySelector('.vs-bar');
-        if(!b){ b = document.createElement('i'); b.className = 'vs-bar'; b.innerHTML = '<s></s>'; td.appendChild(b); }
-        b.firstChild.style.width = pct + '%';
-      });
+      if(tot >= MIN_FILAS && con >= Math.ceil(tot * 0.66)) pct.push(c);
     }
+    columna(T, todas, (pct.length === 1 ? pct[0] : -1), 'vs-hero');
 
     /* la columna por la que esta ordenada */
     var idx = -1;
@@ -117,7 +129,7 @@
       T.addEventListener('click', function(ev){
         if(ev.target.closest('a,button,input,select,label')) return;   /* los controles siguen siendo suyos */
         var tr = ev.target.closest('tr');
-        if(!tr || !cuerpo.contains(tr)) return;
+        if(!tr || !cuerpo.contains(tr) || tr.classList.contains('vs-tot')) return;
         var ya = tr.classList.contains('vs-sel');
         [].slice.call(T.querySelectorAll('tr.vs-sel')).forEach(function(x){ x.classList.remove('vs-sel'); });
         if(!ya) tr.classList.add('vs-sel');
