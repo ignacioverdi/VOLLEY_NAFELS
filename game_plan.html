@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261029-0851"></script>
-<script src="selector_categoria.js?v=20261029-0851"></script>
-<script src="objetivos_config.js?v=20261029-0851"></script>
+<script src="categorias_club.js?v=20261029-0856"></script>
+<script src="selector_categoria.js?v=20261029-0856"></script>
+<script src="objetivos_config.js?v=20261029-0856"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="GAME PLAN — AMRISWIL · NAFELS">GAME PLAN — AMRISWIL · NAFELS</title>
@@ -485,7 +485,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 .gpn-flt .gpn-row{gap:8px}
 #jug-filtro{display:inline-flex;align-items:center;gap:7px;margin-left:auto}
 </style>
-<script src="lang.js?v=20261029-0851" onerror="void 0"></script>
+<script src="lang.js?v=20261029-0856" onerror="void 0"></script>
 <!-- ══ LOS DATOS DE LA LIGA, DESCIFRADOS ═══════════════════════════════
      liga_data.js.enc viene cifrado como todos los datos del club: el .enc
      solo deja el texto crudo en window.__D, y hace falta abrirDatos() para
@@ -496,7 +496,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      con ella moria TODO el script: el Game Plan no pintaba ni una seccion.
      Es el mismo bloque que usa cortes.html, en el mismo orden. -->
 <script>window.__DESCIFRAR_SINCRONO = true;</script>
-<script src="datos_seguros.js?v=20261029-0851"></script>
+<script src="datos_seguros.js?v=20261029-0856"></script>
 <script src="liga_data.js.enc?v=23f5ab7a"></script>
 <!-- ══ EL MAPA DE VIDEOS VA ANTES DE abrirDatos() ══════════════════════
      Estaba DESPUES. Un .enc no define nada por si solo: deja el texto
@@ -509,15 +509,15 @@ select option { color: #111111 !important; background-color: #ffffff !important;
      Es el mismo arreglo, nada mas. -->
 <script src="mapa_videos.js.enc?v=0c095d1b" onerror="window.MAPA_VIDEOS=window.MAPA_VIDEOS||{}"></script>
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[game_plan] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261029-0851" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261029-0851"></script>
-<script src="videos.js?v=20261029-0851" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
+<script src="firebase.js?v=20261029-0856" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261029-0856"></script>
+<script src="videos.js?v=20261029-0856" onerror="window.VIDEOS_DATA=window.VIDEOS_DATA||{}"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261029-0851">
+<link rel="stylesheet" href="movil.css?v=20261029-0856">
 
-<script src="iconos.js?v=20261029-0851" defer></script>
+<script src="iconos.js?v=20261029-0856" defer></script>
 </head>
 <body>
 
@@ -2722,6 +2722,15 @@ function gpnCfgClave(num){ return 'vb_gp_cfg_'+(GP_RIVAL_SLUG||'rival')+'_'+num;
    no se pierde nada de lo que ya estaba preparado. */
 var GPN_FUND=['ataque','saque','recepcion'];
 function gpnCfgCombo(cat){ return (cat||[]).slice().sort().join('+'); }
+/* ══ TODO SALE EN LOS TRES IDIOMAS ═══════════════════════════════════
+   Lo que dibuja el JavaScript no lo alcanza el traductor que recorre el
+   HTML, y los title= no los toca nunca. Por eso cada texto nuevo pasa por
+   aca, que es el mismo translateString que ya usa el boton de video. */
+function gpnT(s){
+  try{ if(typeof translateString==='function')
+    return translateString(s,(typeof getLang==='function'?getLang():'es')); }catch(e){}
+  return s;
+}
 function gpnCfgVista(num,tipo,clave){
   var c=GPN_CFG[num];
   return (c&&c.v&&c.v[tipo]&&c.v[tipo][clave])?c.v[tipo][clave]:null;
@@ -2932,26 +2941,26 @@ function gpnFiltros(cont,num,tipo,cats,escala,onPick,ini){
   function _refG(){
     if(!btnG) return;
     if(_tocado && !_guardadoIgual()){
-      btnG.innerHTML='\ud83d\udcbe Guardar';
+      btnG.innerHTML='\ud83d\udcbe '+gpnT('Guardar');
       btnG.style.borderColor='rgba(245,165,36,.85)'; btnG.style.color='#F5A524';
-      btnG.title='Hay cambios sin guardar. Apret\u00e1 para que los jugadores vean esto.';
+      btnG.title=gpnT('Hay cambios sin guardar. Apret\u00e1 para que los jugadores vean esto.');
     } else if(_guardadoIgual()){
-      btnG.innerHTML='\u2713 As\u00ed lo ven';
+      btnG.innerHTML='\u2713 '+gpnT('As\u00ed lo ven');
       btnG.style.borderColor='rgba(255,255,255,.10)'; btnG.style.color='#5E6B7D';
-      btnG.title='Los jugadores abren la ficha exactamente as\u00ed';
+      btnG.title=gpnT('Los jugadores abren la ficha exactamente as\u00ed');
     } else {
-      btnG.innerHTML='\ud83d\udcbe Guardar';
+      btnG.innerHTML='\ud83d\udcbe '+gpnT('Guardar');
       btnG.style.borderColor='rgba(255,255,255,.10)'; btnG.style.color='#5E6B7D';
-      btnG.title='Guardar esta vista para que la ficha les abra as\u00ed a los jugadores';
+      btnG.title=gpnT('Guardar esta vista para que la ficha les abra as\u00ed a los jugadores');
     }
   }
   function _pick(){ _tocado=true; _refG(); onPick(estado); }
 
   var lblM=document.createElement('span'); lblM.className='gpn-lbl';
-  lblM.title='M\u00edn. pelotas por cuadrante'; lblM.textContent='M\u00edn.';
+  lblM.title=gpnT('M\u00edn. pelotas por cuadrante'); lblM.textContent='M\u00edn.';
   var inpM=document.createElement('input');
   inpM.type='number'; inpM.min='0'; inpM.step='1'; inpM.value=estado.min||0;
-  inpM.title='Los cuadrantes con menos acciones que este n\u00famero quedan en blanco';
+  inpM.title=gpnT('Los cuadrantes con menos acciones que este n\u00famero quedan en blanco');
   function _bordeMin(){ inpM.style.borderColor=(estado.min>0)?'rgba(245,165,36,.85)':'rgba(255,255,255,.10)'; }
   inpM.style.cssText='width:54px;background:#161C27;border:1px solid rgba(255,255,255,.10);color:#E6EDF6;'
     +'border-radius:7px;padding:5px 7px;font-family:inherit;font-weight:700;font-size:12px';
@@ -7296,9 +7305,9 @@ document.addEventListener('click', function(e){
   </div>
 </div>
 
-<script src="temporadas_menu.js?v=20261029-0851"></script>
-<script src="ayuda.js?v=20261029-0851"></script>
-<script src="volver_inicio.js?v=20261029-0851" defer></script>
+<script src="temporadas_menu.js?v=20261029-0856"></script>
+<script src="ayuda.js?v=20261029-0856"></script>
+<script src="volver_inicio.js?v=20261029-0856" defer></script>
 </body>
 </html>
 

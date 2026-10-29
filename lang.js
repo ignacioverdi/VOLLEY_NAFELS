@@ -859,6 +859,17 @@
        del jugador-, asi que van aca y no en el diccionario de claves.
        La de {0} es una plantilla: el nombre del rival se deja como esta. */
     "Detalle por acciones": { en:"Action by action", de:"Aktion für Aktion" },
+    /* ══ GAME PLAN · LA VISTA GUARDADA DE CADA FICHA · 29-10-2026 ═══
+       El boton que deja preparada una combinacion para los jugadores, y
+       el minimo de acciones por cuadrante. Todo esto lo dibuja el
+       JavaScript, por eso va aca. */
+    "\u2713 As\u00ed lo ven": { en:"\u2713 What they see", de:"\u2713 Was sie sehen" },
+    "As\u00ed lo ven": { en:"What they see", de:"Was sie sehen" },
+    "Los jugadores abren la ficha exactamente as\u00ed": { en:"Players open the card exactly like this", de:"Die Spieler \u00f6ffnen die Karte genau so" },
+    "Guardar esta vista para que la ficha les abra as\u00ed a los jugadores": { en:"Save this view so the card opens like this for the players", de:"Diese Ansicht speichern, damit die Karte den Spielern so ge\u00f6ffnet wird" },
+    "Hay cambios sin guardar. Apret\u00e1 para que los jugadores vean esto.": { en:"Unsaved changes. Click so the players see this.", de:"Nicht gespeicherte \u00c4nderungen. Klicken, damit die Spieler das sehen." },
+    "M\u00edn. pelotas por cuadrante": { en:"Min. balls per zone", de:"Min. B\u00e4lle pro Zone" },
+    "Los cuadrantes con menos acciones que este n\u00famero quedan en blanco": { en:"Zones with fewer actions than this number are left blank", de:"Zonen mit weniger Aktionen als diese Zahl bleiben leer" },
     "Todas mis acciones, zona por zona": { en:"All my actions, zone by zone", de:"Alle meine Aktionen, Zone für Zone" },
     "Cómo juega el próximo rival": { en:"How the next opponent plays", de:"Wie der nächste Gegner spielt" },
     "Cómo juega {0}, el próximo rival": { en:"How {0} plays, the next opponent", de:"Wie {0} spielt, der nächste Gegner" },
