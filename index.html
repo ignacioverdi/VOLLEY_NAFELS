@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261030-1341"></script>
-<script src="selector_categoria.js?v=20261030-1341"></script>
+<script src="categorias_club.js?v=20261030-1349"></script>
+<script src="selector_categoria.js?v=20261030-1349"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261030-1341"></script>
-<script src="firebase.js?v=20261030-1341" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1341"></script>
-<script src="lang.js?v=20261030-1341"></script>
-<script src="plantel_nafels.js?v=20261030-1341"></script>
+<script src="datos_seguros.js?v=20261030-1349"></script>
+<script src="firebase.js?v=20261030-1349" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1349"></script>
+<script src="lang.js?v=20261030-1349"></script>
+<script src="plantel_nafels.js?v=20261030-1349"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261030-1341" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261030-1349" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=0da0cf42" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=9f9a8042" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=fe265993" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261030-1341" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261030-1349" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1341">
+<link rel="stylesheet" href="movil.css?v=20261030-1349">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,9 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261030-1341" defer></script>
+<script src="iconos.js?v=20261030-1349" defer></script>
 
-<script src="nav.js?v=20261030-1341" defer></script>
+<script src="nav.js?v=20261030-1349" defer></script>
 <style id="encabezado-2026">
 /* ══ EL ENCABEZADO ═════════════════════════════════════════
    Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
@@ -1037,8 +1037,8 @@ body > footer{padding:5px 20px!important;font-size:9px!important}
 
 </style>
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1341">
-<script src="vs_cab.js?v=20261030-1341" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1349">
+<script src="vs_cab.js?v=20261030-1349" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -2157,9 +2157,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1341"></script>
+<script src="chat_nafels.js?v=20261030-1349"></script>
 
-<script src="proximo_rival.js?v=20261030-1341" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261030-1349" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -2225,13 +2225,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261030-1341" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-1341"></script>
+<script src="fixture_auto.js?v=20261030-1349" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-1349"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261030-1341" defer></script>
+<script src="onesignal_push.js?v=20261030-1349" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2914,7 +2914,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261030-1341"></script>
+<script src="ayuda.js?v=20261030-1349"></script>
 
 <script id="nv-portada-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3852,6 +3852,23 @@ html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-title{font-size:11p
 /* el fixture entra en la fila: antes tenia ancho fijo y la empujaba abajo */
 html:not([data-vs="off"]) #nv-fixp{flex:3 1 0!important;min-width:232px!important}
 html:not([data-vs="off"]) #nv-rival{flex:0 0 442px!important}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARTE 3 · lo que quedaba distinto contra la plantilla
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* la foto del hero llegaba hasta donde terminaba la imagen y se veia el corte:
+   ahora cubre todo el ancho y el velo se encarga del lado izquierdo */
+html:not([data-vs="off"]) #nv-hero .bg{
+ background:url('vs_portada.jpg') right center / auto 132% no-repeat!important;
+ -webkit-mask-image:linear-gradient(90deg,transparent 16%,#000 44%)!important;
+         mask-image:linear-gradient(90deg,transparent 16%,#000 44%)!important}
+/* la fila de arriba queda pareja: MI RENDIMIENTO ya no deja el hueco */
+html:not([data-vs="off"]) .nv-rowR{align-items:stretch!important}
+html:not([data-vs="off"]) .nv-rowR .nv-gt{align-content:center!important}
+/* el fixture, con lugar para los nombres completos */
+html:not([data-vs="off"]) #nv-fixp{flex:4 1 0!important;min-width:272px!important}
+/* el boton del hero, en el mismo tono que la plantilla */
+html:not([data-vs="off"]) #nv-hero .cta{text-transform:none!important}
 </style>
 <script id="nv-piel-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3889,6 +3906,16 @@ html:not([data-vs="off"]) #nv-rival{flex:0 0 442px!important}
     var h = document.getElementById('nv-hero'); if(!h) return;
     var k = h.querySelector('.k');
     if(k && !k.dataset.pl){ k.dataset.pl = '1'; k.textContent = 'NLA ' + T('Suiza').toUpperCase() + ' 2026/27'; }
+    /* el boton va como en la plantilla: solo la primera en mayuscula */
+    var cta = h.querySelector('.cta');
+    if(cta){
+      var n0 = cta.firstChild;
+      if(n0 && n0.nodeType === 3){
+        var t0 = (n0.nodeValue || '').trim();
+        if(t0 && t0 === t0.toUpperCase())
+          n0.nodeValue = ' ' + t0.charAt(0) + t0.slice(1).toLowerCase() + ' ';
+      }
+    }
     if(!document.getElementById('nv-tres')){
       var t = document.createElement('div'); t.id = 'nv-tres';
       t.innerHTML = '<b>' + T('Análisis') + '</b><b>' + T('Estrategia') + '</b><b>' + T('Rendimiento') + '</b>';

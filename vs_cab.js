@@ -178,21 +178,29 @@
         caja = document.createElement('span'); caja.className = 'vs-ctls';
         der.insertBefore(caja, der.firstChild);
       }
-      ['#lang-wrap', '.live-badge', '#fecha-txt', '.fecha-txt', '#temp-menu-link'].forEach(function(sel){
+      ['#lang-wrap', '.live-badge', '#fecha-txt', '.fecha-txt',
+       '#catSelGlobal', '#temp-menu-link'].forEach(function(sel){
         var e;
         try{ e = document.querySelector(sel); }catch(err){ return; }
         if(!e || caja.contains(e)) return;
         e.classList.add('vs-ctl');
         /* el boton de temporadas trae estilos propios en linea: se limpian
            para que tome los de la barra y no desentone */
-        if(e.id === 'temp-menu-link') e.removeAttribute('style');
+        if(e.id === 'temp-menu-link' || e.id === 'catSelGlobal') e.removeAttribute('style');
         caja.appendChild(e);
       });
-      if(!der.querySelector('.vs-ava')){
-        var av = document.createElement('span'); av.className = 'vs-ava';
-        av.setAttribute('aria-hidden', 'true'); av.innerHTML = AVA;
-        caja.appendChild(av);
-      }
+      /* lo que quede suelto en un .header-right huerfano (el selector de
+         categoria llega solo y se plantaba entre la barra y el titulo) */
+      [].slice.call(document.body.children).forEach(function(c){
+        if(!c.classList || !c.classList.contains('header-right')) return;
+        [].slice.call(c.children).forEach(function(h){ h.classList.add('vs-ctl'); caja.appendChild(h); });
+        c.classList.add('vs-huerfano');
+      });
+      /* el avatar va siempre ultimo, antes del buscador */
+      var av = der.querySelector('.vs-ava');
+      if(!av){ av = document.createElement('span'); av.className = 'vs-ava';
+        av.setAttribute('aria-hidden', 'true'); av.innerHTML = AVA; }
+      caja.appendChild(av);
     }
 
     /* ── la banda de marca de la portada ya no hace falta ───────────────── */

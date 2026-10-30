@@ -733,3 +733,14 @@ html:not([data-vs="off"]) #vsn.vs-una .grupos{gap:1px!important;flex:1 1 auto!im
 @media (max-width:1320px){
  html:not([data-vs="off"]) #vsn.vs-una .live-badge{display:none!important}
 }
+/* el selector de categoria, con la misma pastilla que temporadas */
+html:not([data-vs="off"]) #vsn.vs-una #catSelGlobal{height:28px!important;padding:0 10px!important;
+ border-radius:8px!important;border:1px solid #1A3F52!important;background:rgba(0,12,23,.9)!important;
+ color:#B4D2E4!important;font:500 11px/1 var(--vsUI)!important;letter-spacing:.02em!important;
+ -webkit-appearance:none!important;appearance:none!important;cursor:pointer!important;
+ max-width:140px!important;margin:0!important}
+html:not([data-vs="off"]) #vsn.vs-una #catSelGlobal option{background:#000C17!important;color:#EBF4F7!important}
+html:not([data-vs="off"]) .header-right.vs-huerfano{display:none!important}
+@media (max-width:1500px){
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #catSelGlobal{display:none!important}
+}
