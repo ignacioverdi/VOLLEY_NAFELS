@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="PREPARACIÓN FÍSICA — Axpo Volley Näfels">PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261030-1240"></script>
-<script src="selector_categoria.js?v=20261030-1240"></script>
-<script src="plantel_nafels.js?v=20261030-1240" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-1240"></script>
+<script src="categorias_club.js?v=20261030-1310"></script>
+<script src="selector_categoria.js?v=20261030-1310"></script>
+<script src="plantel_nafels.js?v=20261030-1310" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1310"></script>
   <script src="datos_equipo.js.enc?v=9f9a8042" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc?v=36085d95" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc?v=e83b3e20" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20261030-1240" onerror="void 0"></script>
-<script src="firebase.js?v=20261030-1240" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1240"></script>
+<script src="lang.js?v=20261030-1310" onerror="void 0"></script>
+<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1310"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -239,18 +239,18 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1240">
+<link rel="stylesheet" href="movil.css?v=20261030-1310">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-1240" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1310" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261030-1240" defer></script>
+<script src="iconos.js?v=20261030-1310" defer></script>
 
-<script src="nav.js?v=20261030-1240" defer></script>
+<script src="nav.js?v=20261030-1310" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1240">
-<script src="vs_cab.js?v=20261030-1240" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
+<script src="vs_cab.js?v=20261030-1310" defer></script>
 <style id="nv-pf">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · el selector, la calculadora y el jugador que entra solo
@@ -1291,9 +1291,9 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20261030-1240"></script>
-<script src="ayuda.js?v=20261030-1240"></script>
-<script src="volver_inicio.js?v=20261030-1240" defer></script>
+<script src="temporadas_menu.js?v=20261030-1310"></script>
+<script src="ayuda.js?v=20261030-1310"></script>
+<script src="volver_inicio.js?v=20261030-1310" defer></script>
 <script id="nv-pf-js">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · desplegable, calculadora arriba, y el jugador que entra solo
@@ -1449,6 +1449,320 @@ window.addEventListener('langchange', function(e){
     var n = 0, t = setInterval(function(){ repasar(); if(++n > 40) clearInterval(t); }, 300);
   }
 
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<style id="nv-piel-pf">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREPARACIÓN FÍSICA · PIEL 2026/27
+   Misma identidad que la portada y el tablero: banda de titulo con el recorte
+   de la referencia, Montserrat/Inter/JetBrains Mono, panel del selector,
+   estado vacio sobre la foto del gimnasio, contadores y calculadora.
+   No cambia QUE se ve ni CUANDO: solo como se ve. Para apagarlo:
+   localStorage.setItem('vs_estilo','off') y recargar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.nv-pf2:not([data-vs="off"]){
+  --nvUI:'Inter',system-ui,-apple-system,sans-serif;
+  --nvTit:'Montserrat',system-ui,sans-serif;
+  --nvNum:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nvR:#FF0A4E; --nvR2:#FF5C84; --nvMag:#F90656; --nvCyan:#00CFFF;
+  --nvLine:#102935; --nvLineAlta:#545D6C; --nvLine2:#1A3F52;
+  --nvInk:#EBF4F7; --nvInk2:#8FA8BE; --nvInk3:#B4D2E4; --nvDim:#6E869C;
+  --nvAlto:inset 0 1px 0 rgba(84,93,108,.85);
+  --nvSombra:0 26px 54px -32px rgba(0,0,0,.98);
+}
+
+/* ── 1 · la banda de titulo ─────────────────────────────────────────────── */
+html.nv-pf2:not([data-vs="off"]) .page-header{
+ position:relative!important;top:auto!important;padding:0!important;min-height:167px!important;
+ display:flex!important;align-items:center!important;justify-content:flex-start!important;
+ overflow:hidden!important;border-bottom:1px solid var(--nvLine)!important;
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ background:
+  linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 17%,rgba(0,4,13,.88) 27%,
+    rgba(0,4,13,.46) 38%,rgba(0,4,13,.12) 50%,rgba(0,4,13,0) 60%,
+    rgba(0,4,13,.26) 86%,rgba(0,4,13,.72) 100%),
+  linear-gradient(180deg,rgba(0,4,13,.14),rgba(0,4,13,.28)),
+  url('vs_pf.jpg') right center / auto 100% no-repeat,
+  #00040D!important;
+ box-shadow:none!important}
+/* la trama tecnica, que se apaga hacia la derecha */
+html.nv-pf2:not([data-vs="off"]) .page-header::before{content:''!important;position:absolute!important;
+ inset:0!important;z-index:1!important;pointer-events:none!important;display:block!important;
+ background-image:
+  linear-gradient(rgba(255,60,100,.09) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,60,100,.09) 1px,transparent 1px)!important;
+ background-size:36px 36px!important;
+ -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 40%)!important;
+         mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 40%)!important}
+/* el filo de color */
+html.nv-pf2:not([data-vs="off"]) .page-header::after{content:''!important;position:absolute!important;
+ left:0!important;right:0!important;bottom:0!important;top:auto!important;height:2px!important;
+ z-index:6!important;display:block!important;
+ background:linear-gradient(90deg,var(--nvR),var(--nvMag) 50%,var(--nvCyan))!important;
+ box-shadow:0 0 18px rgba(255,10,78,.65)!important}
+
+html.nv-pf2:not([data-vs="off"]) .page-header .header-text{position:relative;z-index:3;
+ flex-direction:column!important;align-items:flex-start!important;gap:0!important;
+ padding:16px 30px 18px!important;flex:1 1 auto;min-width:0}
+html.nv-pf2:not([data-vs="off"]) .page-header .back-btn{border:0!important;background:none!important;
+ padding:0!important;margin:0 0 12px!important;color:var(--nvInk2)!important;
+ font:400 12px/1 var(--nvUI)!important;letter-spacing:0!important;text-transform:none!important}
+html.nv-pf2:not([data-vs="off"]) .page-header .back-btn:hover{color:var(--nvInk)!important}
+html.nv-pf2:not([data-vs="off"]) .page-title{font:800 30px/1.08 var(--nvTit)!important;
+ letter-spacing:.075em!important;text-transform:uppercase!important;
+ background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;
+ color:#EBF4F7!important;-webkit-text-fill-color:#EBF4F7!important;display:flex!important;
+ align-items:center!important;gap:0!important}
+html.nv-pf2:not([data-vs="off"]) .page-title .nv-rojo{color:var(--nvR)!important;
+ -webkit-text-fill-color:var(--nvR)!important;text-shadow:0 0 34px rgba(255,10,78,.85)}
+html.nv-pf2:not([data-vs="off"]) .page-title::before{content:''!important;display:inline-block!important;width:7px!important;height:32px!important;
+ border-radius:2px!important;margin-right:14px!important;background:var(--nvR)!important;
+ transform:skewX(-14deg)!important;box-shadow:0 0 16px rgba(255,10,78,.9)!important;
+ vertical-align:baseline!important;flex:0 0 7px!important}
+html.nv-pf2:not([data-vs="off"]) .page-header .header-text > div > div:last-child{
+ font:600 9.5px/1.4 var(--nvUI)!important;letter-spacing:.28em!important;color:#7E95AB!important;
+ margin-top:12px!important}
+html.nv-pf2:not([data-vs="off"]) .page-header .header-right{position:absolute!important;
+ top:12px!important;right:24px!important;z-index:4!important;gap:10px!important}
+html.nv-pf2:not([data-vs="off"]) .page-header .header-right .back-btn{border:1px solid rgba(255,10,78,.42)!important;
+ background:rgba(255,10,78,.08)!important;color:var(--nvR2)!important;padding:7px 13px!important;
+ margin:0!important;border-radius:9px!important;font:600 10.5px/1 var(--nvUI)!important;
+ letter-spacing:.09em!important;text-transform:uppercase!important}
+html.nv-pf2:not([data-vs="off"]) .page-header .fecha-txt{font:400 9px/1 var(--nvNum)!important;
+ color:#7E95AB!important;letter-spacing:.1em!important}
+html.nv-pf2:not([data-vs="off"]) #nv-lema{position:absolute;right:32px;bottom:16px;z-index:3;
+ text-align:right;font:400 10px/2 var(--nvNum);letter-spacing:.22em;color:#C2D2E2;
+ text-shadow:0 2px 12px rgba(0,4,13,.95);pointer-events:none}
+@media (max-width:1100px){ html.nv-pf2:not([data-vs="off"]) #nv-lema{display:none} }
+
+/* ── 2 · el selector, como panel ────────────────────────────────────────── */
+html.nv-pf2:not([data-vs="off"]) .player-selector{position:sticky!important;top:8px!important;z-index:30!important;
+ margin:16px 24px 0!important;padding:14px 16px 16px!important;border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ background:
+  radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+  linear-gradient(165deg,rgba(0,15,27,.97),rgba(0,9,19,.97) 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html.nv-pf2:not([data-vs="off"]) .nv-selfila{display:flex;align-items:center;gap:11px;margin-bottom:0}
+html.nv-pf2:not([data-vs="off"]) .nv-pic2{width:22px;height:22px;flex:0 0 22px;border-radius:9px;
+ display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,10,78,.45);
+ background:radial-gradient(90% 90% at 50% 20%,rgba(255,10,78,.26),rgba(255,10,78,.07));
+ box-shadow:0 0 16px rgba(255,10,78,.30),inset 0 0 10px rgba(255,10,78,.14)}
+html.nv-pf2:not([data-vs="off"]) .nv-pic2 svg{width:12px;height:12px;stroke:var(--nvR2);fill:none;
+ stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round;
+ filter:drop-shadow(0 0 4px rgba(255,92,132,.55))}
+html.nv-pf2:not([data-vs="off"]) .selector-label{flex:1 1 auto;min-width:0;margin:0!important;
+ font:600 14px/1.3 var(--nvUI)!important;letter-spacing:0!important;text-transform:none!important;
+ color:var(--nvInk)!important}
+html.nv-pf2:not([data-vs="off"]) #nv-pfwrap{margin-top:14px}
+html.nv-pf2:not([data-vs="off"]) #nv-pfsel{min-width:340px!important;max-width:530px!important;
+ padding:11px 38px 11px 14px!important;border-radius:10px!important;
+ border:1px solid var(--nvLine2)!important;background-color:rgba(0,14,26,.9)!important;
+ font:400 13px/1 var(--nvUI)!important;letter-spacing:0!important;text-transform:none!important;
+ color:var(--nvInk3)!important;-webkit-text-fill-color:var(--nvInk3)!important;
+ box-shadow:var(--nvAlto)!important}
+html.nv-pf2:not([data-vs="off"]) #nv-pfsel option{background:#000C17!important;color:var(--nvInk)!important}
+
+/* ── 3 · el estado vacio, sobre la foto del gimnasio ────────────────────── */
+html.nv-pf2:not([data-vs="off"]) #welcome-screen{position:relative!important;overflow:hidden!important;
+ margin:14px 0 0!important;padding:46px 20px!important;min-height:210px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:center!important;border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html.nv-pf2:not([data-vs="off"]) #welcome-screen::before{content:'';position:absolute;inset:0;z-index:0;
+ background:url('vs_gym.jpg') center / cover no-repeat}
+html.nv-pf2:not([data-vs="off"]) #welcome-screen::after{content:'';position:absolute;inset:0;z-index:1;
+ background:radial-gradient(56% 95% at 50% 50%,rgba(0,4,13,.55),rgba(0,4,13,.80) 72%,rgba(0,4,13,.92))}
+html.nv-pf2:not([data-vs="off"]) #welcome-screen > *{position:relative;z-index:2}
+html.nv-pf2:not([data-vs="off"]) .welcome-icon{font-size:0!important;margin:0 0 14px!important;
+ filter:none!important;line-height:0!important}
+html.nv-pf2:not([data-vs="off"]) .welcome-icon svg{width:40px;height:40px;stroke:#C2D2E2;fill:none;
+ stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;
+ filter:drop-shadow(0 0 14px rgba(255,10,78,.45))}
+html.nv-pf2:not([data-vs="off"]) .welcome-title{font:700 14px/1.3 var(--nvTit)!important;
+ letter-spacing:.20em!important;text-transform:uppercase!important;color:#E2ECF5!important;
+ margin:0 0 8px!important}
+html.nv-pf2:not([data-vs="off"]) .welcome-sub{font:400 12px/1.6 var(--nvUI)!important;color:#7E95AB!important}
+
+/* ── 4 · los tres contadores ────────────────────────────────────────────── */
+html.nv-pf2:not([data-vs="off"]) .jug-stats-row{gap:14px!important}
+html.nv-pf2:not([data-vs="off"]) .jug-stat{position:relative;min-width:124px!important;
+ padding:13px 16px!important;border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ background:radial-gradient(110% 86% at 0% 0%,rgba(255,10,78,.07),transparent 56%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html.nv-pf2:not([data-vs="off"]) .jug-stat::before{content:'';position:absolute;left:18%;right:18%;top:-1px;
+ height:1px;background:linear-gradient(90deg,transparent,rgba(255,10,78,.7),transparent)}
+html.nv-pf2:not([data-vs="off"]) .jug-stat-val{font:400 30px/1 var(--nvNum)!important;color:var(--nvInk)!important}
+html.nv-pf2:not([data-vs="off"]) .jug-stat-lbl{font:700 9.5px/1 var(--nvTit)!important;
+ letter-spacing:.16em!important;text-transform:uppercase!important;color:var(--nvInk3)!important;
+ margin-top:7px!important}
+html.nv-pf2:not([data-vs="off"]) .jug-header{border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ background:radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html.nv-pf2:not([data-vs="off"]) .jug-name{font:800 24px/1 var(--nvTit)!important;letter-spacing:.09em!important;
+ color:var(--nvInk)!important}
+html.nv-pf2:not([data-vs="off"]) .jug-meta{font:500 10px/1.3 var(--nvUI)!important;letter-spacing:.14em!important;
+ color:#7E95AB!important}
+html.nv-pf2:not([data-vs="off"]) .jug-avatar{border:1px solid rgba(255,10,78,.45)!important;
+ border-radius:14px!important;font:700 22px/1 var(--nvTit)!important;color:var(--nvR2)!important;
+ background:radial-gradient(90% 90% at 50% 18%,rgba(255,10,78,.26),rgba(255,10,78,.06))!important;
+ box-shadow:0 0 20px rgba(255,10,78,.3),inset 0 0 12px rgba(255,10,78,.14)!important}
+
+/* ── 5 · la calculadora ─────────────────────────────────────────────────── */
+html.nv-pf2:not([data-vs="off"]) .calc-section{border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ background:radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-header{padding:14px 16px!important;
+ border-bottom:1px solid rgba(16,41,53,.9)!important;gap:11px!important}
+html.nv-pf2:not([data-vs="off"]) .calc-title{font:600 14px/1.2 var(--nvUI)!important;
+ letter-spacing:0!important;text-transform:none!important;color:var(--nvInk)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-body{padding:16px!important}
+html.nv-pf2:not([data-vs="off"]) .calc-lbl{font:400 11px/1.2 var(--nvUI)!important;letter-spacing:0!important;
+ text-transform:none!important;color:var(--nvInk2)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-input{padding:9px 12px!important;border-radius:9px!important;
+ border:1px solid var(--nvLine2)!important;background:rgba(0,14,26,.9)!important;
+ color:var(--nvInk3)!important;font:400 13px/1.2 var(--nvUI)!important;text-align:left!important;
+ box-shadow:var(--nvAlto)!important}
+html.nv-pf2:not([data-vs="off"]) select.calc-input{color:#111!important}
+html.nv-pf2:not([data-vs="off"]) .calc-btn{padding:12px!important;border-radius:10px!important;
+ border:1px solid var(--nvR)!important;color:#fff!important;
+ font:700 11.5px/1 var(--nvUI)!important;letter-spacing:.11em!important;
+ background:linear-gradient(180deg,rgba(255,10,78,.20),rgba(255,10,78,.06))!important;
+ box-shadow:0 0 30px -8px rgba(255,10,78,.85),var(--nvAlto)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-btn:hover{transform:none!important;
+ background:linear-gradient(180deg,rgba(255,10,78,.32),rgba(255,10,78,.12))!important}
+html.nv-pf2:not([data-vs="off"]) .calc-result-item{border:1px solid var(--nvLine)!important;
+ border-radius:12px!important;background:linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-result-val{font:400 23px/1 var(--nvNum)!important;color:var(--nvR2)!important}
+html.nv-pf2:not([data-vs="off"]) .calc-result-pct{font:600 9px/1 var(--nvUI)!important;letter-spacing:.12em!important;
+ color:#7E95AB!important}
+html.nv-pf2:not([data-vs="off"]) .calc-result-kg{font:400 9px/1 var(--nvNum)!important;color:#7E95AB!important}
+
+/* ── 6 · telefono ───────────────────────────────────────────────────────── */
+@media (max-width:760px){
+ html.nv-pf2:not([data-vs="off"]) .page-header{min-height:140px!important}
+ html.nv-pf2:not([data-vs="off"]) .page-header .header-text{padding:14px 16px 16px!important}
+ html.nv-pf2:not([data-vs="off"]) .page-title{font-size:21px!important}
+ html.nv-pf2:not([data-vs="off"]) .page-title::before{height:23px!important;margin-right:10px!important}
+ html.nv-pf2:not([data-vs="off"]) .page-header .header-right{position:static!important;
+  padding:0 16px 14px!important;flex-wrap:wrap!important}
+ html.nv-pf2:not([data-vs="off"]) .player-selector{margin:12px 14px 0!important}
+ html.nv-pf2:not([data-vs="off"]) #nv-pfsel{min-width:0!important;width:100%!important}
+}
+
+/* ── 7 · remates finos ──────────────────────────────────────────────────── */
+/* la barra roja va una sola vez: la del titulo entero, no la del trozo que
+   vs_cab.js marca por dentro */
+html.nv-pf2:not([data-vs="off"]) .page-title .vs-cab-tit::before{display:none!important;content:none!important}
+/* el icono del titulo lo reemplaza la barra */
+html.nv-pf2:not([data-vs="off"]) .page-title .vs-i{display:none!important}
+/* la pesa del estado vacio: iconos.js la deja como .vs-i, hay que darle tamaño */
+html.nv-pf2:not([data-vs="off"]) .welcome-icon .vs-i{display:block!important;width:40px!important;
+ height:40px!important;font-size:40px!important;line-height:0!important;margin:0 auto!important;color:#C2D2E2!important}
+html.nv-pf2:not([data-vs="off"]) .welcome-icon .vs-i > i{display:none!important}
+html.nv-pf2:not([data-vs="off"]) .welcome-icon .vs-i svg,
+html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height:40px!important;display:block!important;
+ stroke:#C2D2E2!important;fill:none!important;stroke-width:1.5!important;
+ filter:drop-shadow(0 0 14px rgba(255,10,78,.45))!important}
+</style>
+<script id="nv-piel-pf-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREPARACIÓN FÍSICA · PIEL 2026/27 (parte de armado)
+   Marca la pantalla, saca el emoji del titulo, pinta la ultima palabra en
+   rojo, pone el lema de la derecha, el icono del estado vacio, la ficha del
+   selector y manda el boton de rutinas adentro del panel.
+   No toca ningun dato ni ninguna funcion de la pantalla.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  if(document.documentElement.getAttribute('data-vs') === 'off') return;
+  document.documentElement.classList.add('nv-pf2');
+
+  function T(s){
+    try{ if(typeof translateString === 'function')
+      return translateString(s, (typeof getLang === 'function' ? getLang() : 'es')); }catch(e){}
+    return s;
+  }
+  function sv(d, w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.6)+'" '+
+    'stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; }
+  var I_PESA  = '<path d="M4 10v4M6.5 8v8M17.5 8v8M20 10v4"/><path d="M6.5 12h11"/>';
+  var I_DIANA = '<path d="M12 20a8 8 0 100-16 8 8 0 000 16"/><path d="M12 16a4 4 0 100-8 4 4 0 000 8"/>'+
+                '<path d="M12 13a1 1 0 100-2 1 1 0 000 2"/>';
+
+  /* ── 1 · el titulo: sin emoji y con la ultima palabra en rojo ──────────── */
+  function titulo(){
+    var t = document.querySelector('.page-title'); if(!t) return;
+    /* el emoji es un nodo de texto suelto: el CSS no lo alcanza */
+    [].slice.call(t.childNodes).forEach(function(n){
+      if(n.nodeType === 3 && /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(n.nodeValue)) n.remove();
+    });
+    var sp = t.querySelector('span[data-t]'); if(!sp) return;
+    if(sp.querySelector('.nv-rojo')) return;
+    var txt = (sp.textContent || '').trim(); if(!txt) return;
+    var i = txt.lastIndexOf(' ');
+    if(i <= 0){ return; }
+    sp.textContent = '';
+    sp.appendChild(document.createTextNode(txt.slice(0, i + 1)));
+    var r = document.createElement('i'); r.className = 'nv-rojo';
+    r.style.fontStyle = 'normal'; r.textContent = txt.slice(i + 1);
+    sp.appendChild(r);
+  }
+
+  /* ── 2 · el lema de la derecha ─────────────────────────────────────────── */
+  function lema(){
+    var h = document.querySelector('.page-header'); if(!h || document.getElementById('nv-lema')) return;
+    var d = document.createElement('div'); d.id = 'nv-lema'; d.setAttribute('aria-hidden', 'true');
+    d.innerHTML = T('Disciplina hoy,').toUpperCase().replace(' ', '<br>') + '<br>' +
+                  T('rendimiento mañana.').toUpperCase().replace(' ', '<br>');
+    h.appendChild(d);
+  }
+
+  /* ── 3 · el icono del estado vacio ─────────────────────────────────────── */
+  function vacio(){
+    var i = document.querySelector('.welcome-icon');
+    if(!i || i.querySelector('svg')) return;
+    i.textContent = ''; i.innerHTML = sv(I_PESA, 1.5);
+  }
+
+  /* ── 4 · la ficha del selector y el boton de rutinas ───────────────────── */
+  function selector(){
+    var ps = document.querySelector('.player-selector');
+    var lb = ps && ps.querySelector('.selector-label');
+    if(!ps || !lb || ps.dataset.pl) return;
+    ps.dataset.pl = '1';
+    var fila = document.createElement('div'); fila.className = 'nv-selfila';
+    lb.parentNode.insertBefore(fila, lb);
+    var pic = document.createElement('span'); pic.className = 'nv-pic2';
+    pic.innerHTML = sv(I_DIANA, 1.65);
+    fila.appendChild(pic); fila.appendChild(lb);
+    /* el boton de armar rutinas viaja entero: conserva su data-solo-editor,
+       asi que firebase.js lo sigue escondiendo para quien no es editor */
+    var btn = document.querySelector('.page-header .header-right a[data-solo-editor]');
+    if(btn) fila.appendChild(btn);
+  }
+
+  function pasada(){
+    try{ titulo(); }catch(e){}
+    try{ lema(); }catch(e){}
+    try{ vacio(); }catch(e){}
+    try{ selector(); }catch(e){}
+  }
+  function arrancar(){
+    pasada();
+    [160, 500, 1200, 2600, 5000].forEach(function(ms){ setTimeout(pasada, ms); });
+    document.addEventListener('vbLangChange', function(){ setTimeout(pasada, 30); });
+    try{ new MutationObserver(function(){ titulo(); }).observe(
+      document.querySelector('.page-title') || document.body, { childList:true, subtree:true }); }catch(e){}
+  }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
 })();

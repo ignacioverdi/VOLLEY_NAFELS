@@ -16,17 +16,17 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261030-1240" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261030-1240" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-1240"></script>
-<script src="filtro_tipo.js?v=20261030-1240" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261030-1240" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261030-1310" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261030-1310" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1310"></script>
+<script src="filtro_tipo.js?v=20261030-1310" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261030-1310" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261030-1240" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261030-1240" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261030-1310" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261030-1310" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -43,11 +43,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261030-1240" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261030-1310" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261030-1240" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261030-1310" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc?v=b574b2fa" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc?v=ea01ae31" onerror="void 0"></script>
   
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261030-1240" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1240"></script>
+<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1310"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1240">
+<link rel="stylesheet" href="movil.css?v=20261030-1310">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-1240" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1310" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,14 +782,14 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261030-1240" defer></script>
+<script src="iconos.js?v=20261030-1310" defer></script>
 
-<script src="nav.js?v=20261030-1240" defer></script>
+<script src="nav.js?v=20261030-1310" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1240">
-<script src="vs_cab.js?v=20261030-1240" defer></script>
-<script src="vs_tabla.js?v=20261030-1240" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
+<script src="vs_cab.js?v=20261030-1310" defer></script>
+<script src="vs_tabla.js?v=20261030-1310" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -2755,11 +2755,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1240"></script>
-<script src="lang.js?v=20261030-1240"></script>
-<script src="temporadas_menu.js?v=20261030-1240"></script>
-<script src="ayuda.js?v=20261030-1240"></script>
-<script src="velocidades_saque.js?v=20261030-1240" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261030-1310"></script>
+<script src="lang.js?v=20261030-1310"></script>
+<script src="temporadas_menu.js?v=20261030-1310"></script>
+<script src="ayuda.js?v=20261030-1310"></script>
+<script src="velocidades_saque.js?v=20261030-1310" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2809,29 +2809,38 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261030-1240" defer></script>
+<script src="volver_inicio.js?v=20261030-1310" defer></script>
 <script id="nv-dash-js">
-/* ══════════════════════════════════════════════════════════════════════════
-   LAS BATERIAS, ABAJO DE TODO
+/* ═══════════════════════════════════════════════════════════════════════════
+   dashboard · LA PLANTILLA
    ---------------------------------------------------------------------------
-   Las baterias (#eq-objetivos) estaban entre la tabla y la velocidad de saque.
-   Son lo mas visual de la pantalla, asi que van ultimas: se mueve la caja de
-   velocidad (#velp-caja) ARRIBA de ellas. Es un solo insertBefore, no se toca
-   ni el contenido ni la logica de ninguna de las dos.
+   Rearma la pantalla con los elementos que ya tiene. No crea datos: todo lo que
+   se ve aca sale de la propia pagina.
 
-   De paso, la caja de velocidad muestra el dato que ya tenia y no ensenaba:
-   la velocidad viene como octavo campo de cada saque, solo en los medidos.
-   Se calcula la mediana y el maximo con los mismos saques que usa tu propia
-   pantalla de velocidades. Si no hay ninguno medido, no se dibuja nada.
+     1. Las baterias quedan ULTIMAS: sube la caja de velocidad por encima.
+     2. La caja de velocidad muestra el medidor. La velocidad viene como octavo
+        campo de cada saque y solo esta en los medidos; se calcula la mediana y
+        el maximo con los mismos saques que usa tu pantalla de velocidades.
+     3. La tabla pasa a dos columnas: a la derecha, los anillos de los cinco
+        fundamentos (los mismos EFF de las tarjetas de arriba) y la comparativa
+        de jugadores (la columna EFF% de la propia tabla, ordenada).
+     4. La tabla suma la columna POS, que sale de PLANTEL_NAFELS.
 
    Se apaga con el interruptor de siempre:
        localStorage.setItem('vs_estilo','off')  y recargar.
-   ══════════════════════════════════════════════════════════════════════════ */
+   ═══════════════════════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
   try{ if((localStorage.getItem('vs_estilo')||'') === 'off') return; }catch(e){}
 
-  /* 1 · la velocidad sube, las baterias quedan ultimas */
+  var COL = {'SAQUE':'#FF0A4E','RECEPCION':'#2E7FF0','RECEPCIÓN':'#2E7FF0',
+             'ATAQUE':'#E8A33D','BLOQUEO':'#F0007F','DEFENSA':'#8B5CF6'};
+  function t(e){ return ((e && e.textContent) || '').replace(/\s+/g,' ').trim(); }
+  function titulo(s){
+    return s.toLowerCase().replace(/(^|[\s.-])([a-záéíóúñ])/g, function(m,a,b){ return a + b.toUpperCase(); });
+  }
+
+  /* ── 1 · las baterias, ultimas ──────────────────────────────────────────── */
   function ordenar(){
     var obj = document.getElementById('eq-objetivos');
     var vel = document.getElementById('velp-caja');
@@ -2844,12 +2853,17 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
     vel.dataset.nvMovido = '1';
   }
 
-  /* 2 · el medidor, con los saques que SI estan medidos */
+  /* ── 2 · el medidor de velocidad ────────────────────────────────────────── */
+  var pedido = false;
   function medidor(){
     var caja = document.getElementById('velp-caja');
     if(!caja || caja.dataset.nvMed) return;
     var V = window.VEL_SAQUE;
     if(!V || typeof V.sacadores !== 'function') return;
+    if(!pedido && typeof V.pedirDatos === 'function'){
+      pedido = true;
+      try{ Promise.resolve(V.pedirDatos()).then(function(){ setTimeout(medidor, 400); }); }catch(e){}
+    }
     var S = [];
     try{ S = V.sacadores() || []; }catch(e){ return; }
     var k = [];
@@ -2858,7 +2872,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
         if(f.length >= 8 && typeof f[7] === 'number' && f[7] > 0) k.push(f[7]);
       });
     });
-    if(k.length < 5) return;          /* con menos de 5 no se muestra nada */
+    if(k.length < 5) return;
     k.sort(function(a,b){ return a-b; });
     var med = k[Math.floor(k.length/2)], mx = k[k.length-1], mn = k[0];
     var frac = (mx > mn) ? (med-mn)/(mx-mn) : 0.5, L = 163.4;
@@ -2877,29 +2891,161 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
         '<div><b>HABITUAL</b><span>' + med + ' km/h</span></div>' +
         '<p>mediana sobre ' + k.length + ' saques medidos</p>' +
       '</div>';
-    /* debajo del titulo y arriba del boton */
     var btn = caja.querySelector('a,button');
     if(btn && btn.parentNode === caja) caja.insertBefore(d, btn);
     else caja.appendChild(d);
     caja.dataset.nvMed = '1';
   }
 
-  function todo(){ try{ ordenar(); }catch(e){} try{ medidor(); }catch(e){} }
+  /* ── 3 · la columna de la derecha ───────────────────────────────────────── */
+  function rail(){
+    var cont = document.getElementById('eq-tab-content');
+    var row  = document.getElementById('eq-stats-row');
+    if(!cont || !row || !row.firstElementChild) return;
+
+    var fund = [].map.call(row.firstElementChild.children, function(c){
+      var x = t(c), m = x.match(/^([A-Za-zÁÉÍÓÚáéíóúñÑ]+)\s*(\d+)%/);
+      return m ? { n: m[1].toUpperCase(), p: +m[2] } : null;
+    }).filter(Boolean);
+    if(!fund.length) return;
+
+    var T = cont.querySelector('table'), comp = [];
+    if(T && T.tBodies[0]){
+      [].slice.call(T.tBodies[0].rows).forEach(function(tr){
+        if(tr.cells.length < 3) return;
+        var n = t(tr.cells[0]).replace(/^\d+/,'').replace(/[\u{1F000}-\u{1FFFF}]/gu,'').trim();
+        var e = t(tr.cells[2]);
+        if(/^\d+%$/.test(e) && n && !/total/i.test(n)) comp.push({ n: titulo(n), p: parseInt(e,10) });
+      });
+      comp.sort(function(a,b){ return b.p - a.p; });
+      comp = comp.slice(0, 5);
+    }
+
+    var anillos = fund.map(function(f){
+      var c = COL[f.n] || '#FF0A4E', C = 201.1, d = (f.p*C/100).toFixed(1);
+      return '<div class="nv-an"><svg viewBox="0 0 80 80" role="img" aria-label="' + f.n + ' ' + f.p + ' por ciento">' +
+        '<circle cx="40" cy="40" r="32" fill="none" stroke="rgba(255,255,255,.065)" stroke-width="7"/>' +
+        '<circle cx="40" cy="40" r="32" fill="none" stroke="' + c + '" stroke-width="7" stroke-linecap="round" ' +
+          'stroke-dasharray="' + d + ' ' + C + '" transform="rotate(-90 40 40)" style="filter:drop-shadow(0 0 7px ' + c + 'cc)"/>' +
+        '<text x="40" y="47" text-anchor="middle">' + f.p + '%</text></svg><b>' + f.n + '</b></div>';
+    }).join('');
+    var barras = comp.map(function(c){
+      return '<div class="nv-cr"><span class="nv-cn">' + c.n + '</span>' +
+        '<span class="nv-ct"><i style="width:' + c.p + '%"></i></span>' +
+        '<span class="nv-cv">' + c.p + '%</span></div>';
+    }).join('');
+
+    var rail = document.getElementById('nv-rail');
+    if(!rail){ rail = document.createElement('div'); rail.id = 'nv-rail'; }
+    rail.innerHTML =
+      '<section class="nv-pan"><div class="nv-ph"><span class="nv-pic"></span>' +
+        '<h3>Desempeño por fundamento</h3></div><div class="nv-anillos">' + anillos + '</div></section>' +
+      (comp.length ?
+      '<section class="nv-pan"><div class="nv-ph"><span class="nv-pic"></span>' +
+        '<h3>Comparativa de jugadores</h3></div>' +
+        '<div class="nv-sub">EFF% · DE MAYOR A MENOR</div>' +
+        '<div class="nv-comp">' + barras + '</div></section>' : '');
+
+    var wrap = document.getElementById('nv-wrap');
+    if(!wrap){
+      wrap = document.createElement('div'); wrap.id = 'nv-wrap';
+      cont.parentNode.insertBefore(wrap, cont);
+      wrap.appendChild(cont);
+    }
+    if(rail.parentNode !== wrap) wrap.appendChild(rail);
+  }
+
+  /* ── 4 · la columna POS, desde el plantel ───────────────────────────────── */
+  var ABREV = {'ARMADOR':'AR','OPUESTO':'OP','CENTRAL':'CE','PUNTA':'PU','LIBERO':'LI','LÍBERO':'LI'};
+  function posiciones(){
+    var P = window.PLANTEL_NAFELS;
+    if(!P || !P.jugadores) return null;
+    var m = {};
+    P.jugadores.forEach(function(j){
+      var n = j.num || j.dorsal, p = (j.pos || j.puesto || '').toUpperCase();
+      if(n != null) m[String(n)] = ABREV[p] || p.slice(0,2);
+    });
+    return m;
+  }
+  function columnaPos(){
+    var cont = document.getElementById('eq-tab-content'); if(!cont) return;
+    var T = cont.querySelector('table'); if(!T || T.dataset.nvPos) return;
+    var m = posiciones(); if(!m) return;
+    var th = T.tHead && T.tHead.rows[T.tHead.rows.length-1];
+    if(!th || th.cells.length < 3) return;
+    var nuevo = document.createElement('th');
+    nuevo.textContent = 'POS'; nuevo.className = 'nv-pos';
+    th.insertBefore(nuevo, th.cells[1]);
+    [].slice.call(T.tBodies[0].rows).forEach(function(tr){
+      if(tr.cells.length < 2) return;
+      var d = (t(tr.cells[0]).match(/^(\d+)/) || [])[1];
+      var td = document.createElement('td');
+      td.className = 'nv-pos';
+      td.textContent = (d && m[d]) ? m[d] : '—';
+      tr.insertBefore(td, tr.cells[1]);
+    });
+    T.dataset.nvPos = '1';
+  }
+
+  function todo(){
+    try{ ordenar(); }catch(e){}
+    try{ medidor(); }catch(e){}
+    try{ rail(); }catch(e){}
+    try{ columnaPos(); }catch(e){}
+  }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', todo);
   else todo();
   setTimeout(todo, 900); setTimeout(todo, 2600); setTimeout(todo, 6000);
+  /* la tabla se redibuja al filtrar: se vuelve a armar */
+  try{
+    new MutationObserver(function(){ clearTimeout(window.__nvT); window.__nvT = setTimeout(todo, 220); })
+      .observe(document.body, { childList:true, subtree:true });
+  }catch(e){}
 })();
 </script>
 <style id="nv-dash">
 html:not([data-vs="off"]) .nv-vel{display:flex;align-items:center;gap:16px;padding:6px 2px 12px}
-html:not([data-vs="off"]) .nv-vel svg{width:116px;height:70px;flex-shrink:0;
-  filter:drop-shadow(0 0 10px rgba(255,10,78,.45))}
+html:not([data-vs="off"]) .nv-vel svg{width:116px;height:70px;flex-shrink:0;filter:drop-shadow(0 0 10px rgba(255,10,78,.45))}
 html:not([data-vs="off"]) .nv-vel-n{font-family:var(--vsNum);font-size:23px;fill:#EBF4F7}
 html:not([data-vs="off"]) .nv-vel-u{font-family:var(--vsUI);font-size:9px;letter-spacing:.14em;fill:#8FA8BE}
 html:not([data-vs="off"]) .nv-vel-d div{margin-bottom:9px}
 html:not([data-vs="off"]) .nv-vel-d b{display:block;font:500 9px/1.3 var(--vsUI);letter-spacing:.12em;color:#8FA8BE}
 html:not([data-vs="off"]) .nv-vel-d span{font:500 15px var(--vsNum);color:#EBF4F7}
 html:not([data-vs="off"]) .nv-vel-d p{margin:0;font:9.5px var(--vsUI);color:#6E869C}
+/* dos columnas: la tabla y la barra de la derecha */
+html:not([data-vs="off"]) #nv-wrap{display:flex;gap:14px;align-items:flex-start}
+html:not([data-vs="off"]) #nv-wrap > :first-child{flex:999 1 0;min-width:0}
+html:not([data-vs="off"]) #nv-rail{flex:0 0 358px;display:flex;flex-direction:column;gap:14px;min-width:0}
+html:not([data-vs="off"]) .nv-pan{border-radius:13px;background:linear-gradient(165deg,#000F1B,#000913 64%);
+  box-shadow:inset 0 1px 0 rgba(84,93,108,.6),inset 0 0 0 1px rgba(16,41,53,.85),0 26px 54px -34px rgba(0,0,0,.98)}
+html:not([data-vs="off"]) .nv-ph{display:flex;align-items:center;gap:10px;padding:12px 15px}
+html:not([data-vs="off"]) .nv-pic{width:22px;height:22px;border-radius:8px;flex-shrink:0;
+  background:radial-gradient(90% 90% at 50% 20%,rgba(255,10,78,.26),rgba(255,10,78,.07));
+  box-shadow:0 0 16px rgba(255,10,78,.3),inset 0 0 0 1px rgba(255,10,78,.45)}
+html:not([data-vs="off"]) .nv-ph h3{margin:0;font-family:var(--vsTit);font-size:13px;font-weight:700;
+  letter-spacing:.145em;text-transform:uppercase;color:#EBF4F7}
+html:not([data-vs="off"]) .nv-sub{padding:0 15px 10px;font:9.5px var(--vsUI);letter-spacing:.1em;color:#8FA8BE}
+html:not([data-vs="off"]) .nv-anillos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:2px 14px 16px}
+html:not([data-vs="off"]) .nv-an{display:flex;flex-direction:column;align-items:center;gap:7px}
+html:not([data-vs="off"]) .nv-an svg{width:80px;height:80px}
+html:not([data-vs="off"]) .nv-an text{font-family:var(--vsNum);font-size:19px;fill:#EBF4F7}
+html:not([data-vs="off"]) .nv-an b{font:500 10px var(--vsUI);letter-spacing:.08em;color:#8FA8BE;text-align:center}
+html:not([data-vs="off"]) .nv-comp{padding:0 14px 14px}
+html:not([data-vs="off"]) .nv-cr{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+html:not([data-vs="off"]) .nv-cn{flex:0 0 96px;font:500 12.5px var(--vsUI);color:#B4D2E4;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:not([data-vs="off"]) .nv-ct{flex:1 1 auto;height:8px;border-radius:5px;background:rgba(255,255,255,.065);
+  overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,.5)}
+html:not([data-vs="off"]) .nv-ct i{display:block;height:100%;border-radius:5px;
+  background:linear-gradient(90deg,#A8062F,#FF0A4E 60%,#FF5C84);box-shadow:0 0 12px rgba(255,10,78,.75)}
+html:not([data-vs="off"]) .nv-cv{flex:0 0 38px;text-align:right;font:12px var(--vsNum);color:#EBF4F7}
+html:not([data-vs="off"]) th.nv-pos,html:not([data-vs="off"]) td.nv-pos{
+  font-family:var(--vsUI)!important;font-size:10px!important;font-weight:600!important;
+  letter-spacing:.09em!important;color:#8FA8BE!important;text-align:center!important;width:40px}
+@media (max-width:1100px){
+  html:not([data-vs="off"]) #nv-wrap{display:block}
+  html:not([data-vs="off"]) #nv-rail{margin-top:14px}
+}
 </style>
 </body>
 </html>

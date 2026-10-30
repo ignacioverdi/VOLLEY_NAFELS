@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261030-1240"></script>
-<script src="selector_categoria.js?v=20261030-1240"></script>
+<script src="categorias_club.js?v=20261030-1310"></script>
+<script src="selector_categoria.js?v=20261030-1310"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261030-1240"></script>
-<script src="firebase.js?v=20261030-1240" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1240"></script>
-<script src="lang.js?v=20261030-1240"></script>
-<script src="plantel_nafels.js?v=20261030-1240"></script>
+<script src="datos_seguros.js?v=20261030-1310"></script>
+<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1310"></script>
+<script src="lang.js?v=20261030-1310"></script>
+<script src="plantel_nafels.js?v=20261030-1310"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261030-1240" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261030-1310" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=0da0cf42" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=9f9a8042" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=fe265993" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261030-1240" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261030-1310" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1240">
+<link rel="stylesheet" href="movil.css?v=20261030-1310">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,9 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261030-1240" defer></script>
+<script src="iconos.js?v=20261030-1310" defer></script>
 
-<script src="nav.js?v=20261030-1240" defer></script>
+<script src="nav.js?v=20261030-1310" defer></script>
 <style id="encabezado-2026">
 /* ══ EL ENCABEZADO ═════════════════════════════════════════
    Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
@@ -1037,8 +1037,8 @@ body > footer{padding:5px 20px!important;font-size:9px!important}
 
 </style>
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1240">
-<script src="vs_cab.js?v=20261030-1240" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
+<script src="vs_cab.js?v=20261030-1310" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -2157,9 +2157,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1240"></script>
+<script src="chat_nafels.js?v=20261030-1310"></script>
 
-<script src="proximo_rival.js?v=20261030-1240" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261030-1310" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -2225,13 +2225,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261030-1240" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-1240"></script>
+<script src="fixture_auto.js?v=20261030-1310" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-1310"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261030-1240" defer></script>
+<script src="onesignal_push.js?v=20261030-1310" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2914,7 +2914,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261030-1240"></script>
+<script src="ayuda.js?v=20261030-1310"></script>
 
 <script id="nv-portada-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3346,6 +3346,539 @@ pintarProximo();
   else nvPortada();
 })();
 
+</script>
+<style id="nv-piel">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTADA · PIEL 2026/27
+   Deja la portada igual a la plantilla aprobada: fondo de seis capas, banda
+   de titulo con el recorte de la referencia, tipografia Montserrat/Inter/
+   JetBrains Mono, paneles macizos con el borde superior claro y el hilo rojo,
+   fichas con chevron, el VS con los dos escudos, y las herramientas del
+   entrenador en tarjetas horizontales.
+   No agrega accesos nuevos ni toca permisos: solo reubica y pinta lo que ya
+   estaba. Para apagarlo: localStorage.setItem('vs_estilo','off') y recargar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]){
+  --nvUI:'Inter',system-ui,-apple-system,sans-serif;
+  --nvTit:'Montserrat',system-ui,sans-serif;
+  --nvNum:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nvR:#FF0A4E; --nvR2:#FF5C84; --nvMag:#F90656; --nvCyan:#00CFFF;
+  --nvLine:#102935; --nvLineAlta:#545D6C; --nvLine2:#1A3F52;
+  --nvInk:#EBF4F7; --nvInk2:#8FA8BE; --nvInk3:#B4D2E4; --nvDim:#6E869C;
+  --nvAlto:inset 0 1px 0 rgba(84,93,108,.85);
+  --nvSombra:0 26px 54px -32px rgba(0,0,0,.98);
+  background:#00040D!important;
+}
+
+/* ── 1 · el fondo, las seis capas ───────────────────────────────────────── */
+html:not([data-vs="off"]) #nv-bg{
+ background:
+  radial-gradient(1100px 560px at 2% -4%,rgba(255,10,78,.26),transparent 64%),
+  radial-gradient(900px 480px at 99% 2%,rgba(240,0,131,.17),transparent 68%),
+  radial-gradient(760px 520px at 12% 96%,rgba(255,10,78,.14),transparent 70%),
+  radial-gradient(820px 520px at 88% 92%,rgba(0,207,255,.075),transparent 72%),
+  linear-gradient(180deg,#070E18 0%,#04080F 38%,#03060B 100%)!important}
+html:not([data-vs="off"]) #nv-bg .g{
+ background-image:
+  linear-gradient(rgba(23,71,91,.20) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(23,71,91,.20) 1px,transparent 1px)!important;
+ background-size:44px 44px,44px 44px!important;
+ -webkit-mask-image:none!important;mask-image:none!important}
+html:not([data-vs="off"]) #nv-bg .r1{top:-10%!important;left:6%!important;right:auto!important;
+ width:4px!important;height:62%!important;transform:rotate(18deg)!important;opacity:1!important;
+ filter:blur(1.5px)!important;border-radius:4px!important;
+ background:linear-gradient(180deg,transparent,rgba(255,10,78,.85),transparent)!important}
+html:not([data-vs="off"]) #nv-bg .r2{top:4%!important;right:6%!important;left:auto!important;
+ width:3px!important;height:46%!important;transform:rotate(-15deg)!important;opacity:1!important;
+ filter:blur(1.2px)!important;border-radius:4px!important;
+ background:linear-gradient(180deg,transparent,rgba(240,0,131,.60),transparent)!important}
+html:not([data-vs="off"]) #nv-bg::before,
+html:not([data-vs="off"]) #nv-bg::after{content:'';position:absolute;border-radius:4px;pointer-events:none}
+html:not([data-vs="off"]) #nv-bg::before{bottom:-8%;left:2%;width:4px;height:42%;
+ transform:rotate(27deg);filter:blur(1.6px);
+ background:linear-gradient(180deg,transparent,rgba(255,10,78,.62),transparent)}
+html:not([data-vs="off"]) #nv-bg::after{bottom:-6%;left:30%;width:2px;height:34%;
+ transform:rotate(22deg);filter:blur(.8px);
+ background:linear-gradient(180deg,transparent,rgba(0,207,255,.34),transparent)}
+html:not([data-vs="off"]) #nv-bg .n{opacity:.30!important;background-size:180px 180px!important}
+html:not([data-vs="off"]) #nv-bg .vg{
+ background:radial-gradient(130% 100% at 50% 40%,transparent 48%,rgba(0,0,0,.62) 100%)!important}
+
+/* ── 2 · la banda de titulo ─────────────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-rowA{display:block!important}
+html:not([data-vs="off"]) #nv-zona{padding:0 0 10px!important;gap:0!important}
+html:not([data-vs="off"]) #nv-hero{border-radius:0!important;border:0!important;
+ border-bottom:1px solid var(--nvLine)!important;min-height:192px!important;
+ margin:0 0 2px!important;background:#00040D!important;display:flex!important;align-items:stretch!important}
+html:not([data-vs="off"]) #nv-hero .bg{
+ background:url('vs_portada.jpg') right center / auto 100% no-repeat!important;
+ filter:none!important}
+html:not([data-vs="off"]) #nv-hero .shade{z-index:1!important;background:
+  linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 19%,rgba(0,4,13,.90) 29%,
+    rgba(0,4,13,.52) 40%,rgba(0,4,13,.14) 53%,rgba(0,4,13,0) 63%),
+  linear-gradient(180deg,rgba(0,4,13,.16),rgba(0,4,13,.30))!important}
+html:not([data-vs="off"]) #nv-hero .lux{z-index:2!important;background:none!important;
+ background-image:
+  linear-gradient(rgba(255,60,100,.10) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,60,100,.10) 1px,transparent 1px)!important;
+ background-size:38px 38px!important;
+ -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 42%)!important;
+         mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 42%)!important}
+html:not([data-vs="off"]) #nv-hero .edge{height:2px!important;z-index:6!important;
+ background:linear-gradient(90deg,var(--nvR),var(--nvMag) 50%,var(--nvCyan))!important;
+ box-shadow:0 0 20px rgba(255,10,78,.7)!important}
+html:not([data-vs="off"]) #nv-hero .txt{padding:18px 32px!important;max-width:690px!important;
+ flex:1 1 auto!important;min-width:0!important;display:flex!important;flex-direction:column!important;
+ justify-content:center!important;z-index:3!important}
+html:not([data-vs="off"]) #nv-hero .k{font:600 10px/1 var(--nvUI)!important;letter-spacing:.34em!important;
+ color:var(--nvR2)!important;margin-bottom:12px!important;text-shadow:0 0 16px rgba(255,10,78,.6)!important}
+html:not([data-vs="off"]) #nv-hero h2{font:800 30px/1.06 var(--nvTit)!important;
+ letter-spacing:.075em!important;text-transform:uppercase!important;margin:0 0 9px!important;
+ background:none!important;-webkit-background-clip:border-box!important;background-clip:border-box!important;
+ color:var(--nvR)!important;-webkit-text-fill-color:var(--nvR)!important;
+ text-shadow:0 0 34px rgba(255,10,78,.85)!important}
+html:not([data-vs="off"]) #nv-hero h2 span{color:#EBF4F7!important;-webkit-text-fill-color:#EBF4F7!important;
+ text-shadow:none!important}
+html:not([data-vs="off"]) #nv-hero p{font:400 12px/1.5 var(--nvUI)!important;letter-spacing:0!important;
+ text-transform:none!important;color:var(--nvInk2)!important;max-width:520px!important;margin:0 0 13px!important}
+html:not([data-vs="off"]) #nv-hero .cta{align-self:flex-start!important;margin-top:0!important;
+ padding:8px 17px!important;border-radius:9px!important;border:1px solid var(--nvR)!important;
+ font:600 12px/1 var(--nvUI)!important;letter-spacing:.09em!important;text-transform:none!important;
+ color:var(--nvR2)!important;background:rgba(255,10,78,.08)!important;box-shadow:none!important}
+html:not([data-vs="off"]) #nv-hero .cta:hover{transform:none!important;
+ background:rgba(255,10,78,.16)!important;box-shadow:0 0 22px -8px rgba(255,10,78,.8)!important}
+html:not([data-vs="off"]) #nv-hero .cta b{color:var(--nvR2)!important}
+/* las tres palabras, a la derecha */
+html:not([data-vs="off"]) #nv-tres{position:relative;z-index:3;align-self:center;margin-left:auto;
+ padding-right:36px;text-align:right;flex-shrink:0}
+html:not([data-vs="off"]) #nv-tres b{display:block;font:600 13px/1 var(--nvTit);letter-spacing:.32em;
+ color:#D7E4F0;margin-bottom:12px;text-transform:uppercase;
+ text-shadow:0 2px 14px rgba(0,4,13,.95),0 0 26px rgba(0,4,13,.9)}
+html:not([data-vs="off"]) #nv-tres b:last-child{margin-bottom:0}
+html:not([data-vs="off"]) #nv-cd{padding:0 18px 7px!important;
+ background:linear-gradient(180deg,rgba(0,4,13,0),rgba(0,4,13,.85))!important}
+@media (max-width:980px){ html:not([data-vs="off"]) #nv-tres{display:none} }
+
+/* ── 3 · las filas ──────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-zonaw{display:flex;flex-direction:column;gap:14px;padding:14px 24px 4px}
+html:not([data-vs="off"]) .nv-rowB,html:not([data-vs="off"]) .nv-rowC{
+ display:flex!important;gap:14px!important;align-items:stretch!important}
+html:not([data-vs="off"]) .nv-rowR{display:flex!important;gap:14px!important;align-items:flex-start!important}
+html:not([data-vs="off"]) #nv-rival{flex:0 0 470px!important}
+html:not([data-vs="off"]) #nv-fixp{flex:0 0 470px!important}
+
+/* ── 4 · paneles ────────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-pan{border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;padding:0!important;
+ background:
+  radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+  linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important}
+html:not([data-vs="off"]) .nv-pan::before{left:18%!important;right:18%!important;top:-1px!important;
+ border-radius:1px!important;background:linear-gradient(90deg,transparent,rgba(255,10,78,.75),transparent)!important}
+html:not([data-vs="off"]) .nv-ph{padding:10px 15px!important;margin:0!important;gap:10px!important;
+ flex:0 0 auto!important;min-height:0!important}
+html:not([data-vs="off"]) .nv-pic{width:22px!important;height:22px!important;flex:0 0 22px!important;
+ border-radius:9px!important;border:1px solid rgba(255,10,78,.45)!important;color:var(--nvR2)!important;
+ background:radial-gradient(90% 90% at 50% 20%,rgba(255,10,78,.26),rgba(255,10,78,.07))!important;
+ box-shadow:0 0 16px rgba(255,10,78,.30),inset 0 0 10px rgba(255,10,78,.14)!important}
+html:not([data-vs="off"]) .nv-pic svg{width:12px!important;height:12px!important;
+ stroke-width:1.65!important;filter:drop-shadow(0 0 4px rgba(255,92,132,.55))!important}
+html:not([data-vs="off"]) .nv-pt{font:700 15px/1.15 var(--nvTit)!important;letter-spacing:.145em!important;
+ text-transform:uppercase!important;color:var(--nvInk)!important;text-shadow:0 0 20px rgba(255,255,255,.10)!important;
+ flex:1 1 auto!important;white-space:normal!important}
+html:not([data-vs="off"]) .nv-pt .nv-sub{display:block;font:500 9px/1.2 var(--nvUI);letter-spacing:.14em;
+ color:#7E95AB;margin-top:3px;text-shadow:none}
+html:not([data-vs="off"]) .nv-pv{font:500 10.5px/1 var(--nvUI)!important;letter-spacing:0!important;
+ color:var(--nvInk2)!important}
+html:not([data-vs="off"]) .nv-pv b{font-weight:500!important;color:var(--nvR2)!important}
+html:not([data-vs="off"]) .nv-lock svg{width:10px!important;height:10px!important;flex:0 0 10px!important;
+ stroke:var(--nvR2)!important;fill:none!important;stroke-width:2!important}
+html:not([data-vs="off"]) .nv-lock{display:inline-flex!important;align-items:center!important;gap:6px!important;
+ padding:4px 10px!important;border:1px solid rgba(255,10,78,.42)!important;border-radius:7px!important;
+ font:600 8.5px/1 var(--nvUI)!important;letter-spacing:.12em!important;text-transform:uppercase!important;
+ color:var(--nvR2)!important;background:none!important;flex-shrink:0!important;margin-left:10px!important}
+html:not([data-vs="off"]) .nv-pb{padding:0 0 2px!important}
+
+/* ── 5 · fichas ─────────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-gt{gap:9px!important;padding:0 14px 14px!important;
+ flex:1 1 auto!important;align-content:center!important;grid-auto-rows:auto!important}
+html:not([data-vs="off"]) a.card.nv-tile{height:auto!important;min-height:92px!important;
+ gap:9px!important;padding:13px 8px 12px!important;border-radius:12px!important;
+ border:1px solid var(--nvLine)!important;
+ background:radial-gradient(76% 56% at 50% 10%,rgba(255,10,78,.13),transparent 72%),
+   linear-gradient(165deg,#000E1A,#000913 62%)!important;
+ box-shadow:var(--nvAlto),0 16px 34px -26px rgba(0,0,0,.95)!important}
+html:not([data-vs="off"]) a.card.nv-tile::before{opacity:1!important;left:22%!important;right:22%!important;
+ top:-1px!important;height:1px!important;
+ background:linear-gradient(90deg,transparent,rgba(255,10,78,.6),transparent)!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover{border-color:rgba(255,10,78,.55)!important;
+ background:radial-gradient(76% 56% at 50% 10%,rgba(255,10,78,.22),transparent 72%),
+   linear-gradient(165deg,#0A0E1E,#000913 62%)!important;
+ box-shadow:var(--nvAlto),0 16px 34px -14px rgba(255,10,78,.5)!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip{width:34px!important;height:34px!important;
+ border-radius:12px!important;border:1px solid rgba(255,10,78,.45)!important;color:var(--nvR2)!important;
+ background:radial-gradient(90% 90% at 50% 18%,rgba(255,10,78,.28),rgba(255,10,78,.06))!important;
+ box-shadow:0 0 20px rgba(255,10,78,.34),inset 0 0 12px rgba(255,10,78,.16)!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip > svg{width:17px!important;height:17px!important;
+ flex-basis:17px!important;stroke-width:1.6!important;filter:drop-shadow(0 0 5px rgba(255,92,132,.6))!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover .card-icon.nv-chip{color:#fff!important;transform:none!important;
+ background:radial-gradient(90% 90% at 50% 18%,rgba(255,10,78,.52),rgba(255,10,78,.12))!important;
+ border-color:rgba(255,92,132,.75)!important;
+ box-shadow:0 0 24px rgba(255,10,78,.5),inset 0 0 12px rgba(255,10,78,.22)!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-title{font:500 12.5px/1.35 var(--nvUI)!important;
+ color:var(--nvInk3)!important;letter-spacing:0!important}
+/* el chevron de la esquina */
+html:not([data-vs="off"]) a.card.nv-tile::after{display:block!important;content:'\203A'!important;
+ position:absolute!important;right:10px!important;bottom:6px!important;top:auto!important;left:auto!important;
+ width:auto!important;height:auto!important;background:none!important;border:0!important;
+ font:400 13px/1 var(--nvUI)!important;color:var(--nvR2)!important;opacity:.8!important;
+ transform:none!important;box-shadow:none!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover::after{opacity:1!important}
+
+/* ── 6 · el VS con los dos escudos ──────────────────────────────────────── */
+html:not([data-vs="off"]) #nv-prox{display:flex!important;align-items:center!important;gap:13px!important;
+ margin:0 14px 11px!important;padding:13px 14px!important;border-radius:13px!important;
+ border:1px solid rgba(255,10,78,.30)!important;overflow:hidden!important;position:relative!important;
+ background:radial-gradient(90% 120% at 50% 0%,rgba(255,10,78,.20),transparent 66%),
+   linear-gradient(165deg,#0B0A1C,#000913 64%)!important;
+ box-shadow:var(--nvAlto),0 0 30px -16px rgba(255,10,78,.6)!important}
+html:not([data-vs="off"]) #nv-prox::before{content:'';position:absolute;left:16px;right:16px;top:-1px;height:1px;
+ background:linear-gradient(90deg,transparent,rgba(255,10,78,.8),transparent)}
+html:not([data-vs="off"]) #nv-prox .nv-lado{flex:1 1 0;min-width:0;display:flex;flex-direction:column;
+ align-items:center;gap:9px}
+html:not([data-vs="off"]) #nv-prox .nv-lado img{width:46px!important;height:46px!important;object-fit:contain}
+html:not([data-vs="off"]) #nv-prox .nv-lado b{font:600 11.5px/1.2 var(--nvUI);color:var(--nvInk3);
+ text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+html:not([data-vs="off"]) #nv-prox .nv-mid{flex:0 0 auto;font:700 19px/1 var(--nvTit);letter-spacing:.12em;
+ color:var(--nvR2)}
+html:not([data-vs="off"]) #nv-prox .nv-datos{flex:0 0 150px;border-left:1px solid rgba(23,50,71,.9);
+ padding-left:16px}
+html:not([data-vs="off"]) #nv-prox .nv-datos div{display:flex;align-items:center;gap:9px;margin-bottom:11px}
+html:not([data-vs="off"]) #nv-prox .nv-datos div:last-child{margin-bottom:0}
+html:not([data-vs="off"]) #nv-prox .nv-datos svg{width:15px;height:15px;stroke:var(--nvDim);fill:none;
+ stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+html:not([data-vs="off"]) #nv-prox .nv-datos .lb{display:block;font:500 8.5px/1 var(--nvUI);
+ letter-spacing:.14em;color:#7E95AB;text-transform:uppercase}
+html:not([data-vs="off"]) #nv-prox .nv-datos .vl{display:block;font:500 11.5px/1.2 var(--nvUI);
+ color:var(--nvInk);margin-top:3px;text-transform:capitalize}
+html:not([data-vs="off"]) #nv-prox .nv-dias{flex:0 0 auto;text-align:center;padding-left:14px;margin:0!important}
+html:not([data-vs="off"]) #nv-prox .nv-dias b{display:block;font:400 29px/1 var(--nvNum);color:var(--nvR)}
+html:not([data-vs="off"]) #nv-prox .nv-dias span{display:block;font:600 8.5px/1 var(--nvUI);letter-spacing:.17em;
+ text-transform:uppercase;color:#7E95AB;margin-top:5px}
+html:not([data-vs="off"]) .nv-btnr{text-decoration:none;display:flex;align-items:center;justify-content:center;gap:9px;
+ margin:0 14px 13px;padding:9px;border:1px solid var(--nvR);border-radius:10px;
+ background:linear-gradient(180deg,rgba(255,10,78,.16),rgba(255,10,78,.05));
+ font:600 11.5px/1 var(--nvUI);letter-spacing:.07em;color:#fff;
+ box-shadow:0 0 24px -6px rgba(255,10,78,.65),var(--nvAlto)}
+html:not([data-vs="off"]) .nv-btnr:hover{background:linear-gradient(180deg,rgba(255,10,78,.28),rgba(255,10,78,.10))}
+
+/* ── 7 · fixture ────────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-fx{gap:0!important;padding:0 14px 12px!important;flex:1 1 auto!important;
+ justify-content:center!important}
+html:not([data-vs="off"]) .nv-fxr{gap:9px!important;padding:5px 0!important;border-radius:0!important;
+ border-bottom:1px solid rgba(16,41,53,.6)!important}
+html:not([data-vs="off"]) .nv-fxr:last-child{border-bottom:0!important}
+html:not([data-vs="off"]) .nv-fxr:hover{background:rgba(255,10,78,.07)!important}
+html:not([data-vs="off"]) .nv-fxr .nv-ic{width:22px;height:22px;border-radius:8px;display:flex;
+ align-items:center;justify-content:center;border:1px solid rgba(255,10,78,.28);
+ background:rgba(255,10,78,.08);flex-shrink:0}
+html:not([data-vs="off"]) .nv-fxr .nv-ic img{width:15px!important;height:15px!important;object-fit:contain}
+html:not([data-vs="off"]) .nv-fxn{font:500 12.5px/1.2 var(--nvUI)!important;color:var(--nvInk)!important;
+ flex:1 1 auto!important;min-width:0!important}
+html:not([data-vs="off"]) .nv-cond{padding:2px 8px!important;border-radius:6px!important;
+ font:600 8px/1 var(--nvUI)!important;letter-spacing:.1em!important;border:1px solid #1C3A52!important;
+ color:var(--nvInk2)!important;background:none!important}
+html:not([data-vs="off"]) .nv-cond.loc{border-color:rgba(255,10,78,.42)!important;color:#FF8DA3!important;
+ background:rgba(255,10,78,.09)!important}
+html:not([data-vs="off"]) .nv-fxd{flex:0 0 70px!important;text-align:right!important;
+ font:400 10px/1 var(--nvNum)!important;color:var(--nvInk3)!important;margin-left:0!important}
+html:not([data-vs="off"]) .nv-fxr b{color:var(--nvDim)!important;font-size:12px!important}
+
+/* ── 8 · herramientas del entrenador, tarjetas horizontales ─────────────── */
+html:not([data-vs="off"]) #nv-coach,html:not([data-vs="off"]) #nv-coach-mas{
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile{flex-direction:row!important;align-items:center!important;
+ justify-content:flex-start!important;text-align:left!important;gap:11px!important;height:auto!important;
+ min-height:0!important;padding:10px 12px!important;border-radius:12px!important;
+ background:radial-gradient(70% 110% at 0% 0%,rgba(255,10,78,.11),transparent 62%),
+   linear-gradient(165deg,#000E1A,#000913 62%)!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile::before,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile::before{left:16px!important;right:16px!important;
+ background:linear-gradient(90deg,transparent,rgba(255,10,78,.5),transparent)!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile::after,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile::after{display:none!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip{width:30px!important;height:30px!important;
+ border-radius:11px!important;flex:0 0 30px!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i svg{
+ width:15px!important;height:15px!important;flex-basis:15px!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-body,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-body{flex:1 1 auto!important;min-width:0!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-title,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-title{display:block!important;
+ text-align:left!important;font:600 12.5px/1.25 var(--nvUI)!important;color:var(--nvInk)!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-desc,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-desc{display:block!important;
+ font:400 9.5px/1.3 var(--nvUI)!important;color:#7E95AB!important;margin:2px 0 0!important;padding:0!important;
+ white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ max-height:none!important;opacity:1!important;visibility:visible!important;transform:none!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-fav,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-fav{display:none!important}
+
+/* ── 9 · el panel del jugador (rol jugador) ─────────────────────────────── */
+html:not([data-vs="off"]) .nv-jg{padding:0 14px 13px!important}
+html:not([data-vs="off"]) .nv-kpi{border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:12px!important;
+ background:radial-gradient(110% 86% at 0% 0%,rgba(255,10,78,.07),transparent 56%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;box-shadow:var(--nvAlto)!important}
+html:not([data-vs="off"]) .nv-kpi span{font:600 8.5px/1.1 var(--nvUI)!important;letter-spacing:.16em!important;
+ color:#7E95AB!important}
+html:not([data-vs="off"]) .nv-kpi b{font:400 26px/1 var(--nvNum)!important;color:var(--nvInk)!important}
+html:not([data-vs="off"]) .nv-kpi b i{color:var(--nvR)!important;font-size:13px!important}
+html:not([data-vs="off"]) .nv-graf{border:1px solid var(--nvLine)!important;border-radius:12px!important;
+ background:linear-gradient(165deg,#000F1B,#000913 64%)!important}
+html:not([data-vs="off"]) .nv-grafT{font:600 8.5px/1 var(--nvUI)!important;letter-spacing:.15em!important;
+ color:#7E95AB!important}
+html:not([data-vs="off"]) .nv-vacio{border:1px dashed var(--nvLine2)!important;border-radius:12px!important;
+ font:500 10.5px/1.4 var(--nvUI)!important;color:var(--nvInk2)!important;margin:0 14px 13px!important}
+
+/* ── 10 · notebook y telefono ───────────────────────────────────────────── */
+@media (max-width:1280px){
+ html:not([data-vs="off"]) #nv-rival,html:not([data-vs="off"]) #nv-fixp{flex:0 0 400px!important}
+}
+@media (max-width:1100px){
+ html:not([data-vs="off"]) .nv-rowB,html:not([data-vs="off"]) .nv-rowC,
+ html:not([data-vs="off"]) .nv-rowR{flex-wrap:wrap!important}
+ html:not([data-vs="off"]) #nv-rival,html:not([data-vs="off"]) #nv-fixp{flex:1 1 100%!important}
+ html:not([data-vs="off"]) .nv-rowR .nv-pan,html:not([data-vs="off"]) .nv-rowC .nv-pan{flex:1 1 100%!important}
+ html:not([data-vs="off"]) #nv-coach,html:not([data-vs="off"]) #nv-coach-mas{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media (max-width:760px){
+ html:not([data-vs="off"]) .nv-zonaw{padding:12px 14px 4px!important;gap:10px!important}
+ html:not([data-vs="off"]) #nv-hero{min-height:168px!important}
+ html:not([data-vs="off"]) #nv-hero .txt{padding:16px 18px!important}
+ html:not([data-vs="off"]) #nv-hero h2{font-size:23px!important}
+ html:not([data-vs="off"]) #nv-prox{flex-wrap:wrap!important}
+ html:not([data-vs="off"]) #nv-prox .nv-datos{flex:1 1 100%!important;border-left:0!important;
+  padding-left:0!important;border-top:1px solid rgba(23,50,71,.9)!important;padding-top:11px!important}
+ html:not([data-vs="off"]) #nv-coach,html:not([data-vs="off"]) #nv-coach-mas{
+  grid-template-columns:1fr!important}
+}
+
+/* ── 11 · el buscador de pantallas ──────────────────────────────────────── */
+html:not([data-vs="off"]) .nv-hubw{margin:0 14px 12px!important;padding-top:11px!important;
+ border-top:1px solid rgba(16,41,53,.8)!important}
+html:not([data-vs="off"]) .nv-hubw input{border:1px solid var(--nvLine2)!important;border-radius:9px!important;
+ background:rgba(0,14,26,.9)!important;color:var(--nvInk)!important;
+ font:400 11.5px/1 var(--nvUI)!important;box-shadow:var(--nvAlto)!important;height:32px!important}
+html:not([data-vs="off"]) .nv-hubw button{border-radius:8px!important;
+ font:600 9.5px/1 var(--nvUI)!important;letter-spacing:.1em!important}
+html:not([data-vs="off"]) .nv-hubw .hb-vacio{font:400 10.5px/1.4 var(--nvUI)!important;color:#7E95AB!important}
+
+/* ── 12 · en el telefono, las fichas del rival en tres columnas ─────────── */
+@media (max-width:760px){
+ html:not([data-vs="off"]) .nv-rowR{flex-direction:column!important}
+ html:not([data-vs="off"]) .nv-rowR .nv-pan{flex:1 1 auto!important;width:100%!important}
+ html:not([data-vs="off"]) .nv-rowR .nv-gt{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ html:not([data-vs="off"]) .nv-rowR a.card.nv-tile{min-height:84px!important}
+}
+</style>
+<script id="nv-piel-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   PORTADA · PIEL 2026/27 (parte de armado)
+   Lo que el CSS no puede hacer solo: las tres palabras del hero, el VS con
+   los dos escudos, el boton de analisis del rival (apunta a una tarjeta que
+   YA esta permitida para este usuario, no crea acceso nuevo), la fila del
+   proximo rival junto a mi rendimiento, y las filas del fixture.
+   Todo es idempotente y no borra nada: si algo no esta, se saltea.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  if(document.documentElement.getAttribute('data-vs') === 'off') return;
+
+  function T(s){
+    try{ if(typeof translateString === 'function')
+      return translateString(s, (typeof getLang === 'function' ? getLang() : 'es')); }catch(e){}
+    return s;
+  }
+  function sv(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" '+
+    'stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; }
+  var I_CAL  = '<rect x="3.6" y="5.2" width="16.8" height="15.2" rx="2.6"/><path d="M8 3v4M16 3v4M3.6 10.6h16.8"/>';
+  var I_CASA = '<path d="M4 10.5L12 4l8 6.5"/><path d="M6 10v9h12v-9"/>';
+  var I_COPA = '<path d="M7 4.5h10v4a5 5 0 01-10 0z"/><path d="M7 6H4.5v1.5A3 3 0 007 10.5M17 6h2.5v1.5a3 3 0 01-2.5 3"/><path d="M10 18h4M12 13.5V18"/>';
+  var I_LOCK = '<path d="M6.5 10.5h11v9h-11z"/><path d="M8.5 10.5V7.5a3.5 3.5 0 017 0v3"/>';
+
+  var CLAVE_REND = ['plan_desarrollo','equipo','nla_stats_table','dashboard','informe_equipo','analisis',
+    'hm_ataque','hm_saque','hm_recepcion','hm_bloqueo','hm_defensa','hm_armador',
+    'ranking','jugador','mi_juego','tendencias'];
+  function slugDe(a){
+    return String(a.getAttribute('href') || '').split('?')[0].split('#')[0].replace(/\.html$/, '');
+  }
+
+  /* ── 1 · las tres palabras y el copete del hero ────────────────────────── */
+  function hero(){
+    var h = document.getElementById('nv-hero'); if(!h) return;
+    var k = h.querySelector('.k');
+    if(k && !k.dataset.pl){ k.dataset.pl = '1'; k.textContent = 'NLA ' + T('Suiza').toUpperCase() + ' 2026/27'; }
+    if(!document.getElementById('nv-tres')){
+      var t = document.createElement('div'); t.id = 'nv-tres';
+      t.innerHTML = '<b>' + T('Análisis') + '</b><b>' + T('Estrategia') + '</b><b>' + T('Rendimiento') + '</b>';
+      var cd = document.getElementById('nv-cd');
+      h.insertBefore(t, cd || null);
+    }
+  }
+
+  /* ── 2 · las filas: hero solo, rival junto a mi rendimiento ────────────── */
+  function filas(){
+    var z = document.getElementById('nv-zona'); if(!z || z.dataset.pl) return;
+    var A = z.querySelector('.nv-rowA'), B = z.querySelector('.nv-rowB');
+    var riv = document.getElementById('nv-rival');
+    if(!A || !riv) return;
+    z.dataset.pl = '1';
+
+    /* la caja que agrupa todo lo que va debajo de la banda de titulo */
+    var caja = document.createElement('div'); caja.className = 'nv-zonaw';
+    z.appendChild(caja);
+
+    /* el panel de rendimiento: el de la fila B que tiene tarjetas de rendimiento */
+    var pRend = null;
+    if(B) [].slice.call(B.querySelectorAll(':scope > .nv-pan')).forEach(function(p){
+      if(pRend) return;
+      var hay = [].slice.call(p.querySelectorAll('a.card')).some(function(a){
+        return CLAVE_REND.indexOf(slugDe(a)) >= 0; });
+      if(hay) pRend = p;
+    });
+
+    var R = document.createElement('div'); R.className = 'nv-rowR';
+    R.appendChild(riv);
+    if(pRend){ pRend.style.flex = '1 1 0'; R.appendChild(pRend); }
+    caja.appendChild(R);
+    if(B){ caja.appendChild(B); }
+    var C = z.querySelector('.nv-rowC'); if(C) caja.appendChild(C);
+
+    /* las que quedan en la fila B se reparten en partes iguales */
+    if(B) [].slice.call(B.querySelectorAll(':scope > .nv-pan')).forEach(function(p){
+      var n = p.querySelectorAll('a.card').length || 1;
+      p.style.flex = n + ' 1 0';
+    });
+  }
+
+  /* ── 3 · el VS con los dos escudos ─────────────────────────────────────── */
+  var MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto',
+             'septiembre','octubre','noviembre','diciembre'];
+  var DIA = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  function vs(){
+    var box = document.getElementById('nv-prox'); if(!box) return;
+    var prx = (window.FIXTURE_DATA && FIXTURE_DATA.proximo) || null; if(!prx) return;
+    if(box.dataset.plF === prx.fecha + '|' + prx.rival) return;
+    box.dataset.plF = prx.fecha + '|' + prx.rival;
+
+    var d = new Date(prx.fecha + 'T12:00:00');
+    var dias = Math.max(0, Math.ceil((d - new Date()) / 86400000));
+    var loc = (prx.cond === 'local');
+    var fecha = T(DIA[d.getDay()]) + ' ' + d.getDate() + ' ' + T(MES[d.getMonth()]);
+    function lado(slug, nom){
+      return '<span class="nv-lado"><img src="escudos/' + slug + '.png" alt="" ' +
+             'onerror="this.style.visibility=\'hidden\'"><b>' + nom + '</b></span>';
+    }
+    box.innerHTML =
+      lado('nafels', 'Näfels') + '<span class="nv-mid">VS</span>' + lado(prx.slug, prx.rival) +
+      '<span class="nv-datos">' +
+        '<div>' + sv(I_CAL)  + '<span><span class="lb">' + T('Fecha')     + '</span>' +
+                                     '<span class="vl">' + fecha + '</span></span></div>' +
+        '<div>' + sv(I_CASA) + '<span><span class="lb">' + T('Condición') + '</span>' +
+                                     '<span class="vl">' + T(loc ? 'Local' : 'Visitante') + '</span></span></div>' +
+      '</span>' +
+      '<span class="nv-dias"><b>' + dias + '</b><span>' + T(dias === 1 ? 'día' : 'días') + '</span></span>';
+
+    /* el boton apunta a la primera tarjeta del propio panel: si el rol no la
+       tiene, no hay boton. Asi nunca abre algo que el usuario no deberia ver. */
+    var pan = document.getElementById('nv-rival');
+    var vie = pan && pan.querySelector('.nv-btnr'); if(vie) vie.remove();
+    var destino = pan && pan.querySelector('.nv-gt a.card');
+    if(pan && destino){
+      var b = document.createElement('a'); b.className = 'nv-btnr';
+      b.href = destino.getAttribute('href');
+      b.innerHTML = T('Ver análisis del rival') + ' <b aria-hidden="true">&rarr;</b>';
+      /* va pegado al VS, como en la plantilla */
+      box.parentNode.insertBefore(b, box.nextSibling);
+    }
+  }
+
+  /* ── 4 · el copete del panel del rival y el candado ────────────────────── */
+  function cabeceras(){
+    var riv = document.getElementById('nv-rival');
+    if(riv){
+      var pt = riv.querySelector('.nv-pt');
+      if(pt && !pt.querySelector('.nv-sub')){
+        var s = document.createElement('span'); s.className = 'nv-sub';
+        s.textContent = 'NLA ' + T('Suiza').toUpperCase() + ' 2026/27';
+        pt.appendChild(s);
+      }
+    }
+    var lk = document.querySelector('#nv-coachp .nv-lock');
+    if(lk && !lk.dataset.pl){
+      lk.dataset.pl = '1';
+      lk.innerHTML = sv(I_LOCK) + T('Acceso exclusivo');
+    }
+  }
+
+  /* ── 5 · las filas del fixture ─────────────────────────────────────────── */
+  function fixture(){
+    [].slice.call(document.querySelectorAll('.nv-fxr')).forEach(function(a){
+      if(a.dataset.pl) return; a.dataset.pl = '1';
+      var sep = a.querySelector('.nv-vs'); if(sep) sep.remove();
+      var ims = [].slice.call(a.querySelectorAll('img'));
+      var rival = null;
+      ims.forEach(function(im){
+        if(!rival && String(im.getAttribute('src') || '').indexOf('nafels') < 0) rival = im;
+      });
+      if(!rival) rival = ims[0];
+      ims.forEach(function(im){ if(im !== rival) im.remove(); });
+      var ic = document.createElement('span'); ic.className = 'nv-ic';
+      if(rival){ a.insertBefore(ic, rival); ic.appendChild(rival); }
+      else a.insertBefore(ic, a.firstChild);
+      /* si el club no tiene escudo cargado, va la copa en su lugar */
+      if(rival){
+        var copa = function(){ if(ic.querySelector('svg')) return;
+          rival.remove(); ic.innerHTML = sv(I_COPA); };
+        rival.addEventListener('error', copa);
+        if(rival.complete && !rival.naturalWidth) copa();
+      }
+    });
+  }
+
+  function pasada(){
+    try{ hero(); }catch(e){}
+    try{ filas(); }catch(e){}
+    try{ cabeceras(); }catch(e){}
+    try{ vs(); }catch(e){}
+    try{ fixture(); }catch(e){}
+  }
+
+  function arrancar(){
+    pasada();
+    [160, 500, 1200, 2600, 5000].forEach(function(ms){ setTimeout(pasada, ms); });
+    /* cuando el calendario de Firebase pisa el fixture */
+    var antes = window.vbFixtureCambio;
+    window.vbFixtureCambio = function(){
+      try{ if(typeof antes === 'function') antes(); }catch(e){}
+      setTimeout(pasada, 30);
+    };
+    /* y cuando cambia el idioma */
+    document.addEventListener('vbLangChange', function(){ setTimeout(pasada, 30); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
 </script>
 </body>
 </html>
