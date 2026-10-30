@@ -135,22 +135,22 @@ body.pres .slide.active{display:block;animation:slideIn .4s ease}
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="categorias_club.js?v=20261030-2140"></script>
-<script src="selector_categoria.js?v=20261030-2140"></script>
-<script src="firebase.js?v=20261030-2140" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-2140"></script>
+<script src="categorias_club.js?v=20261030-2217"></script>
+<script src="selector_categoria.js?v=20261030-2217"></script>
+<script src="firebase.js?v=20261030-2217" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-2217"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-2140">
+<link rel="stylesheet" href="movil.css?v=20261030-2217">
 
-<script src="iconos.js?v=20261030-2140" defer></script>
+<script src="iconos.js?v=20261030-2217" defer></script>
 
-<script src="nav.js?v=20261030-2140" defer></script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-2140">
-<script src="nav.js?v=20261030-2140" defer></script>
-<script src="vs_cab.js?v=20261030-2140" defer></script>
-<script src="vs_tabla.js?v=20261030-2140" defer></script>
+<script src="nav.js?v=20261030-2217" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-2217">
+<script src="nav.js?v=20261030-2217" defer></script>
+<script src="vs_cab.js?v=20261030-2217" defer></script>
+<script src="vs_tabla.js?v=20261030-2217" defer></script>
 <style>
 /* NV · las laminas toman el fondo de la app */
 html:not([data-vs="off"]) .deck{--ink:#000C17;--ink2:#061522;--ink3:#13303C}
@@ -614,6 +614,122 @@ document.querySelectorAll('.vlink').forEach(function(a){
 <a id="club-escudo" href="index.html" title="Inicio · Volley Näfels" style="position:fixed;left:14px;bottom:14px;z-index:99990;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#000;border:1px solid rgba(255,255,255,.18);box-shadow:0 2px 12px rgba(0,0,0,.55);display:block">
   <img src="escudo.png" alt="Volley Näfels" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none';this.parentElement.style.background='#111'">
 </a>
-<script src="lang.js?v=20261030-2140"></script>
-<script src="ayuda.js?v=20261030-2140"></script>
+<script src="lang.js?v=20261030-2217"></script>
+<script src="ayuda.js?v=20261030-2217"></script>
+<style id="pb-fit-css">
+/* ═══════════════════════════════════════════════════════════════════════════
+   QUE NO SE CORTE EL TEXTO DE LAS LAMINAS · 2026/27
+   La lamina es una caja 16:9 fija con overflow:hidden. Cuando el texto no
+   entraba —siete de las veinte— lo que sobraba se recortaba sin aviso: el
+   renglon de abajo simplemente no estaba. Y en modo presentacion, donde la
+   lamina mide lo que mide la pantalla, pasaba lo mismo o peor.
+
+   La solucion no toca ni una palabra del playbook: el contenido de la lamina
+   que no entra se achica lo justo para entrar, con zoom. Las que ya entraban
+   no se tocan, asi que el deck conserva su escala. Los adornos sueltos (el
+   numerito gigante del capitulo) se quedan donde estaban.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.slide > .pbfit{ zoom: var(--pbz, 1); display:flow-root; }
+/* si el navegador no entiende zoom, la lamina crece en vez de recortar */
+.slide[data-pbcrece]{ aspect-ratio:auto !important; height:auto !important; }
+</style>
+<script id="pb-fit-js">
+(function(){
+  'use strict';
+  var HAY_ZOOM = false;
+  try{ HAY_ZOOM = !!(window.CSS && CSS.supports && CSS.supports('zoom', '0.9')); }catch(e){}
+
+  /* El contenido de la lamina se mete en una caja propia. Lo que esta puesto
+     en posicion absoluta —el numero gigante del capitulo— no entra: es
+     decoracion y tiene que quedarse pegado a la lamina. */
+  function envolver(s){
+    var w = s.querySelector('.pbfit');
+    if(w && w.parentNode === s) return w;
+    w = document.createElement('div');
+    w.className = 'pbfit';
+    var hijos = [].slice.call(s.childNodes);
+    s.appendChild(w);
+    for(var i = 0; i < hijos.length; i++){
+      var n = hijos[i];
+      if(n === w) continue;
+      if(n.nodeType === 1){
+        var p = '';
+        try{ p = getComputedStyle(n).position; }catch(e){}
+        if(p === 'absolute' || p === 'fixed') continue;
+      }
+      w.appendChild(n);
+    }
+    return w;
+  }
+
+  function ajustar(){
+    var sl = document.querySelectorAll('.slide');
+    for(var i = 0; i < sl.length; i++){
+      var s = sl[i], cs;
+      try{ cs = getComputedStyle(s); }catch(e){ continue; }
+      if(cs.display === 'none') continue;
+      var w = envolver(s);
+      /* se mide siempre a escala 1 */
+      w.style.setProperty('--pbz', '1');
+      s.removeAttribute('data-pbcrece');
+      var alto = s.clientHeight - parseFloat(cs.paddingTop || 0) - parseFloat(cs.paddingBottom || 0);
+      /*  con display:flow-root la caja mide de verdad lo que ocupa su
+          contenido, margenes del ultimo parrafo incluidos: sin eso la
+          cuenta daba de menos y la lamina seguia cortada.               */
+      var rw = w.getBoundingClientRect(), nat = rw.height;
+      /*  y si adentro hay algo en posicion absoluta —una lamina lo tiene—
+          no cuenta en el alto de la caja: se mide hasta donde llega lo que
+          mas baja, si no la cuenta da de menos y esa lamina sigue cortada. */
+      try{
+        var hh = w.querySelectorAll('*');
+        for(var q = 0; q < hh.length && q < 400; q++){
+          var rr = hh[q].getBoundingClientRect();
+          if(rr.height > 0 && rr.width > 0 && rr.bottom - rw.top > nat) nat = rr.bottom - rw.top;
+        }
+      }catch(e){}
+      if(!alto || !nat) continue;
+      if(nat <= alto + 1){ w.style.removeProperty('--pbz'); s.removeAttribute('data-pbz'); continue; }
+      if(!HAY_ZOOM){ s.setAttribute('data-pbcrece', '1'); continue; }
+      var k = Math.floor(((alto - 2) / nat) * 1000) / 1000;
+      /*  por debajo del 68% el texto ya no se lee de lejos: ahi la lamina
+          crece en vez de seguir achicando.                               */
+      if(k < 0.68){ w.style.removeProperty('--pbz'); s.setAttribute('data-pbcrece', '1');
+                    s.removeAttribute('data-pbz'); continue; }
+      w.style.setProperty('--pbz', String(k));
+      s.setAttribute('data-pbz', k.toFixed(3));
+      /*  Y se comprueba. En una lamina el texto se reacomoda al achicarlo y
+          termina ocupando MAS renglones, asi que achicar no alcanza: esa se
+          deja crecer. Primero se intenta mantener el 16:9; si no entra, antes
+          que cortar una palabra la lamina se hace mas alta.               */
+      if(s.scrollHeight > s.clientHeight + 2){
+        w.style.removeProperty('--pbz');
+        s.removeAttribute('data-pbz');
+        s.setAttribute('data-pbcrece', '1');
+      }
+    }
+  }
+
+  var t = null;
+  function pedir(){ clearTimeout(t); t = setTimeout(ajustar, 90); }
+
+  function arrancar(){
+    ajustar();
+    [350, 900, 2000, 4000].forEach(function(ms){ setTimeout(ajustar, ms); });
+    window.addEventListener('resize', pedir);
+    window.addEventListener('load', pedir);
+    document.addEventListener('keydown', function(e){
+      if(/Arrow|Page|Home|End| /.test(e.key || '')) pedir();
+    });
+    document.addEventListener('click', pedir, true);
+    try{
+      new MutationObserver(pedir).observe(document.documentElement, {
+        attributes:true, subtree:true, attributeFilter:['class','style','hidden'] });
+    }catch(e){}
+    /*  las fuentes llegan despues y cambian el alto del texto  */
+    try{ if(document.fonts && document.fonts.ready) document.fonts.ready.then(pedir); }catch(e){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
 </body></html>

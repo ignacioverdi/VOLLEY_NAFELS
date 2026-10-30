@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261030-2140"></script>
-<script src="selector_categoria.js?v=20261030-2140"></script>
+<script src="categorias_club.js?v=20261030-2217"></script>
+<script src="selector_categoria.js?v=20261030-2217"></script>
 <script src="datos_voley.js.enc?v=22928f64" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -391,14 +391,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261030-2140"></script>
+<script src="objetivos_config.js?v=20261030-2217"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261030-2140"></script>
+<script src="datos_seguros.js?v=20261030-2217"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -409,12 +409,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261030-2140" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-2140"></script>
-<script src="lang.js?v=20261030-2140"></script>
-<script src="objetivos.js?v=20261030-2140" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261030-2140"></script>
-  <script src="video_delay.js?v=20261030-2140" onerror="void 0"></script>
+<script src="firebase.js?v=20261030-2217" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-2217"></script>
+<script src="lang.js?v=20261030-2217"></script>
+<script src="objetivos.js?v=20261030-2217" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261030-2217"></script>
+  <script src="video_delay.js?v=20261030-2217" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -782,12 +782,12 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-2140">
+<link rel="stylesheet" href="movil.css?v=20261030-2217">
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-2140">
-<script src="vs_cab.js?v=20261030-2140" defer></script>
-<script src="vs_tabla.js?v=20261030-2140" defer></script>
-<script src="nav.js?v=20261030-2140" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-2217">
+<script src="vs_cab.js?v=20261030-2217" defer></script>
+<script src="vs_tabla.js?v=20261030-2217" defer></script>
+<script src="nav.js?v=20261030-2217" defer></script>
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -2440,6 +2440,45 @@ function pvEdad(){
   e.style.color = '#f87171';
 }
 
+/* ══ QUE EL DETALLE SEA DE LA MISMA SESION QUE EL MARCADOR ══════════════════
+   El scout publica tres cosas: voley_live (el marcador, liviano), voley_data
+   (las tablas) y voley_codes (los codigos). Se escriben una detras de otra, y
+   si una falla —la nube no contesta, se corto la red— el panel terminaba
+   mostrando el marcador de un partido con las tablas del anterior. Nadie se
+   daba cuenta: los dos numeros eran reales, de sesiones distintas.
+
+   Ahora se comparan los dos identificadores de sesion. Si no coinciden se
+   espera: lo que falta suele llegar en el segundo siguiente. Si despues de
+   quince segundos siguen sin coincidir se muestra igual —nunca se queda
+   pegado— pero con el cartel diciendo que el detalle es de otra sesion. */
+var _desfaseDesde = 0;
+function pvAvisoDesfase(mostrar){
+  var b = document.getElementById('pv-desfase');
+  if(!b){
+    if(!mostrar) return;
+    b = document.createElement('div'); b.id = 'pv-desfase';
+    b.style.cssText = 'margin:0 0 12px;padding:10px 14px;border-radius:10px;text-align:center;'
+      + 'background:rgba(255,10,78,.10);border:1px solid rgba(255,10,78,.45);color:#FF5C84;'
+      + 'font-size:13px;line-height:1.5';
+    var r = document.getElementById('pv-refresh');
+    if(r && r.parentNode) r.parentNode.insertBefore(b, r.nextSibling);
+    else document.body.insertBefore(b, document.body.firstChild);
+  }
+  if(!mostrar){ b.style.display = 'none'; return; }
+  b.innerHTML = 'El marcador es de la sesión de ahora, pero el <b>detalle todavía es de la anterior</b>. '
+    + '<a href="#" onclick="pvTraerAhora();return false;" style="color:#FF5C84;font-weight:700">traer de nuevo</a>';
+  b.style.display = 'block';
+}
+function pvMismaSesion(L, D){
+  var a = (L && typeof L.sid === 'string') ? L.sid : '';
+  var b = (D && typeof D.sid === 'string') ? D.sid : '';
+  if(!a || !b || a === b){ _desfaseDesde = 0; pvAvisoDesfase(false); return true; }
+  if(!_desfaseDesde) _desfaseDesde = Date.now();
+  if(Date.now() - _desfaseDesde < 15000) return false;
+  pvAvisoDesfase(true);
+  return true;
+}
+
 function traerEnVivo(primera){
   if(typeof fbGet!=='function') return;
   /* El marcador se lee siempre (liviano). El nº de rally decide si hay que
@@ -2542,6 +2581,7 @@ function traerEnVivo(primera){
           _ultData = Date.now();
           if(!D || !D.j || !D.j.length) return;
           if(_sesionFija) return;
+          if(!pvMismaSesion(L, D)) return;
           _liveTS=D.ts; if(D.iso) _liveISO=D.iso;
           if(!_liveTitulo && D.titulo){ _liveTitulo=D.titulo; _liveTipo=D.tipo||''; }
           try{ pvSembrarHist(L, D); }catch(e){}
@@ -3088,8 +3128,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261030-2140" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-2140"></script>
+<script src="plantel_nafels.js?v=20261030-2217" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-2217"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -3188,7 +3228,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261030-2140"></script>
+<script src="ayuda.js?v=20261030-2217"></script>
 
 
 
@@ -4015,18 +4055,19 @@ function renderAnalisis(){
 })();
 
 </script>
-<script src="analisis_vivo.js?v=20261030-2140" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261030-2217" onerror="void 0"></script>
 <!-- Los paneles de "como venimos", "quien esta cerrando" y los atajos son
      los MISMOS que los de Scout en Vivo: el modulo es el mismo archivo. La
      marca de abajo le dice que aca no toque el marco de la pagina, solo
      llene los tres recuadros que ya estan en el HTML. -->
 <script>window.PE_SOLO_PANELES = true;</script>
-<script src="panel_estilo.js?v=20261030-2140" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261030-2217" onerror="void 0"></script>
 <!-- La flecha para volver: una sola, siempre en el mismo lugar, en cualquiera
      de las nueve ventanas que abre el panel. Ademas hace que la ventana
      abierta se vuelva a dibujar con cada dato nuevo, como el panel. -->
-<script src="volver_panel.js?v=20261030-2140" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261030-2140" defer></script>
+<script src="volver_panel.js?v=20261030-2217" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261030-2217" defer></script>
+
 <style id="pv-tablas-css">
 /* ═══════════════════════════════════════════════════════════════════════════
    TABLAS Y ANALISIS EN EL PANEL EN VIVO · 2026/27
@@ -4084,6 +4125,9 @@ function renderAnalisis(){
   border:1px solid var(--b,#102935);border-radius:5px;font-size:10px;padding:1px 3px;margin-right:6px}
 #pv-tablas .pvt-pos{color:#22c55e}
 #pv-tablas .pvt-neg{color:#ef4444}
+#pv-tablas[data-pvt-fija] .pvt-wrap{display:none!important}
+#pv-tablas[data-pvt-fija] > h3::after{content:' — se ve al volver a la sesión actual';
+  font-size:10.5px;letter-spacing:.06em;color:#FF5C84;text-transform:none}
 @media(max-width:1100px){
   #pv-tablas .pvt-wrap{grid-template-columns:1fr}
   #pv-tablas .pvt-twin{grid-template-columns:1fr}
@@ -4285,8 +4329,31 @@ function renderAnalisis(){
     var w = document.getElementById('pvt-wrap');
     return w && !w.hasAttribute('hidden');
   }
+  /*  ══ DE DONDE SALEN LOS DATOS ════════════════════════════════════════
+      M no se llena solo: lo arma pvSyncM() desde VOLEY_CODES, que es lo que
+      baja de la nube cada pocos segundos. Si no se llama, M se queda con lo
+      que dejo la ultima vez que alguien abrio la ventana de Analisis —otro
+      partido, de otro dia— y estas tablas mostraban una sesion distinta a la
+      del resto de la pantalla. Se sincroniza antes de cada pintada.        */
+  function sincronizar(){
+    try{ if(typeof window.pvSyncM === 'function') window.pvSyncM(); }catch(e){}
+  }
+  /*  Si se abrio una sesion guardada a mano, el resto del panel muestra esa
+      y esto mostraria la de ahora: dos sesiones en la misma pantalla. En ese
+      caso la seccion se esconde y lo dice.                                 */
+  function fijada(){
+    try{ return !!window._sesionFija; }catch(e){ return false; }
+  }
   function pintar(){
+    var d = document.getElementById('pv-tablas');
+    if(!d) return;
+    if(fijada()){
+      d.setAttribute('data-pvt-fija', '1');
+      return;
+    }
+    d.removeAttribute('data-pvt-fija');
     if(!abierto()) return;
+    sincronizar();
     try{ mini(); }catch(e){}
     try{ tablas(); }catch(e){}
   }
@@ -4347,12 +4414,19 @@ function renderAnalisis(){
   /*  Se repinta solo cuando llegaron codigos nuevos: el panel baja datos cada
       pocos segundos y redibujar dos tablas enteras sin motivo seria tirar
       trabajo a la basura (y borraria el filtro que estes mirando).         */
-  var _ultimo = -1;
+  var _ultima = '';
   function latido(){
     if(!montar()) return;
-    var n = (window.M && M.codes) ? M.codes.length : 0;
-    if(n === _ultimo) return;
-    _ultimo = n;
+    /*  La firma es de lo que BAJA de la nube, no de M: asi se repinta cuando
+        llega una accion nueva o cuando cambia la sesion, y no se repinta
+        cuando no cambio nada (que borraria el filtro que estes mirando).   */
+    var C = window.VOLEY_CODES || {};
+    var cods = C.codes || [];
+    var firma = (C.sid || '') + '|' + cods.length + '|' +
+                (cods.length ? String((cods[cods.length - 1] || {}).c || '') : '') + '|' +
+                (fijada() ? 'fija' : '');
+    if(firma === _ultima) return;
+    _ultima = firma;
     pintar();
   }
   function arrancar(){ latido(); setInterval(latido, 1200); }
@@ -4394,6 +4468,165 @@ html:not([data-vs="off"]) #pv-barra::after{content:'';position:absolute;left:0;r
   function arrancar(){
     try{ mover(); }catch(e){}
     [300, 900, 2000, 4000].forEach(function(ms){ setTimeout(function(){ try{ mover(); }catch(e){} }, ms); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<style id="pv-vivo-css">
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL PANEL NO MIENTE SOBRE LO QUE ESTA PASANDO · 2026/27
+   Hasta ahora el panel mostraba SIEMPRE la ultima sesion publicada. Un martes
+   a la noche, con el gimnasio cerrado, segui­a mostrando el entrenamiento de
+   esa tarde con cara de cosa en curso. El que lo miraba de reojo le creia.
+
+   Ahora: si no hay nada en vivo —mas de 15 minutos sin una accion nueva— el
+   panel queda VACIO y ofrece. Si hay algo en vivo, lo ofrece para abrirlo al
+   instante, y una vez abierto se queda ahi solo hasta que termine.
+   ═══════════════════════════════════════════════════════════════════════════ */
+#pv-espera{max-width:720px;margin:26px auto 40px;padding:30px 28px;border-radius:16px;
+  background:var(--card,#000C17);border:1px solid var(--line,#102935);text-align:center}
+#pv-espera .pve-tit{font-family:var(--vsTit,inherit);font-weight:700;font-size:21px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--txt,#EBF4F7);margin:0 0 8px}
+#pv-espera .pve-sub{font-size:13.5px;line-height:1.6;color:var(--mut,#8FA8BE);margin:0 auto 20px;max-width:520px}
+#pv-espera .pve-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#pv-espera button{padding:10px 18px;border-radius:10px;cursor:pointer;font-family:inherit;
+  font-size:12.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  border:1px solid rgba(255,10,78,.46);color:var(--red2,#FF5C84);
+  background:linear-gradient(180deg,rgba(255,10,78,.15),rgba(255,10,78,.04))}
+#pv-espera button:hover{background:linear-gradient(180deg,rgba(255,10,78,.26),rgba(255,10,78,.08));
+  border-color:rgba(255,10,78,.72);color:#FFE9EF}
+#pv-espera button.pve-pri{border-color:var(--red,#FF0A4E);color:#fff;
+  background:linear-gradient(180deg,rgba(255,10,78,.46),rgba(255,10,78,.14));
+  box-shadow:0 0 22px -8px rgba(255,10,78,.85)}
+#pv-espera .pve-pulso{display:inline-flex;align-items:center;gap:7px;margin:0 0 14px;
+  padding:4px 12px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;border:1px solid rgba(255,10,78,.45);color:var(--red2,#FF5C84)}
+#pv-espera .pve-pulso i{width:7px;height:7px;border-radius:50%;background:var(--red,#FF0A4E);
+  animation:pveLat 1.4s infinite}
+@keyframes pveLat{0%,100%{opacity:1}50%{opacity:.25}}
+body[data-pv-espera] #main-content,
+body[data-pv-espera] #objetivos-panel,
+body[data-pv-espera] #pv-barra,
+body[data-pv-espera] #hdr-live,
+body[data-pv-espera] #hdr-score{display:none!important}
+</style>
+<script id="pv-vivo-js">
+(function(){
+  'use strict';
+  var LIMITE = 15;              /* minutos sin una accion nueva = ya no esta en vivo */
+  var CLAVE  = 'pv_sid_abierta';
+  var abierta = '';
+  try{ abierta = localStorage.getItem(CLAVE) || ''; }catch(e){}
+
+  function sidVivo(){ try{ return window._liveSid || ''; }catch(e){ return ''; } }
+  function fijada(){ try{ return !!window._sesionFija; }catch(e){ return false; } }
+  function minutos(){
+    try{
+      if(typeof pvMinutosDe !== 'function' || typeof pvSello !== 'function') return null;
+      return pvMinutosDe(pvSello() || '');
+    }catch(e){ return null; }
+  }
+  function hayVivo(){ var m = minutos(); return m !== null && m <= LIMITE; }
+  function titulo(){
+    try{ return (typeof pvTituloDe === 'function') ? (pvTituloDe(window._liveTipo, window._liveTitulo) || '') : ''; }
+    catch(e){ return ''; }
+  }
+  function esEntren(){
+    try{ return (typeof pvEsEntren === 'function') ? pvEsEntren(window._liveTipo, window._liveTitulo) : false; }
+    catch(e){ return false; }
+  }
+  function cuando(){
+    try{ return (typeof pvCuandoDe === 'function') ? (pvCuandoDe(window._liveISO) || '') : ''; }
+    catch(e){ return ''; }
+  }
+
+  /* ── el cartel ──────────────────────────────────────────────────────── */
+  function caja(){
+    var d = document.getElementById('pv-espera');
+    if(d) return d;
+    d = document.createElement('div'); d.id = 'pv-espera';
+    var m = document.getElementById('main-content');
+    if(m && m.parentNode) m.parentNode.insertBefore(d, m);
+    else document.body.appendChild(d);
+    return d;
+  }
+  function pintarCartel(){
+    var d = caja(), vivo = hayVivo(), t = titulo(), hay = !!sidVivo();
+    var palabra = esEntren() ? 'Entrenamiento' : 'Partido';
+    var qué = '<span data-t="' + palabra + '">' + palabra + '</span>' + (t ? ' · ' + t : '');
+    var h = '';
+    /*  Los rotulos van con data-t: lang.js los pasa a ingles y aleman solo.
+        Los nombres de equipo y las fechas no se traducen, son datos.      */
+    function tr(txt){ return '<span data-t="' + txt + '">' + txt + '</span>'; }
+    if(vivo && hay){
+      h += '<div class="pve-pulso"><i></i>' + tr('En vivo ahora') + '</div>'
+        +  '<h2 class="pve-tit">' + qué + '</h2>'
+        +  '<p class="pve-sub">' + tr('Se está scouteando en este momento.') + '</p>'
+        +  '<div class="pve-btns"><button type="button" class="pve-pri" onclick="PVIVO.abrir()">'
+        +  tr('Abrir y seguir en vivo') + '</button>'
+        +  '<button type="button" onclick="PVIVO.otras()">' + tr('Otras sesiones') + '</button></div>';
+    } else {
+      h += '<h2 class="pve-tit">' + tr('No hay nada en vivo') + '</h2>'
+        +  '<p class="pve-sub">' + tr('Nadie está scouteando en este momento. El panel queda en blanco a propósito: lo último que se cargó no es lo que está pasando ahora.') + '</p>'
+        +  '<div class="pve-btns">'
+        +  (hay ? '<button type="button" class="pve-pri" onclick="PVIVO.abrir()">' +
+                  tr(esEntren() ? 'Traer el entrenamiento' : 'Traer el partido') +
+                  (t ? ' · ' + t : '') + (cuando() ? ' · ' + cuando() : '') + '</button>' : '')
+        +  '<button type="button" onclick="PVIVO.otras()">' + tr('Ver otras sesiones') + '</button></div>';
+    }
+    d.innerHTML = h;
+    try{ if(window.T && typeof window.aplicarIdioma === 'function') window.aplicarIdioma(); }catch(e){}
+  }
+
+  function aplicar(){
+    var sid = sidVivo();
+    /*  una sesion guardada elegida a mano manda: el panel la muestra  */
+    if(fijada()){ document.body.removeAttribute('data-pv-espera'); return; }
+    /*  mientras siga en vivo la sesion que ya abri, no se pregunta mas  */
+    if(sid && abierta === sid && hayVivo()){
+      document.body.removeAttribute('data-pv-espera'); return;
+    }
+    /*  si la que tenia abierta dejo de estar en vivo, se suelta  */
+    if(abierta && (!hayVivo() || abierta !== sid)){
+      if(abierta !== sid || !hayVivo()){ abierta = ''; try{ localStorage.removeItem(CLAVE); }catch(e){} }
+    }
+    document.body.setAttribute('data-pv-espera', '1');
+    pintarCartel();
+  }
+
+  window.PVIVO = {
+    abrir: function(){
+      abierta = sidVivo();
+      try{ localStorage.setItem(CLAVE, abierta); }catch(e){}
+      document.body.removeAttribute('data-pv-espera');
+      try{ if(typeof pvTraerAhora === 'function') pvTraerAhora(); }catch(e){}
+    },
+    otras: function(){
+      try{ if(typeof pvAbrirSesiones === 'function') pvAbrirSesiones(); }catch(e){}
+    },
+    revisar: aplicar
+  };
+
+  /*  refrescarVista solo dibuja cuando el panel esta mostrando algo: si esta
+      en blanco, lo que llega no se pinta y no queda nada viejo debajo.     */
+  function envolver(){
+    if(typeof window.refrescarVista !== 'function' || window.refrescarVista.__pvivo) return false;
+    var orig = window.refrescarVista;
+    window.refrescarVista = function(D){
+      try{ aplicar(); }catch(e){}
+      if(document.body.hasAttribute('data-pv-espera')) return;
+      return orig.apply(this, arguments);
+    };
+    window.refrescarVista.__pvivo = true;
+    return true;
+  }
+
+  function arrancar(){
+    if(!envolver()) setTimeout(envolver, 400);
+    aplicar();
+    [600, 1500, 3000, 6000].forEach(function(ms){ setTimeout(aplicar, ms); });
+    setInterval(aplicar, 5000);
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
