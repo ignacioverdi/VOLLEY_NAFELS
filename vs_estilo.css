@@ -547,6 +547,10 @@ html:not([data-vs="off"]) .vs-cab-tit{
  color:#ffffff!important;
 }
 html:not([data-vs="off"]) .vs-cab-tit-puesta{ margin-right:auto; }
+/*  las dos portadas de documento: misma letra, escala de tapa */
+html:not([data-vs="off"]) .vs-cab-portada .vs-cab-tit{
+ font-size:46px!important; letter-spacing:.03em!important; line-height:1!important;
+}
 
 @media (max-width:760px){
  html:not([data-vs="off"]) .vs-cab-chica,

@@ -147,6 +147,11 @@
            la clase, la barra subia a 80, la medicion siguiente veia 80, la
            condicion daba falso y la clase se iba; la barra volvia a 27. */
         if(alto > 0 && alto < 80) cab.classList.add('vs-cab-chica');
+        /* Las portadas de documento —el Manual y la Guia de scouteo— son
+           bandas de 200 a 340 px pensadas para leerse como tapa. Con el titulo
+           a 26 px quedaba MAS CHICO QUE SU PROPIO SUBTITULO. Misma tipografia
+           y mismo estilo, escala de tapa. */
+        if(alto >= 180) cab.classList.add('vs-cab-portada');
       }catch(e){}
     }
     medir();
