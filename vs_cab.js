@@ -203,6 +203,33 @@
       caja.appendChild(av);
     }
 
+    /* ── la tirita suelta de arriba ─────────────────────────────────────
+       Algunas pantallas traen un renglon propio arriba de todo con el boton
+       de volver y los idiomas. Los idiomas ya subieron a la barra; lo que
+       queda (el volver) se mete adentro de la banda de titulo, como el
+       "Volver al Hub" del tablero, y la tirita se esconde. */
+    var cab0 = document.querySelector('.vs-cab');
+    if(cab0){
+      var ant = cab0.previousElementSibling;
+      while(ant){
+        var sig = ant.previousElementSibling;
+        if(ant.id !== 'vsn' && !ant.dataset.vsTira){
+          var alto = 0;
+          try{ alto = ant.getBoundingClientRect().height; }catch(e){}
+          var hijos = [].slice.call(ant.children);
+          var soloEnlaces = hijos.length > 0 && hijos.every(function(h){
+            return h.tagName === 'A' || h.tagName === 'BUTTON' || h.children.length === 0;
+          });
+          if(alto > 0 && alto < 64 && soloEnlaces){
+            ant.dataset.vsTira = '1';
+            hijos.forEach(function(h){ h.classList.add('vs-volver'); cab0.insertBefore(h, cab0.firstChild); });
+            ant.classList.add('vs-huerfano');
+          } else if(ant.dataset) ant.dataset.vsTira = '0';
+        }
+        ant = sig;
+      }
+    }
+
     /* ── la banda de marca de la portada ya no hace falta ───────────────── */
     var hd = document.querySelector('body > header');
     if(hd && hd.querySelector('.logo-wrap') && !hd.dataset.vsUna){
@@ -257,7 +284,7 @@
   function esDeLaMarca(h){ return h === null || h >= 326 || h <= 14 || (h >= 180 && h <= 200); }
 
   function pintarAcentos(){
-    var n = 0;
+    var n = 0, cands = [];
     try{
       var els = document.querySelectorAll('button,a');
       for(var i = 0; i < els.length && n < 300; i++){
@@ -270,10 +297,30 @@
            ahi el margen de error es grande y no vale la pena arriesgar una
            pantalla entera por un detalle. */
         var hb = tono(s.backgroundColor);
-        if(hb !== null && !esDeLaMarca(hb)){
-          e.dataset.vsAc = '1'; e.classList.add('vs-acento'); n++;
-        } else e.dataset.vsAc = '0';
+        if(hb !== null && !esDeLaMarca(hb)) cands.push({ el:e, h:Math.round(hb/30), p:e.parentElement });
+        else e.dataset.vsAc = '0';
       }
+      /* VARIOS BOTONES DE COLORES DISTINTOS JUNTOS SON UN CODIGO, NO ADORNO.
+         En el panel de scouteo los botones de evaluacion (#, +, !, -, =)
+         estan pintados a proposito: cada color dice una cosa. Si en un mismo
+         contenedor hay dos o mas acentos de tonos distintos, se deja todo el
+         grupo como esta. Un acento solo, o varios del mismo tono, si es
+         decoracion y se repinta. */
+      var grupos = [];
+      cands.forEach(function(c){
+        var g = null;
+        for(var q = 0; q < grupos.length; q++) if(grupos[q].p === c.p){ g = grupos[q]; break; }
+        if(!g){ g = { p: c.p, items: [], tonos: {} }; grupos.push(g); }
+        g.items.push(c); g.tonos[c.h] = 1;
+      });
+      grupos.forEach(function(g){
+        var codigo = (g.items.length >= 2 && Object.keys(g.tonos).length >= 2);
+        g.items.forEach(function(c){
+          if(codigo){ c.el.dataset.vsAc = '0'; return; }
+          c.el.dataset.vsAc = '1'; c.el.classList.add('vs-acento'); n++;
+        });
+      });
+
       /* Las barras de progreso son el otro caso: una barra de carga es
          decoracion, pero varias barras de colores distintos en la misma
          pantalla son una escala (verde bien / ambar regular / rojo mal) y ahi

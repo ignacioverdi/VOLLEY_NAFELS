@@ -518,7 +518,7 @@ html:not([data-vs="off"]) .vs-cab{
   linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 20%,rgba(0,4,13,.90) 31%,
     rgba(0,4,13,.52) 42%,rgba(0,4,13,.16) 54%,rgba(0,4,13,0) 64%),
   linear-gradient(180deg,rgba(0,4,13,.16),rgba(0,4,13,.30)),
-  url('vs_hero.jpg') right center / auto 100% no-repeat,
+  url('vs_hero.jpg') right center / auto 165% no-repeat,
   #00040D
   !important;
  border-bottom:0!important;
@@ -812,3 +812,23 @@ html:not([data-vs="off"]) .vs-barra{
  box-shadow:0 0 12px -2px rgba(255,10,78,.7)!important}
 /* los enlaces de cabecera no van subrayados */
 html:not([data-vs="off"]) .nv-pv,html:not([data-vs="off"]) a.nv-pv{text-decoration:none!important}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA BANDA DE TITULO, IGUAL EN LAS 55 PANTALLAS · 2026/27
+   El alto, la tipografia y el recorte son los del tablero. Las pantallas que
+   ya traian una banda alta (el Manual y la Guia) conservan su escala de tapa.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) .vs-cab:not(.vs-cab-portada){
+ min-height:118px!important;padding:16px 28px!important;
+ display:flex!important;align-items:center!important;flex-wrap:wrap!important;
+ gap:12px!important;position:relative!important;overflow:hidden!important}
+html:not([data-vs="off"]) .vs-cab-tit{font-family:var(--vsTit)!important;font-weight:700!important;
+ letter-spacing:.075em!important;text-transform:uppercase!important;color:var(--txt)!important}
+html:not([data-vs="off"]) .vs-cab:not(.vs-cab-portada) .vs-cab-tit{font-size:26px!important}
+/* el boton de volver que subio desde la tirita */
+html:not([data-vs="off"]) .vs-cab .vs-volver{order:-1;flex:0 0 100%;border:0!important;
+ background:none!important;padding:0!important;margin:0 0 2px!important;
+ color:var(--mut)!important;font:400 12px/1 var(--vsUI)!important;letter-spacing:0!important;
+ text-transform:none!important;text-decoration:none!important;box-shadow:none!important}
+html:not([data-vs="off"]) .vs-cab .vs-volver:hover{color:var(--txt)!important}
+html:not([data-vs="off"]) .vs-huerfano{display:none!important}
