@@ -214,6 +214,91 @@
     return true;
   }
 
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     UN SOLO JUEGO DE COLORES EN TODA LA APP
+     -----------------------------------------------------------------------
+     Cada pantalla se fue armando en su momento con el color que vino a mano:
+     el naranja de "Cargar videos", el verde de la barra de progreso, el turquesa
+     de los avisos, el violeta de los badges. Nada de eso esta en la referencia.
+
+     No se puede arreglar por CSS: los colores estan escritos a mano adentro de
+     cada pantalla, no salen de una variable comun. Aca se MIDE el color que
+     termino teniendo cada boton y, si es un acento fuerte que no es el rojo de
+     la marca, se lo repinta con el de la app.
+
+     Lo que NO se toca, porque ahi el color es informacion y no decoracion:
+     las baterias, las tablas, los graficos, los semaforos de wellness, las
+     leyendas y el chip verde de "sistema activo".
+     ═══════════════════════════════════════════════════════════════════════ */
+  var NO_TOCAR = '#eq-objetivos,table,svg,.live-badge,.vs-leyenda,' +
+    '[class*="bat"],[id*="bat"],[class*="semaforo"],[class*="readiness"],[class*="rd-"],' +
+    '[class*="chart"],[class*="grafico"],[class*="legend"],[class*="leyenda"],' +
+    '[class*="dbat"],#nv-rail,.nv-d-comp,[class*="badge-"],[class*="objetivo"]';
+
+  /* devuelve el tono 0-360 si el color es un acento fuerte; si no, null */
+  function tono(col){
+    var m = String(col).match(/rgba?\(([^)]+)\)/); if(!m) return null;
+    var p = m[1].split(',').map(parseFloat);
+    var a = p.length > 3 ? p[3] : 1;
+    if(a < 0.5) return null;
+    var r = p[0]/255, g = p[1]/255, b = p[2]/255;
+    var mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx - mn;
+    if(mx < 0.34) return null;   /* oscuro: no es un acento */
+    if(d < 0.20) return null;    /* gris o casi */
+    var h;
+    if(mx === r) h = 60 * (((g - b) / d) % 6);
+    else if(mx === g) h = 60 * ((b - r) / d + 2);
+    else h = 60 * ((r - g) / d + 4);
+    if(h < 0) h += 360;
+    return h;
+  }
+  /* el rojo y el magenta de la marca, y el cyan, se respetan */
+  function esDeLaMarca(h){ return h === null || h >= 326 || h <= 14 || (h >= 180 && h <= 200); }
+
+  function pintarAcentos(){
+    var n = 0;
+    try{
+      var els = document.querySelectorAll('button,a');
+      for(var i = 0; i < els.length && n < 300; i++){
+        var e = els[i];
+        if(e.dataset.vsAc) continue;
+        try{ if(e.closest(NO_TOCAR)) { e.dataset.vsAc = '0'; continue; } }catch(err){}
+        var s = getComputedStyle(e);
+        if(s.display === 'none') continue;
+        /* SOLO el relleno macizo. El borde y la letra se dejan como estan:
+           ahi el margen de error es grande y no vale la pena arriesgar una
+           pantalla entera por un detalle. */
+        var hb = tono(s.backgroundColor);
+        if(hb !== null && !esDeLaMarca(hb)){
+          e.dataset.vsAc = '1'; e.classList.add('vs-acento'); n++;
+        } else e.dataset.vsAc = '0';
+      }
+      /* Las barras de progreso son el otro caso: una barra de carga es
+         decoracion, pero varias barras de colores distintos en la misma
+         pantalla son una escala (verde bien / ambar regular / rojo mal) y ahi
+         el color ES el dato. Por eso solo se repinta cuando hay pocas y todas
+         del mismo tono: eso es una barra de progreso, no una escala. */
+      var cand = [], bs = document.querySelectorAll('div,span,i');
+      for(var k = 0; k < bs.length && cand.length < 24; k++){
+        var b = bs[k];
+        if(b.dataset.vsBa || b.children.length) continue;
+        try{ if(b.closest(NO_TOCAR)) { b.dataset.vsBa = '0'; continue; } }catch(err){}
+        var c = b.getBoundingClientRect();
+        if(c.height < 3 || c.height > 16 || c.width < 36) continue;
+        var h2 = tono(getComputedStyle(b).backgroundColor);
+        if(h2 === null || esDeLaMarca(h2)){ b.dataset.vsBa = '0'; continue; }
+        cand.push({ el: b, h: Math.round(h2 / 30) });
+      }
+      var tonos = {};
+      cand.forEach(function(x){ tonos[x.h] = 1; });
+      if(cand.length && cand.length <= 4 && Object.keys(tonos).length === 1){
+        cand.forEach(function(x){ x.el.dataset.vsBa = '1'; x.el.classList.add('vs-barra'); });
+      } else cand.forEach(function(x){ x.el.dataset.vsBa = '0'; });
+    }catch(e){}
+    return n;
+  }
+
   function armar(){
     var cab = document.querySelector(SEL);
     var creada = false;
@@ -343,8 +428,17 @@
     });
     /* los paneles, al cargar y de nuevo cuando la pantalla termino de dibujar */
     try{ pintarPaneles(); }catch(e){}
-    setTimeout(function(){ try{ pintarPaneles(); }catch(e){} }, 700);
-    setTimeout(function(){ try{ pintarPaneles(); }catch(e){} }, 2200);
+    try{ pintarAcentos(); }catch(e){}
+    [700, 2200, 4500].forEach(function(ms){
+      setTimeout(function(){ try{ pintarPaneles(); pintarAcentos(); }catch(e){} }, ms);
+    });
+    /* las pantallas dibujan botones despues de bajar los datos */
+    try{
+      var tt = null;
+      new MutationObserver(function(){
+        clearTimeout(tt); tt = setTimeout(function(){ try{ pintarAcentos(); }catch(e){} }, 300);
+      }).observe(document.body, { childList:true, subtree:true });
+    }catch(e){}
     /* algunas pantallas dibujan su barra despues de bajar los datos */
     var n = 0, t = setInterval(function(){
       try{ if(!document.querySelector('.vs-cab-tit')) armar(); }catch(e){}

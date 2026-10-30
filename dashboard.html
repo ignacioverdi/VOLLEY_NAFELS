@@ -16,17 +16,17 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261030-1547" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261030-1547" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-1547"></script>
-<script src="filtro_tipo.js?v=20261030-1547" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261030-1547" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261030-1600" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261030-1600" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1600"></script>
+<script src="filtro_tipo.js?v=20261030-1600" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261030-1600" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261030-1547" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261030-1547" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261030-1600" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261030-1600" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -43,11 +43,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261030-1547" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261030-1600" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261030-1547" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261030-1600" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc?v=b574b2fa" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc?v=ea01ae31" onerror="void 0"></script>
   
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261030-1547" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1547"></script>
+<script src="firebase.js?v=20261030-1600" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1600"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1547">
+<link rel="stylesheet" href="movil.css?v=20261030-1600">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-1547" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1600" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,14 +782,14 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261030-1547" defer></script>
+<script src="iconos.js?v=20261030-1600" defer></script>
 
-<script src="nav.js?v=20261030-1547" defer></script>
+<script src="nav.js?v=20261030-1600" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1547">
-<script src="vs_cab.js?v=20261030-1547" defer></script>
-<script src="vs_tabla.js?v=20261030-1547" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1600">
+<script src="vs_cab.js?v=20261030-1600" defer></script>
+<script src="vs_tabla.js?v=20261030-1600" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -2755,11 +2755,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1547"></script>
-<script src="lang.js?v=20261030-1547"></script>
-<script src="temporadas_menu.js?v=20261030-1547"></script>
-<script src="ayuda.js?v=20261030-1547"></script>
-<script src="velocidades_saque.js?v=20261030-1547" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261030-1600"></script>
+<script src="lang.js?v=20261030-1600"></script>
+<script src="temporadas_menu.js?v=20261030-1600"></script>
+<script src="ayuda.js?v=20261030-1600"></script>
+<script src="velocidades_saque.js?v=20261030-1600" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2809,7 +2809,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261030-1547" defer></script>
+<script src="volver_inicio.js?v=20261030-1600" defer></script>
 <script id="nv-dash-js">
 /* ═══════════════════════════════════════════════════════════════════════════
    dashboard · LA PLANTILLA
@@ -3290,39 +3290,14 @@ html.nv-d2:not([data-vs="off"]) .nv-d-comp .br i{display:block;height:100%;borde
 html.nv-d2:not([data-vs="off"]) .nv-d-comp .pc{flex:0 0 42px;text-align:right;
  font:400 11px/1 var(--nvNum);color:var(--nvInk3)}
 
-/* ── parte 4 · la tabla y las baterias con la tipografia de la plantilla ── */
-html.nv-d2:not([data-vs="off"]) #eq-tab-content table{width:100%!important}
-html.nv-d2:not([data-vs="off"]) #eq-tab-content thead th{font:600 10.5px/1.2 var(--nvUI)!important;
- letter-spacing:.14em!important;text-transform:uppercase!important;color:#7E95AB!important;
- padding:10px 8px!important;border-bottom:1px solid rgba(16,41,53,.9)!important;background:none!important}
-html.nv-d2:not([data-vs="off"]) #eq-tab-content tbody td{font:500 13px/1.3 var(--nvUI)!important;
- padding:9px 8px!important;
- border-bottom:1px solid rgba(16,41,53,.55)!important;background:none!important}
-html.nv-d2:not([data-vs="off"]) #eq-tab-content tbody tr:hover td{background:rgba(255,10,78,.05)!important}
-html.nv-d2:not([data-vs="off"]) #eq-tab-content tbody td:first-child{font-weight:600!important}
-html.nv-d2:not([data-vs="off"]) #eq-tab-content tfoot td,
-html.nv-d2:not([data-vs="off"]) #eq-tab-content tbody tr:last-child td{font-weight:600!important}
-/* las baterias: misma familia y mismos tamaños que el resto */
+/* ── parte 4 · las baterias con la tipografia de la app ─────────────────── */
 html.nv-d2:not([data-vs="off"]) #eq-objetivos,
 html.nv-d2:not([data-vs="off"]) #eq-objetivos *{font-family:var(--nvUI)!important}
 html.nv-d2:not([data-vs="off"]) #eq-objetivos{padding:0 14px 14px!important}
-/* el medidor y el analisis, con el mismo alto */
 html.nv-d2:not([data-vs="off"]) .nv-d-f5 > *{display:flex;flex-direction:column}
-
-/* la columna de la derecha, en grilla: la tabla a la izquierda y, a la
-   derecha, el medidor de fundamentos arriba y la comparativa abajo. Se ubica
-   por grilla y no por orden porque nv-dash reordena #nv-rail todo el tiempo. */
-html.nv-d2:not([data-vs="off"]) #nv-wrap{display:grid!important;
- grid-template-columns:minmax(0,1fr) 358px!important;gap:14px!important;align-items:start!important}
-html.nv-d2:not([data-vs="off"]) #nv-wrap > :first-child{grid-column:1!important;
- grid-row:1 / span 2!important;flex:none!important}
-html.nv-d2:not([data-vs="off"]) #nv-wrap > #nv-rail{grid-column:2!important;grid-row:1!important;
- flex:none!important;width:auto!important}
-html.nv-d2:not([data-vs="off"]) #nv-wrap > #nv-d-compp{grid-column:2!important;grid-row:2!important}
-@media (max-width:1100px){
- html.nv-d2:not([data-vs="off"]) #nv-wrap{grid-template-columns:minmax(0,1fr)!important}
- html.nv-d2:not([data-vs="off"]) #nv-wrap > *{grid-column:1!important;grid-row:auto!important}
-}
+/* el enlace de cabecera: es un boton de verdad, no un texto suelto */
+html.nv-d2:not([data-vs="off"]) button.nv-pv{border:0;background:none;padding:0;cursor:pointer}
+html.nv-d2:not([data-vs="off"]) .nv-pv:hover{color:#fff!important}
 
 /* ── parte 5 · remates sobre lo publicado ──────────────────────────────── */
 /* el medidor de saque, con la misma cabecera que los demas paneles */
@@ -3413,14 +3388,49 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
   }
 
   /* ── 2 · panel + cabecera para una caja que ya existe ──────────────────── */
-  function panelar(el, ico, titulo, extra){
+  /* Va a donde dice que va. Antes el "Ver todos" era un <span> suelto: se
+     veia como enlace y no hacia nada. Ahora es un enlace de verdad, y cuando
+     el destino es otra pestaña del mismo tablero, la abre. */
+  function irA(destino){
+    if(!destino) return null;
+    if(destino.charAt(0) !== '#') return { href: destino };
+    var tab = destino.slice(1);
+    return { tab: tab };
+  }
+  function enlace(texto, destino){
+    var d = irA(destino);
+    if(!d) return null;
+    var a = document.createElement(d.href ? 'a' : 'button');
+    a.className = 'nv-pv';
+    if(d.href) a.href = d.href;
+    else{
+      a.type = 'button';
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        try{
+          var bs = document.querySelectorAll('.main-tabs .mtab');
+          for(var i = 0; i < bs.length; i++){
+            var oc = String(bs[i].getAttribute('onclick') || '');
+            if(oc.indexOf("'" + d.tab + "'") >= 0){ bs[i].click(); break; }
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }catch(err){}
+      });
+    }
+    a.innerHTML = texto + ' <b aria-hidden="true">&rarr;</b>';
+    return a;
+  }
+  function panelar(el, ico, titulo, extra, destino){
     if(!el || el.dataset.plPan) return el;
     el.dataset.plPan = '1';
     var p = document.createElement('section'); p.className = 'nv-pan nv-d-pan';
     el.parentNode.insertBefore(p, el);
     var ph = document.createElement('div'); ph.className = 'nv-ph';
-    ph.innerHTML = '<span class="nv-pic">' + sv(ico, 1.65) + '</span><h3>' + titulo + '</h3>' +
-                   (extra ? '<span class="nv-pv">' + extra + ' <b>&rarr;</b></span>' : '');
+    ph.innerHTML = '<span class="nv-pic">' + sv(ico, 1.65) + '</span><h3>' + titulo + '</h3>';
+    if(extra){
+      var a = enlace(extra, destino);
+      if(a) ph.appendChild(a);
+    }
     p.appendChild(ph); p.appendChild(el);
     return p;
   }
@@ -3442,8 +3452,16 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
 
     f2.appendChild(tarjetaLink('plan_desarrollo.html', IC.diana,
       T('Plan de desarrollo'), T('Objetivos individuales y de equipo'), T('Ver detalles'), 'nv-d-plan'));
-    f2.appendChild(tarjetaLink('#velp-caja', IC.cohete,
-      T('Velocidad de saque'), T('Tu equipo en la velocidad de saque'), T('Ver análisis'), 'nv-d-velc'));
+    var tv = tarjetaLink('#velp-caja', IC.cohete,
+      T('Velocidad de saque'), T('Tu equipo en la velocidad de saque'), T('Ver análisis'), 'nv-d-velc');
+    tv.addEventListener('click', function(e){
+      e.preventDefault();
+      var caja = document.getElementById('velp-caja'); if(!caja) return;
+      caja.scrollIntoView({ behavior:'smooth', block:'center' });
+      var b = document.getElementById('velp-btn');
+      if(b && b.offsetParent !== null) setTimeout(function(){ b.click(); }, 450);
+    });
+    f2.appendChild(tv);
 
     var strip = document.createElement('section'); strip.className = 'nv-pan nv-d-strip';
     f2.appendChild(strip); strip.appendChild(subs);
@@ -3452,12 +3470,13 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
     verDetalle();
 
     /* la barra de filtros, como panel */
-    panelar(fbar, IC.filtro, T('Filtros'), null);
+    panelar(fbar, IC.filtro, T('Filtros'), null, null);
     var pf = fbar.parentElement;
     if(pf && pf.classList.contains('nv-d-pan')){ pf.classList.add('nv-d-filtros'); vista.insertBefore(pf, f2); }
 
     /* la tabla, con su cabecera */
-    panelar(tabla, IC.barras, T('Rendimiento individual').toUpperCase(), null);
+    panelar(tabla, IC.barras, T('Rendimiento individual').toUpperCase(),
+            T('Ver por jugador'), '#jugador');
 
     /* fila 4: las baterias solas, a lo ancho, para que se lean todas juntas */
     var f4 = document.createElement('div'); f4.className = 'nv-d-f4';
@@ -3466,7 +3485,8 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
     if(obj){
       var lbl = obj.previousElementSibling;
       if(lbl && lbl.classList && lbl.classList.contains('sec-lbl')) lbl.classList.add('nv-oculto');
-      var po = panelar(obj, IC.bandera, T('Objetivos individuales').toUpperCase(), T('Ver todos'));
+      var po = panelar(obj, IC.bandera, T('Objetivos individuales').toUpperCase(),
+                       T('Ver todos'), '#objetivos');
       if(po) f4.appendChild(po);
     }
     /* fila 5: el medidor de saque y el analisis por equipo, debajo */
@@ -3517,12 +3537,13 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
                  ['tendencias.html', IC.tend, 'Tendencias de rendimiento', 'Evolución y gráficas de la temporada']];
     p.innerHTML = '<div class="nv-ph"><span class="nv-pic">' + sv(IC.barras, 1.65) + '</span>' +
       '<h3>' + T('Análisis por equipo').toUpperCase() + '</h3>' +
-      '<span class="nv-pv">' + T('Ver todos') + ' <b>&rarr;</b></span></div>' +
-      '<div class="nv-d-aelista">' + FILAS.map(function(f){
+      '</div>' + '<div class="nv-d-aelista">' + FILAS.map(function(f){
         return '<a href="' + f[0] + '"><span class="nv-pic">' + sv(f[1], 1.6) + '</span>' +
                '<span class="tx"><b>' + T(f[2]) + '</b><span>' + T(f[3]) + '</span></span>' +
                '<b class="fl">&rsaquo;</b></a>';
       }).join('') + '</div>';
+    var aE = enlace(T('Ver todos'), 'equipo.html');
+    if(aE) p.querySelector('.nv-ph').appendChild(aE);
     return p;
   }
 
@@ -3585,14 +3606,15 @@ html.nv-d2:not([data-vs="off"]) #nv-rail .nv-pic::after{content:'';display:block
     var mx = Math.max.apply(null, datos.map(function(d){ return Math.abs(d.v); })) || 1;
     p.innerHTML = '<div class="nv-ph"><span class="nv-pic">' + sv(IC.gente, 1.65) + '</span>' +
       '<h3>' + T('Comparativa de jugadores').toUpperCase() + '</h3>' +
-      '<span class="nv-pv">' + T('Ver más') + ' <b>&rarr;</b></span></div>' +
-      '<div class="nv-d-comp">' + datos.map(function(d){
+      '</div>' + '<div class="nv-d-comp">' + datos.map(function(d){
         var w = Math.max(3, Math.round(Math.abs(d.v) / mx * 100));
         return '<div class="fila"><span class="ic">' + sv(I_PERS, 1.6) + '</span>' +
                '<span class="nm">' + d.n + '</span>' +
                '<span class="br"><i style="width:' + w + '%"></i></span>' +
                '<span class="pc">' + d.v + '%</span></div>';
       }).join('') + '</div>';
+    var aC = enlace(T('Ver más'), '#jugador');
+    if(aC) p.querySelector('.nv-ph').appendChild(aC);
   }
 
   /* ── 5 · la chispa de velocidad, con los saques medidos ────────────────── */

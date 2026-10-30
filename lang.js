@@ -901,6 +901,7 @@
     "Comparativa de jugadores": { en:"Player comparison", de:"Spielervergleich" },
     "Mejor registro": { en:"Best record", de:"Bestwert" },
     "Promedio equipo": { en:"Team average", de:"Teamdurchschnitt" },
+    "Ver por jugador": { en:"See by player", de:"Nach Spieler ansehen" },
     "Acceso exclusivo": { en:"Exclusive access", de:"Exklusiver Zugang" },
     "Puntos de ataque": { en:"Attack points", de:"Angriffspunkte" },
     "Eficiencia de ataque por sesi\u00f3n": { en:"Attack efficiency per session", de:"Angriffseffizienz pro Einheit" },
