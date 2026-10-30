@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 /* ═══════════════════════════════════════════════════════════════════════════
    vs_estilo.css · LA PIEL DE TODA LA APP
    ---------------------------------------------------------------------------
@@ -26,29 +26,35 @@
 
 /* ── las variables que ya usan todas las pantallas ────────────────────────── */
 html:not([data-vs="off"]){
-  /* marca */
-  --red:#E8192C;  --red2:#FF5468;  --redd:#B00C22;
-  /* fondos */
-  --bg:#07080F;
-  --card:rgba(13,14,26,.72);   --card2:rgba(19,22,42,.72);  --elev:rgba(23,26,48,.76);
-  --pan:rgba(13,16,32,.72);    --pan2:rgba(17,21,42,.72);
-  /* lineas */
-  --line:rgba(255,255,255,.085);   --border:rgba(255,255,255,.085);  --b:rgba(255,255,255,.085);
-  --border2:rgba(255,255,255,.145); --b2:rgba(255,255,255,.145);
+  /* marca — medida pixel a pixel sobre la referencia (#FC023C..#FF085B) */
+  --red:#FF0A4E;  --red2:#FF5C84;  --redd:#A8062F;
+  --vsFill:#DE0640;        /* relleno macizo con letras blancas: 4,9:1 */
+  --mag:#F90656;  --cyan:#00CFFF;
+  /* fondos — el panel es casi tan negro como la pagina; lo separa el borde */
+  --bg:#00040D;
+  --card:#000C17;              --card2:#000F1B;            --elev:#00101D;
+  --pan:#000C17;               --pan2:#000F1B;
+  /* lineas — el borde SUPERIOR es claro, los otros tres oscuros */
+  --line:#102935;                  --border:#102935;                --b:#102935;
+  --border2:#1A3F52;               --b2:#1A3F52;
+  --vsLineAlta:#545D6C;            --vsSep:#021826;
   /* texto */
-  --txt:#E8EDF7;  --mut:#8E9AB4;  --mut2:#AEB9CE;  --dim:#8A94A6;
+  --txt:#EBF4F7;  --mut:#8FA8BE;  --mut2:#B4D2E4;  --dim:#6E869C;
   /* avisos: un solo juego para toda la app */
   --green:#2BBF72; --amber:#E0A32F; --teal:#2AA9A0; --indigo:#7C8BE8; --orange:#E8762C;
-  --vsUI:'Barlow','Barlow Condensed',system-ui,-apple-system,sans-serif;
+  --vsUI:'Inter',system-ui,-apple-system,sans-serif;
+  /* los titulos: Montserrat. Rajdhani era la que MAS lejos quedaba de la
+     referencia (17,3 contra 23,75 de relacion ancho/alto). */
+  --vsTit:'Montserrat',system-ui,sans-serif;
   /* los numeros de las tablas: ancho fijo, para que las columnas se alineen solas */
-  --vsNum:'IBM Plex Mono',ui-monospace,'SF Mono','Cascadia Mono',Consolas,monospace;
+  --vsNum:'JetBrains Mono',ui-monospace,'SF Mono','Cascadia Mono',Consolas,monospace;
 }
 
 /* ── el fondo, fijo detras de todo ────────────────────────────────────────── */
 /*   Va en <html> y no en <body>: asi cada pantalla puede seguir usando su
      propio body sin pelearse con esto. Las capas quedan fijas a la ventana,
      o sea que el fondo no se mueve cuando scrolleas — como en la portada.    */
-html:not([data-vs="off"]){ background:linear-gradient(180deg,#0A0B14 0%,#07080F 42%,#05060B 100%) #06070E; }
+html:not([data-vs="off"]){ background:linear-gradient(180deg,#070E18 0%,#04080F 38%,#00040D 100%) #00040D; }
 html:not([data-vs="off"]) body{ background:transparent!important; }
 /*   focos rojos + una trama de puntos que se desvanece hacia abajo.
      Antes eran dos juegos de lineas cada 54 px: leia como hoja cuadriculada y
@@ -58,12 +64,14 @@ html:not([data-vs="off"]) body{ background:transparent!important; }
 html:not([data-vs="off"])::before{
   content:'';position:fixed;inset:0;z-index:-3;pointer-events:none;
   background:
-    radial-gradient(900px 520px at 8% -8%,rgba(232,25,44,.20),transparent 62%),
-    radial-gradient(760px 480px at 102% 6%,rgba(120,20,60,.17),transparent 60%),
-    radial-gradient(1100px 700px at 50% 112%,rgba(232,25,44,.09),transparent 64%),
-    radial-gradient(rgba(255,255,255,.085) 1px,transparent 1px);
-  background-size:auto,auto,auto,30px 30px;
-  background-repeat:no-repeat,no-repeat,no-repeat,repeat;
+    radial-gradient(1100px 560px at 2% -4%,rgba(255,10,78,.26),transparent 64%),
+    radial-gradient(900px 480px at 99% 2%,rgba(249,6,86,.17),transparent 68%),
+    radial-gradient(760px 520px at 12% 96%,rgba(255,10,78,.14),transparent 70%),
+    radial-gradient(820px 520px at 88% 92%,rgba(0,207,255,.075),transparent 72%),
+    linear-gradient(rgba(23,71,91,.20) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(23,71,91,.20) 1px,transparent 1px);
+  background-size:auto,auto,auto,auto,44px 44px,44px 44px;
+  background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,repeat,repeat;
   -webkit-mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
           mask-image:radial-gradient(150% 110% at 50% -6%,#000 22%,rgba(0,0,0,.35) 70%,transparent 100%);
 }
@@ -502,17 +510,19 @@ html:not([data-vs="off"]) .top,
 html:not([data-vs="off"]) .hdr,
 html:not([data-vs="off"]) .hdr-in,
 html:not([data-vs="off"]) .vs-cab{
+ /* El arte es el de la referencia, recortado de ella misma y anclado a la
+    derecha, igual que ahi. A la izquierda el degradado lo funde con el fondo
+    para que el titulo se lea sobre negro. Abajo, el filo rojo-magenta-cian. */
  background:
-  linear-gradient(90deg,#e8192c,#ff4d6d 34%,#b94bff 68%,#6f7bff) left bottom / 100% 3px no-repeat,
-  radial-gradient(620px 300px at 5% 50%,rgba(232,25,44,.26),transparent 72%),
-  radial-gradient(520px 280px at 95% 50%,rgba(120,60,220,.18),transparent 74%),
-  linear-gradient(90deg,rgba(7,6,11,.95) 0%,rgba(7,6,11,.86) 34%,rgba(7,6,11,.42) 56%,rgba(7,6,11,.34) 78%,rgba(7,6,11,.80) 100%),
-  linear-gradient(180deg,rgba(7,6,11,.30),rgba(7,6,11,.52)),
-  url('fondo_axpo_nafels.jpg') center / cover no-repeat,
-  #0B0810
+  linear-gradient(90deg,var(--red),var(--mag) 50%,var(--cyan)) left bottom / 100% 2px no-repeat,
+  linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 20%,rgba(0,4,13,.90) 31%,
+    rgba(0,4,13,.52) 42%,rgba(0,4,13,.16) 54%,rgba(0,4,13,0) 64%),
+  linear-gradient(180deg,rgba(0,4,13,.16),rgba(0,4,13,.30)),
+  url('vs_hero.jpg') right center / auto 100% no-repeat,
+  #00040D
   !important;
  border-bottom:0!important;
- box-shadow:0 10px 34px -20px rgba(0,0,0,.9)!important;
+ box-shadow:0 12px 36px -22px rgba(0,0,0,.96),0 0 26px -12px rgba(255,10,78,.35)!important;
 }
 
 /* ── el alto y la tipografia del encabezado ──────────────────────────────── */
@@ -538,7 +548,7 @@ html:not([data-vs="off"]) .vs-cab-nueva{
     normal: Bebas tiene un solo peso y pedirle negrita hace que el navegador la
     simule y salga sucia.                                                     */
 html:not([data-vs="off"]) .vs-cab-tit{
- font-family:'Bebas Neue','Barlow Condensed',sans-serif!important;
+ font-family:var(--vsTit)!important;
  font-size:26px!important;
  font-weight:400!important;
  letter-spacing:.045em!important;
@@ -557,4 +567,58 @@ html:not([data-vs="off"]) .vs-cab-portada .vs-cab-tit{
  html:not([data-vs="off"]) .vs-cab-nueva{ min-height:64px!important; }
  html:not([data-vs="off"]) .vs-cab-nueva{ padding:11px 16px!important; }
  html:not([data-vs="off"]) .vs-cab-tit{ font-size:22px!important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA PIEL, PARTE 2 · lo que hace que una pantalla se vea como la portada
+   ---------------------------------------------------------------------------
+   Los tokens de arriba repintan colores y tipografias en las 55. Esto suma
+   las tres cosas que faltaban para que TODAS se vean como el dashboard:
+
+     1. La barra roja inclinada delante del titulo de la banda.
+     2. El panel con BORDE SUPERIOR CLARO. Medido en la referencia: los
+        laterales y el inferior son #102935 y el de arriba #545D6C. Ese solo
+        detalle es el que da volumen; sin el los paneles se ven planos.
+     3. El relleno rojo macizo con letras blancas usa --vsFill, no --red:
+        el rojo de marca sobre blanco da 3,85:1 y no llega al minimo legible.
+
+   Los paneles no tienen una clase comun en las 55 pantallas, asi que los
+   marca vs_cab.js en tiempo de ejecucion: mide cada caja y le pone .vs-pan
+   solo si ya era un panel (borde propio, fondo propio, esquinas redondeadas)
+   y si su borde es neutro. Un panel con borde de color a proposito no se toca.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── la barra roja del titulo ────────────────────────────────────────────── */
+html:not([data-vs="off"]) .vs-cab-tit::before{
+  content:'';display:inline-block;width:7px;height:.74em;margin-right:.40em;
+  border-radius:2px;background:var(--red);transform:skewX(-14deg);
+  vertical-align:-.05em;box-shadow:0 0 16px rgba(255,10,78,.85);
+}
+html:not([data-vs="off"]) .vs-cab-portada .vs-cab-tit::before{ height:.70em;width:9px; }
+
+/* ── el panel ────────────────────────────────────────────────────────────── */
+/* Tus paneles NO tienen borde: son fondo y esquinas redondeadas. Asi que el
+   borde claro de arriba y el hilo oscuro de los otros tres lados se dibujan
+   con sombras INTERNAS, que no ocupan espacio y no mueven un pixel de la
+   maqueta. Si se agregara un borde de verdad, cada panel creceria 2 px.    */
+html:not([data-vs="off"]) .vs-pan{
+  box-shadow:inset 0 1px 0 rgba(84,93,108,.60),
+             inset 0 0 0 1px rgba(16,41,53,.85),
+             0 26px 54px -34px rgba(0,0,0,.98)!important;
+}
+
+/* ── el rojo macizo con letras blancas ───────────────────────────────────── */
+html:not([data-vs="off"]) .vs-pan [style*="background:#E8192C"],
+html:not([data-vs="off"]) button[style*="background:#E8192C"]{
+  background:var(--vsFill)!important;
+}
+
+/* ── grano finisimo: le saca el plano digital al negro ───────────────────── */
+/* Va en un elemento propio que crea vs_cab.js, NO en body::after: hay
+   pantallas que usan ese pseudo-elemento y se lo estariamos pisando. */
+html:not([data-vs="off"]) .vs-grano{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.26;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
 }

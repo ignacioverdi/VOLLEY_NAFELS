@@ -16,17 +16,17 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261030-0758" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261030-0758" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-0758"></script>
-<script src="filtro_tipo.js?v=20261030-0758" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261030-0758" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261030-1240" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261030-1240" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1240"></script>
+<script src="filtro_tipo.js?v=20261030-1240" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261030-1240" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261030-0758" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261030-0758" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261030-1240" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261030-1240" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -43,11 +43,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261030-0758" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261030-1240" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261030-0758" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261030-1240" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc?v=b574b2fa" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc?v=ea01ae31" onerror="void 0"></script>
   
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261030-0758" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-0758"></script>
+<script src="firebase.js?v=20261030-1240" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1240"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-0758">
+<link rel="stylesheet" href="movil.css?v=20261030-1240">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-0758" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1240" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,14 +782,14 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261030-0758" defer></script>
+<script src="iconos.js?v=20261030-1240" defer></script>
 
-<script src="nav.js?v=20261030-0758" defer></script>
+<script src="nav.js?v=20261030-1240" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-0758">
-<script src="vs_cab.js?v=20261030-0758" defer></script>
-<script src="vs_tabla.js?v=20261030-0758" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1240">
+<script src="vs_cab.js?v=20261030-1240" defer></script>
+<script src="vs_tabla.js?v=20261030-1240" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -2755,11 +2755,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-0758"></script>
-<script src="lang.js?v=20261030-0758"></script>
-<script src="temporadas_menu.js?v=20261030-0758"></script>
-<script src="ayuda.js?v=20261030-0758"></script>
-<script src="velocidades_saque.js?v=20261030-0758" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261030-1240"></script>
+<script src="lang.js?v=20261030-1240"></script>
+<script src="temporadas_menu.js?v=20261030-1240"></script>
+<script src="ayuda.js?v=20261030-1240"></script>
+<script src="velocidades_saque.js?v=20261030-1240" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2809,7 +2809,98 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261030-0758" defer></script>
+<script src="volver_inicio.js?v=20261030-1240" defer></script>
+<script id="nv-dash-js">
+/* ══════════════════════════════════════════════════════════════════════════
+   LAS BATERIAS, ABAJO DE TODO
+   ---------------------------------------------------------------------------
+   Las baterias (#eq-objetivos) estaban entre la tabla y la velocidad de saque.
+   Son lo mas visual de la pantalla, asi que van ultimas: se mueve la caja de
+   velocidad (#velp-caja) ARRIBA de ellas. Es un solo insertBefore, no se toca
+   ni el contenido ni la logica de ninguna de las dos.
+
+   De paso, la caja de velocidad muestra el dato que ya tenia y no ensenaba:
+   la velocidad viene como octavo campo de cada saque, solo en los medidos.
+   Se calcula la mediana y el maximo con los mismos saques que usa tu propia
+   pantalla de velocidades. Si no hay ninguno medido, no se dibuja nada.
+
+   Se apaga con el interruptor de siempre:
+       localStorage.setItem('vs_estilo','off')  y recargar.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  try{ if((localStorage.getItem('vs_estilo')||'') === 'off') return; }catch(e){}
+
+  /* 1 · la velocidad sube, las baterias quedan ultimas */
+  function ordenar(){
+    var obj = document.getElementById('eq-objetivos');
+    var vel = document.getElementById('velp-caja');
+    if(!obj || !vel || vel.dataset.nvMovido) return;
+    var p = obj.parentElement;
+    if(vel.parentElement !== p) return;
+    var lbl = obj.previousElementSibling;
+    var ancla = (lbl && lbl.classList && lbl.classList.contains('sec-lbl')) ? lbl : obj;
+    p.insertBefore(vel, ancla);
+    vel.dataset.nvMovido = '1';
+  }
+
+  /* 2 · el medidor, con los saques que SI estan medidos */
+  function medidor(){
+    var caja = document.getElementById('velp-caja');
+    if(!caja || caja.dataset.nvMed) return;
+    var V = window.VEL_SAQUE;
+    if(!V || typeof V.sacadores !== 'function') return;
+    var S = [];
+    try{ S = V.sacadores() || []; }catch(e){ return; }
+    var k = [];
+    S.forEach(function(j){
+      (j.data || []).forEach(function(f){
+        if(f.length >= 8 && typeof f[7] === 'number' && f[7] > 0) k.push(f[7]);
+      });
+    });
+    if(k.length < 5) return;          /* con menos de 5 no se muestra nada */
+    k.sort(function(a,b){ return a-b; });
+    var med = k[Math.floor(k.length/2)], mx = k[k.length-1], mn = k[0];
+    var frac = (mx > mn) ? (med-mn)/(mx-mn) : 0.5, L = 163.4;
+    var d = document.createElement('div');
+    d.className = 'nv-vel';
+    d.innerHTML =
+      '<svg viewBox="0 0 130 78" role="img" aria-label="Velocidad habitual ' + med + ' kilometros por hora">' +
+        '<path d="M13 68a52 52 0 01104 0" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10" stroke-linecap="round"/>' +
+        '<path d="M13 68a52 52 0 01104 0" fill="none" stroke="#FF0A4E" stroke-width="10" stroke-linecap="round" ' +
+          'stroke-dasharray="' + (L*frac).toFixed(1) + ' ' + L + '"/>' +
+        '<text x="65" y="56" text-anchor="middle" class="nv-vel-n">' + med + '</text>' +
+        '<text x="65" y="72" text-anchor="middle" class="nv-vel-u">km/h</text>' +
+      '</svg>' +
+      '<div class="nv-vel-d">' +
+        '<div><b>MEJOR REGISTRO</b><span>' + mx + ' km/h</span></div>' +
+        '<div><b>HABITUAL</b><span>' + med + ' km/h</span></div>' +
+        '<p>mediana sobre ' + k.length + ' saques medidos</p>' +
+      '</div>';
+    /* debajo del titulo y arriba del boton */
+    var btn = caja.querySelector('a,button');
+    if(btn && btn.parentNode === caja) caja.insertBefore(d, btn);
+    else caja.appendChild(d);
+    caja.dataset.nvMed = '1';
+  }
+
+  function todo(){ try{ ordenar(); }catch(e){} try{ medidor(); }catch(e){} }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', todo);
+  else todo();
+  setTimeout(todo, 900); setTimeout(todo, 2600); setTimeout(todo, 6000);
+})();
+</script>
+<style id="nv-dash">
+html:not([data-vs="off"]) .nv-vel{display:flex;align-items:center;gap:16px;padding:6px 2px 12px}
+html:not([data-vs="off"]) .nv-vel svg{width:116px;height:70px;flex-shrink:0;
+  filter:drop-shadow(0 0 10px rgba(255,10,78,.45))}
+html:not([data-vs="off"]) .nv-vel-n{font-family:var(--vsNum);font-size:23px;fill:#EBF4F7}
+html:not([data-vs="off"]) .nv-vel-u{font-family:var(--vsUI);font-size:9px;letter-spacing:.14em;fill:#8FA8BE}
+html:not([data-vs="off"]) .nv-vel-d div{margin-bottom:9px}
+html:not([data-vs="off"]) .nv-vel-d b{display:block;font:500 9px/1.3 var(--vsUI);letter-spacing:.12em;color:#8FA8BE}
+html:not([data-vs="off"]) .nv-vel-d span{font:500 15px var(--vsNum);color:#EBF4F7}
+html:not([data-vs="off"]) .nv-vel-d p{margin:0;font:9.5px var(--vsUI);color:#6E869C}
+</style>
 </body>
 </html>
 

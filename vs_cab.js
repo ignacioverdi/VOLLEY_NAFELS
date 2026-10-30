@@ -181,8 +181,77 @@
     }
   }
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     LOS PANELES
+     -----------------------------------------------------------------------
+     En la referencia el panel es casi tan negro como la pagina: lo que lo
+     separa es un BORDE SUPERIOR CLARO (#545D6C) contra los otros tres
+     oscuros (#102935). Medido pixel a pixel. Ese solo detalle es el que le
+     da volumen; sin el los paneles se ven planos.
+
+     No hay una clase de panel comun en las 55 pantallas, asi que no se puede
+     hacer por CSS. Aca se MIDE cada caja y se le pone .vs-pan solo si ya era
+     un panel: borde propio, fondo propio y esquinas redondeadas. Si su borde
+     tiene color a proposito —un panel destacado en rojo, por ejemplo— no se
+     toca: se compara la saturacion del borde y los de color quedan afuera.  */
+  function esNeutro(col){
+    var m = String(col).match(/rgba?\(([^)]+)\)/);
+    if(!m) return true;
+    var p = m[1].split(',').map(parseFloat);
+    var r = p[0], g = p[1], b = p[2];
+    var max = Math.max(r,g,b), min = Math.min(r,g,b);
+    return (max - min) < 42;        /* poca saturacion = borde neutro */
+  }
+  function pintarPaneles(){
+    var cajas;
+    try{ cajas = document.querySelectorAll('div,section,article,aside,form'); }catch(e){ return; }
+    var n = 0;
+    for(var i = 0; i < cajas.length && n < 400; i++){
+      var el = cajas[i];
+      if(el.dataset.vsPan) continue;
+      try{
+        if(el.closest('.vs-cab')) continue;
+        if(el.closest('table')) continue;
+        var s = getComputedStyle(el);
+        if(s.display === 'none' || s.position === 'fixed') continue;
+        /* Se midieron las pantallas: los paneles no traen borde, traen fondo
+           y esquinas redondeadas. Ese es el criterio. Se dejan afuera los
+           circulos (radio en %) y las pastillas (radio mayor que media
+           altura), que no son paneles. */
+        var rr = s.borderTopLeftRadius || '';
+        if(rr.indexOf('%') >= 0) continue;
+        var rad = parseFloat(rr) || 0;
+        if(rad < 8 || rad > 28) continue;
+        var bg = s.backgroundColor || '';
+        if(!bg || bg === 'transparent' || /rgba\([^)]*,\s*0\s*\)$/.test(bg)) continue;
+        var c = el.getBoundingClientRect();
+        if(c.width < 190 || c.height < 54) continue;
+        if(rad > c.height / 2) continue;
+        el.dataset.vsPan = '1';
+        el.classList.add('vs-pan');
+        n++;
+      }catch(e){}
+    }
+    return n;
+  }
+
+  /* el grano: un elemento propio, para no pisarle el ::after a nadie */
+  function grano(){
+    try{
+      if(document.querySelector('.vs-grano')) return;
+      var g = document.createElement('i');
+      g.className = 'vs-grano'; g.setAttribute('aria-hidden','true');
+      document.body.appendChild(g);
+    }catch(e){}
+  }
+
   function arrancar(){
     try{ armar(); }catch(e){}
+    try{ grano(); }catch(e){}
+    /* los paneles, al cargar y de nuevo cuando la pantalla termino de dibujar */
+    try{ pintarPaneles(); }catch(e){}
+    setTimeout(function(){ try{ pintarPaneles(); }catch(e){} }, 700);
+    setTimeout(function(){ try{ pintarPaneles(); }catch(e){} }, 2200);
     /* algunas pantallas dibujan su barra despues de bajar los datos */
     var n = 0, t = setInterval(function(){
       try{ if(!document.querySelector('.vs-cab-tit')) armar(); }catch(e){}
