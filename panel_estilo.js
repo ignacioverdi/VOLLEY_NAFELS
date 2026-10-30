@@ -203,7 +203,7 @@
       '.top .tbtn.pri{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.16);',
       '  color:#C3CBD9;font-weight:700}',
       '.top .tbtn.pri:hover{border-color:rgba(232,25,44,.55);color:#FF6B79}',
-      '#pe-analisis{background:#E8192C;border:none;color:#fff;font-weight:800}',
+      '#pe-analisis{background:#DE0640;border:none;color:#fff;font-weight:700}',
       '#pe-analisis:hover{background:#FF2A3E}',
 
       /* el menú */
@@ -420,7 +420,8 @@
     caja.appendChild(btn); caja.appendChild(panel);
     top.appendChild(caja);
 
-    var COL = { antes: '#8B5CF6', vivo: '#0E9F6E', luego: '#0B84C4' };
+    /* los tres momentos, en la paleta de la app: rojo, rojo claro y gris azulado */
+    var COL = { antes: '#FF0A4E', vivo: '#FF5C84', luego: '#8FA8BE' };
     var cajas = {};
     ['antes', 'vivo', 'luego'].forEach(function (k) {
       var g = document.createElement('div');
@@ -707,13 +708,26 @@
       }).join('') + '</div>';
   }
 
+  /*   Escribe solo si el texto cambio. Antes se reescribia el panel entero
+       cada 700 ms aunque no hubiera pasado nada: eso borraba las clases que
+       la piel de la app le pone a los botones y volvian a aparecer 300 ms
+       despues, asi que el boton del equipo parpadeaba dos veces por segundo.
+       Comparando primero, el panel se queda quieto mientras no haya datos
+       nuevos y de paso el navegador trabaja mucho menos.                   */
+  function poner(el, html) {
+    if (!el) return;
+    if (el.__peHtml === html) return;
+    el.__peHtml = html;
+    el.innerHTML = html;
+  }
+
   function pintarPulso() {
     var pane = document.getElementById('pe-pulso');
     if (!pane) return;
     var t = L(), d = calcular();
     if (!d) {
-      pane.innerHTML = '<h3 data-notr>' + esc(t.venimos) + '</h3>' + interruptorLado() +
-                       '<div style="font-size:12.5px;color:#6B7488;padding:6px 2px">' + esc(t.nada) + '</div>';
+      poner(pane, '<h3 data-notr>' + esc(t.venimos) + '</h3>' + interruptorLado() +
+                  '<div style="font-size:12.5px;color:#6B7488;padding:6px 2px">' + esc(t.nada) + '</div>');
       return;
     }
     function fila(lbl, v, det, col, ancho) {
@@ -742,7 +756,7 @@
     h += fila(t.ef, d.ef.pct + '%', d.ef.n + ' ' + t.de + ' ' + d.ef.t,
               d.ef.pct >= 25 ? '#0E9F6E' : d.ef.pct >= 10 ? '#CE7C18' : '#DC2A5A',
               Math.min(100, Math.max(0, d.ef.pct) * 2));
-    pane.innerHTML = h;
+    poner(pane, h);
 
     var lado = ladoPulso();
     var pj = document.getElementById('pe-cierran');
@@ -750,7 +764,7 @@
     var quien = '<h3 data-notr>' + esc(t.cierran) +
                 '<i class="pe-cq pe-cq-' + (lado === 'home' ? 'h' : 'a') + '">' +
                 esc(nombreEq(lado, lado === 'home' ? t.nosotros : t.ellos)) + '</i></h3>';
-    if (!d.jug.length) { pj.innerHTML = quien; return; }
+    if (!d.jug.length) { poner(pj, quien); return; }
     var max = Math.max.apply(null, d.jug.map(function (j) { return j.a + j.e; })) || 1;
     var c = quien;
     d.jug.forEach(function (j) {
@@ -764,7 +778,7 @@
            '<b class="pe-csal" style="color:' + (j.saldo >= 0 ? '#0E9F6E' : '#DC2A5A') + '">' + sal + '</b></div>';
     });
     c += '<div class="pe-nota">' + esc(t.leyenda) + '</div>';
-    pj.innerHTML = c;
+    poner(pj, c);
   }
 
   function panelesPulso() {
@@ -929,16 +943,16 @@
      acá y nada más. */
   var ATAJOS = [
     { k:'arm', tab:'arm', erec:'#+',
-      ico:'&#9679;', col:'#8B5CF6' },
+      ico:'&#9679;', col:'#FF0A4E' },
     /* Estos tres abren LA DISTRIBUCION DEL ARMADOR, no la tabla de
        jugadores: la pregunta es "cuando la recepcion viene de esta calle,
        ¿a quien le da el armador?". Y filtran por zarm —la recepcion de la
        misma posesion, la que precede al armado— y no por zrec, que mira el
        punto entero y se traeria el contraataque de dos defensas despues. */
-    { k:'so1', tab:'arm', fase:'so', zarm:'1', ico:'1', col:'#0E9F6E' },
-    { k:'so6', tab:'arm', fase:'so', zarm:'6', ico:'6', col:'#0E9F6E' },
-    { k:'so5', tab:'arm', fase:'so', zarm:'5', ico:'5', col:'#0E9F6E' },
-    { k:'dir', tab:'dir', fund:'A', ico:'&#8599;', col:'#0B84C4' }
+    { k:'so1', tab:'arm', fase:'so', zarm:'1', ico:'1', col:'#FF5C84' },
+    { k:'so6', tab:'arm', fase:'so', zarm:'6', ico:'6', col:'#FF5C84' },
+    { k:'so5', tab:'arm', fase:'so', zarm:'5', ico:'5', col:'#FF5C84' },
+    { k:'dir', tab:'dir', fund:'A', ico:'&#8599;', col:'#F90656' }
   ];
 
   /* que zonas son cada columna, para decirlo en el propio boton en vez de

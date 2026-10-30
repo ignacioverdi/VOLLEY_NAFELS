@@ -512,9 +512,11 @@ html:not([data-vs="off"]) .hdr-in,
 html:not([data-vs="off"]) .vs-cab{
  /* El arte es el de la referencia, recortado de ella misma y anclado a la
     derecha, igual que ahi. A la izquierda el degradado lo funde con el fondo
-    para que el titulo se lea sobre negro. Abajo, el filo rojo-magenta-cian. */
+    para que el titulo se lea sobre negro. Abajo, el filo rojo, que se apaga
+    hacia la derecha: el violeta y el cian que habia antes eran de otra app. */
  background:
-  linear-gradient(90deg,var(--red),var(--mag) 50%,var(--cyan)) left bottom / 100% 2px no-repeat,
+  linear-gradient(90deg,var(--red) 0%,var(--mag) 38%,rgba(255,10,78,.22) 78%,rgba(255,10,78,0) 100%)
+    left bottom / 100% 2px no-repeat,
   linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 20%,rgba(0,4,13,.90) 31%,
     rgba(0,4,13,.52) 42%,rgba(0,4,13,.16) 54%,rgba(0,4,13,0) 64%),
   linear-gradient(180deg,rgba(0,4,13,.16),rgba(0,4,13,.30)),
@@ -755,8 +757,11 @@ html:not([data-vs="off"]) .header-right.vs-huerfano{display:none!important}
    Se excluye lo que depende de una fuente de simbolos o de ancho fijo real.
    Para apagarlo: localStorage.setItem('vs_estilo','off') y recargar.
    ═══════════════════════════════════════════════════════════════════════════ */
+/*   Va contra todo el documento, no solo contra el <body>: la pantalla de
+     acceso (#fb-login) la cuelgan de <html>, fuera del body, y con la regla
+     vieja se quedaba con la tipografia del sistema.                         */
 html:not([data-vs="off"]) body,
-html:not([data-vs="off"]) body *:not(code):not(pre):not(kbd):not([class*="material-icons"]):not(.fa):not([class^="icon-"]){
+html:not([data-vs="off"]) *:not(head):not(title):not(meta):not(link):not(script):not(style):not(code):not(pre):not(kbd):not([class*="material-icons"]):not(.fa):not([class^="icon-"]){
   font-family:'Rajdhani',system-ui,-apple-system,sans-serif!important;
 }
 /* los numeros, en columna: ancho igual para que las tablas queden alineadas */
@@ -800,13 +805,96 @@ html:not([data-vs="off"]) table.vs-tabla tbody tr.vs-tot td,
 html:not([data-vs="off"]) table.vs-tabla tfoot td{font-weight:600!important;color:#EBF4F7!important}
 
 /* ── el repintado de acentos que marca vs_cab.js ────────────────────────── */
-html:not([data-vs="off"]) .vs-acento{
- background:var(--vsFill)!important;background-image:none!important;
- border-color:var(--red)!important;color:#fff!important;
+/*   Un solo par de botones en toda la app, el de la portada: casi negro con
+     el borde y las letras rojas. El que esta elegido —la pestaña activa— es
+     el unico con relleno rojo, asi se lee de un golpe cual esta puesto.
+     Antes cada pantalla traia su propio color (verde, naranja, violeta) y la
+     app parecia hecha por cinco manos distintas.                            */
+html:not([data-vs="off"]) body .vs-acento.vs-acento{
+ background:linear-gradient(180deg,rgba(255,10,78,.15),rgba(255,10,78,.04))!important;
+ border:1px solid rgba(255,10,78,.46)!important;
+ color:var(--red2)!important;
+ text-shadow:none!important;
+ box-shadow:inset 0 0 10px -2px rgba(255,10,78,.14)!important}
+html:not([data-vs="off"]) body .vs-acento.vs-acento:hover{
+ background:linear-gradient(180deg,rgba(255,10,78,.26),rgba(255,10,78,.08))!important;
+ border-color:rgba(255,10,78,.72)!important;color:#FFE9EF!important;
  box-shadow:0 0 22px -8px rgba(255,10,78,.8)!important}
-html:not([data-vs="off"]) .vs-acento:hover{background:var(--red)!important}
-html:not([data-vs="off"]) .vs-acento *{color:#fff!important}
-html:not([data-vs="off"]) .vs-acento svg{stroke:#fff!important}
+html:not([data-vs="off"]) body .vs-acento.vs-acento *{color:var(--red2)!important;background:none!important}
+html:not([data-vs="off"]) body .vs-acento.vs-acento:hover *{color:#FFE9EF!important}
+html:not([data-vs="off"]) body .vs-acento.vs-acento svg{stroke:var(--red2)!important}
+/*   el elegido: relleno rojo y letras blancas                               */
+html:not([data-vs="off"]) body .vs-acento-on.vs-acento-on{
+ background:linear-gradient(180deg,rgba(255,10,78,.46),rgba(255,10,78,.14))!important;
+ border:1px solid var(--red)!important;
+ color:#fff!important;text-shadow:none!important;
+ box-shadow:0 0 22px -8px rgba(255,10,78,.85),inset 0 0 12px -2px rgba(255,10,78,.28)!important}
+html:not([data-vs="off"]) body .vs-acento-on.vs-acento-on:hover{
+ background:linear-gradient(180deg,rgba(255,10,78,.58),rgba(255,10,78,.20))!important}
+html:not([data-vs="off"]) body .vs-acento-on.vs-acento-on *{color:#fff!important;background:none!important}
+html:not([data-vs="off"]) body .vs-acento-on.vs-acento-on svg{stroke:#fff!important}
+/*   los dos, apagados, no mienten que se puede apretar                      */
+html:not([data-vs="off"]) .vs-acento[disabled],
+html:not([data-vs="off"]) .vs-acento-on[disabled]{opacity:.42!important;box-shadow:none!important}
+
+/* ── los haces en diagonal y el destape del fondo ────────────────────────── */
+/*   Los mismos cinco haces de la portada, puestos por vs_cab.js en todas las
+     pantallas. Van fijos a la pantalla y detras de todo, con el z-index por
+     debajo del contenido; no reciben el clic.                               */
+html:not([data-vs="off"]) .vs-haz{
+ position:fixed!important;z-index:-2!important;pointer-events:none!important;
+ border-radius:4px!important;margin:0!important;display:block!important}
+html:not([data-vs="off"]) .vs-haz.a{top:-10%!important;left:6%!important;right:auto!important;
+ width:4px!important;height:62%!important;transform:rotate(18deg)!important;filter:blur(1.5px)!important;
+ background:linear-gradient(180deg,transparent,rgba(255,10,78,.85),transparent)!important}
+html:not([data-vs="off"]) .vs-haz.b{top:-4%!important;left:11%!important;right:auto!important;
+ width:2px!important;height:40%!important;transform:rotate(18deg)!important;filter:blur(.6px)!important;
+ background:linear-gradient(180deg,transparent,rgba(255,92,132,.45),transparent)!important}
+html:not([data-vs="off"]) .vs-haz.c{top:4%!important;right:6%!important;left:auto!important;
+ width:3px!important;height:46%!important;transform:rotate(-15deg)!important;filter:blur(1.2px)!important;
+ background:linear-gradient(180deg,transparent,rgba(240,0,131,.60),transparent)!important}
+html:not([data-vs="off"]) .vs-haz.d{bottom:-6%!important;left:30%!important;right:auto!important;top:auto!important;
+ width:2px!important;height:34%!important;transform:rotate(22deg)!important;filter:blur(.8px)!important;
+ background:linear-gradient(180deg,transparent,rgba(0,207,255,.34),transparent)!important}
+html:not([data-vs="off"]) .vs-haz.e{bottom:-8%!important;left:2%!important;right:auto!important;top:auto!important;
+ width:4px!important;height:42%!important;transform:rotate(27deg)!important;filter:blur(1.6px)!important;
+ background:linear-gradient(180deg,transparent,rgba(255,10,78,.62),transparent)!important}
+/*   la portada ya trae sus propios haces en #nv-bg: ahi no se duplican      */
+html:not([data-vs="off"]) body:has(#nv-bg) .vs-haz{display:none!important}
+/*   los cajones casi negros que tapaban la trama, destapados                */
+html:not([data-vs="off"]) .vs-transp{background-color:transparent!important;
+ background-image:none!important}
+/*   Y los que estan fijos a la pantalla y no se pueden volver transparentes
+     —la pantalla de inicio del panel en vivo— llevan la misma trama pintada
+     encima: los focos rojos, la cuadricula y dos lineas en diagonal. Va con
+     background-attachment:fixed para que calce con el fondo de la pagina.   */
+html:not([data-vs="off"]) .vs-fondo{
+ background-color:#00040D!important;
+ background-image:
+  radial-gradient(150% 115% at 50% 0%,transparent 36%,rgba(0,4,13,.55) 76%,rgba(0,4,13,.88) 100%),
+  linear-gradient(72deg,transparent 7.4%,rgba(255,10,78,.42) 7.7%,transparent 8%),
+  linear-gradient(-72deg,transparent 9.4%,rgba(240,0,131,.30) 9.7%,transparent 10%),
+  radial-gradient(1100px 560px at 2% -4%,rgba(255,10,78,.26),transparent 64%),
+  radial-gradient(900px 480px at 99% 2%,rgba(249,6,86,.17),transparent 68%),
+  radial-gradient(760px 520px at 12% 96%,rgba(255,10,78,.14),transparent 70%),
+  radial-gradient(820px 520px at 88% 92%,rgba(0,207,255,.075),transparent 72%),
+  linear-gradient(rgba(23,71,91,.10) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(23,71,91,.10) 1px,transparent 1px)!important;
+ background-size:auto,auto,auto,auto,auto,auto,auto,44px 44px,44px 44px!important;
+ background-repeat:no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,repeat,repeat!important;
+ background-attachment:fixed,fixed,fixed,fixed,fixed,fixed,fixed,fixed,fixed!important;
+ background-position:0 0!important}
+/*   Las tiritas de color que varias pantallas traian arriba del contenido
+     iban de rojo a violeta y a azul: eran de otra paleta. Van en rojo, igual
+     que el filo de la banda de titulo.                                     */
+html:not([data-vs="off"]) body .topline.topline,
+html:not([data-vs="off"]) body .vs-tirita.vs-tirita{
+ background:linear-gradient(90deg,var(--red) 0%,var(--mag) 38%,rgba(255,10,78,.22) 78%,rgba(255,10,78,0) 100%)!important;
+ background-image:linear-gradient(90deg,var(--red) 0%,var(--mag) 38%,rgba(255,10,78,.22) 78%,rgba(255,10,78,0) 100%)!important}
+html:not([data-vs="off"]) body .club-name .cn-hi.cn-hi{
+ background:linear-gradient(95deg,var(--red) 0%,var(--red2) 46%,var(--mag) 100%)!important;
+ filter:drop-shadow(0 0 20px rgba(255,10,78,.35))!important}
+
 html:not([data-vs="off"]) .vs-barra{
  background:linear-gradient(90deg,var(--red),var(--red2))!important;
  box-shadow:0 0 12px -2px rgba(255,10,78,.7)!important}
@@ -821,7 +909,11 @@ html:not([data-vs="off"]) .nv-pv,html:not([data-vs="off"]) a.nv-pv{text-decorati
 html:not([data-vs="off"]) .vs-cab:not(.vs-cab-portada){
  min-height:118px!important;padding:16px 28px!important;
  display:flex!important;align-items:center!important;flex-wrap:wrap!important;
- gap:12px!important;position:relative!important;overflow:hidden!important}
+ gap:12px!important;position:relative!important;overflow:visible!important}
+/*   La banda NO recorta lo que le cuelga. Antes iba con overflow:hidden y en
+     el panel en vivo el menu "Mas …" se abria dentro de la banda: el desplegable
+     quedaba cortado a los 34 px y parecia que el boton no hacia nada. El arte
+     de fondo ya queda recortado solo por la caja, el recorte no hacia falta. */
 html:not([data-vs="off"]) .vs-cab-tit{font-family:var(--vsTit)!important;font-weight:700!important;
  letter-spacing:.075em!important;text-transform:uppercase!important;color:var(--txt)!important}
 html:not([data-vs="off"]) .vs-cab:not(.vs-cab-portada) .vs-cab-tit{font-size:26px!important}

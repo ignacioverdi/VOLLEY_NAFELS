@@ -259,16 +259,21 @@
      leyendas y el chip verde de "sistema activo".
      ═══════════════════════════════════════════════════════════════════════ */
   var NO_TOCAR = '#eq-objetivos,table,svg,.live-badge,.vs-leyenda,' +
-    '[class*="bat"],[id*="bat"],[class*="semaforo"],[class*="readiness"],[class*="rd-"],' +
+    '[class~="bat"],[class*="bat-"],[class*="bats"],[class*="bateria"],[id*="bateria"],' +
+    '[id^="bat-"],[id*="dbat"],[class*="semaforo"],[class*="readiness"],[class*="rd-"],' +
     '[class*="chart"],[class*="grafico"],[class*="legend"],[class*="leyenda"],' +
     '[class*="dbat"],#nv-rail,.nv-d-comp,[class*="badge-"],[class*="objetivo"]';
 
   /* devuelve el tono 0-360 si el color es un acento fuerte; si no, null */
-  function tono(col){
+  /*   minA: cuanto relleno hace falta para considerarlo un color. Por defecto
+       medio: un boton macizo. Con 0.05 entran tambien los botones "teñidos",
+       los del panel en vivo, que van pintados al 10-16% de opacidad: el tono
+       esta igual en el rgb, lo unico que cambia es cuanto se ve.            */
+  function tono(col, minA){
     var m = String(col).match(/rgba?\(([^)]+)\)/); if(!m) return null;
     var p = m[1].split(',').map(parseFloat);
     var a = p.length > 3 ? p[3] : 1;
-    if(a < 0.5) return null;
+    if(a < (minA === undefined ? 0.5 : minA)) return null;
     var r = p[0]/255, g = p[1]/255, b = p[2]/255;
     var mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx - mn;
     if(mx < 0.34) return null;   /* oscuro: no es un acento */
@@ -281,11 +286,115 @@
     return h;
   }
   /* el rojo y el magenta de la marca, y el cyan, se respetan */
-  function esDeLaMarca(h){ return h === null || h >= 326 || h <= 14 || (h >= 180 && h <= 200); }
+  /*   soloRojo: para los BOTONES, de la marca es unicamente el rojo y el
+       magenta. El cian entra en la paleta para un haz o un filete, pero un
+       boton celeste al lado de uno rojo sigue siendo de otra app.          */
+  function esDeLaMarca(h, soloRojo){
+    if(h === null) return true;
+    if(h >= 326 || h <= 14) return true;
+    if(soloRojo) return false;
+    return (h >= 180 && h <= 200);
+  }
+
+  /* un boton "elegido" es el de la pestaña activa: lleva el relleno rojo */
+  function elegido(e){
+    try{
+      if(e.getAttribute('aria-pressed') === 'true' || e.getAttribute('aria-selected') === 'true') return true;
+      var c = ' ' + (e.className || '') + ' ';
+      return / on | activo | active | sel | selected | current /.test(c);
+    }catch(err){ return false; }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     QUE SE VEA EL FONDO
+     Varias pantallas pintan su contenedor principal de negro liso y tapan la
+     trama de la app: las luces rojas, la cuadricula y los haces en diagonal
+     quedan debajo y no se ven. Si ese relleno es practicamente el mismo negro
+     del fondo, sacarlo no cambia nada salvo dejar pasar la trama.
+     ═══════════════════════════════════════════════════════════════════════ */
+  function casiNegro(col){
+    var m = String(col).match(/rgba?\(([^)]+)\)/); if(!m) return false;
+    var p = m[1].split(',').map(parseFloat);
+    if(p.length > 3 && p[3] < 0.5) return false;
+    return (p[0] * 0.299 + p[1] * 0.587 + p[2] * 0.114) < 26;
+  }
+  function opaco(col){
+    var m = String(col).match(/rgba?\(([^)]+)\)/); if(!m) return false;
+    var p = m[1].split(',').map(parseFloat);
+    return !(p.length > 3 && p[3] < 0.92);
+  }
+  /*   Un cajon es "tapa" si ocupa casi todo el ancho, es alto, esta pintado de
+       un negro liso y no tiene ni borde ni esquinas redondeadas: eso no es un
+       panel, es el fondo de la pantalla puesto a mano. Un panel —con su borde
+       y sus esquinas— no se toca nunca.                                     */
+  /*   Lo que todavia no se midio bien —la pantalla aun no abrio, el estilo no
+       llego— no se descarta de una: se lo vuelve a mirar unas pasadas.      */
+  function luego(e){
+    var v = +(e.dataset.vsTapV || 0);
+    if(v >= 6) e.dataset.vsTap = '0'; else e.dataset.vsTapV = v + 1;
+  }
+  function destapar(){
+    try{
+      var anchoV = window.innerWidth || 1200;
+      /*  Tambien lo que cuelga de <html> fuera del body: la pantalla de
+          acceso se dibuja ahi y quedaba negra lisa.                        */
+      var els = document.querySelectorAll('body > *,body > * > *,body > * > * > *,' +
+        'html > div,html > div > *,html > section,html > main');
+      for(var i = 0; i < els.length && i < 600; i++){
+        var e = els[i];
+        if(e.dataset.vsTap) continue;
+        if(e.id === 'vsn' || e.closest('.vs-cab')) { e.dataset.vsTap = '0'; continue; }
+        if(e.classList.contains('vs-pan')) { e.dataset.vsTap = '0'; continue; }
+        /*  el video, el lienzo y las imagenes no son fondo: no se tocan  */
+        if(/^(VIDEO|CANVAS|IMG|IFRAME|SVG|OBJECT|EMBED|PICTURE)$/.test(e.tagName)){
+          e.dataset.vsTap = '0'; continue; }
+        var s2 = getComputedStyle(e);
+        if(s2.backgroundImage && s2.backgroundImage !== 'none') { luego(e); continue; }
+        if(parseFloat(s2.borderTopWidth) > 0 || parseFloat(s2.borderLeftWidth) > 0 ||
+           parseFloat(s2.borderBottomWidth) > 0 || parseFloat(s2.borderRightWidth) > 0){
+          e.dataset.vsTap = '0'; continue; }
+        if(parseFloat(s2.borderTopLeftRadius) > 4) { e.dataset.vsTap = '0'; continue; }
+        var r = e.getBoundingClientRect();
+        if(r.width < anchoV * 0.84 || r.height < 260) { luego(e); continue; }
+        if(!casiNegro(s2.backgroundColor)) { luego(e); continue; }
+        /*  Lo que esta fijo a la pantalla —la pantalla de inicio del panel en
+            vivo, por ejemplo— tapa a proposito lo que hay detras: ahi no se
+            puede volver transparente sin dejar ver lo de abajo. A ese se le
+            pinta la misma trama del fondo encima, que es lo que se buscaba. */
+        if(s2.position === 'fixed'){
+          if(!opaco(s2.backgroundColor)) { e.dataset.vsTap = '0'; continue; }
+          e.dataset.vsTap = '1'; e.classList.add('vs-fondo'); continue;
+        }
+        e.dataset.vsTap = '1'; e.classList.add('vs-transp');
+      }
+    }catch(e){}
+  }
+
+  /* los haces de luz en diagonal, los mismos de la portada */
+  function haces(){
+    try{
+      if(document.querySelector('.vs-haz')) return;
+      ['a','b','c','d','e'].forEach(function(k){
+        var i = document.createElement('i');
+        i.className = 'vs-haz ' + k; i.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(i);
+      });
+    }catch(e){}
+  }
 
   function pintarAcentos(){
     var n = 0, cands = [];
     try{
+      /*  la pestaña elegida cambia sola: se refresca en cada pasada  */
+      var ya = document.querySelectorAll('[data-vs-ac="1"]');
+      for(var y = 0; y < ya.length; y++){
+        var on = elegido(ya[y]);
+        /*  solo se escribe si cambio: si no, cada pasada mueve el atributo y
+            despierta al observador para nada                               */
+        if(on === ya[y].classList.contains('vs-acento-on')) continue;
+        ya[y].classList.toggle('vs-acento-on', on);
+        ya[y].classList.toggle('vs-acento', !on);
+      }
       var els = document.querySelectorAll('button,a');
       for(var i = 0; i < els.length && n < 300; i++){
         var e = els[i];
@@ -296,29 +405,32 @@
         /* SOLO el relleno macizo. El borde y la letra se dejan como estan:
            ahi el margen de error es grande y no vale la pena arriesgar una
            pantalla entera por un detalle. */
-        var hb = tono(s.backgroundColor);
-        if(hb !== null && !esDeLaMarca(hb)) cands.push({ el:e, h:Math.round(hb/30), p:e.parentElement });
-        else e.dataset.vsAc = '0';
+        /*  lo mio no se repinta a si mismo  */
+        var cn = ' ' + String(e.className || '') + ' ';
+        if(/ (nv|vs)-/.test(cn)){ e.dataset.vsAc = '0'; continue; }
+        var hb = tono(s.backgroundColor, 0.05);
+        if(hb !== null && !esDeLaMarca(hb, true)){ cands.push({ el:e, h:Math.round(hb/30), p:e.parentElement }); }
+        else {
+          /*  Muchas pantallas le ponen el color al boton recien cuando la
+              pestaña se activa. Si se descarta en la primera pasada no se
+              repinta nunca, asi que se lo vuelve a mirar unas cuantas veces
+              antes de darlo por neutro.                                     */
+          var vz = +(e.dataset.vsAcV || 0);
+          if(vz >= 6) e.dataset.vsAc = '0'; else e.dataset.vsAcV = vz + 1;
+        }
       }
-      /* VARIOS BOTONES DE COLORES DISTINTOS JUNTOS SON UN CODIGO, NO ADORNO.
-         En el panel de scouteo los botones de evaluacion (#, +, !, -, =)
-         estan pintados a proposito: cada color dice una cosa. Si en un mismo
-         contenedor hay dos o mas acentos de tonos distintos, se deja todo el
-         grupo como esta. Un acento solo, o varios del mismo tono, si es
-         decoracion y se repinta. */
-      var grupos = [];
+      /* TODOS LOS BOTONES PASAN A NEGRO CON ROJO.
+         La unica excepcion son los del teclado de scouteo: ahi el color ES el
+         dato (#, +, !, -, =, /) y se reconocen porque su texto tiene una o dos
+         letras. Todo lo que diga una palabra es navegacion o accion, y va con
+         la piel de la app: fondo oscuro, borde y letra en rojo. El que esta
+         elegido va con el relleno rojo, como en la portada. */
       cands.forEach(function(c){
-        var g = null;
-        for(var q = 0; q < grupos.length; q++) if(grupos[q].p === c.p){ g = grupos[q]; break; }
-        if(!g){ g = { p: c.p, items: [], tonos: {} }; grupos.push(g); }
-        g.items.push(c); g.tonos[c.h] = 1;
-      });
-      grupos.forEach(function(g){
-        var codigo = (g.items.length >= 2 && Object.keys(g.tonos).length >= 2);
-        g.items.forEach(function(c){
-          if(codigo){ c.el.dataset.vsAc = '0'; return; }
-          c.el.dataset.vsAc = '1'; c.el.classList.add('vs-acento'); n++;
-        });
+        var t = (c.el.textContent || '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu, '').trim();
+        if(t.length > 0 && t.length < 3){ c.el.dataset.vsAc = '0'; return; }
+        c.el.dataset.vsAc = '1';
+        c.el.classList.add(elegido(c.el) ? 'vs-acento-on' : 'vs-acento');
+        n++;
       });
 
       /* Las barras de progreso son el otro caso: una barra de carga es
@@ -337,6 +449,30 @@
         if(h2 === null || esDeLaMarca(h2)){ b.dataset.vsBa = '0'; continue; }
         cand.push({ el: b, h: Math.round(h2 / 30) });
       }
+      /*  Las tiritas de degradado: finitas, anchas y con algun color fuera de
+          la marca (el violeta y el azul que venian de otra paleta). Eso es
+          adorno, no dato, y va en rojo. Un degradado alto o angosto —una
+          tarjeta, un grafico— no entra aca.                                */
+      try{
+        var ti = document.querySelectorAll('div,span,i,hr,p');
+        for(var z = 0; z < ti.length && z < 1200; z++){
+          var t = ti[z];
+          if(t.dataset.vsTi) continue;
+          try{ if(t.closest(NO_TOCAR)) { t.dataset.vsTi = '0'; continue; } }catch(err){}
+          var bi = getComputedStyle(t).backgroundImage || '';
+          if(bi.indexOf('linear-gradient') < 0) { t.dataset.vsTi = '0'; continue; }
+          var rc = t.getBoundingClientRect();
+          if(rc.height < 1 || rc.height > 7 || rc.width < 120) { t.dataset.vsTi = '0'; continue; }
+          var cols = bi.match(/rgba?\([^)]+\)/g) || [], ajeno = false;
+          for(var w = 0; w < cols.length; w++){
+            var hh = tono(cols[w]);
+            if(hh !== null && !esDeLaMarca(hh)){ ajeno = true; break; }
+          }
+          if(!ajeno) { t.dataset.vsTi = '0'; continue; }
+          t.dataset.vsTi = '1'; t.classList.add('vs-tirita');
+        }
+      }catch(err){}
+
       var tonos = {};
       cand.forEach(function(x){ tonos[x.h] = 1; });
       if(cand.length && cand.length <= 4 && Object.keys(tonos).length === 1){
@@ -465,29 +601,46 @@
   }
 
   function arrancar(){
-    try{ armar(); }catch(e){}
-    try{ barraUnica(); }catch(e){}
+    /*  Las pantallas de proyeccion (el video con retardo) van a pantalla
+        completa sobre la pared: una barra fija arriba taparia la imagen. Esas
+        llevan data-vs-barra="no" en el <body> y reciben todo lo demas —el
+        fondo, los haces, los paneles y los botones— pero ninguna barra.     */
+    var SIN_BARRA = false;
+    try{ SIN_BARRA = document.body.getAttribute('data-vs-barra') === 'no'; }catch(e){}
+    if(!SIN_BARRA){
+      try{ armar(); }catch(e){}
+      try{ barraUnica(); }catch(e){}
+    }
     try{ grano(); }catch(e){}
     /* nav.js, lang.js y temporadas_menu.js dibujan sus cosas cuando pueden:
        se vuelve a pasar unas veces hasta que esten todas adentro de la barra */
-    [250, 800, 1800, 3500].forEach(function(ms){
+    if(!SIN_BARRA) [250, 800, 1800, 3500].forEach(function(ms){
       setTimeout(function(){ try{ barraUnica(); }catch(e){} }, ms);
     });
     /* los paneles, al cargar y de nuevo cuando la pantalla termino de dibujar */
+    try{ haces(); }catch(e){}
+    try{ destapar(); }catch(e){}
     try{ pintarPaneles(); }catch(e){}
     try{ pintarAcentos(); }catch(e){}
     [700, 2200, 4500].forEach(function(ms){
-      setTimeout(function(){ try{ pintarPaneles(); pintarAcentos(); }catch(e){} }, ms);
+      setTimeout(function(){ try{ destapar(); pintarPaneles(); pintarAcentos(); }catch(e){} }, ms);
     });
     /* las pantallas dibujan botones despues de bajar los datos */
     try{
       var tt = null;
+      /*  Varias pantallas tienen paneles que recien aparecen cuando se abre
+          una pestaña: no se agregan al documento, se les saca el display:none.
+          Por eso ademas de los hijos se miran class, style y hidden. Los
+          data-* quedan afuera a proposito, que son los que escribe este
+          mismo archivo y lo despertarian solo.                             */
       new MutationObserver(function(){
-        clearTimeout(tt); tt = setTimeout(function(){ try{ pintarAcentos(); }catch(e){} }, 300);
-      }).observe(document.body, { childList:true, subtree:true });
+        clearTimeout(tt); tt = setTimeout(function(){ try{ destapar(); pintarAcentos(); }catch(e){} }, 300);
+      }).observe(document.body, { childList:true, subtree:true, attributes:true,
+        attributeFilter:['class','style','hidden','open','aria-selected','aria-pressed'] });
     }catch(e){}
     /* algunas pantallas dibujan su barra despues de bajar los datos */
     var n = 0, t = setInterval(function(){
+      if(SIN_BARRA){ clearInterval(t); return; }
       try{ if(!document.querySelector('.vs-cab-tit')) armar(); }catch(e){}
       try{ barraUnica(); }catch(e){}
       if(++n > 20) clearInterval(t);
