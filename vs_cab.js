@@ -259,6 +259,9 @@
     if(hd && hd.querySelector('.logo-wrap') && !hd.dataset.vsUna){
       hd.dataset.vsUna = '1';
       hd.classList.add('vs-cab-dupe');
+      /*  y deja de ser banda de titulo: si no, la regla general de .vs-cab la
+          vuelve a mostrar y la portada queda con dos encabezados  */
+      hd.classList.remove('vs-cab', 'vs-cab-chica', 'vs-cab-portada');
     }
     /* en las pantallas de adentro, la columna derecha de la cabecera queda
        vacia: se esconde sola con :empty desde el CSS */
@@ -449,9 +452,22 @@
          letras. Todo lo que diga una palabra es navegacion o accion, y va con
          la piel de la app: fondo oscuro, borde y letra en rojo. El que esta
          elegido va con el relleno rojo, como en la portada. */
+      /*  Los de una o dos letras: si hay TRES O MAS juntos en el mismo cajon
+          es el teclado de scouteo (#, +, !, -, =, /) y ahi el color ES el
+          dato, no se toca. Uno solo —el "?" de ayuda— es un boton como
+          cualquier otro y va con la piel de la app.                       */
+      var grupos = {}, seq = 0;
       cands.forEach(function(c){
-        var t = (c.el.textContent || '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu, '').trim();
-        if(t.length > 0 && t.length < 3){ c.el.dataset.vsAc = '0'; return; }
+        c.t = (c.el.textContent || '').replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\uFE0F]/gu, '').trim();
+        if(!(c.t.length > 0 && c.t.length < 3)) return;
+        var p = c.p;
+        if(!p){ c.g = 0; return; }
+        if(!p.__vsG) p.__vsG = ++seq;
+        c.g = p.__vsG;
+        grupos[c.g] = (grupos[c.g] || 0) + 1;
+      });
+      cands.forEach(function(c){
+        if(c.g && grupos[c.g] >= 3){ c.el.dataset.vsAc = '0'; return; }
         c.el.dataset.vsAc = '1';
         c.el.classList.add(elegido(c.el) ? 'vs-acento-on' : 'vs-acento');
         n++;
@@ -506,8 +522,18 @@
     return n;
   }
 
+  /*  la banda de marca de la portada no sirve como banda de titulo  */
+  function elegirCab(){
+    var l = document.querySelectorAll(SEL);
+    for(var i = 0; i < l.length; i++){
+      if(l[i].classList.contains('vs-cab-dupe')) continue;
+      if(l[i].dataset && l[i].dataset.vsUna === '1') continue;
+      return l[i];
+    }
+    return null;
+  }
   function armar(){
-    var cab = document.querySelector(SEL);
+    var cab = elegirCab();
     var creada = false;
     if(!cab){ cab = crearBarra(); creada = true; }
     if(!cab) return;

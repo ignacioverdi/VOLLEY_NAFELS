@@ -704,7 +704,11 @@ html:not([data-vs="off"]) #vsn.vs-una .bb{height:30px!important;border-radius:8p
 html:not([data-vs="off"]) #vsn.vs-una .bb kbd{font-family:var(--vsNum)!important;border-color:#1A3F52!important}
 
 /* la banda de marca duplicada de la portada: su contenido ya esta arriba */
-html:not([data-vs="off"]) body > header.vs-cab-dupe{display:none!important}
+/*   La banda de marca de la portada se esconde. Va con la clase repetida a
+     proposito: la regla general de .vs-cab pone display:flex!important y le
+     ganaba por especificidad, asi que la banda volvia a aparecer y la portada
+     quedaba con dos encabezados.                                           */
+html:not([data-vs="off"]) body header.vs-cab-dupe.vs-cab-dupe{display:none!important}
 /* en las pantallas de adentro, la columna derecha queda vacia */
 html:not([data-vs="off"]) .page-header .header-right:empty,
 html:not([data-vs="off"]) .hdr .hdr-right:empty,
