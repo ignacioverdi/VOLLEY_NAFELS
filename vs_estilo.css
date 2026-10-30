@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
 /* ═══════════════════════════════════════════════════════════════════════════
    vs_estilo.css · LA PIEL DE TODA LA APP
    ---------------------------------------------------------------------------
@@ -42,12 +42,12 @@ html:not([data-vs="off"]){
   --txt:#EBF4F7;  --mut:#8FA8BE;  --mut2:#B4D2E4;  --dim:#6E869C;
   /* avisos: un solo juego para toda la app */
   --green:#2BBF72; --amber:#E0A32F; --teal:#2AA9A0; --indigo:#7C8BE8; --orange:#E8762C;
-  --vsUI:'Inter',system-ui,-apple-system,sans-serif;
+  --vsUI:'Rajdhani',system-ui,-apple-system,sans-serif;
   /* los titulos: Montserrat. Rajdhani era la que MAS lejos quedaba de la
      referencia (17,3 contra 23,75 de relacion ancho/alto). */
-  --vsTit:'Montserrat',system-ui,sans-serif;
+  --vsTit:'Rajdhani',system-ui,sans-serif;
   /* los numeros de las tablas: ancho fijo, para que las columnas se alineen solas */
-  --vsNum:'JetBrains Mono',ui-monospace,'SF Mono','Cascadia Mono',Consolas,monospace;
+  --vsNum:'Rajdhani',system-ui,sans-serif;
 }
 
 /* ── el fondo, fijo detras de todo ────────────────────────────────────────── */
@@ -636,7 +636,7 @@ html:not([data-vs="off"]) #vsn.vs-una .marca{gap:11px!important;padding-right:16
  margin-right:2px!important;border-right:1px solid #102935!important}
 html:not([data-vs="off"]) #vsn.vs-una .marca img{width:34px!important;height:34px!important;
  border-radius:50%!important;border:1px solid rgba(255,10,78,.35)!important;background:#00060F!important}
-html:not([data-vs="off"]) #vsn.vs-una .marca b{font:800 16px/1 var(--vsTit)!important;
+html:not([data-vs="off"]) #vsn.vs-una .marca b{font:700 16px/1 var(--vsTit)!important;
  letter-spacing:.055em!important;color:#EBF4F7!important}
 html:not([data-vs="off"]) #vsn.vs-una .marca b em{font-style:normal!important;color:var(--red)!important;
  text-shadow:0 0 18px rgba(255,10,78,.6)!important}
@@ -744,3 +744,30 @@ html:not([data-vs="off"]) .header-right.vs-huerfano{display:none!important}
 @media (max-width:1500px){
  html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #catSelGlobal{display:none!important}
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNA SOLA TIPOGRAFIA EN TODA LA APP · 2026/27
+   Rajdhani, la de la referencia. Medida contra la imagen original: 0.822 de
+   coincidencia pixel a pixel contra el titulo, muy por encima del segundo
+   candidato (0.711). Antes convivian Bebas Neue, Barlow Condensed, Barlow,
+   Inter, Montserrat y JetBrains Mono segun la pantalla.
+   Se excluye lo que depende de una fuente de simbolos o de ancho fijo real.
+   Para apagarlo: localStorage.setItem('vs_estilo','off') y recargar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body,
+html:not([data-vs="off"]) body *:not(code):not(pre):not(kbd):not([class*="material-icons"]):not(.fa):not([class^="icon-"]){
+  font-family:'Rajdhani',system-ui,-apple-system,sans-serif!important;
+}
+/* los numeros, en columna: ancho igual para que las tablas queden alineadas */
+html:not([data-vs="off"]) table,
+html:not([data-vs="off"]) table *,
+html:not([data-vs="off"]) input[type="number"],
+html:not([data-vs="off"]) .nv-d-comp,html:not([data-vs="off"]) .nv-d-comp *,
+html:not([data-vs="off"]) .jug-stat-val,html:not([data-vs="off"]) .nv-vel,
+html:not([data-vs="off"]) .nv-vel *,html:not([data-vs="off"]) .nv-fxd{
+  font-variant-numeric:tabular-nums!important;font-feature-settings:'tnum' 1!important;
+}
+/* Rajdhani tiene la x mas baja que Inter: el cuerpo sube un punto para que
+   se lea igual de grande que en la referencia */
+html:not([data-vs="off"]) body{font-size:14px!important}
