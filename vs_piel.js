@@ -168,3 +168,99 @@
     document.addEventListener('DOMContentLoaded', barra);
   } else { barra(); }
 })();
+
+/* ══ LAS BANDERAS ═════════════════════════════════════════════════════════
+   Windows no trae los emoji de bandera: 🇦🇷 se ve como "AR" y 🇨🇭 como "CH".
+   No es un problema de la app ni de la fuente, el sistema directamente no
+   tiene esos dibujos. Asi que las banderas se dibujan a mano, en SVG, con
+   el codigo adentro del propio archivo: no se baja nada de afuera y se ven
+   igual en Windows, en Mac y en el telefono.
+
+   Cada bandera va en una caja de 24x16 con las esquinas apenas redondeadas
+   y un filo tenue, para que no se pierda contra el fondo negro.
+   Si un pais no esta en la lista, queda el codigo de tres letras solo, que
+   es lo que ya se mostraba.
+   ========================================================================= */
+(function(){
+  function r(x,y,w,h,c){ return '<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+c+'"/>'; }
+  /* tres franjas horizontales */
+  function h3(a,b,c){ return r(0,0,24,5.34,a)+r(0,5.34,24,5.33,b)+r(0,10.67,24,5.33,c); }
+  /* tres franjas verticales */
+  function v3(a,b,c){ return r(0,0,8,16,a)+r(8,0,8,16,b)+r(16,0,8,16,c); }
+  /* cruz nordica */
+  function nor(f,c,c2){
+    return r(0,0,24,16,f) + (c2 ? r(6,0,5,16,c2)+r(0,5.5,24,5,c2) : '') +
+           r(7,0,3,16,c)+r(0,6.5,24,3,c);
+  }
+  var F = {
+    ARG:h3('#74ACDF','#fff','#74ACDF')+'<circle cx="12" cy="8" r="2.1" fill="#F6B40E"/>',
+    SUI:r(0,0,24,16,'#D52B1E')+r(10.4,3.4,3.2,9.2,'#fff')+r(7.6,6.4,8.8,3.2,'#fff'),
+    USA:(function(){var s='';for(var i=0;i<13;i++)s+=r(0,i*1.231,24,1.231,i%2?'#fff':'#B22234');
+         return s+r(0,0,10,8.6,'#3C3B6E');})(),
+    SWE:nor('#006AA7','#FECC00'),
+    FIN:nor('#fff','#003580'),
+    NOR:nor('#BA0C2F','#00205B','#fff'),
+    DEN:nor('#C8102E','#fff'),
+    ISL:nor('#02529C','#DC1E35','#fff'),
+    GER:h3('#000','#DD0000','#FFCE00'),
+    ITA:v3('#009246','#fff','#CE2B37'),
+    FRA:v3('#002395','#fff','#ED2939'),
+    BEL:v3('#000','#FAE042','#ED2939'),
+    IRL:v3('#169B62','#fff','#FF883E'),
+    MEX:v3('#006847','#fff','#CE1126'),
+    ESP:r(0,0,24,4,'#AA151B')+r(0,4,24,8,'#F1BF00')+r(0,12,24,4,'#AA151B'),
+    POL:r(0,0,24,8,'#fff')+r(0,8,24,8,'#DC143C'),
+    UKR:r(0,0,24,8,'#005BBB')+r(0,8,24,8,'#FFD500'),
+    AUT:h3('#ED2939','#fff','#ED2939'),
+    PER:v3('#D91023','#fff','#D91023'),
+    NED:h3('#AE1C28','#fff','#21468B'),
+    RUS:h3('#fff','#0039A6','#D52B1E'),
+    SLO:h3('#fff','#0000A0','#DE2910'),
+    SRB:h3('#C6363C','#0C4076','#fff'),
+    CRO:h3('#FF0000','#fff','#171796'),
+    BUL:h3('#fff','#00966E','#D62612'),
+    COL:r(0,0,24,8,'#FCD116')+r(0,8,24,4,'#003893')+r(0,12,24,4,'#CE1126'),
+    VEN:h3('#FFCC00','#00247D','#CF142B'),
+    HUN:h3('#CE2939','#fff','#477050'),
+    LTU:h3('#FDB913','#006A44','#C1272D'),
+    EST:h3('#0072CE','#000','#fff'),
+    JPN:r(0,0,24,16,'#fff')+'<circle cx="12" cy="8" r="4.6" fill="#BC002D"/>',
+    POR:r(0,0,9.6,16,'#006600')+r(9.6,0,14.4,16,'#FF0000')+'<circle cx="9.6" cy="8" r="3.1" fill="#FFFF00" stroke="#006600" stroke-width=".7"/>',
+    TUR:r(0,0,24,16,'#E30A17')+'<circle cx="9.6" cy="8" r="3.5" fill="#fff"/><circle cx="11" cy="8" r="2.8" fill="#E30A17"/>'+
+        '<path d="m14.4 8 2.6-.85-1.6 2.2V6.65l1.6 2.2L14.4 8z" fill="#fff"/>',
+    MKD:r(0,0,24,16,'#D20000')+'<circle cx="12" cy="8" r="3" fill="#FFE600"/>'+
+        '<path d="M12 8 0 0h4l8 8zM12 8l12-8h-4l-8 8zM12 8 0 16h4l8-8zM12 8l12 8h-4l-8-8z" fill="#FFE600" opacity=".9"/>',
+    GRE:(function(){var s='';for(var i=0;i<9;i++)s+=r(0,i*1.78,24,1.78,i%2?'#fff':'#0D5EAF');
+         return s+r(0,0,8.9,8.9,'#0D5EAF')+r(3.5,0,1.9,8.9,'#fff')+r(0,3.5,8.9,1.9,'#fff');})(),
+    CZE:r(0,0,24,8,'#fff')+r(0,8,24,8,'#D7141A')+'<path d="M0 0l10 8-10 8z" fill="#11457E"/>',
+    SVK:h3('#fff','#0B4EA2','#EE1C25'),
+    BRA:r(0,0,24,16,'#009739')+'<path d="M12 1.6 22.6 8 12 14.4 1.4 8z" fill="#FEDD00"/><circle cx="12" cy="8" r="3" fill="#012169"/>',
+    URU:(function(){var s=r(0,0,24,16,'#fff');for(var i=0;i<4;i++)s+=r(9,i*3.56+1.78,15,1.78,'#0038A8');
+         return s+r(0,0,9,9,'#fff')+'<circle cx="4.5" cy="4.5" r="2.4" fill="#FCD116"/>';})(),
+    CHI:r(0,0,24,8,'#fff')+r(0,8,24,8,'#D52B1E')+r(0,0,8,8,'#0039A6')+
+        '<path d="m4 2.1.9 2.7h2.8l-2.3 1.7.9 2.7L4 7.5 1.7 9.2l.9-2.7L.3 4.8h2.8z" fill="#fff"/>',
+    CUB:(function(){var s='';for(var i=0;i<5;i++)s+=r(0,i*3.2,24,3.2,i%2?'#fff':'#002A8F');
+         return s+'<path d="M0 0l11 8L0 16z" fill="#CF142B"/><path d="m4 5.5.75 2.3h2.4l-1.95 1.4.75 2.3L4 10.1 2 11.5l.75-2.3L.8 7.8h2.4z" fill="#fff"/>';})(),
+    DOM:r(0,0,24,16,'#002D62')+r(12,0,12,8,'#CE1126')+r(0,8,12,8,'#CE1126')+r(10,0,4,16,'#fff')+r(0,6,24,4,'#fff'),
+    CAN:r(0,0,24,16,'#fff')+r(0,0,6,16,'#FF0000')+r(18,0,6,16,'#FF0000')+
+        '<path d="m12 3.2.9 2.6 2-1-.8 2.4 2.2.3-1.9 1.4.6 2.2-2.2-1-.5 2.6h-.6l-.5-2.6-2.2 1 .6-2.2L8 7.5l2.2-.3-.8-2.4 2 1z" fill="#FF0000"/>',
+    AUS:r(0,0,24,16,'#00008B')+r(0,0,10,6,'#00008B')+
+        '<path d="M0 0h1.6l3 2.2V0h2v2.2L9.6 0H10v1.3L7.4 3H10v2H7.4L10 6.7V8H9.6L6.6 5.8V8h-2V5.8L1.6 8H0V6.7L2.6 5H0V3h2.6L0 1.3z" fill="#fff"/>',
+    NZL:r(0,0,24,16,'#00247D')+'<path d="M0 0h1.6l3 2.2V0h2v2.2L9.6 0H10v1.3L7.4 3H10v2H7.4L10 6.7V8H9.6L6.6 5.8V8h-2V5.8L1.6 8H0V6.7L2.6 5H0V3h2.6L0 1.3z" fill="#fff"/>'
+  };
+
+  /*  lo que se muestra: la caja con el dibujo adentro  */
+  function bandera(cod){
+    var d = F[String(cod || '').toUpperCase()];
+    if(!d) return '';
+    return '<svg class="vs-p-bd" viewBox="0 0 24 16" width="24" height="16" aria-hidden="true">' +
+      '<defs><clipPath id="vsbd"><rect width="24" height="16" rx="2.4"/></clipPath></defs>' +
+      '<g clip-path="url(#vsbd)">' + d + '</g>' +
+      '<rect width="24" height="16" rx="2.4" fill="none" stroke="rgba(255,255,255,.26)" stroke-width="1"/>' +
+    '</svg>';
+  }
+
+  window.VSP = window.VSP || {};
+  window.VSP.bandera = bandera;
+  window.VSP.PAISES  = F;
+})();

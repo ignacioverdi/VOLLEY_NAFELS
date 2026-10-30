@@ -54,8 +54,8 @@ html:not([data-vs="off"]) body .vs-p-wrap{
    a la mitad con un filo duro. Eso es lo unico que cambia. */
 html:not([data-vs="off"]) body.vs-p .vs-cab{
   position:relative;overflow:visible!important;
-  min-height:118px;
-  padding:14px max(24px,calc((100% - 1480px) / 2 + 24px)) 16px!important;
+  min-height:108px;
+  padding:12px max(24px,calc((100% - 1480px) / 2 + 24px)) 14px!important;
   border-bottom:1px solid var(--p-borde)!important}
 html:not([data-vs="off"]) body.vs-p .vs-cab::before{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -143,10 +143,10 @@ html:not([data-vs="off"]) body .vs-p-lema::after{
    Un solo marco con divisiones adentro. La etiqueta del desplegable se apoya
    SOBRE el borde, como en la maqueta. */
 html:not([data-vs="off"]) body .vs-p-barra{
-  display:flex;align-items:center;gap:0;margin:20px 0 22px;
+  display:flex;align-items:center;gap:0;margin:16px 0 16px;
   border:1px solid var(--p-borde);border-radius:var(--p-r);
   background:linear-gradient(180deg,#000D18,#00070F);
-  padding:12px 14px;flex-wrap:wrap;row-gap:12px}
+  padding:9px 14px;flex-wrap:wrap;row-gap:10px}
 html:not([data-vs="off"]) body .vs-p-barra > .sep{
   width:1px;align-self:stretch;margin:0 14px;min-height:38px;
   background:linear-gradient(180deg,transparent,var(--p-borde2) 22%,var(--p-borde2) 78%,transparent)}
@@ -159,7 +159,7 @@ html:not([data-vs="off"]) body .vs-p-busca .lupa{
 html:not([data-vs="off"]) body .vs-p-busca .lupa svg{width:17px;height:17px;
   stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 html:not([data-vs="off"]) body .vs-p-busca input{
-  flex:1;height:38px;padding:0 14px;border-radius:var(--p-r2);
+  flex:1;height:36px;padding:0 13px;border-radius:var(--p-r2);
   border:1px solid var(--p-borde);background:var(--p-hueco);color:#E6EEF5;
   font:500 15px/1 var(--vsUI);outline:0;transition:border-color .15s}
 html:not([data-vs="off"]) body .vs-p-busca input:focus{border-color:var(--p-cyan)}
@@ -174,7 +174,7 @@ html:not([data-vs="off"]) body .vs-p-campo > label{
   pointer-events:none}
 html:not([data-vs="off"]) body .vs-p-campo > select,
 html:not([data-vs="off"]) body .vs-p-campo > input{
-  width:100%;height:42px;padding:0 34px 0 14px;border-radius:var(--p-r2);
+  width:100%;height:38px;padding:0 32px 0 13px;border-radius:var(--p-r2);
   border:1px solid var(--p-borde2);background:var(--p-hueco);color:#E6EEF5;
   font:500 15px/1 var(--vsUI);outline:0;cursor:pointer;
   -webkit-appearance:none;appearance:none;transition:border-color .15s}
@@ -189,7 +189,7 @@ html:not([data-vs="off"]) body .vs-p-campo.sinflecha::after{display:none}
 /* ═══ 3 · LOS BOTONES ══════════════════════════════════════════════════════ */
 html:not([data-vs="off"]) body .vs-p-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  height:42px;padding:0 20px;border-radius:var(--p-r2);
+  height:38px;padding:0 17px;border-radius:var(--p-r2);
   border:1px solid var(--p-borde2);background:var(--p-hueco);
   color:var(--p-txt2);font:600 14px/1 var(--vsUI);letter-spacing:.05em;
   cursor:pointer;white-space:nowrap;text-decoration:none;
@@ -263,7 +263,7 @@ html:not([data-vs="off"]) body .vs-p-num{
   border:1.5px solid var(--red);background:rgba(255,10,60,.06);color:#fff;
   font:700 16px/1 var(--vsTit);letter-spacing:.02em;
   box-shadow:0 0 16px -6px rgba(255,10,60,.95),inset 0 0 12px -8px rgba(255,10,60,.9)}
-html:not([data-vs="off"]) body .vs-p-num.gde{min-width:46px;height:46px;font-size:26px;border-radius:11px}
+html:not([data-vs="off"]) body .vs-p-num.gde{min-width:34px;height:30px;font-size:19px;border-radius:8px}
 html:not([data-vs="off"]) body .vs-p-num.chico{min-width:24px;height:24px;font-size:13px;border-radius:7px;border-width:1px}
 
 /* ═══ 6 · LAS PESTANIAS ════════════════════════════════════════════════════ */
@@ -327,11 +327,11 @@ html:not([data-vs="off"]) body .vs-p-anillo .medio i{
 
 /* ═══ 9 · LA BANDA DE PIE ══════════════════════════════════════════════════ */
 html:not([data-vs="off"]) body .vs-p-pie{
-  position:relative;margin-top:34px;padding:20px 24px;overflow:hidden;
+  position:relative;margin-top:16px;padding:12px 24px;overflow:hidden;
   border-top:1px solid rgba(255,10,60,.3);
   background:linear-gradient(180deg,#00070F,#000308);
   display:flex;align-items:center;gap:18px}
-html:not([data-vs="off"]) body .vs-p-pie img.esc{width:40px;height:40px;object-fit:contain;flex:none;opacity:.95}
+html:not([data-vs="off"]) body .vs-p-pie img.esc{width:34px;height:34px;object-fit:contain;flex:none;opacity:.95}
 html:not([data-vs="off"]) body .vs-p-pie .lema{
   flex:1;text-align:center;
   font:600 12px/1 var(--vsUI);letter-spacing:.34em;text-transform:uppercase;color:#C3D2DE}
@@ -377,10 +377,16 @@ html:not([data-vs="off"]) body .vs-p-vacio{
    Medida sobre la maqueta: la foto ocupa el 42% del ancho y llega hasta los
    tres bordes; el resto es la columna de datos. La foto no se corta con un
    filo: se apaga con un degradado contra el fondo de la tarjeta. */
+/*  La medida sale de la cuenta: el cuerpo de la pagina tiene 1432 px utiles
+    (1480 menos los 24 de cada lado). Con 254 px de minimo y 14 de hueco
+    entran CINCO columnas, y trece jugadores caen en TRES filas. Con la
+    tarjeta en 196 px de alto, las tres filas mas los huecos suman 616, que
+    entra en la pantalla debajo de la banda y los filtros sin tener que
+    bajar con la rueda.                                                    */
 html:not([data-vs="off"]) body .vs-p-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(318px,1fr));gap:18px}
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(252px,1fr));gap:12px}
 html:not([data-vs="off"]) body .vs-p-jug{
-  position:relative;display:flex;min-height:244px;overflow:hidden;
+  position:relative;display:flex;min-height:170px;overflow:hidden;
   border:1px solid var(--p-borde);border-radius:var(--p-r);
   background:
     radial-gradient(120% 90% at 85% 10%,rgba(99,216,238,.05),transparent 60%),
@@ -402,24 +408,26 @@ html:not([data-vs="off"]) body .vs-p-jug .foto .sinfoto{
   font:700 60px/1 var(--vsTit);color:#15324A}
 html:not([data-vs="off"]) body .vs-p-jug .info{
   flex:1;min-width:0;display:flex;flex-direction:column;
-  padding:16px 16px 15px;gap:7px}
+  padding:9px 11px 9px;gap:4px}
 html:not([data-vs="off"]) body .vs-p-jug .nom{
-  font:700 19px/1.05 var(--vsTit);letter-spacing:.02em;text-transform:uppercase;color:#fff;
+  font:700 14.5px/1.04 var(--vsTit);letter-spacing:.015em;text-transform:uppercase;color:#fff;
   overflow-wrap:anywhere}
 html:not([data-vs="off"]) body .vs-p-jug .pos{
-  position:static;top:auto;right:auto;left:auto;bottom:auto;
+  position:static;font-size:11px!important;letter-spacing:.15em!important;top:auto;right:auto;left:auto;bottom:auto;
   padding:0;border:0;background:none;border-radius:0;
   font:700 12.5px/1 var(--vsUI);letter-spacing:.19em;text-transform:uppercase;color:var(--p-cyan)}
 html:not([data-vs="off"]) body .vs-p-jug .pais{
-  display:flex;align-items:center;gap:9px;
-  font:600 14px/1 var(--vsUI);letter-spacing:.07em;color:#E8F0F6}
-html:not([data-vs="off"]) body .vs-p-jug .pais .bd{font-size:19px;line-height:1}
+  display:flex;align-items:center;gap:7px;
+  font:600 12px/1 var(--vsUI);letter-spacing:.07em;color:#E8F0F6}
+html:not([data-vs="off"]) body .vs-p-bd{
+  display:block;flex:none;width:21px;height:14px;border-radius:2.5px}
 html:not([data-vs="off"]) body .vs-p-jug .fis{
-  display:flex;align-items:center;gap:11px;
-  font:500 14px/1 var(--vsUI);color:#CBDAE5}
+  display:flex;align-items:center;gap:8px;
+  font:500 12px/1 var(--vsUI);color:#CBDAE5}
 html:not([data-vs="off"]) body .vs-p-jug .fis i{
   font-style:normal;width:1px;height:13px;background:var(--p-borde2);display:inline-block}
-html:not([data-vs="off"]) body .vs-p-jug .vs-p-btn{margin-top:auto;height:38px}
+html:not([data-vs="off"]) body .vs-p-jug .vs-p-btn{margin-top:auto;height:28px;font-size:11px;padding:0 9px}
+html:not([data-vs="off"]) body .vs-p-jug .vs-p-btn svg{width:14px;height:14px}
 /* el dorsal, arriba del todo en la columna de datos */
 html:not([data-vs="off"]) body .vs-p-jug .vs-p-num{align-self:flex-start}
 @media (max-width:420px){
@@ -464,7 +472,7 @@ html:not([data-vs="off"]) body .vs-p-staff .rl{
    .vs-cab-tit lo deja en 26 px con !important, asi que hay que ganarle */
 html:not([data-vs="off"]) body.vs-p .vs-cab .vs-p-tit.vs-p-tit{
   font-size:40px!important;letter-spacing:.012em!important;color:#fff!important;
-  margin:11px 0 4px;white-space:nowrap}
+  margin:8px 0 3px;white-space:nowrap}
 @media (max-width:760px){
   html:not([data-vs="off"]) body.vs-p .vs-cab .vs-p-tit.vs-p-tit{font-size:27px!important}
 }
