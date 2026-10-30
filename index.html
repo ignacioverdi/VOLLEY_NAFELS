@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261030-1409"></script>
-<script src="selector_categoria.js?v=20261030-1409"></script>
+<script src="categorias_club.js?v=20261030-1542"></script>
+<script src="selector_categoria.js?v=20261030-1542"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261030-1409"></script>
-<script src="firebase.js?v=20261030-1409" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1409"></script>
-<script src="lang.js?v=20261030-1409"></script>
-<script src="plantel_nafels.js?v=20261030-1409"></script>
+<script src="datos_seguros.js?v=20261030-1542"></script>
+<script src="firebase.js?v=20261030-1542" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1542"></script>
+<script src="lang.js?v=20261030-1542"></script>
+<script src="plantel_nafels.js?v=20261030-1542"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261030-1409" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261030-1542" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=0da0cf42" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=9f9a8042" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=fe265993" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261030-1409" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261030-1542" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1409">
+<link rel="stylesheet" href="movil.css?v=20261030-1542">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,9 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261030-1409" defer></script>
+<script src="iconos.js?v=20261030-1542" defer></script>
 
-<script src="nav.js?v=20261030-1409" defer></script>
+<script src="nav.js?v=20261030-1542" defer></script>
 <style id="encabezado-2026">
 /* ══ EL ENCABEZADO ═════════════════════════════════════════
    Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
@@ -1037,8 +1037,8 @@ body > footer{padding:5px 20px!important;font-size:9px!important}
 
 </style>
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1409">
-<script src="vs_cab.js?v=20261030-1409" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1542">
+<script src="vs_cab.js?v=20261030-1542" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -2157,9 +2157,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1409"></script>
+<script src="chat_nafels.js?v=20261030-1542"></script>
 
-<script src="proximo_rival.js?v=20261030-1409" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261030-1542" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -2225,13 +2225,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261030-1409" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-1409"></script>
+<script src="fixture_auto.js?v=20261030-1542" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-1542"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261030-1409" defer></script>
+<script src="onesignal_push.js?v=20261030-1542" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2914,7 +2914,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261030-1409"></script>
+<script src="ayuda.js?v=20261030-1542"></script>
 
 <script id="nv-portada-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3895,6 +3895,23 @@ html:not([data-vs="off"]) .nv-fxd{font-size:10px!important}
 /* el panel del rival: el bloque VS y las fichas tambien llenan */
 html:not([data-vs="off"]) #nv-rival .nv-pb{justify-content:flex-start!important}
 html:not([data-vs="off"]) #nv-rival .nv-gt{flex:1 1 auto!important}
+
+/* ── parte 5 · proporciones finales contra la plantilla ────────────────── */
+/* las fichas de MI RENDIMIENTO reparten los dos renglones sin dejar hueco */
+html:not([data-vs="off"]) .nv-rowR a.card.nv-tile .card-icon.nv-chip{height:30px!important;flex-basis:30px!important}
+html:not([data-vs="off"]) .nv-rowR a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) .nv-rowR a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) .nv-rowR a.card.nv-tile .card-icon.nv-chip > svg{width:29px!important;height:29px!important;
+ flex-basis:29px!important}
+html:not([data-vs="off"]) .nv-rowR a.card.nv-tile .card-title{font-size:12px!important}
+/* el panel del rival, un poco mas bajo: la fila de arriba se empareja sola */
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile{min-height:78px!important;padding:11px 6px 9px!important;
+ gap:7px!important}
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile .card-icon.nv-chip{height:24px!important;flex-basis:24px!important}
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile .card-icon.nv-chip > svg{width:23px!important;height:23px!important;
+ flex-basis:23px!important}
 </style>
 <script id="nv-piel-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3978,8 +3995,22 @@ html:not([data-vs="off"]) #nv-rival .nv-gt{flex:1 1 auto!important}
       /* con mas de cinco fichas se reparten en dos renglones: asi llenan el
          panel y no queda el hueco de abajo */
       var g = pRend.querySelector('.nv-gt');
-      var n = pRend.querySelectorAll('a.card').length;
-      if(g && n > 5) g.style.gridTemplateColumns = 'repeat(' + Math.ceil(n / 2) + ',minmax(0,1fr))';
+      var cs = pRend.querySelectorAll('a.card');
+      var n = cs.length;
+      if(g && n > 5){
+        /* dos renglones SIN hueco al final: se arma una grilla con el minimo
+           comun multiplo de las dos cantidades y cada ficha ocupa su parte.
+           Con 7 fichas: 4 arriba de 3 columnas y 3 abajo de 4. */
+        var a = Math.ceil(n / 2), b = n - a;
+        var x = a, y = b;
+        while(y){ var r = x % y; x = y; y = r; }
+        var L = a * b / x;
+        g.style.gridTemplateColumns = 'repeat(' + L + ',minmax(0,1fr))';
+        [].slice.call(cs).forEach(function(c, i){
+          /* en linea y con prioridad: la hoja de la pantalla pisa grid-column */
+          c.style.setProperty('grid-column', 'span ' + (i < a ? L / a : L / b), 'important');
+        });
+      }
       R.appendChild(pRend);
     }
     caja.appendChild(R);
