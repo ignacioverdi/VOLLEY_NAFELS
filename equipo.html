@@ -5,23 +5,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="EQUIPO — NAFELS VOLEY">EQUIPO — NAFELS VOLEY</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="lang.js?v=20261030-2328" onerror="void 0"></script>
-<script src="utils.js?v=20261030-2328" onerror="void 0"></script>
+<script src="lang.js?v=20261031-0019" onerror="void 0"></script>
+<script src="utils.js?v=20261031-0019" onerror="void 0"></script>
 <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261030-2328" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261030-2328" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-2328"></script>
+<script src="categorias_club.js?v=20261031-0019" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261031-0019" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261031-0019"></script>
   <!-- El plantel del club, con nombre y apellido. Es la lista de verdad:
      datos_equipo.js.enc solo trae a los que YA JUGARON, asi que un
      jugador nuevo no aparecia hasta su debut. -->
 <!-- Las metas, el semaforo (objClassify) y VB_EFF: la tarjeta de cada
      jugador ahora muestra sus numeros, con el mismo criterio que el resto. -->
-<script src="objetivos_config.js?v=20261030-2328" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261031-0019" onerror="void 0"></script>
 <!-- Las baterias: de ahi salen los numeros y tambien CUANTAS acciones hay
      detras de cada uno (n_sq, n_rec, ...). Es la misma fuente que usa el
      Ranking, para que las dos pantallas no puedan discrepar. -->
 <script src="datos_baterias.js.enc?v=0da0cf42" onerror="void 0"></script>
-<script src="plantel_nafels.js?v=20261030-2328" onerror="void 0"></script>
+<script src="plantel_nafels.js?v=20261031-0019" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=9f9a8042" onerror="window.EQUIPO_DATA=null"></script>
 <!-- Las fechas de nacimiento viven aca, cifradas. Si no se puede abrir,
      se usa lo que traiga el plantel, que es como funcionaba antes. -->
@@ -113,47 +113,59 @@ body{background:var(--bg);background-image:radial-gradient(ellipse at 20% 20%,rg
 </style>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261030-2328" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-2328"></script>
+<script src="firebase.js?v=20261031-0019" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261031-0019"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-2328">
+<link rel="stylesheet" href="movil.css?v=20261031-0019">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-2328" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261031-0019" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261030-2328" defer></script>
+<script src="iconos.js?v=20261031-0019" defer></script>
 
-<script src="nav.js?v=20261030-2328" defer></script>
+<script src="nav.js?v=20261031-0019" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-2328">
-<script src="vs_cab.js?v=20261030-2328" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261031-0019">
+<script src="vs_cab.js?v=20261031-0019" defer></script>
+<!--eq-piel-css-->
+<link rel="stylesheet" href="vs_piel.css?v=20261031-0019">
+<script src="vs_piel.js?v=20261031-0019" onerror="void 0"></script>
+<!--/eq-piel-css-->
 </head>
 <body>
 
+<!--eq-piel-hero-->
 <div class="page-header">
-  <div style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
-    <button onclick="showHeatmapMenu()" style="background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);color:#F97316;padding:6px 14px;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:11px;cursor:pointer;letter-spacing:1px" data-t="🔥 HEAT MAPS"><span data-t="🔥 HEAT MAPS">🔥 HEAT MAPS</span></button>
-    <div>
-      <div class="page-title">🏐 <span data-t="equipo"><span data-t="Equipo">Equipo</span></span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;" data-t="NAFELS VOLEY · NLA Suiza 2026/27"><span data-t="NAFELS VOLEY · NLA Suiza 2026/27">NAFELS VOLEY · NLA Suiza 2026/27</span></div>
-    </div>
+  <div class="vs-p-hero-izq">
+    <a href="index.html" class="vs-p-volver"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 12H5"/><path d="m11 6-6 6 6 6"/></svg><span data-t="Volver">Volver</span></a>
+    <!-- lleva tambien vs-cab-tit a proposito: asi vs_cab.js lo toma como EL
+         titulo de la banda y no sale a buscar un <span> de adentro, que era
+         lo que partia el renglon en dos. -->
+    <div class="vs-p-tit vs-cab-tit"><span data-t="Plantel del">Plantel del</span> <b data-t="Equipo">Equipo</b></div>
+    <div class="vs-p-sub" data-t="Jugadores · Roles · Fichas personales">Jugadores · Roles · Fichas personales</div>
   </div>
-  <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
+  <div class="vs-p-hero-der">
+    <button type="button" class="vs-p-pill rojo" onclick="showHeatmapMenu()"
+            data-t="Heat maps"><span data-t="Heat maps">Heat maps</span></button>
+    <span class="vs-p-pill" id="eq-cuenta"></span>
+  </div>
+  <div id="lang-wrap" style="display:none"></div>
 </div>
+<!--/eq-piel-hero-->
 
-<div class="main">
-  <div class="section-lbl" data-t="Plantel NLA 2026/27"><span data-t="Plantel NLA 2026/27">Plantel NLA 2026/27</span></div>
-  <div class="eq-resumen" id="eq-resumen"></div>
-  <div class="eq-barra" id="eq-barra"></div>
-  <div class="jugadores-grid" id="jugadores-grid"></div>
-
-  <div class="section-lbl" style="margin-top:8px;" data-t="Cuerpo Técnico"><span data-t="Cuerpo Técnico">Cuerpo Técnico</span></div>
-  <div class="staff-grid" id="staff-grid"></div>
+<!--eq-piel-main-->
+<div class="vs-p-wrap">
+  <div class="vs-p-barra" id="eq-barra2"></div>
+  <div class="vs-p-grid" id="jugadores-grid"></div>
+  <div class="vs-p-staff" id="staff-grid" style="display:none"></div>
+  <div class="vs-p-vacio" id="eq-nada" style="display:none"
+       data-t="Nadie coincide con la búsqueda.">Nadie coincide con la búsqueda.</div>
+  <div class="eq-barra" id="eq-barra" style="display:none"></div>
 </div>
+<!--/eq-piel-main-->
 
 <script>
 // ── DATOS POR DEFECTO (reemplazados por datos_equipo.js) ─────────
@@ -543,105 +555,275 @@ function eqResumen(){
     + (fuente ? '<div class="eq-fuente">' + fuente + '</div>' : '');
 }
 
-function render(){
-  var grid = document.getElementById('jugadores-grid');
-  grid.innerHTML = '';
-  eqBarra(); eqResumen();
+/*[eq-piel-js]*/
 
-  eqVisibles().forEach(function(j){
-    var color = POS_COLOR[j.pos] || '#64748b';
+/* ══ EL CODIGO DE PAIS DE TRES LETRAS ═════════════════════════════════════
+   La maqueta muestra la bandera y al lado ARG, SUI, MKD. La bandera ya la
+   teniamos; el codigo no. Si una nacionalidad no esta en la lista se usan
+   sus tres primeras letras, que es mejor que dejar el hueco. */
+function eqCod(nac){
+  if(!nac) return '';
+  if(!eqCod._t) eqCod._t = {
+    'argentina':'ARG','suiza':'SUI','ee.uu.':'USA','estados unidos':'USA',
+    'suecia':'SWE','alemania':'GER','francia':'FRA','italia':'ITA',
+    'brasil':'BRA','españa':'ESP','polonia':'POL','serbia':'SRB',
+    'croacia':'CRO','holanda':'NED','paises bajos':'NED','países bajos':'NED',
+    'austria':'AUT','canada':'CAN','canadá':'CAN','cuba':'CUB',
+    'japon':'JPN','japón':'JPN','chile':'CHI','uruguay':'URU',
+    'venezuela':'VEN','eslovenia':'SLO','republica checa':'CZE',
+    'república checa':'CZE','belgica':'BEL','bélgica':'BEL',
+    'macedonia':'MKD','macedonia del norte':'MKD','portugal':'POR',
+    'grecia':'GRE','turquia':'TUR','turquía':'TUR','rusia':'RUS',
+    'ucrania':'UKR','bulgaria':'BUL','finlandia':'FIN','noruega':'NOR',
+    'dinamarca':'DEN','mexico':'MEX','méxico':'MEX','colombia':'COL',
+    'peru':'PER','perú':'PER','republica dominicana':'DOM'
+  };
+  var k = String(nac).toLowerCase().trim();
+  if(eqCod._t[k]) return eqCod._t[k];
+  k = k.split('/')[0].trim();                /* "Argentina / Italia" */
+  return eqCod._t[k] || String(nac).replace(/[^A-Za-zÀ-ɏ]/g,'').slice(0,3).toUpperCase();
+}
+
+/* ══ LA BARRA DE FILTROS ══════════════════════════════════════════════════
+   Se arma UNA sola vez. Antes se rehacia en cada dibujo y eso ahora borraria
+   lo que estas escribiendo en el buscador en el medio de la tecleada. */
+var EQ_Q = '';
+var EQ_VISTA = 'plantel';
+
+function eqIcoSvg(n){ return (window.VSP && VSP.ico) ? VSP.ico(n) : ''; }
+function eqT(es, en, de){
+  try{ if(window.tr){ var v = window.tr(es); if(v) return v; } }catch(e){}
+  var l = (window.VSP && VSP.idioma) ? VSP.idioma() : 'es';
+  return l === 'en' ? en : l === 'de' ? de : es;
+}
+
+function eqBarraUna(){
+  var el = document.getElementById('eq-barra2');
+  if(!el || el.dataset.lista === '1') return;
+  el.dataset.lista = '1';
+
+  var puestos = [];
+  ((typeof DATA!=='undefined' && DATA.jugadores) || []).forEach(function(j){
+    var p = eqPuestoDe(j);
+    if(p && puestos.indexOf(p) < 0) puestos.push(p);
+  });
+  puestos.sort();
+
+  var ops = '<option value="">' + eqT('Todas','All','Alle') + '</option>';
+  puestos.forEach(function(p){ ops += '<option value="' + p + '">' + p + '</option>'; });
+
+  el.innerHTML =
+    '<div class="vs-p-busca">' +
+      '<span class="lupa">' + eqIcoSvg('lupa') + '</span>' +
+      '<input type="search" id="eq-q" autocomplete="off" spellcheck="false" placeholder="' +
+        eqT('Buscar jugador…','Search player…','Spieler suchen…') + '">' +
+    '</div>' +
+    '<div class="sep"></div>' +
+    '<div class="vs-p-campo"><label>' + eqT('Posición','Position','Position') + '</label>' +
+      '<select id="eq-sel-pos">' + ops + '</select></div>' +
+    '<div class="vs-p-campo"><label>' + eqT('Orden','Order','Reihenfolge') + '</label>' +
+      '<select id="eq-sel-ord">' +
+        '<option value="dorsal">'   + eqT('Dorsal','Shirt number','Trikotnummer') + '</option>' +
+        '<option value="puesto">'   + eqT('Puesto','Position','Position') + '</option>' +
+        '<option value="acciones">' + eqT('Acciones','Actions','Aktionen') + '</option>' +
+      '</select></div>' +
+    '<div class="sep"></div>' +
+    '<button type="button" class="vs-p-btn on" id="eq-b-pl">' + eqIcoSvg('persona') +
+      '<span>' + eqT('Plantel activo','Active squad','Aktiver Kader') + '</span></button>' +
+    '<button type="button" class="vs-p-btn" id="eq-b-st" style="margin-left:8px">' + eqIcoSvg('personas') +
+      '<span>' + eqT('Cuerpo técnico','Coaching staff','Trainerstab') + '</span></button>';
+
+  var q = document.getElementById('eq-q');
+  if(q) q.addEventListener('input', function(){ EQ_Q = this.value || ''; render(); });
+
+  var sp = document.getElementById('eq-sel-pos');
+  if(sp) sp.addEventListener('change', function(){ EQ_POS = this.value || null; render(); });
+
+  var so = document.getElementById('eq-sel-ord');
+  if(so){ so.value = EQ_ORD; so.addEventListener('change', function(){ EQ_ORD = this.value; render(); }); }
+
+  function vista(v){
+    EQ_VISTA = v;
+    var a = document.getElementById('eq-b-pl'), b = document.getElementById('eq-b-st');
+    if(a) a.classList.toggle('on', v === 'plantel');
+    if(b) b.classList.toggle('on', v === 'staff');
+    render();
+  }
+  var bp = document.getElementById('eq-b-pl'); if(bp) bp.addEventListener('click', function(){ vista('plantel'); });
+  var bs = document.getElementById('eq-b-st'); if(bs) bs.addEventListener('click', function(){ vista('staff'); });
+}
+
+/* el buscador: por apellido, por nombre de pila o por dorsal */
+function eqCoincide(j){
+  var q = EQ_Q.trim().toLowerCase();
+  if(!q) return true;
+  return (String(j.nombre||'') + ' ' + String(j.pila||'') + ' ' + String(j.num||''))
+           .toLowerCase().indexOf(q) >= 0;
+}
+
+function render(){
+  var grid  = document.getElementById('jugadores-grid');
+  var staff = document.getElementById('staff-grid');
+  var nada  = document.getElementById('eq-nada');
+  if(!grid) return;
+
+  eqBarraUna();
+  eqResumen();
+
+  var hayPlantel = EQ_VISTA === 'plantel';
+  grid.style.display  = hayPlantel ? '' : 'none';
+  staff.style.display = hayPlantel ? 'none' : '';
+
+  /* ── las tarjetas de jugador ───────────────────────────────────────── */
+  grid.innerHTML = '';
+  var lista = eqVisibles().filter(eqCoincide);
+
+  lista.forEach(function(j){
+    var pos = eqPuestoDe(j);
     var card = document.createElement('a');
-    card.className = 'jug-card';
+    card.className = 'vs-p-jug';
     card.href = 'jugador.html?num=' + j.num;
 
-    // Foto o placeholder
-    var fotoWrap = document.createElement('div');
-    fotoWrap.className = 'jug-foto-wrap';
-    fotoWrap.style.borderBottom = '2px solid ' + color;
-
+    var foto = document.createElement('div');
+    foto.className = 'foto';
     if(j.foto){
       var img = document.createElement('img');
       img.alt = j.nombre;
-      /* ══ EL AVISO DE ERROR VA ANTES DEL src ══════════════════════════════
-         Estaba despues. Si el archivo no esta y el navegador ya lo tenia
-         marcado como 404, el error salta en el acto —antes de que exista el
-         aviso— y la tarjeta se queda con la imagen rota en vez del numero.
-         Con el aviso puesto primero no se escapa ninguno. */
+      /* el aviso va ANTES del src: si el archivo no esta y el navegador ya
+         lo tenia marcado como 404, el error salta en el acto */
       img.onerror = function(){
         var w = this.parentElement; if(!w) return;
-        var resto = w.querySelector('.jug-num-overlay');
-        w.innerHTML = '<div class="jug-foto-placeholder">' + j.num + '</div>';
-        if(resto) w.appendChild(resto);
+        w.innerHTML = '<div class="sinfoto">' + j.num + '</div>';
       };
       img.src = j.foto;
-      fotoWrap.appendChild(img);
+      foto.appendChild(img);
     } else {
-      fotoWrap.innerHTML = '<div class="jug-foto-placeholder">' + j.num + '</div>';
+      foto.innerHTML = '<div class="sinfoto">' + j.num + '</div>';
     }
 
-    /* ══ innerHTML += BORRABA LA FOTO Y SU AVISO ═══════════════════════════
-       Sumar con += vuelve a parsear TODO el bloque: el <img> que se acababa
-       de crear se reemplaza por otro igual pero sin el onerror enganchado.
-       Por eso, con una foto que falta, la tarjeta quedaba con el icono de
-       imagen rota y nunca caia al numero.
-       insertAdjacentHTML agrega sin tocar lo que ya esta. */
-    fotoWrap.insertAdjacentHTML('beforeend', '<div class="jug-num-overlay" style="color:' + color + '">#' + j.num + '</div>');
-    /* ══ El puesto, editable por el staff ═══════════════════════════════
-       Los puestos salen de lo que declara cada .dvw, y ahi el scout no
-       siempre los carga: quedan jugadoras sin puesto o con uno equivocado.
-       Eso despues aparece en su perfil, en el plan de partido y en el
-       informe, y no habia forma de corregirlo desde la app.
+    var bandera = j.pais || eqBandera(j.nac) || '';
+    var cod     = eqCod(j.nac);
+    var alt     = parseInt(j.altura, 10) || 0;
+    var ed      = j.edad || 0;
+    var fis     = [];
+    if(alt) fis.push((alt / 100).toFixed(2) + ' m');
+    if(ed)  fis.push(ed + ' ' + eqT('años','yrs','J.'));
 
-       Ahora el cuerpo tecnico lo cambia con un toque. Se guarda en la base
-       del club y desde ahi manda sobre lo que digan los partidos: nadie
-       tiene que abrir un archivo ni correr nada. El jugador solo lo ve. */
-    var _pos = (window.PLANTEL_FIX && window.PLANTEL_FIX[String(j.num)]) || j.pos || '';
-    color = POS_COLOR[_pos] || '#64748b';
-    fotoWrap.style.borderBottom = '2px solid ' + color;
-    fotoWrap.insertAdjacentHTML('beforeend', '<div class="jug-pos-overlay" data-num="' + j.num + '" style="background:rgba(0,0,0,.6);color:' + color + ';border:1px solid ' + color + '33">'
-      + (_pos || '+ puesto') + '</div>');
+    var info = document.createElement('div');
+    info.className = 'info';
+    info.innerHTML =
+      '<span class="vs-p-num gde">' + j.num + '</span>' +
+      /* como en la maqueta: nombre de pila y despues apellido, los dos
+         del mismo peso. El apellido solo sigue siendo la clave con la que
+         el resto de la app lo busca; aca cambia nada mas como se lee. */
+      '<div class="nom">' + (j.pila ? j.pila + ' ' : '') + j.nombre + '</div>' +
+      /* la clase vieja se conserva a proposito: conectarEdicion() engancha
+         el cambio de puesto justamente por ahi y tiene que seguir andando */
+      '<div class="pos jug-pos-overlay" data-num="' + j.num + '">' +
+         (pos || eqT('+ puesto','+ position','+ Position')) + '</div>' +
+      (bandera || cod
+        ? '<div class="pais"><span class="bd">' + bandera + '</span>' + (cod ? '<span>' + cod + '</span>' : '') + '</div>'
+        : '') +
+      (fis.length
+        ? '<div class="fis"><span>' + fis.join('</span><i></i><span>') + '</span></div>'
+        : '') +
+      '<span class="vs-p-btn rojo ancho">' + eqT('Ver ficha','View profile','Profil ansehen') +
+        eqIcoSvg('flecha') + '</span>';
 
-    card.appendChild(fotoWrap);
-
-    // Info
-    var body = document.createElement('div');
-    body.className = 'jug-card-body';
-    body.innerHTML =
-      /* El apellido grande, y abajo el nombre de pila en chico. Los enlaces de
-         abajo siguen usando SOLO el apellido, que es como los busca el resto
-         de la app: si se cambiara, se romperian las stats y la rutina. */
-      '<div class="jug-card-nombre">' + j.nombre +
-        (j.pila ? '<div style="font-size:11px;font-weight:400;opacity:.6;'
-                + 'letter-spacing:.5px;margin-top:2px">' + j.pila + '</div>' : '') +
-      '</div>' +
-      '<div class="jug-card-meta">' + eqMeta(j) + '</div>' + eqPills(j);
-
-    // Links rápidos
-    var links = document.createElement('div');
-    links.className = 'jug-card-links';
-    links.innerHTML =
-      '<a class="jug-link" href="historial_voley.html?player=' + encodeURIComponent(j.nombre) + '">📈 Stats</a>' +
-      '<a class="jug-link" href="prep_fisica.html?player=' + encodeURIComponent(j.nombre) + '">💪 Rutina</a>' +
-      '<a class="jug-link red" href="jugador.html?num=' + j.num + '">👤 Perfil</a>';
-
-    body.appendChild(links);
-    card.appendChild(body);
+    card.appendChild(foto);
+    card.appendChild(info);
     grid.appendChild(card);
   });
 
-  // Staff
-  var staffGrid = document.getElementById('staff-grid');
-  staffGrid.innerHTML = '';
-  (window.STAFF_CLUB || DATA.staff || []).forEach(function(s){
-    var card = document.createElement('div');
-    card.className = 'staff-card';
-    card.innerHTML =
-      '<div class="staff-avatar">' + (s.icon||'👤') + '</div>' +
-      '<div class="staff-nombre">' + s.nombre + '</div>' +
-      '<div class="staff-rol">' + s.rol + '</div>';
-    staffGrid.appendChild(card);
-  });
+  if(nada) nada.style.display = (hayPlantel && !lista.length) ? '' : 'none';
+
+  /* ── el cuerpo tecnico ─────────────────────────────────────────────── */
+  //   Solo si todavia no lo dibujo el bloque de edicion de mas abajo, que es
+  //   el duenio de verdad de esta grilla (trae Agregar y Quitar). Asi no se
+  //   pisan, y el staff aparece igual aunque la base tarde en contestar.
+  if(staff.dataset.pintado !== '1'){
+    staff.innerHTML = '';
+    (window.STAFF_CLUB || DATA.staff || []).forEach(function(s){
+      staff.appendChild(eqStaffTarjeta(s));
+    });
+  }
+
+  /* ── el contador de la banda ───────────────────────────────────────── */
+  var c = document.getElementById('eq-cuenta');
+  if(c){
+    var tot = ((typeof DATA!=='undefined' && DATA.jugadores) || []).length;
+    c.innerHTML = eqIcoSvg('personas') + '<span>' + tot + ' ' +
+      eqT('jugadores','players','Spieler') + '</span>';
+  }
 }
+
+/* ══ LA TARJETA DEL CUERPO TECNICO ════════════════════════════════════════
+   Con la foto real del club cuando la hay: fotos/hc.jpg para el entrenador
+   principal y fotos/ac.jpg para el asistente, que es como estan guardadas.
+   Si el archivo no esta, caen las iniciales, igual que las tarjetas de
+   jugador caen al dorsal. */
+function eqFotoStaff(s){
+  var r = String((s && s.rol) || '').toLowerCase();
+  if(/asist|segundo|^ac$/.test(r))                        return 'fotos/ac.jpg';
+  if(/head|principal|^hc$|^entrenador|^cheftrainer/.test(r)) return 'fotos/hc.jpg';
+  return '';
+}
+function eqIniciales(nom){
+  return String(nom || '').trim().split(/\s+/)
+    .map(function(x){ return x.charAt(0); }).join('').slice(0, 2).toUpperCase();
+}
+function eqStaffTarjeta(s, i, conBoton){
+  var nom = (s && s.nombre) || '';
+  var ini = eqIniciales(nom) || '\u00b7';
+  var fo  = eqFotoStaff(s);
+  var it  = document.createElement('div');
+  it.className = 'it';
+  it.innerHTML =
+    (fo ? '<div class="av"><img src="' + fo + '" alt=""></div>'
+        : '<div class="ini">' + ini + '</div>') +
+    '<div><div class="nm">' + nom + '</div>' +
+      '<div class="rl">' + ((s && s.rol) || '') + '</div></div>' +
+    (conBoton ? '<button type="button" class="quitar-staff" data-i="' + i + '" data-t="Quitar">' +
+                eqT('Quitar','Remove','Entfernen') + '</button>' : '');
+  var img = it.querySelector('img');
+  if(img) img.onerror = function(){
+    var w = this.parentElement; if(!w) return;
+    w.outerHTML = '<div class="ini">' + ini + '</div>';
+  };
+  return it;
+}
+window.eqStaffTarjeta = eqStaffTarjeta;
+
+/* ══ DIBUJAR YA, SIN ESPERAR A LA NUBE ════════════════════════════════════
+   El plantel se dibujaba recien cuando volvia fbGet('plantel_pos'). Si la
+   base tarda —o no contesta— la pantalla se quedaba vacia aunque la lista
+   de jugadores ya estuviera cargada en el navegador.
+   Ahora se dibuja de entrada con lo que hay, y cuando llegan las
+   correcciones de puesto se vuelve a dibujar: render() rehace la grilla
+   entera, asi que llamarlo dos veces no duplica nada. */
+(function(){
+  function yaDibuja(){
+    try{ if(typeof render === 'function') render(); }catch(e){}
+    try{ if(typeof conectarEdicion === 'function') conectarEdicion(); }catch(e){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', yaDibuja);
+  else yaDibuja();
+})();
+
+/* ══ LA BANDA DE PIE ══════════════════════════════════════════════════════ */
+(function(){
+  function poner(){
+    if(window.VSP && VSP.pie){
+      VSP.pie(eqT('Cada jugador, una historia. Un equipo, un objetivo.',
+                  'Every player, a story. One team, one goal.',
+                  'Jeder Spieler eine Geschichte. Ein Team, ein Ziel.'));
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poner);
+  else poner();
+})();
+
+/*[/eq-piel-js]*/
 
 /* ══ CORREGIR EL PUESTO DESDE LA APP ══════════════════════════════════════
    Se toca la etiqueta del puesto y se elige el correcto. Queda guardado en la
@@ -735,9 +917,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-2328"></script>
-<script src="temporadas_menu.js?v=20261030-2328"></script>
-<script src="ayuda.js?v=20261030-2328"></script>
+<script src="chat_nafels.js?v=20261031-0019"></script>
+<script src="temporadas_menu.js?v=20261031-0019"></script>
+<script src="ayuda.js?v=20261031-0019"></script>
 
 <script>
 /* ══ EL CUERPO TECNICO ═══════════════════════════════════════════════════
@@ -765,26 +947,16 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
     if (!g) return;
     g.innerHTML = '';
     (window.STAFF_CLUB || []).forEach(function(s, i){
-      var c = document.createElement('div');
-      c.className = 'staff-card';
-      c.innerHTML =
-        '<div class="staff-avatar">' + (s.icon || ICONO[s.rol] || '👤') + '</div>' +
-        '<div class="staff-nombre">' + (s.nombre || '') + '</div>' +
-        '<div class="staff-rol">' + (s.rol || '') + '</div>' +
-        (esStaff() ? '<button type="button" data-i="' + i + '" class="quitar-staff" ' +
-          'style="margin-top:8px;background:none;border:1px solid rgba(255,255,255,.14);' +
-          'color:#93a5c0;border-radius:7px;padding:3px 9px;font-size:11px;cursor:pointer">' +
-          'Quitar</button>' : '');
-      g.appendChild(c);
+      g.appendChild(eqStaffTarjeta(s, i, esStaff()));
+      g.dataset.pintado = '1';
     });
 
     if (esStaff()) {
       var add = document.createElement('div');
-      add.className = 'staff-card';
-      add.style.cssText = 'border-style:dashed;cursor:pointer;opacity:.75';
-      add.innerHTML = '<div class="staff-avatar">＋</div>' +
-        '<div class="staff-nombre">Agregar</div>' +
-        '<div class="staff-rol">cuerpo técnico</div>';
+      add.className = 'it sumar';
+      add.innerHTML = '<div class="ini">+</div>' +
+        '<div><div class="nm" data-t="Agregar">Agregar</div>' +
+        '<div class="rl" data-t="cuerpo técnico">cuerpo técnico</div></div>';
       add.onclick = agregar;
       g.appendChild(add);
     }
@@ -836,7 +1008,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
   else setTimeout(cargar, 400);
 })();
 </script>
-<script src="volver_inicio.js?v=20261030-2328" defer></script>
+<script src="volver_inicio.js?v=20261031-0019" defer></script>
 </body>
 </html>
 

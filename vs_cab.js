@@ -74,7 +74,7 @@
           return 'AAAAAAACEEEEIIIIDNOOOOO.OUUUUY..aaaaaaaceeeeiiiidnooooo.ouuuuy.y'
             .charAt(c.charCodeAt(0) - 192) || c; })
         .toUpperCase().replace(/[^A-Z]/g, '');
-      return /^(AXPO)?(BIOGAS)?(VOLLEY)?NAFELS(VOLEY)?(VOLLEYBALL)?$/.test(l)
+      return /^(AXPO)?(BIOGAS)?(VOLLEY)?NAFELS(VOLEY|VOLLEY|VOLLEYBALL)?$/.test(l)
           || /^NAFELSVOLEYANALISIS/.test(l);
     }
     /* Pero se descarta SOLO si hay un reemplazo a la altura. En el Manual el
@@ -165,7 +165,9 @@
       if(cs) sub = (cs.textContent || '').trim();
       if(!sub) sub = tr('Sistema de Análisis · NLA Suiza 2026/27');
       var sp = m.querySelector('span');
-      if(sp) sp.innerHTML = '<b>NAFELS <em>VOLEY</em></b><i class="vs-msub"></i>';
+      /*  el nombre real del club: AXPO VOLLEY NAFELS, con la dieresis.
+          La ultima palabra va en rojo, igual que los titulos de las bandas. */
+      if(sp) sp.innerHTML = '<b>AXPO VOLLEY <em>N\u00c4FELS</em></b><i class="vs-msub"></i>';
       var si = m.querySelector('.vs-msub');
       if(si) si.textContent = sub;
     }

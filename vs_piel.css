@@ -1,0 +1,492 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   vs_piel.css · LA PIEL NUEVA — los componentes de las maquetas 2026/27
+   ---------------------------------------------------------------------------
+   QUE ES
+   Las cuatro maquetas nuevas (Equipo, Wellness, Rutina del jugador y Armar
+   rutinas) no traen una paleta nueva: traen COMPONENTES nuevos. El fondo, el
+   rojo, la tipografia y el color de panel ya son los que vs_estilo.css le da
+   a toda la app —medido pixel a pixel contra las imagenes: el panel de la
+   maqueta es #000C17, que es exactamente nuestro --card—.
+
+   Lo que falta, y es lo que escribe este archivo, son las piezas:
+   la barra de filtros con la etiqueta sobre el borde, las tarjetas de jugador
+   con la foto al costado, el chip redondeado de cada dato, las pestanias con
+   la franja roja, los paneles con cabecera de icono, el anillo de porcentaje
+   y la banda de pie con el pulso.
+
+   POR QUE NO ROMPE NADA
+   · Se carga SOLO en las cuatro pantallas. Las otras sesenta ni lo descargan.
+   · Todas las clases empiezan con "vs-p-". vs_cab.js ya saltea todo lo que
+     empieza con "vs-" cuando reparte los acentos rojos, asi que no le pinta
+     por encima a ninguna pieza de aca.
+   · No redefine ninguna variable global: las usa.
+
+   APAGARLO
+       localStorage.setItem('vs_estilo','off')  y recargar  (cae todo junto)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+html:not([data-vs="off"]) body{
+  /* los tres acentos que la maqueta usa y la app todavia no tenia con nombre */
+  --p-cyan:#63D8EE;         /* el puesto del jugador, los rotulos de columna  */
+  --p-cyan-b:#8FE6F6;
+  --p-verde:#00E5A6;        /* "disponible", "optimo", el anillo que va bien  */
+  --p-ambar:#F5A524;        /* "en riesgo"                                    */
+  --p-txt2:#8FA8BE;         /* el gris de la maqueta, el mismo del panel vivo */
+  --p-txt3:#5A7489;
+  --p-borde:rgba(99,216,238,.13);   /* el filo cyan apenas visible del panel  */
+  --p-borde2:rgba(99,216,238,.26);
+  --p-hueco:#02121E;        /* el relleno de los chips y los campos           */
+  --p-r:14px;               /* el radio de los paneles                        */
+  --p-r2:9px;               /* el radio de los chips y los botones            */
+}
+
+/* ── el ancho de la pagina ────────────────────────────────────────────────
+   La maqueta deja 24 px de aire a cada lado y no pasa de 1480. */
+html:not([data-vs="off"]) body .vs-p-wrap{
+  max-width:1480px;margin:0 auto;padding:18px 24px 0;width:100%}
+@media (max-width:760px){
+  html:not([data-vs="off"]) body .vs-p-wrap{padding:12px 12px 0}
+}
+
+/* ═══ 1 · LA BANDA DEL TITULO ══════════════════════════════════════════════
+   vs_cab.js ya dibuja la banda con la foto. En la maqueta la foto cruza TODO
+   el ancho y se apaga hacia la izquierda con un degradado, en vez de cortarse
+   a la mitad con un filo duro. Eso es lo unico que cambia. */
+html:not([data-vs="off"]) body.vs-p .vs-cab{
+  position:relative;overflow:visible!important;
+  min-height:118px;
+  padding:14px max(24px,calc((100% - 1480px) / 2 + 24px)) 16px!important;
+  border-bottom:1px solid var(--p-borde)!important}
+html:not([data-vs="off"]) body.vs-p .vs-cab::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  /*  vs_hero_ancho.jpg es la misma foto sobre un lienzo mas ancho: la banda
+      es muy baja para lo ancha que es, y con la original "cover" la agrandaba
+      tanto que solo se veia el cuero de la pelota.                          */
+  background-image:var(--p-foto,url('vs_hero_ancho.jpg'));
+  background-size:cover;background-position:center right;background-repeat:no-repeat;
+  filter:saturate(.9) brightness(.78)}
+html:not([data-vs="off"]) body.vs-p .vs-cab::after{
+  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,
+      #000810 0%, rgba(0,8,16,.97) 22%, rgba(0,8,16,.72) 42%,
+      rgba(0,8,16,.34) 62%, rgba(0,8,16,.12) 100%)}
+html:not([data-vs="off"]) body.vs-p .vs-cab > *{position:relative;z-index:2}
+/* el filo rojo de abajo, que en la maqueta se apaga hacia la derecha */
+html:not([data-vs="off"]) body.vs-p .vs-cab{
+  box-shadow:inset 0 -2px 0 -1px rgba(255,10,60,.55)}
+
+/* el "← VOLVER" chiquito arriba del titulo */
+html:not([data-vs="off"]) body .vs-p-volver{
+  display:inline-flex;align-items:center;gap:8px;
+  height:30px;padding:0 13px;border-radius:var(--p-r2);
+  border:1px solid rgba(255,255,255,.17);background:rgba(0,8,16,.62);
+  color:#D7E2EC;text-decoration:none;
+  font:700 11px/1 var(--vsUI);letter-spacing:.17em;text-transform:uppercase;
+  transition:border-color .15s,color .15s,background .15s}
+html:not([data-vs="off"]) body .vs-p-volver:hover{
+  border-color:var(--red);color:#fff;background:rgba(255,10,60,.12)}
+
+/* el titulo: la barra roja, el texto, y la ultima palabra en rojo */
+html:not([data-vs="off"]) body .vs-p-tit{
+  display:flex;align-items:center;gap:14px;margin:12px 0 4px;
+  font:700 40px/1 var(--vsTit);letter-spacing:.012em;color:#fff;text-transform:uppercase}
+html:not([data-vs="off"]) body .vs-p-tit::before{
+  content:'';width:7px;height:34px;border-radius:2px;flex:none;
+  background:var(--red);transform:skewX(-14deg);
+  box-shadow:0 0 18px -2px rgba(255,10,60,.9)}
+html:not([data-vs="off"]) body .vs-p-tit b{color:var(--red);font-weight:700}
+html:not([data-vs="off"]) body .vs-p-sub{
+  font:700 12px/1.3 var(--vsUI);letter-spacing:.26em;text-transform:uppercase;
+  color:var(--p-cyan);padding-left:21px}
+@media (max-width:760px){
+  html:not([data-vs="off"]) body .vs-p-tit{font-size:27px;gap:10px}
+  html:not([data-vs="off"]) body .vs-p-tit::before{height:24px;width:5px}
+  html:not([data-vs="off"]) body .vs-p-sub{font-size:10px;letter-spacing:.18em;padding-left:15px}
+}
+
+/* la pildora de la derecha de la banda ("12 JUGADORES", "PLANTILLA", ...) */
+html:not([data-vs="off"]) body .vs-p-hero-der{
+  display:flex;align-items:center;gap:12px;flex:0 0 auto;margin-left:auto;z-index:3}
+/*   la mitad izquierda de la banda: volver, titulo y subtitulo, apilados.
+     Va en UN solo hijo para que el flex de la banda no tenga que acomodar
+     tres piezas sueltas: con tres se iban de ancho y la pagina terminaba
+     midiendo 3715 px con barra horizontal.                                 */
+html:not([data-vs="off"]) body .vs-p-hero-izq{flex:1 1 300px;min-width:0}
+html:not([data-vs="off"]) body .vs-p-pill{
+  display:inline-flex;align-items:center;gap:9px;
+  height:42px;padding:0 20px;border-radius:11px;
+  border:1px solid var(--p-borde2);background:rgba(0,10,20,.78);
+  color:#E6EEF5;font:700 13px/1 var(--vsUI);letter-spacing:.13em;text-transform:uppercase;
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  transition:border-color .15s,color .15s}
+html:not([data-vs="off"]) body .vs-p-pill:hover{border-color:var(--p-cyan);color:#fff}
+html:not([data-vs="off"]) body .vs-p-pill.rojo{
+  border-color:rgba(255,10,60,.55);color:var(--red);
+  box-shadow:0 0 22px -10px rgba(255,10,60,.8)}
+html:not([data-vs="off"]) body .vs-p-pill svg{width:17px;height:17px;flex:none;
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:980px){
+  html:not([data-vs="off"]) body .vs-p-hero-der{margin-left:0;margin-top:10px;flex-basis:100%}
+}
+
+/* el lema vertical de la derecha ("DISCIPLINA HOY. RENDIMIENTO MANIANA.") */
+html:not([data-vs="off"]) body .vs-p-lema{
+  position:absolute;right:26px;top:18px;z-index:3;text-align:right;
+  font:700 11.5px/1.65 var(--vsUI);letter-spacing:.2em;text-transform:uppercase;
+  color:#C6D3DE;pointer-events:none}
+html:not([data-vs="off"]) body .vs-p-lema::after{
+  content:'';display:block;width:46px;height:2px;margin:9px 0 0 auto;
+  background:var(--red);box-shadow:0 0 12px -2px rgba(255,10,60,.9)}
+@media (max-width:980px){ html:not([data-vs="off"]) body .vs-p-lema{display:none} }
+
+/* ═══ 2 · LA BARRA DE FILTROS ══════════════════════════════════════════════
+   Un solo marco con divisiones adentro. La etiqueta del desplegable se apoya
+   SOBRE el borde, como en la maqueta. */
+html:not([data-vs="off"]) body .vs-p-barra{
+  display:flex;align-items:center;gap:0;margin:20px 0 22px;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);
+  padding:12px 14px;flex-wrap:wrap;row-gap:12px}
+html:not([data-vs="off"]) body .vs-p-barra > .sep{
+  width:1px;align-self:stretch;margin:0 14px;min-height:38px;
+  background:linear-gradient(180deg,transparent,var(--p-borde2) 22%,var(--p-borde2) 78%,transparent)}
+html:not([data-vs="off"]) body .vs-p-busca{
+  display:flex;align-items:center;gap:10px;flex:1 1 260px;min-width:200px}
+html:not([data-vs="off"]) body .vs-p-busca .lupa{
+  width:36px;height:36px;flex:none;display:grid;place-items:center;
+  border:1px solid var(--p-borde);border-radius:var(--p-r2);
+  background:var(--p-hueco);color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-busca .lupa svg{width:17px;height:17px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+html:not([data-vs="off"]) body .vs-p-busca input{
+  flex:1;height:38px;padding:0 14px;border-radius:var(--p-r2);
+  border:1px solid var(--p-borde);background:var(--p-hueco);color:#E6EEF5;
+  font:500 15px/1 var(--vsUI);outline:0;transition:border-color .15s}
+html:not([data-vs="off"]) body .vs-p-busca input:focus{border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-busca input::placeholder{color:var(--p-txt3)}
+
+/* el campo con la etiqueta sobre el borde */
+html:not([data-vs="off"]) body .vs-p-campo{position:relative;flex:0 1 220px;min-width:150px}
+html:not([data-vs="off"]) body .vs-p-campo > label{
+  position:absolute;top:-7px;left:12px;padding:0 6px;z-index:2;
+  background:#00080F;color:var(--p-cyan);
+  font:700 10px/1 var(--vsUI);letter-spacing:.15em;text-transform:uppercase;
+  pointer-events:none}
+html:not([data-vs="off"]) body .vs-p-campo > select,
+html:not([data-vs="off"]) body .vs-p-campo > input{
+  width:100%;height:42px;padding:0 34px 0 14px;border-radius:var(--p-r2);
+  border:1px solid var(--p-borde2);background:var(--p-hueco);color:#E6EEF5;
+  font:500 15px/1 var(--vsUI);outline:0;cursor:pointer;
+  -webkit-appearance:none;appearance:none;transition:border-color .15s}
+html:not([data-vs="off"]) body .vs-p-campo > select:focus,
+html:not([data-vs="off"]) body .vs-p-campo > input:focus{border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-campo::after{
+  content:'';position:absolute;right:15px;top:50%;width:8px;height:8px;
+  margin-top:-6px;border-right:2px solid var(--p-txt2);border-bottom:2px solid var(--p-txt2);
+  transform:rotate(45deg);pointer-events:none}
+html:not([data-vs="off"]) body .vs-p-campo.sinflecha::after{display:none}
+
+/* ═══ 3 · LOS BOTONES ══════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  height:42px;padding:0 20px;border-radius:var(--p-r2);
+  border:1px solid var(--p-borde2);background:var(--p-hueco);
+  color:var(--p-txt2);font:600 14px/1 var(--vsUI);letter-spacing:.05em;
+  cursor:pointer;white-space:nowrap;text-decoration:none;
+  transition:border-color .15s,color .15s,background .15s,box-shadow .15s}
+html:not([data-vs="off"]) body .vs-p-btn:hover{border-color:var(--p-cyan);color:#fff}
+html:not([data-vs="off"]) body .vs-p-btn svg{width:17px;height:17px;flex:none;
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body .vs-p-btn.on{
+  background:linear-gradient(180deg,#FF0A3C,#B00428);
+  border-color:#FF2E58;color:#fff;font-weight:700;
+  box-shadow:0 0 26px -8px rgba(255,10,60,.85),inset 0 1px 0 rgba(255,255,255,.22)}
+html:not([data-vs="off"]) body .vs-p-btn.on:hover{border-color:#FF5C7E;color:#fff}
+/* el de contorno rojo, como "VER FICHA" o "CARGAR" */
+html:not([data-vs="off"]) body .vs-p-btn.rojo{
+  border:1.5px solid var(--red);color:#fff;background:rgba(255,10,60,.05);
+  box-shadow:0 0 20px -9px rgba(255,10,60,.9),inset 0 0 18px -10px rgba(255,10,60,.7);
+  letter-spacing:.13em;text-transform:uppercase;font-weight:700;font-size:13px}
+html:not([data-vs="off"]) body .vs-p-btn.rojo:hover{
+  background:rgba(255,10,60,.16);box-shadow:0 0 28px -6px rgba(255,10,60,1)}
+/* el de contorno verde agua, como "VER DETALLE" */
+html:not([data-vs="off"]) body .vs-p-btn.agua{
+  border:1.5px solid rgba(0,229,166,.55);color:var(--p-verde);background:rgba(0,229,166,.05);
+  letter-spacing:.13em;text-transform:uppercase;font-weight:700;font-size:13px}
+html:not([data-vs="off"]) body .vs-p-btn.agua:hover{background:rgba(0,229,166,.14);color:#BFF7E6}
+html:not([data-vs="off"]) body .vs-p-btn.ancho{width:100%}
+
+/* ═══ 4 · EL PANEL ═════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-pan{
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);
+  margin-bottom:16px;overflow:hidden}
+html:not([data-vs="off"]) body .vs-p-pan.destacado{
+  border-color:rgba(255,10,60,.34);
+  background:
+    radial-gradient(120% 100% at 0% 0%,rgba(255,10,60,.13),transparent 62%),
+    linear-gradient(180deg,#0A0710,#00070F)}
+html:not([data-vs="off"]) body .vs-p-pan-cab{
+  display:flex;align-items:center;gap:11px;padding:14px 16px;
+  border-bottom:1px solid var(--p-borde)}
+html:not([data-vs="off"]) body .vs-p-pan-cab h3,
+html:not([data-vs="off"]) body .vs-p-pan-cab .t{
+  margin:0;font:700 14px/1 var(--vsTit);letter-spacing:.14em;text-transform:uppercase;color:#EDF3F8}
+html:not([data-vs="off"]) body .vs-p-pan-cab .der{
+  margin-left:auto;display:flex;align-items:center;gap:12px;
+  font:600 11.5px/1 var(--vsUI);letter-spacing:.11em;text-transform:uppercase;color:var(--p-txt3)}
+html:not([data-vs="off"]) body .vs-p-pan-cuerpo{padding:14px 16px}
+/* el icono cuadrado de la cabecera */
+html:not([data-vs="off"]) body .vs-p-ico{
+  width:28px;height:28px;flex:none;display:grid;place-items:center;border-radius:8px;
+  border:1px solid rgba(255,10,60,.42);background:rgba(255,10,60,.09);color:var(--red)}
+html:not([data-vs="off"]) body .vs-p-ico.cyan{
+  border-color:var(--p-borde2);background:rgba(99,216,238,.07);color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-ico svg{width:15px;height:15px;
+  stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* ═══ 5 · EL CHIP — la pieza que mas se repite ═════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-chip{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:30px;padding:5px 12px;border-radius:8px;
+  border:1px solid var(--p-borde);background:var(--p-hueco);
+  color:#DCE7F0;font:500 13.5px/1.15 var(--vsUI);white-space:nowrap}
+html:not([data-vs="off"]) body .vs-p-chip.izq{justify-content:flex-start;text-align:left;white-space:normal}
+html:not([data-vs="off"]) body .vs-p-chip.rojo{
+  border-color:rgba(255,10,60,.42);color:#FF8DA6;background:rgba(255,10,60,.07)}
+html:not([data-vs="off"]) body .vs-p-chip.verde{
+  border-color:rgba(0,229,166,.38);color:var(--p-verde);background:rgba(0,229,166,.06)}
+/* el cuadradito con numero (el dorsal, el orden del ejercicio) */
+html:not([data-vs="off"]) body .vs-p-num{
+  display:grid;place-items:center;flex:none;
+  min-width:30px;height:30px;padding:0 7px;border-radius:8px;
+  border:1.5px solid var(--red);background:rgba(255,10,60,.06);color:#fff;
+  font:700 16px/1 var(--vsTit);letter-spacing:.02em;
+  box-shadow:0 0 16px -6px rgba(255,10,60,.95),inset 0 0 12px -8px rgba(255,10,60,.9)}
+html:not([data-vs="off"]) body .vs-p-num.gde{min-width:46px;height:46px;font-size:26px;border-radius:11px}
+html:not([data-vs="off"]) body .vs-p-num.chico{min-width:24px;height:24px;font-size:13px;border-radius:7px;border-width:1px}
+
+/* ═══ 6 · LAS PESTANIAS ════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-tabs{
+  display:flex;align-items:stretch;gap:0;overflow-x:auto;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);margin-bottom:16px}
+html:not([data-vs="off"]) body .vs-p-tabs > button,
+html:not([data-vs="off"]) body .vs-p-tabs > a{
+  position:relative;display:inline-flex;align-items:center;gap:9px;
+  height:48px;padding:0 20px;border:0;background:none;cursor:pointer;
+  color:var(--p-txt2);font:700 12.5px/1 var(--vsUI);letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;white-space:nowrap;
+  transition:color .15s,background .15s}
+html:not([data-vs="off"]) body .vs-p-tabs > button + button::before,
+html:not([data-vs="off"]) body .vs-p-tabs > a + a::before{
+  content:'';position:absolute;left:0;top:13px;bottom:13px;width:1px;background:var(--p-borde)}
+html:not([data-vs="off"]) body .vs-p-tabs svg{width:16px;height:16px;flex:none;color:var(--p-cyan);
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body .vs-p-tabs > *:hover{color:#fff;background:rgba(255,255,255,.035)}
+html:not([data-vs="off"]) body .vs-p-tabs > .on{
+  color:#fff;background:linear-gradient(180deg,rgba(255,10,60,.26),rgba(255,10,60,.04))}
+html:not([data-vs="off"]) body .vs-p-tabs > .on svg{color:var(--red)}
+html:not([data-vs="off"]) body .vs-p-tabs > .on::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2.5px;background:var(--red);
+  box-shadow:0 0 14px -1px rgba(255,10,60,.95)}
+
+/* ═══ 7 · LA TABLA ═════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-tabla{width:100%;border-collapse:separate;border-spacing:0 7px}
+html:not([data-vs="off"]) body .vs-p-tabla th{
+  padding:0 10px 8px;text-align:center;
+  font:700 10.5px/1 var(--vsUI);letter-spacing:.17em;text-transform:uppercase;
+  color:var(--p-cyan);opacity:.82;white-space:nowrap}
+html:not([data-vs="off"]) body .vs-p-tabla th:first-child,
+html:not([data-vs="off"]) body .vs-p-tabla td:first-child{text-align:left}
+html:not([data-vs="off"]) body .vs-p-tabla td{
+  padding:4px 6px;vertical-align:middle;color:#DCE7F0;font:500 14px/1.25 var(--vsUI)}
+html:not([data-vs="off"]) body .vs-p-tabla tbody tr{transition:background .13s}
+html:not([data-vs="off"]) body .vs-p-tabla tbody tr:hover td{background:rgba(99,216,238,.045)}
+html:not([data-vs="off"]) body .vs-p-tabla .ej{display:flex;align-items:center;gap:11px}
+html:not([data-vs="off"]) body .vs-p-tabla .ej img,
+html:not([data-vs="off"]) body .vs-p-tabla .ej .mini{
+  width:40px;height:40px;flex:none;border-radius:8px;object-fit:cover;
+  border:1px solid var(--p-borde);background:var(--p-hueco)}
+html:not([data-vs="off"]) body .vs-p-tabla .ej b{display:block;font-weight:600;font-size:14.5px;color:#F2F7FA}
+html:not([data-vs="off"]) body .vs-p-tabla .ej i{
+  display:block;font-style:normal;font-size:12px;color:var(--p-cyan);opacity:.85;margin-top:1px}
+
+/* ═══ 8 · EL ANILLO DE PORCENTAJE ══════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-anillo{position:relative;flex:none;display:grid;place-items:center}
+html:not([data-vs="off"]) body .vs-p-anillo svg{transform:rotate(-90deg);display:block}
+html:not([data-vs="off"]) body .vs-p-anillo .pista{stroke:rgba(99,216,238,.13);fill:none;stroke-linecap:round}
+html:not([data-vs="off"]) body .vs-p-anillo .arco{fill:none;stroke-linecap:round;
+  transition:stroke-dasharray .6s cubic-bezier(.22,1,.36,1)}
+html:not([data-vs="off"]) body .vs-p-anillo .medio{
+  position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1}
+html:not([data-vs="off"]) body .vs-p-anillo .medio b{
+  font:700 24px/1 var(--vsTit);color:#fff;letter-spacing:.01em}
+html:not([data-vs="off"]) body .vs-p-anillo .medio i{
+  font-style:normal;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--p-txt3)}
+
+/* ═══ 9 · LA BANDA DE PIE ══════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-pie{
+  position:relative;margin-top:34px;padding:20px 24px;overflow:hidden;
+  border-top:1px solid rgba(255,10,60,.3);
+  background:linear-gradient(180deg,#00070F,#000308);
+  display:flex;align-items:center;gap:18px}
+html:not([data-vs="off"]) body .vs-p-pie img.esc{width:40px;height:40px;object-fit:contain;flex:none;opacity:.95}
+html:not([data-vs="off"]) body .vs-p-pie .lema{
+  flex:1;text-align:center;
+  font:600 12px/1 var(--vsUI);letter-spacing:.34em;text-transform:uppercase;color:#C3D2DE}
+html:not([data-vs="off"]) body .vs-p-pie .pulso{width:96px;height:28px;flex:none;color:var(--red);opacity:.9}
+html:not([data-vs="off"]) body .vs-p-pie .pulso svg{width:100%;height:100%;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+@media (max-width:760px){
+  html:not([data-vs="off"]) body .vs-p-pie{flex-wrap:wrap;justify-content:center;gap:10px;padding:16px}
+  html:not([data-vs="off"]) body .vs-p-pie .lema{flex:1 0 100%;letter-spacing:.2em;font-size:10.5px;order:3}
+}
+
+/* ═══ 10 · EL BADGE DE ESTADO DE LA BARRA DE ARRIBA ════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-vivo{
+  display:inline-flex;align-items:center;gap:7px;height:30px;padding:0 13px;border-radius:999px;
+  border:1px solid rgba(0,229,166,.42);background:rgba(0,229,166,.07);color:var(--p-verde);
+  font:700 10.5px/1 var(--vsUI);letter-spacing:.15em;text-transform:uppercase;white-space:nowrap}
+html:not([data-vs="off"]) body .vs-p-vivo::before{
+  content:'';width:7px;height:7px;border-radius:50%;background:var(--p-verde);flex:none;
+  box-shadow:0 0 9px 1px rgba(0,229,166,.85);animation:vsPLat 2.4s ease-in-out infinite}
+@keyframes vsPLat{0%,100%{opacity:1}50%{opacity:.34}}
+@media (prefers-reduced-motion:reduce){
+  html:not([data-vs="off"]) body .vs-p-vivo::before{animation:none}
+}
+html:not([data-vs="off"]) body .vs-p-fecha{
+  font:500 13px/1 var(--vsUI);color:var(--p-txt2);white-space:nowrap}
+@media (max-width:1240px){
+  html:not([data-vs="off"]) body .vs-p-fecha{display:none}
+}
+
+/* ═══ 11 · EL ROTULO DE SECCION ════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-rot{
+  display:flex;align-items:center;gap:12px;margin:26px 0 14px;
+  font:700 10.5px/1 var(--vsUI);letter-spacing:.26em;text-transform:uppercase;color:var(--p-txt3)}
+html:not([data-vs="off"]) body .vs-p-rot::after{
+  content:'';flex:1;height:1px;background:var(--p-borde)}
+
+/* ═══ 12 · EL AVISO DE VACIO ═══════════════════════════════════════════════ */
+html:not([data-vs="off"]) body .vs-p-vacio{
+  padding:38px 20px;text-align:center;color:var(--p-txt3);
+  font:500 15px/1.5 var(--vsUI);border:1px dashed var(--p-borde);border-radius:var(--p-r)}
+
+/* ═══ 13 · LA TARJETA DE JUGADOR ═══════════════════════════════════════════
+   Medida sobre la maqueta: la foto ocupa el 42% del ancho y llega hasta los
+   tres bordes; el resto es la columna de datos. La foto no se corta con un
+   filo: se apaga con un degradado contra el fondo de la tarjeta. */
+html:not([data-vs="off"]) body .vs-p-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(318px,1fr));gap:18px}
+html:not([data-vs="off"]) body .vs-p-jug{
+  position:relative;display:flex;min-height:244px;overflow:hidden;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:
+    radial-gradient(120% 90% at 85% 10%,rgba(99,216,238,.05),transparent 60%),
+    linear-gradient(180deg,#000D18,#00070F);
+  text-decoration:none;color:inherit;
+  transition:border-color .18s,box-shadow .18s,transform .18s}
+html:not([data-vs="off"]) body .vs-p-jug:hover{
+  border-color:rgba(255,10,60,.45);transform:translateY(-3px);
+  box-shadow:0 18px 40px -26px #000,0 0 26px -14px rgba(255,10,60,.75)}
+html:not([data-vs="off"]) body .vs-p-jug .foto{
+  position:relative;width:42%;flex:none;overflow:hidden;background:#00080F}
+html:not([data-vs="off"]) body .vs-p-jug .foto img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+html:not([data-vs="off"]) body .vs-p-jug .foto::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent 52%,rgba(0,10,20,.55) 84%,#000B16 100%)}
+html:not([data-vs="off"]) body .vs-p-jug .foto .sinfoto{
+  width:100%;height:100%;display:grid;place-items:center;
+  font:700 60px/1 var(--vsTit);color:#15324A}
+html:not([data-vs="off"]) body .vs-p-jug .info{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  padding:16px 16px 15px;gap:7px}
+html:not([data-vs="off"]) body .vs-p-jug .nom{
+  font:700 19px/1.05 var(--vsTit);letter-spacing:.02em;text-transform:uppercase;color:#fff;
+  overflow-wrap:anywhere}
+html:not([data-vs="off"]) body .vs-p-jug .pos{
+  position:static;top:auto;right:auto;left:auto;bottom:auto;
+  padding:0;border:0;background:none;border-radius:0;
+  font:700 12.5px/1 var(--vsUI);letter-spacing:.19em;text-transform:uppercase;color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-jug .pais{
+  display:flex;align-items:center;gap:9px;
+  font:600 14px/1 var(--vsUI);letter-spacing:.07em;color:#E8F0F6}
+html:not([data-vs="off"]) body .vs-p-jug .pais .bd{font-size:19px;line-height:1}
+html:not([data-vs="off"]) body .vs-p-jug .fis{
+  display:flex;align-items:center;gap:11px;
+  font:500 14px/1 var(--vsUI);color:#CBDAE5}
+html:not([data-vs="off"]) body .vs-p-jug .fis i{
+  font-style:normal;width:1px;height:13px;background:var(--p-borde2);display:inline-block}
+html:not([data-vs="off"]) body .vs-p-jug .vs-p-btn{margin-top:auto;height:38px}
+/* el dorsal, arriba del todo en la columna de datos */
+html:not([data-vs="off"]) body .vs-p-jug .vs-p-num{align-self:flex-start}
+@media (max-width:420px){
+  html:not([data-vs="off"]) body .vs-p-grid{grid-template-columns:1fr}
+  html:not([data-vs="off"]) body .vs-p-jug .foto{width:38%}
+  html:not([data-vs="off"]) body .vs-p-jug .nom{font-size:17px}
+}
+
+/* ── la tarjeta del cuerpo tecnico: la misma, sin foto ─────────────────── */
+html:not([data-vs="off"]) body .vs-p-staff{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+html:not([data-vs="off"]) body .vs-p-staff .it{
+  display:flex;align-items:center;gap:13px;padding:14px 16px;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F)}
+html:not([data-vs="off"]) body .vs-p-staff .ini{
+  width:46px;height:46px;flex:none;display:grid;place-items:center;border-radius:50%;
+  border:1.5px solid var(--red);background:rgba(255,10,60,.07);color:#fff;
+  font:700 16px/1 var(--vsTit);letter-spacing:.04em;
+  box-shadow:0 0 18px -7px rgba(255,10,60,.9)}
+html:not([data-vs="off"]) body .vs-p-staff .av{
+  width:46px;height:46px;flex:none;border-radius:50%;overflow:hidden;
+  border:1.5px solid var(--red);background:#00080F;
+  box-shadow:0 0 18px -7px rgba(255,10,60,.9)}
+html:not([data-vs="off"]) body .vs-p-staff .av img{
+  width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+html:not([data-vs="off"]) body .vs-p-staff .quitar-staff{
+  margin-left:auto;background:none;border:1px solid var(--p-borde2);
+  color:var(--p-txt3);border-radius:7px;padding:4px 10px;cursor:pointer;
+  font:600 11px/1 var(--vsUI);letter-spacing:.08em;text-transform:uppercase}
+html:not([data-vs="off"]) body .vs-p-staff .quitar-staff:hover{color:var(--red);border-color:var(--red)}
+html:not([data-vs="off"]) body .vs-p-staff .it.sumar{
+  border-style:dashed;cursor:pointer;opacity:.8}
+html:not([data-vs="off"]) body .vs-p-staff .it.sumar:hover{opacity:1;border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body .vs-p-staff .nm{
+  font:700 16px/1.1 var(--vsTit);letter-spacing:.03em;text-transform:uppercase;color:#fff}
+html:not([data-vs="off"]) body .vs-p-staff .rl{
+  font:600 11.5px/1 var(--vsUI);letter-spacing:.16em;text-transform:uppercase;
+  color:var(--p-cyan);margin-top:4px}
+
+/* el titulo de la banda, al tamanio de la maqueta: la regla general de
+   .vs-cab-tit lo deja en 26 px con !important, asi que hay que ganarle */
+html:not([data-vs="off"]) body.vs-p .vs-cab .vs-p-tit.vs-p-tit{
+  font-size:40px!important;letter-spacing:.012em!important;color:#fff!important;
+  margin:11px 0 4px;white-space:nowrap}
+@media (max-width:760px){
+  html:not([data-vs="off"]) body.vs-p .vs-cab .vs-p-tit.vs-p-tit{font-size:27px!important}
+}
+/*   la banda no pasa de 180 px de alto a proposito: a partir de ahi vs_cab.js
+     la toma por una tapa de documento (.vs-cab-portada) y le cambia la escala
+     del titulo, que es para el Manual, no para esto.                        */
+html:not([data-vs="off"]) body.vs-p .vs-cab{max-height:176px}
+
+/* ── la tira del resumen del plantel ──────────────────────────────────────
+   No esta en la maqueta, pero el dato es real y util. Se la viste con la
+   misma caja y la misma letra que el resto para que no desentone. */
+html:not([data-vs="off"]) body .vs-p .eq-resumen,
+html:not([data-vs="off"]) body .eq-resumen{
+  display:flex;flex-wrap:wrap;align-items:center;gap:34px;
+  margin:0 0 20px;padding:14px 20px;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F)}
+html:not([data-vs="off"]) body .eq-resumen .eq-rz{display:block}
+html:not([data-vs="off"]) body .eq-resumen .eq-rv{
+  font:700 23px/1 var(--vsTit);color:#fff;letter-spacing:.02em}
+html:not([data-vs="off"]) body .eq-resumen .eq-rl{
+  font:700 10px/1 var(--vsUI);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--p-cyan);opacity:.85;margin-top:6px}
+html:not([data-vs="off"]) body .eq-resumen .eq-fuente{
+  flex:1 1 100%;font:500 12.5px/1.4 var(--vsUI);color:var(--p-txt3)}
