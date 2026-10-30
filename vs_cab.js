@@ -210,6 +210,17 @@
        "Volver al Hub" del tablero, y la tirita se esconde. */
     var cab0 = document.querySelector('.vs-cab');
     if(cab0){
+      /*  Un solo renglon para todos los "volver". Antes cada enlace absorbido
+          ocupaba una fila entera y en el panel en vivo quedaban tres rotulos
+          apilados arriba del titulo —"CAT", "Dashboard" y "HUB"—, uno debajo
+          del otro. Ahora van todos en la misma linea, y lo que no es un
+          enlace (un rotulo suelto como "CAT") no sube: se esconde.        */
+      var fila = cab0.querySelector('.vs-fila-volver');
+      if(!fila){
+        fila = document.createElement('span');
+        fila.className = 'vs-fila-volver';
+        cab0.insertBefore(fila, cab0.firstChild);
+      }
       var ant = cab0.previousElementSibling;
       while(ant){
         var sig = ant.previousElementSibling;
@@ -222,12 +233,25 @@
           });
           if(alto > 0 && alto < 64 && soloEnlaces){
             ant.dataset.vsTira = '1';
-            hijos.forEach(function(h){ h.classList.add('vs-volver'); cab0.insertBefore(h, cab0.firstChild); });
+            hijos.forEach(function(h){
+              if(h.tagName !== 'A' && h.tagName !== 'BUTTON') return;  /* rotulos sueltos, no */
+              h.classList.add('vs-volver'); fila.appendChild(h);
+            });
             ant.classList.add('vs-huerfano');
           } else if(ant.dataset) ant.dataset.vsTira = '0';
         }
         ant = sig;
       }
+      /*  y el "volver" que la pantalla ya traia adentro de la banda se suma
+          al mismo renglon en vez de inventar otro                         */
+      [].slice.call(cab0.children).forEach(function(h){
+        if(h === fila || h.parentNode !== cab0) return;
+        if(h.tagName !== 'A' && h.tagName !== 'BUTTON') return;
+        var tx = (h.textContent || '').trim();
+        if(!/^[\u2190\u2039\u25C2<]/.test(tx) || tx.length > 28) return;
+        h.classList.add('vs-volver'); fila.appendChild(h);
+      });
+      fila.style.display = fila.children.length ? '' : 'none';
     }
 
     /* ── la banda de marca de la portada ya no hace falta ───────────────── */

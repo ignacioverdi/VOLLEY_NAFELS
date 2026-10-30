@@ -3181,6 +3181,8 @@
     "Cerrar":{en:"Close",de:"Schlie\u00dfen"},
     "Lado":{en:"Side",de:"Seite"},
     "Tot":{en:"Tot",de:"Ges"},
+    "Sin acciones todav\u00eda":{en:"No actions yet",de:"Noch keine Aktionen"},
+    "Puntos":{en:"Points",de:"Punkte"},
     "Pos%":{en:"Pos%",de:"Pos%"},
     "C\u00f3d":{en:"Code",de:"Code"},
     "Una vez por computadora. Si el scout usa la suya, tiene que hacerlo en la suya.":{en:"Once per computer. If the scout uses their own, they have to do it on theirs.",de:"Einmal pro Computer. Wenn der Scout seinen eigenen nutzt, muss er es dort tun."},

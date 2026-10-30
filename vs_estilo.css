@@ -918,6 +918,12 @@ html:not([data-vs="off"]) .vs-cab-tit{font-family:var(--vsTit)!important;font-we
  letter-spacing:.075em!important;text-transform:uppercase!important;color:var(--txt)!important}
 html:not([data-vs="off"]) .vs-cab:not(.vs-cab-portada) .vs-cab-tit{font-size:26px!important}
 /* el boton de volver que subio desde la tirita */
+/*   el renglon unico de los "volver"                                       */
+html:not([data-vs="off"]) .vs-cab .vs-fila-volver{order:-1;flex:0 0 100%;
+ display:flex!important;align-items:center;gap:16px;margin:0 0 2px;min-width:0}
+html:not([data-vs="off"]) .vs-cab .vs-fila-volver .vs-volver{flex:0 0 auto!important;
+ margin:0!important}
+html:not([data-vs="off"]) .vs-cab .vs-fila-volver:empty{display:none!important}
 html:not([data-vs="off"]) .vs-cab .vs-volver{order:-1;flex:0 0 100%;border:0!important;
  background:none!important;padding:0!important;margin:0 0 2px!important;
  color:var(--mut)!important;font:400 12px/1 var(--vsUI)!important;letter-spacing:0!important;

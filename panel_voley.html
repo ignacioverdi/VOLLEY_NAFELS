@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title data-t="Stats Entrenamiento">Stats Entrenamiento</title>
-<script src="categorias_club.js?v=20261030-2030"></script>
-<script src="selector_categoria.js?v=20261030-2030"></script>
+<script src="categorias_club.js?v=20261030-2105"></script>
+<script src="selector_categoria.js?v=20261030-2105"></script>
 <script src="datos_voley.js.enc?v=22928f64" onerror="void 0" onerror="void 0"></script>
 <style id="fuentes-embebidas">
 /* Fuentes embebidas (Barlow, Barlow Condensed, JetBrains Mono) — SIL Open Font License.
@@ -391,14 +391,14 @@ body::before{content:'';position:fixed;inset:0;
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="objetivos_config.js?v=20261030-2030"></script>
+<script src="objetivos_config.js?v=20261030-2105"></script>
 
 <script>
 /* Pantalla de escritorio: necesita sus datos completos al abrir.
    Las de las jugadoras no llevan esta marca. */
 window.__DESCIFRAR_SINCRONO = true;
 </script>
-<script src="datos_seguros.js?v=20261030-2030"></script>
+<script src="datos_seguros.js?v=20261030-2105"></script>
 <!-- ══ ABRIR LOS DATOS ════════════════════════════════════════════════════
      datos_voley.js.enc se carga arriba de todo, pero el .enc solo deja el
      texto cifrado en window.__D: hace falta abrirDatos() para que aparezca
@@ -409,12 +409,12 @@ window.__DESCIFRAR_SINCRONO = true;
      alimenta de Firebase, que publica VOLEY_DATA en cada accion. Pero sin
      Firebase —o antes de que conteste— el panel quedaba sin nada. -->
 <script>try{ abrirDatos(); }catch(e){ try{console.error('[panel_voley] abrirDatos',e);}catch(_){} }</script>
-<script src="firebase.js?v=20261030-2030" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-2030"></script>
-<script src="lang.js?v=20261030-2030"></script>
-<script src="objetivos.js?v=20261030-2030" onerror="void 0"></script>
-<script src="delay_buffer.js?v=20261030-2030"></script>
-  <script src="video_delay.js?v=20261030-2030" onerror="void 0"></script>
+<script src="firebase.js?v=20261030-2105" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-2105"></script>
+<script src="lang.js?v=20261030-2105"></script>
+<script src="objetivos.js?v=20261030-2105" onerror="void 0"></script>
+<script src="delay_buffer.js?v=20261030-2105"></script>
+  <script src="video_delay.js?v=20261030-2105" onerror="void 0"></script>
 <script>
 // ================================================================
 // NAFELS VOLEY — Utils compartidos
@@ -782,12 +782,12 @@ function renderObjetivosJugador(cid,nombre,extra){
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-2030">
+<link rel="stylesheet" href="movil.css?v=20261030-2105">
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-2030">
-<script src="vs_cab.js?v=20261030-2030" defer></script>
-<script src="vs_tabla.js?v=20261030-2030" defer></script>
-<script src="nav.js?v=20261030-2030" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-2105">
+<script src="vs_cab.js?v=20261030-2105" defer></script>
+<script src="vs_tabla.js?v=20261030-2105" defer></script>
+<script src="nav.js?v=20261030-2105" defer></script>
 </head>
 <body>
 <div style="padding:6px 20px;background:rgba(7,8,15,.97);border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:300;display:flex;align-items:center;gap:12px"><a href="dashboard.html" style="padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#8395ac;font-size:10px;font-weight:700;letter-spacing:1px;text-decoration:none;text-transform:uppercase" data-t="← Dashboard"><span data-t="← Dashboard">← Dashboard</span></a><div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div></div>
@@ -3088,8 +3088,8 @@ function closeJugDetail(){
   document.getElementById('jug-det').style.display = 'none';
   document.body.style.overflow = '';
 }</script>
-<script src="plantel_nafels.js?v=20261030-2030" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-2030"></script>
+<script src="plantel_nafels.js?v=20261030-2105" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-2105"></script>
 <div id="m-plan" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);padding:0" >
   <div style="height:100%;display:flex;flex-direction:column">
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 18px;background:#0d0e1a;border-bottom:1px solid rgba(255,255,255,.1)">
@@ -3188,7 +3188,7 @@ function vdReplay(){ if(window.VideoDelay) VideoDelay.replayUltimoPunto(12); }
 function vdMaximizar(){ var w=document.getElementById('vd-videowrap'); if(!w) return; if(!document.fullscreenElement){ (w.requestFullscreen||w.webkitRequestFullscreen||w.webkitEnterFullscreen||function(){}).call(w); } else { (document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document); } }
 </script>
 
-<script src="ayuda.js?v=20261030-2030"></script>
+<script src="ayuda.js?v=20261030-2105"></script>
 
 
 
@@ -4015,18 +4015,390 @@ function renderAnalisis(){
 })();
 
 </script>
-<script src="analisis_vivo.js?v=20261030-2030" onerror="void 0"></script>
+<script src="analisis_vivo.js?v=20261030-2105" onerror="void 0"></script>
 <!-- Los paneles de "como venimos", "quien esta cerrando" y los atajos son
      los MISMOS que los de Scout en Vivo: el modulo es el mismo archivo. La
      marca de abajo le dice que aca no toque el marco de la pagina, solo
      llene los tres recuadros que ya estan en el HTML. -->
 <script>window.PE_SOLO_PANELES = true;</script>
-<script src="panel_estilo.js?v=20261030-2030" onerror="void 0"></script>
+<script src="panel_estilo.js?v=20261030-2105" onerror="void 0"></script>
 <!-- La flecha para volver: una sola, siempre en el mismo lugar, en cualquiera
      de las nueve ventanas que abre el panel. Ademas hace que la ventana
      abierta se vuelva a dibujar con cada dato nuevo, como el panel. -->
-<script src="volver_panel.js?v=20261030-2030" onerror="void 0"></script>
-<script src="volver_inicio.js?v=20261030-2030" defer></script>
+<script src="volver_panel.js?v=20261030-2105" onerror="void 0"></script>
+<script src="volver_inicio.js?v=20261030-2105" defer></script>
+<style id="pv-tablas-css">
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLAS Y ANALISIS EN EL PANEL EN VIVO · 2026/27
+   Las mismas dos tablas que ya tiene Scout en Vivo, abajo de todo y abiertas
+   de entrada. Leen el mismo window.M que ya usa esta pantalla, asi que no
+   bajan ni calculan nada nuevo. Todo cuelga de #pv-tablas y las clases van
+   con prefijo pvt-, porque esta pantalla ya tiene .fund, .jug y .num con
+   otro significado y si no se pisaban.
+   ═══════════════════════════════════════════════════════════════════════════ */
+#pv-tablas{padding:0 14px 26px;--pvtLoc:#FF5C84;--pvtVis:#00CFFF}
+#pv-tablas > h3{font-family:var(--vsUI,'Barlow Condensed');font-weight:700;letter-spacing:1.6px;
+  font-size:12px;text-transform:uppercase;color:var(--mut);margin:0 0 10px;cursor:pointer;
+  display:flex;align-items:center;gap:7px}
+#pv-tablas .pvt-wrap{display:grid;grid-template-columns:minmax(190px,.5fr) 2.4fr;gap:10px;align-items:start}
+#pv-tablas .pvt-wrap[hidden]{display:none}
+#pv-tablas .pvt-pane{background:var(--card,#000C17);border:1px solid var(--b,#102935);
+  border-radius:10px;padding:9px;min-width:0}
+#pv-tablas .pvt-pane h4{font-family:var(--vsUI,'Barlow Condensed');font-weight:700;letter-spacing:1.6px;
+  font-size:10.5px;text-transform:uppercase;color:var(--mut);margin:0 0 7px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+#pv-tablas .pvt-twin{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+#pv-tablas #pvt-lado{padding:3px 10px;border-radius:7px;cursor:pointer;
+  font-family:inherit;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid rgba(255,10,78,.46);
+  background:linear-gradient(180deg,rgba(255,10,78,.15),rgba(255,10,78,.04));
+  color:var(--red2,#FF5C84)}
+#pv-tablas #pvt-lado:hover{background:linear-gradient(180deg,rgba(255,10,78,.26),rgba(255,10,78,.08));
+  border-color:rgba(255,10,78,.72);color:#FFE9EF}
+#pv-tablas .pvt-mini{font-size:11px}
+#pv-tablas .pvt-row{display:grid;grid-template-columns:52px 1fr 34px;gap:6px;align-items:center;padding:2px 0}
+#pv-tablas .pvt-row .pvt-k{color:var(--mut);font-weight:600;letter-spacing:.3px;text-transform:uppercase;font-size:9px}
+#pv-tablas .pvt-bar{height:6px;border-radius:3px;background:var(--card2,#07131F);overflow:hidden;position:relative}
+#pv-tablas .pvt-bar i{display:block;height:100%;border-radius:3px}
+#pv-tablas .pvt-row .pvt-v{font-size:10.5px;text-align:right;font-variant-numeric:tabular-nums}
+#pv-tablas .pvt-top{margin-top:7px;border-top:1px solid var(--b,#102935);padding-top:6px}
+#pv-tablas .pvt-top .pvt-r{display:flex;justify-content:space-between;padding:1.5px 0;font-size:10.5px}
+#pv-tablas .pvt-top .pvt-r b{font-weight:600}
+#pv-tablas .pvt-top .pvt-r span{color:var(--mut);font-variant-numeric:tabular-nums}
+#pv-tablas .pvt-cab{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#pv-tablas .pvt-cab .pvt-tag{font-family:var(--vsTit,'Barlow Condensed');font-weight:700;
+  letter-spacing:1px;font-size:15px}
+#pv-tablas table{width:100%;border-collapse:collapse;font-size:12.5px}
+#pv-tablas th{font-family:var(--vsUI,'Barlow Condensed');font-weight:600;letter-spacing:1px;
+  font-size:10.5px;text-transform:uppercase;color:var(--mut);padding:6px 4px;text-align:right}
+#pv-tablas th:first-child{text-align:left}
+#pv-tablas td{padding:5px 4px;text-align:right;border:0}
+#pv-tablas td.pvt-k{text-align:left}
+#pv-tablas td .pvt-num{font-variant-numeric:tabular-nums;font-size:12px}
+#pv-tablas tr.pvt-fund td{font-weight:700;border-top:1px solid var(--b2,#102935)}
+#pv-tablas tr.pvt-fund td.pvt-k{text-transform:uppercase;letter-spacing:.5px;font-size:10px}
+#pv-tablas tr.pvt-jug td{opacity:.78}
+#pv-tablas tr.pvt-jug td.pvt-k{padding-left:16px;font-size:10.5px;font-weight:500;color:var(--mut)}
+#pv-tablas tr.pvt-jug:hover td{opacity:1;background:rgba(255,10,78,.055)}
+#pv-tablas .pvt-dor{display:inline-block;min-width:19px;text-align:center;background:var(--card2,#07131F);
+  border:1px solid var(--b,#102935);border-radius:5px;font-size:10px;padding:1px 3px;margin-right:6px}
+#pv-tablas .pvt-pos{color:#22c55e}
+#pv-tablas .pvt-neg{color:#ef4444}
+@media(max-width:1100px){
+  #pv-tablas .pvt-wrap{grid-template-columns:1fr}
+  #pv-tablas .pvt-twin{grid-template-columns:1fr}
+}
+</style>
+<script id="pv-tablas-js">
+(function(){
+  'use strict';
+  if(window.PVT) return;
+  var SKILLS = {S:'Saque',R:'Recepción',A:'Ataque',B:'Bloqueo',D:'Defensa',E:'Armado',F:'Freeball'};
+  var EVALS  = ['#','+','!','-','/','='];
+  var LADO = 'home', FASE = '', TIPO = {};
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function tr(txt){ try{ return (window.T && window.T(txt)) || txt; }catch(e){ return txt; } }
+
+  /* la eficacia es la de objetivos_config.js, la misma de toda la app */
+  function efFund(sk, cnt, n){
+    if(!n) return null;
+    var o = { total:n, Punto:cnt['#'], Pos:cnt['+'], Adm:cnt['!'],
+              Neg:cnt['-'], Vend:cnt['/'], Err:cnt['='] };
+    try{
+      var V = window.VB_EFF;
+      if(V){
+        if(sk==='S' && V.saque)     return V.saque(o);
+        if(sk==='R' && V.recepcion) return V.recepcion(o);
+        if(sk==='D' && V.defensa)   return V.defensa(o);
+        if(sk==='A' && V.ataque)    return V.ataque(o);
+      }
+    }catch(e){}
+    if(sk === 'B') return Math.round(cnt['#'] / n * 100);
+    var errs = cnt['='] + (('AB'.indexOf(sk)>=0)?cnt['/']:0);
+    return Math.round((cnt['#']-errs)/n*100);
+  }
+  function efDe(sk,cnt,n){
+    if(!n) return null;
+    if('SRDF'.indexOf(sk)>=0) return Math.round((cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0))/n*100);
+    return efFund(sk, cnt, n);
+  }
+
+  /* quien saco cada punto: fija la fase (side out / transition) */
+  var _fc=null, _fn=-1;
+  function sacadores(){
+    var cods = (window.M && M.codes) || [];
+    if(_fn === cods.length && _fc) return _fc;
+    var out = new Array(cods.length), saca = null;
+    for(var i=0;i<cods.length;i++){
+      var c = cods[i], t = String((c && c.c) || '');
+      if(c && c.k==='play' && t[3]==='S') saca = t[0];
+      out[i] = saca;
+    }
+    _fn = cods.length; _fc = out;
+    return out;
+  }
+  function filtrarFase(rows, pre){
+    if(!FASE) return rows;
+    var saca = sacadores(), cods = (window.M && M.codes) || [];
+    var idx = new Map();
+    for(var i=0;i<cods.length;i++) idx.set(cods[i], i);
+    return rows.filter(function(c){
+      var q = saca[idx.get(c)];
+      if(!q) return false;
+      return (FASE==='so') ? (q !== pre) : (q === pre);
+    });
+  }
+
+  var TIPOS = {
+    S: [['MH','FLOTADO'], ['QT','POTENCIA']],
+    R: [['MH','FLOTADO'], ['QT','POTENCIA']],
+    A: [['H','Alta'], ['Q','Rápida'], ['T','Tensa'], ['M','Media']],
+    B: [], E: [], D: [], F: []
+  };
+  function estilo(activo){
+    return 'padding:2px 8px;border-radius:6px;font-size:10.5px;font-weight:700;'
+         + 'cursor:pointer;font-family:inherit;border:1px solid '
+         + (activo ? 'var(--red,#FF0A4E);background:rgba(255,10,78,.46);color:#fff'
+                   : 'rgba(255,10,78,.30);background:transparent;color:#FF5C84');
+  }
+  function botones(sk){
+    var tipos = TIPOS[sk] || [];
+    if(!tipos.length) return '';
+    var act = TIPO[sk] || '';
+    var h = '<div style="display:flex;gap:4px;flex-wrap:wrap;padding:3px 0 5px">';
+    if(sk==='A'){
+      h += [['','TODO'],['so','SIDE OUT'],['bp','TRANSITION']].map(function(x){
+        return '<button type="button" onclick="PVT.fase(\'' + x[0] + '\')" style="'
+             + estilo(FASE===x[0]) + '">' + x[1] + '</button>';
+      }).join('') + '<span style="width:1px;background:rgba(255,10,78,.25);margin:0 5px"></span>';
+    }
+    h += '<button type="button" onclick="PVT.tipo(\''+sk+'\',\'\')" style="'
+          + estilo(!act) + '">' + ((sk==='S'||sk==='R') ? 'TOTAL' : 'Todos') + '</button>';
+    tipos.forEach(function(t){
+      h += '<button type="button" onclick="PVT.tipo(\''+sk+'\',\''+t[0]+'\')" style="'
+         + estilo(act===t[0]) + '">' + t[1] + '</button>';
+    });
+    return h + '</div>';
+  }
+
+  function nombreJug(side,num){
+    try{
+      if(side!=='home') return '';
+      var pc = (typeof plantelClub==='function') ? plantelClub() : null;
+      if(!pc) return '';
+      for(var i=0;i<pc.length;i++) if(String(pc[i].c)===String(num)) return pc[i].n;
+    }catch(e){}
+    return '';
+  }
+  function nombreEq(side){
+    try{
+      var m = window.M || {};
+      var n = (side==='home' ? (m.home && m.home.name) : (m.away && m.away.name));
+      return n || tr(side==='home' ? 'LOCAL' : 'VISITANTE');
+    }catch(e){ return side==='home' ? 'LOCAL' : 'VISITANTE'; }
+  }
+
+  function mini(){
+    var el = document.getElementById('pvt-mini'); if(!el) return;
+    var m = window.M; if(!m || !m.codes) return;
+    var pre = LADO==='home' ? '*' : 'a';
+    var col = LADO==='home' ? 'var(--pvtLoc)' : 'var(--pvtVis)';
+    var rows = m.codes.filter(function(c){ return c.k==='play' && c.c[0]===pre; });
+    if(!rows.length){
+      el.innerHTML = '<div style="color:var(--mut);font-size:11px;padding:8px 0">'+esc(tr('Sin acciones todavía'))+'</div>';
+      return;
+    }
+    var html = '';
+    Object.keys(SKILLS).forEach(function(sk){
+      var acts = rows.filter(function(c){ return c.c[3]===sk; });
+      if(!acts.length) return;
+      var n = acts.length, cnt = {};
+      EVALS.forEach(function(e){ cnt[e] = acts.filter(function(c){ return c.c[5]===e; }).length; });
+      var v = efDe(sk,cnt,n);
+      var w = Math.max(0, Math.min(100, v<0?0:v));
+      var c = v===null ? 'var(--mut)' : (v>=60?'#22c55e':v>=30?'#eab308':'#ef4444');
+      html += '<div class="pvt-row"><span class="pvt-k">'+esc(tr(SKILLS[sk]).slice(0,6))+'</span>'+
+        '<span class="pvt-bar"><i style="width:'+w+'%;background:'+c+'"></i></span>'+
+        '<span class="pvt-v" style="color:'+c+'">'+(v===null?'–':v+'%')+'</span></div>';
+    });
+    var pts = {};
+    rows.forEach(function(c){
+      if((c.c[3]==='A'||c.c[3]==='B'||c.c[3]==='S') && c.c[5]==='#'){
+        var n = parseInt(c.c.slice(1,3),10); if(n>=1) pts[n] = (pts[n]||0)+1;
+      }
+    });
+    var top = Object.keys(pts).sort(function(a,b){ return pts[b]-pts[a]; }).slice(0,4);
+    if(top.length){
+      html += '<div class="pvt-top"><div class="pvt-k" style="color:var(--mut);font-size:9px;letter-spacing:.5px;margin-bottom:3px">'+esc(tr('Puntos').toUpperCase())+'</div>';
+      top.forEach(function(n){ html += '<div class="pvt-r"><b style="color:'+col+'">#'+n+'</b><span>'+pts[n]+'</span></div>'; });
+      html += '</div>';
+    }
+    el.innerHTML = html;
+  }
+
+  function tablas(){
+    var m = window.M; if(!m || !m.codes) return;
+    ['home','away'].forEach(function(side){
+      var pre = side==='home' ? '*' : 'a';
+      var rows = m.codes.filter(function(c){ return c.k==='play' && c.c[0]===pre; });
+      var body = document.getElementById(side==='home' ? 'pvt-h' : 'pvt-a');
+      if(!body) return;
+      var out = [];
+      function fila(nombre, acts, clase, sk){
+        var n = acts.length, cnt = {};
+        EVALS.forEach(function(e){ cnt[e] = acts.filter(function(c){ return c.c[5]===e; }).length; });
+        var pos  = cnt['#']+cnt['+']+(sk==='S'?cnt['/']:0);
+        var posP = Math.round(pos/n*100);
+        var efP  = efFund(sk, cnt, n);
+        return '<tr class="'+clase+'"><td class="pvt-k">'+nombre+'</td><td><span class="pvt-num">'+n+'</span></td>'+
+          EVALS.map(function(e){ return '<td><span class="pvt-num">'+(cnt[e]||'·')+'</span></td>'; }).join('')+
+          '<td><span class="pvt-num '+(posP<0?'pvt-neg':'pvt-pos')+'">'+posP+'%</span></td>'+
+          '<td><span class="pvt-num '+(efP<0?'pvt-neg':'pvt-pos')+'">'+efP+'%</span></td></tr>';
+      }
+      Object.keys(SKILLS).forEach(function(sk){
+        var acts = rows.filter(function(c){ return c.c[3]===sk; });
+        if(sk==='A') acts = filtrarFase(acts, pre);
+        if(TIPO[sk]) acts = acts.filter(function(c){ return TIPO[sk].indexOf(c.c[4])>=0; });
+        var bt = botones(sk);
+        if(bt) out.push('<tr><td colspan="10" style="padding:0">'+bt+'</td></tr>');
+        if(!acts.length) return;
+        out.push(fila(esc(tr(SKILLS[sk])), acts, 'pvt-fund', sk));
+        var nums = [];
+        acts.forEach(function(c){ var n = parseInt(c.c.slice(1,3),10);
+          if(n>=1 && nums.indexOf(n)<0) nums.push(n); });
+        nums.map(function(n){ return { n:n, acts:acts.filter(function(c){ return parseInt(c.c.slice(1,3),10)===n; }) }; })
+            .sort(function(a,b){ return b.acts.length-a.acts.length; })
+            .forEach(function(p){
+              out.push(fila('<span class="pvt-dor">'+p.n+'</span> '+esc(nombreJug(side,p.n)), p.acts, 'pvt-jug', sk));
+            });
+      });
+      body.innerHTML = out.length ? out.join('')
+        : '<tr><td colspan="10" style="color:var(--mut);text-align:center;padding:18px">'+esc(tr('Sin acciones todavía'))+'</td></tr>';
+      var tag = document.getElementById(side==='home' ? 'pvt-nm-h' : 'pvt-nm-a');
+      if(tag) tag.textContent = nombreEq(side);
+    });
+  }
+
+  function abierto(){
+    var w = document.getElementById('pvt-wrap');
+    return w && !w.hasAttribute('hidden');
+  }
+  function pintar(){
+    if(!abierto()) return;
+    try{ mini(); }catch(e){}
+    try{ tablas(); }catch(e){}
+  }
+
+  window.PVT = {
+    lado: function(){ LADO = LADO==='home' ? 'away' : 'home';
+      var b = document.getElementById('pvt-lado');
+      if(b) b.textContent = nombreEq(LADO);
+      mini(); },
+    fase: function(f){ FASE = f; try{ localStorage.setItem('pvt_fase', f); }catch(e){} tablas(); },
+    tipo: function(sk,t){ TIPO[sk] = t; tablas(); },
+    abrir: function(){
+      var w = document.getElementById('pvt-wrap'), a = document.getElementById('pvt-flecha');
+      if(!w) return;
+      var abre = w.hasAttribute('hidden');
+      if(abre){ w.removeAttribute('hidden'); if(a) a.textContent='▾'; pintar(); }
+      else { w.setAttribute('hidden',''); if(a) a.textContent='▸'; }
+      try{ localStorage.setItem('pvt_abierto', abre?'1':'0'); }catch(e){}
+    },
+    pintar: pintar
+  };
+
+  var MARCA = '<h3 onclick="PVT.abrir()"><span id="pvt-flecha">▾</span>' +
+    '<span data-t="Tablas y análisis — mismas referencias para los dos equipos">Tablas y análisis — mismas referencias para los dos equipos</span></h3>' +
+    '<div class="pvt-wrap" id="pvt-wrap">' +
+      '<div class="pvt-pane">' +
+        '<h4><span data-t="Análisis en vivo">Análisis en vivo</span>' +
+        '<button type="button" class="hbtn" id="pvt-lado" onclick="PVT.lado()">Local</button></h4>' +
+        '<div id="pvt-mini" class="pvt-mini"></div>' +
+      '</div>' +
+      '<div class="pvt-twin">' +
+        '<div class="pvt-pane">' +
+          '<div class="pvt-cab"><span class="pvt-tag" style="color:var(--pvtLoc)" id="pvt-nm-h" data-notr>LOCAL</span></div>' +
+          '<table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="pvt-h"></tbody></table>' +
+        '</div>' +
+        '<div class="pvt-pane">' +
+          '<div class="pvt-cab"><span class="pvt-tag" style="color:var(--pvtVis)" id="pvt-nm-a" data-notr>VISITANTE</span></div>' +
+          '<table><thead><tr><th data-t="Fund.">Fund.</th><th data-t="Tot">Tot</th><th>#</th><th>+</th><th>!</th><th>−</th><th>/</th><th>=</th><th data-t="Pos%">Pos%</th><th>Ef%</th></tr></thead><tbody id="pvt-a"></tbody></table>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  function montar(){
+    if(document.getElementById('pv-tablas')) return true;
+    var destino = document.getElementById('main-content') || document.querySelector('main') || document.body;
+    if(!destino) return false;
+    var d = document.createElement('div');
+    d.id = 'pv-tablas'; d.className = 'stats';
+    d.innerHTML = MARCA;
+    destino.appendChild(d);
+    try{ FASE = localStorage.getItem('pvt_fase') || ''; }catch(e){}
+    try{ if(localStorage.getItem('pvt_abierto') === '0') window.PVT.abrir(); }catch(e){}
+    var b = document.getElementById('pvt-lado');
+    if(b) b.textContent = nombreEq('home');
+    return true;
+  }
+
+  /*  Se repinta solo cuando llegaron codigos nuevos: el panel baja datos cada
+      pocos segundos y redibujar dos tablas enteras sin motivo seria tirar
+      trabajo a la basura (y borraria el filtro que estes mirando).         */
+  var _ultimo = -1;
+  function latido(){
+    if(!montar()) return;
+    var n = (window.M && M.codes) ? M.codes.length : 0;
+    if(n === _ultimo) return;
+    _ultimo = n;
+    pintar();
+  }
+  function arrancar(){ latido(); setInterval(latido, 1200); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<style id="pv-barra-css">
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA FILA ROJA, ABAJO DE LA BANDA · 2026/27
+   La fila de filtros "Fund. / Tipo" se saca y en su lugar va la fila roja de
+   accesos que estaba metida adentro de la banda de titulo. Los filtros no se
+   borran del documento —quedan en "Todos", que es como venian— asi que nada
+   de lo que dependia de ellos cambia; simplemente no se muestran.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body > .fbar:not([id]){display:none!important}
+html:not([data-vs="off"]) #pv-barra{
+  position:sticky!important;top:var(--vsn-h,58px)!important;z-index:99!important;
+  margin:0!important;width:auto!important;
+  display:flex!important;align-items:center!important;flex-wrap:wrap!important;
+  gap:10px!important;padding:7px 14px!important;
+  background:rgba(0,5,14,.94)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line,#102935)!important;
+  justify-content:flex-start!important;box-shadow:0 10px 30px -26px #000!important}
+html:not([data-vs="off"]) #pv-barra::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:linear-gradient(90deg,var(--red,#FF0A4E) 0%,var(--mag,#F90656) 38%,rgba(255,10,78,0) 100%)}
+</style>
+<script id="pv-barra-js">
+(function(){
+  'use strict';
+  function mover(){
+    var h = document.querySelector('header.hdr .hright, header.vs-cab .hright');
+    if(!h) return;
+    var hdr = h.closest('header');
+    if(!hdr || !hdr.parentNode) return;
+    h.id = 'pv-barra';
+    if(h.previousElementSibling !== hdr) hdr.parentNode.insertBefore(h, hdr.nextSibling);
+  }
+  function arrancar(){
+    try{ mover(); }catch(e){}
+    [300, 900, 2000, 4000].forEach(function(ms){ setTimeout(function(){ try{ mover(); }catch(e){} }, ms); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
 </body>
 </html>
 
