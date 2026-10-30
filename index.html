@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <!-- Migracion interna de etiquetas casla_* -> vb_* (transparente: conserva sesion, notas y datos) -->
-<script src="categorias_club.js?v=20261030-1310"></script>
-<script src="selector_categoria.js?v=20261030-1310"></script>
+<script src="categorias_club.js?v=20261030-1341"></script>
+<script src="selector_categoria.js?v=20261030-1341"></script>
 <script>(function(){try{function m(s){for(var i=s.length-1;i>=0;i--){var k=s.key(i);if(k&&k.indexOf("casla_")===0){var n="vb_"+k.slice(6);if(s.getItem(n)===null)s.setItem(n,s.getItem(k));}}}m(localStorage);m(sessionStorage);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <link rel="manifest" href="manifest.json">
@@ -253,17 +253,17 @@ footer{
 select { color: var(--txt) !important; background-color: var(--card2) !important; }
 select option { color: #111111 !important; background-color: #ffffff !important; }
 </style>
-<script src="datos_seguros.js?v=20261030-1310"></script>
-<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1310"></script>
-<script src="lang.js?v=20261030-1310"></script>
-<script src="plantel_nafels.js?v=20261030-1310"></script>
+<script src="datos_seguros.js?v=20261030-1341"></script>
+<script src="firebase.js?v=20261030-1341" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1341"></script>
+<script src="lang.js?v=20261030-1341"></script>
+<script src="plantel_nafels.js?v=20261030-1341"></script>
 <!-- == EL OBJETIVO DE LA SEMANA, ARRIBA DE TODO ========================
      Es lo primero que ve el jugador al entrar. Necesita las baterias, el
      plantel y el ejercicio de armado de alta. Todos van con onerror: si
      alguno no carga, la tarjeta no se dibuja y la portada queda igual que
      siempre. -->
-<script src="objetivos_config.js?v=20261030-1310" onerror="void 0"></script>
+<script src="objetivos_config.js?v=20261030-1341" onerror="void 0"></script>
 <script src="datos_baterias.js.enc?v=0da0cf42" onerror="void 0"></script>
 <script src="datos_equipo.js.enc?v=9f9a8042" onerror="window.EQUIPO_DATA=null"></script>
 <!-- ══ ABRIR LOS DATOS ═══════════════════════════════════════════════════
@@ -285,7 +285,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <script src="datos_high_set_26-27.js.enc?v=fe265993" onerror="void 0"></script>
 <script src="datos_high_set_27-28.js.enc?v=1" onerror="void 0"></script>
 <script src="datos_high_set_28-29.js.enc?v=1" onerror="void 0"></script>
-<script src="objetivos_semanales.js?v=20261030-1310" onerror="void 0"></script>
+<script src="objetivos_semanales.js?v=20261030-1341" onerror="void 0"></script>
 
 <style>
 @media(max-width:768px){
@@ -384,7 +384,7 @@ select option { color: #111111 !important; background-color: #ffffff !important;
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1310">
+<link rel="stylesheet" href="movil.css?v=20261030-1341">
 <style>
 /* ══════════════════════════════════════════════════════════════════════════
    LA PORTADA, DE MENU A TABLERO
@@ -592,9 +592,9 @@ body.hb-compacto .card[style*="grid-column"]{grid-column:auto!important}
 }
 </style>
 
-<script src="iconos.js?v=20261030-1310" defer></script>
+<script src="iconos.js?v=20261030-1341" defer></script>
 
-<script src="nav.js?v=20261030-1310" defer></script>
+<script src="nav.js?v=20261030-1341" defer></script>
 <style id="encabezado-2026">
 /* ══ EL ENCABEZADO ═════════════════════════════════════════
    Este bloque va ULTIMO en el <head> a proposito: el bloque "skin-camiseta"
@@ -1037,8 +1037,8 @@ body > footer{padding:5px 20px!important;font-size:9px!important}
 
 </style>
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
-<script src="vs_cab.js?v=20261030-1310" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1341">
+<script src="vs_cab.js?v=20261030-1341" defer></script>
 </head>
 <body>
 <div id="fx"><div class="grid"></div><div class="sweep"></div><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="vig"></div></div>
@@ -2157,9 +2157,9 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1310"></script>
+<script src="chat_nafels.js?v=20261030-1341"></script>
 
-<script src="proximo_rival.js?v=20261030-1310" onerror="window.FIXTURE_DATA=null"></script>
+<script src="proximo_rival.js?v=20261030-1341" onerror="window.FIXTURE_DATA=null"></script>
 <script>
 /* ══ EL FIXTURE DEL CALENDARIO MANDA ═════════════════════════════════════
    proximo_rival.js lo genera el Excel. Pero el calendario de la app es lo
@@ -2225,13 +2225,13 @@ window.pintarProximo = function(){
 };
 pintarProximo();
 </script>
-<script src="fixture_auto.js?v=20261030-1310" onerror="void 0"></script>
-<script src="temporadas_menu.js?v=20261030-1310"></script>
+<script src="fixture_auto.js?v=20261030-1341" onerror="void 0"></script>
+<script src="temporadas_menu.js?v=20261030-1341"></script>
 <!-- El Service Worker (PWA + push) ahora lo registra OneSignal desde onesignal_push.js,
      usando OneSignalSDKWorker.js en la raíz. Por eso ya NO registramos sw.js por separado
      (evita el conflicto de dos workers en el mismo scope "/"). -->
 <!-- Notificaciones push (OneSignal) -->
-<script src="onesignal_push.js?v=20261030-1310" defer></script>
+<script src="onesignal_push.js?v=20261030-1341" defer></script>
 <!-- ════════ VISTA POR ROL ════════
      El jugador ve SOLO lo suyo + Cortes de video (visor completo). Game Plan es solo del DT.
      El entrenador/staff (y quien no inició sesión) ve TODO igual que siempre. -->
@@ -2914,7 +2914,7 @@ pintarProximo();
   else arrancar();
 })();
 </script>
-<script src="ayuda.js?v=20261030-1310"></script>
+<script src="ayuda.js?v=20261030-1341"></script>
 
 <script id="nv-portada-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3460,7 +3460,7 @@ html:not([data-vs="off"]) #nv-cd{padding:0 18px 7px!important;
 @media (max-width:980px){ html:not([data-vs="off"]) #nv-tres{display:none} }
 
 /* ── 3 · las filas ──────────────────────────────────────────────────────── */
-html:not([data-vs="off"]) .nv-zonaw{display:flex;flex-direction:column;gap:14px;padding:14px 24px 4px}
+html:not([data-vs="off"]) .nv-zonaw{display:flex;flex-direction:column;gap:12px;padding:12px 18px 4px}
 html:not([data-vs="off"]) .nv-rowB,html:not([data-vs="off"]) .nv-rowC{
  display:flex!important;gap:14px!important;align-items:stretch!important}
 html:not([data-vs="off"]) .nv-rowR{display:flex!important;gap:14px!important;align-items:flex-start!important}
@@ -3691,6 +3691,167 @@ html:not([data-vs="off"]) .nv-hubw .hb-vacio{font:400 10.5px/1.4 var(--nvUI)!imp
  html:not([data-vs="off"]) .nv-rowR .nv-gt{grid-template-columns:repeat(3,minmax(0,1fr))!important}
  html:not([data-vs="off"]) .nv-rowR a.card.nv-tile{min-height:84px!important}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARTE 2 · ajuste fino contra la plantilla
+   Los iconos de las fichas van sueltos (sin pastilla), los titulos de panel
+   bajan a 13 px y las cinco secciones de abajo van en una sola fila.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) .nv-rowU{display:flex!important;flex-wrap:wrap!important;gap:12px!important;align-items:stretch!important}
+
+/* titulos de panel */
+html:not([data-vs="off"]) .nv-pt{font:700 13px/1.2 var(--nvTit)!important;letter-spacing:.13em!important}
+html:not([data-vs="off"]) .nv-pt .nv-sub{font-size:8.5px!important;letter-spacing:.12em!important;margin-top:2px!important}
+html:not([data-vs="off"]) .nv-ph{padding:11px 14px 9px!important;gap:9px!important}
+html:not([data-vs="off"]) .nv-pic{width:26px!important;height:26px!important;flex:0 0 26px!important;
+ border-radius:8px!important}
+html:not([data-vs="off"]) .nv-pic svg{width:14px!important;height:14px!important}
+html:not([data-vs="off"]) .nv-pv{font-size:9.5px!important}
+
+/* fichas: icono suelto, grande, sin pastilla */
+html:not([data-vs="off"]) .nv-gt{gap:10px!important;padding:0 14px 14px!important}
+html:not([data-vs="off"]) a.card.nv-tile{min-height:104px!important;gap:12px!important;
+ padding:16px 8px 14px!important;border-radius:11px!important;
+ border:1px solid rgba(20,40,56,.95)!important;
+ background:linear-gradient(170deg,#000E1A,#00070F 68%)!important;
+ box-shadow:none!important}
+html:not([data-vs="off"]) a.card.nv-tile::before{opacity:0!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover::before{opacity:1!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover{border-color:rgba(255,10,78,.5)!important;
+ background:linear-gradient(170deg,#120A1A,#00070F 68%)!important;box-shadow:none!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip{width:auto!important;height:30px!important;
+ border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;
+ color:var(--nvR)!important;flex:0 0 30px!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) a.card.nv-tile .card-icon.nv-chip > svg{width:29px!important;height:29px!important;
+ flex-basis:29px!important;stroke-width:1.5!important;
+ filter:drop-shadow(0 0 8px rgba(255,10,78,.55))!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover .card-icon.nv-chip{color:#FF5C84!important;
+ background:none!important;border:0!important;box-shadow:none!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-title{font:400 11px/1.3 var(--nvUI)!important;
+ color:#AFC4D6!important}
+html:not([data-vs="off"]) a.card.nv-tile::after{right:9px!important;bottom:5px!important;
+ font-size:12px!important;opacity:.85!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-fav{opacity:0!important}
+html:not([data-vs="off"]) a.card.nv-tile:hover .card-fav{opacity:.55!important}
+
+/* el proximo rival */
+html:not([data-vs="off"]) #nv-prox{background:
+  radial-gradient(85% 130% at 50% 0%,rgba(255,10,78,.14),transparent 64%),
+  linear-gradient(170deg,#0A0714,#00070F 66%)!important;
+ border-color:rgba(255,10,78,.22)!important;box-shadow:none!important;padding:15px 14px!important}
+html:not([data-vs="off"]) #nv-prox .nv-datos{flex:0 0 190px!important;border-left:0!important;padding-left:0!important}
+html:not([data-vs="off"]) #nv-prox .nv-datos .vl i{font-style:normal;color:var(--nvR2)}
+html:not([data-vs="off"]) #nv-prox .nv-mid{font-size:17px!important;color:#F1F6FA!important;opacity:.85}
+html:not([data-vs="off"]) #nv-prox .nv-lado img{width:42px!important;height:42px!important}
+html:not([data-vs="off"]) .nv-btnr{margin:0 14px 14px!important;padding:10px!important;
+ border-color:rgba(255,10,78,.75)!important;
+ background:linear-gradient(180deg,rgba(255,10,78,.10),rgba(255,10,78,.03))!important;
+ box-shadow:0 0 22px -10px rgba(255,10,78,.8)!important;font-size:11px!important}
+
+/* fixture mas compacto, como en la plantilla */
+html:not([data-vs="off"]) .nv-fx{padding:0 12px 12px!important}
+html:not([data-vs="off"]) .nv-fxr{padding:6px 0!important;gap:8px!important}
+html:not([data-vs="off"]) .nv-fxr .nv-ic{width:21px;height:21px;border-radius:7px}
+html:not([data-vs="off"]) .nv-fxn{font-size:11px!important}
+html:not([data-vs="off"]) .nv-cond{font-size:7.5px!important;padding:2px 6px!important}
+html:not([data-vs="off"]) .nv-fxd{flex:0 0 62px!important;font-size:9.5px!important}
+
+/* herramientas del entrenador */
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile{min-height:0!important;padding:11px 12px!important;
+ gap:11px!important;background:linear-gradient(170deg,#000E1A,#00070F 68%)!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip{width:30px!important;height:30px!important;
+ flex:0 0 30px!important;border-radius:9px!important;border:1px solid rgba(255,10,78,.42)!important;
+ background:radial-gradient(90% 90% at 50% 18%,rgba(255,10,78,.22),rgba(255,10,78,.05))!important;
+ box-shadow:0 0 14px rgba(255,10,78,.26)!important;color:var(--nvR2)!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-icon.nv-chip .vs-i svg{
+ width:15px!important;height:15px!important;flex-basis:15px!important;filter:none!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-title,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-title{font:600 11.5px/1.25 var(--nvUI)!important;
+ color:#E7F0F6!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-desc,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-desc{font-size:9px!important}
+
+@media (max-width:1400px){
+ html:not([data-vs="off"]) .nv-rowU{flex-wrap:wrap!important}
+ html:not([data-vs="off"]) .nv-rowU > .nv-pan{flex:1 1 calc(50% - 7px)!important}
+ html:not([data-vs="off"]) #nv-fixp{flex:1 1 calc(50% - 7px)!important}
+}
+@media (max-width:760px){
+ html:not([data-vs="off"]) .nv-rowU{flex-direction:column!important}
+ html:not([data-vs="off"]) .nv-rowU > .nv-pan,html:not([data-vs="off"]) #nv-fixp{flex:1 1 auto!important;width:100%!important}
+}
+
+/* ── parte 2b · que ningun titulo se corte y el buscador al pie ─────────── */
+html:not([data-vs="off"]) .nv-pt{white-space:normal!important;overflow:visible!important;
+ text-overflow:clip!important}
+
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-title,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-title{white-space:normal!important;
+ overflow:visible!important;text-overflow:clip!important;display:-webkit-box!important;
+ -webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-desc,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-desc{font-size:8.5px!important}
+html:not([data-vs="off"]) .nv-hubpie{margin:0!important;padding:11px 14px!important;
+ border:1px solid var(--nvLine)!important;border-top-color:var(--nvLineAlta)!important;
+ border-radius:13px!important;background:linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto)!important}
+html:not([data-vs="off"]) .nv-hubpie #hub-top{display:flex!important;align-items:center!important;
+ gap:10px!important;flex-wrap:wrap!important}
+
+/* ── parte 2c · densidad: que las cinco secciones entren sin cortar nada ── */
+html:not([data-vs="off"]) .nv-rowU .nv-gt{gap:8px!important;padding:0 12px 12px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile{min-height:98px!important;padding:14px 5px 12px!important;
+ gap:10px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-title{font-size:10px!important;line-height:1.25!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip{height:27px!important;flex-basis:27px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip > svg{width:26px!important;height:26px!important;
+ flex-basis:26px!important}
+html:not([data-vs="off"]) .nv-rowU .nv-pt{font-size:12px!important;letter-spacing:.11em!important}
+html:not([data-vs="off"]) .nv-rowU .nv-ph{padding:11px 12px 9px!important;gap:8px!important}
+
+/* el panel del rival, mas bajo: asi la fila de arriba queda pareja */
+html:not([data-vs="off"]) #nv-prox{padding:12px!important;gap:10px!important;margin:0 14px 10px!important}
+html:not([data-vs="off"]) #nv-prox .nv-lado img{width:38px!important;height:38px!important}
+html:not([data-vs="off"]) #nv-prox .nv-lado{gap:7px!important}
+html:not([data-vs="off"]) .nv-btnr{margin:0 14px 12px!important;padding:9px!important}
+html:not([data-vs="off"]) #nv-rival .nv-gt{padding:0 14px 12px!important}
+html:not([data-vs="off"]) #nv-rival a.card.nv-tile{min-height:92px!important;padding:13px 6px 11px!important}
+html:not([data-vs="off"]) .nv-rowR .nv-gt{align-content:start!important}
+/* que ni los titulos de panel ni los de ficha se salgan de su caja:
+   cortan por espacio, nunca por el medio de una palabra */
+html:not([data-vs="off"]) .nv-rowU .nv-pt{min-width:0!important;font-size:11px!important;
+ letter-spacing:.09em!important;overflow-wrap:normal!important;word-break:normal!important}
+html:not([data-vs="off"]) a.card.nv-tile .card-title{overflow-wrap:normal!important;
+ word-break:normal!important;hyphens:none!important}
+
+/* ── parte 2d · las fichas de la fila de abajo, al tamaño de la plantilla ─ */
+html:not([data-vs="off"]) .nv-rowU .nv-gt{gap:7px!important;padding:0 11px 11px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile{min-height:92px!important;padding:13px 4px 11px!important;
+ gap:9px!important;border-radius:10px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-title{font-size:9.5px!important;line-height:1.22!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip{height:25px!important;flex-basis:25px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip .vs-i,
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip .vs-i svg,
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile .card-icon.nv-chip > svg{width:24px!important;height:24px!important;
+ flex-basis:24px!important}
+html:not([data-vs="off"]) .nv-rowU a.card.nv-tile::after{right:6px!important;bottom:3px!important;font-size:11px!important}
+/* herramientas del entrenador: el subtitulo en una linea, sin partir palabras */
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile{padding:10px 10px!important;gap:9px!important}
+html:not([data-vs="off"]) #nv-coach a.card.nv-tile .card-title,
+html:not([data-vs="off"]) #nv-coach-mas a.card.nv-tile .card-title{font-size:11px!important}
+/* el fixture entra en la fila: antes tenia ancho fijo y la empujaba abajo */
+html:not([data-vs="off"]) #nv-fixp{flex:3 1 0!important;min-width:232px!important}
+html:not([data-vs="off"]) #nv-rival{flex:0 0 442px!important}
 </style>
 <script id="nv-piel-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -3761,14 +3922,32 @@ html:not([data-vs="off"]) .nv-hubw .hb-vacio{font:400 10.5px/1.4 var(--nvUI)!imp
     R.appendChild(riv);
     if(pRend){ pRend.style.flex = '1 1 0'; R.appendChild(pRend); }
     caja.appendChild(R);
-    if(B){ caja.appendChild(B); }
-    var C = z.querySelector('.nv-rowC'); if(C) caja.appendChild(C);
 
-    /* las que quedan en la fila B se reparten en partes iguales */
+    /* fisico, agenda, video, fixture y herramientas: todo en una sola fila,
+       como en la plantilla. El ancho de cada panel sale de cuantas fichas
+       tiene adentro, asi ninguna queda apretada. */
+    var U = document.createElement('div'); U.className = 'nv-rowU';
+    caja.appendChild(U);
+    var C = z.querySelector('.nv-rowC');
     if(B) [].slice.call(B.querySelectorAll(':scope > .nv-pan')).forEach(function(p){
       var n = p.querySelectorAll('a.card').length || 1;
       p.style.flex = n + ' 1 0';
+      /* ancho minimo segun cuantas fichas tiene: asi ningun titulo se corta */
+      p.style.minWidth = Math.max(n * 62 + 56, 205) + 'px';
+      U.appendChild(p);
     });
+    if(C){
+      var fx = document.getElementById('nv-fixp');
+      if(fx){ fx.style.flex = '3 1 0'; fx.style.minWidth = '232px'; U.appendChild(fx); }
+      [].slice.call(C.children).forEach(function(p){ p.style.flex = '6 1 0'; p.style.minWidth = '366px'; U.appendChild(p); });
+      C.remove();
+    }
+    if(B) B.remove();
+
+    /* el buscador de pantallas no esta en la plantilla y le robaba 90 px de
+       alto al panel del rival: baja al pie, entero y funcionando */
+    var hub = caja.querySelector('.nv-hubw');
+    if(hub){ hub.classList.add('nv-hubpie'); caja.appendChild(hub); }
   }
 
   /* ── 3 · el VS con los dos escudos ─────────────────────────────────────── */
@@ -3793,11 +3972,13 @@ html:not([data-vs="off"]) .nv-hubw .hb-vacio{font:400 10.5px/1.4 var(--nvUI)!imp
       lado('nafels', 'Näfels') + '<span class="nv-mid">VS</span>' + lado(prx.slug, prx.rival) +
       '<span class="nv-datos">' +
         '<div>' + sv(I_CAL)  + '<span><span class="lb">' + T('Fecha')     + '</span>' +
-                                     '<span class="vl">' + fecha + '</span></span></div>' +
+                                     '<span class="vl">' + fecha +
+                                     (dias > 0 ? ' <i>· ' + dias + ' ' + T(dias === 1 ? 'día' : 'días') + '</i>' : '') +
+                                     '</span></span></div>' +
         '<div>' + sv(I_CASA) + '<span><span class="lb">' + T('Condición') + '</span>' +
                                      '<span class="vl">' + T(loc ? 'Local' : 'Visitante') + '</span></span></div>' +
       '</span>' +
-      '<span class="nv-dias"><b>' + dias + '</b><span>' + T(dias === 1 ? 'día' : 'días') + '</span></span>';
+      '';
 
     /* el boton apunta a la primera tarjeta del propio panel: si el rol no la
        tiene, no hay boton. Asi nunca abre algo que el usuario no deberia ver. */

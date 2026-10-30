@@ -622,3 +622,114 @@ html:not([data-vs="off"]) .vs-grano{
   mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   UNA SOLA BARRA ARRIBA · 2026/27
+   Marca, menu, idiomas, estado, fecha, temporada y avatar en la misma barra.
+   La banda de marca de la portada queda escondida (su contenido subio aca).
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]){ --vsn-h:58px; }
+html:not([data-vs="off"]) #vsn.vs-una{height:58px!important;padding:0 18px!important;gap:16px!important;
+ background:rgba(0,5,14,.94)!important;border-bottom:1px solid #102935!important;
+ font-family:var(--vsUI)!important;box-shadow:0 10px 30px -24px #000!important}
+html:not([data-vs="off"]) #vsn.vs-una .marca{gap:11px!important;padding-right:16px!important;
+ margin-right:2px!important;border-right:1px solid #102935!important}
+html:not([data-vs="off"]) #vsn.vs-una .marca img{width:34px!important;height:34px!important;
+ border-radius:50%!important;border:1px solid rgba(255,10,78,.35)!important;background:#00060F!important}
+html:not([data-vs="off"]) #vsn.vs-una .marca b{font:800 16px/1 var(--vsTit)!important;
+ letter-spacing:.055em!important;color:#EBF4F7!important}
+html:not([data-vs="off"]) #vsn.vs-una .marca b em{font-style:normal!important;color:var(--red)!important;
+ text-shadow:0 0 18px rgba(255,10,78,.6)!important}
+html:not([data-vs="off"]) #vsn.vs-una .marca .vs-msub{display:block!important;font-style:normal!important;
+ font:500 8px/1 var(--vsUI)!important;letter-spacing:.19em!important;color:#6E869C!important;
+ margin-top:5px!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) #vsn.vs-una .grupos{gap:3px!important}
+html:not([data-vs="off"]) #vsn.vs-una .g{height:34px!important;padding:0 11px!important;
+ font:500 12.5px/1 var(--vsUI)!important;letter-spacing:0!important;color:#8FA8BE!important;
+ border-radius:8px!important}
+html:not([data-vs="off"]) #vsn.vs-una .g svg{width:16px!important;height:16px!important;stroke-width:1.6!important}
+html:not([data-vs="off"]) #vsn.vs-una .g:hover{background:rgba(255,255,255,.05)!important;color:#EBF4F7!important}
+html:not([data-vs="off"]) #vsn.vs-una .g.on{background:rgba(255,10,78,.13)!important;color:#fff!important;
+ box-shadow:inset 0 0 0 1px rgba(255,10,78,.32)!important}
+html:not([data-vs="off"]) #vsn.vs-una .g.aqui{color:#fff!important}
+html:not([data-vs="off"]) #vsn.vs-una .g.aqui svg{color:var(--red)!important}
+html:not([data-vs="off"]) #vsn.vs-una .g.aqui::after{background:var(--red)!important;bottom:-11px!important;
+ box-shadow:0 0 10px rgba(255,10,78,.9)!important}
+
+/* la columna de controles */
+html:not([data-vs="off"]) #vsn.vs-una .der{gap:10px!important}
+html:not([data-vs="off"]) #vsn.vs-una .vs-ctls{display:flex;align-items:center;gap:10px;flex:none}
+html:not([data-vs="off"]) #vsn.vs-una .vs-ctl{margin:0!important}
+/* idiomas */
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap{gap:3px!important}
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap button,
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap a{min-width:34px!important;height:26px!important;
+ padding:0 9px!important;border-radius:6px!important;border:1px solid #1A3F52!important;
+ background:transparent!important;color:#8FA8BE!important;
+ font:600 10.5px/1 var(--vsUI)!important;letter-spacing:.08em!important;cursor:pointer!important}
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap .on,
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap .activo,
+html:not([data-vs="off"]) #vsn.vs-una #lang-wrap [aria-pressed="true"]{
+ background:var(--vsFill)!important;border-color:var(--vsFill)!important;color:#fff!important}
+/* sistema activo */
+html:not([data-vs="off"]) #vsn.vs-una .live-badge{display:inline-flex!important;align-items:center!important;
+ gap:7px!important;height:26px!important;padding:0 11px!important;border-radius:999px!important;
+ border:1px solid rgba(7,211,152,.38)!important;background:rgba(7,211,152,.08)!important;
+ color:#07D398!important;font:600 9.5px/1 var(--vsUI)!important;letter-spacing:.12em!important;
+ text-transform:uppercase!important;white-space:nowrap!important}
+html:not([data-vs="off"]) #vsn.vs-una .live-badge .live-dot{width:6px!important;height:6px!important;
+ border-radius:50%!important;background:#07D398!important;box-shadow:0 0 8px #07D398!important}
+/* fecha */
+html:not([data-vs="off"]) #vsn.vs-una #fecha-txt,
+html:not([data-vs="off"]) #vsn.vs-una .fecha-txt{font:400 10px/1 var(--vsNum)!important;
+ letter-spacing:.04em!important;color:#8FA8BE!important;text-transform:none!important;white-space:nowrap!important}
+/* temporada */
+html:not([data-vs="off"]) #vsn.vs-una #temp-menu-link{display:inline-flex!important;align-items:center!important;
+ gap:7px!important;height:28px!important;padding:0 12px!important;border-radius:8px!important;
+ border:1px solid #1A3F52!important;background:rgba(0,12,23,.9)!important;color:#B4D2E4!important;
+ font:500 11px/1 var(--vsUI)!important;letter-spacing:.02em!important;text-decoration:none!important;
+ white-space:nowrap!important}
+html:not([data-vs="off"]) #vsn.vs-una #temp-menu-link:hover{border-color:rgba(255,10,78,.45)!important;
+ color:#fff!important}
+/* avatar */
+html:not([data-vs="off"]) #vsn.vs-una .vs-ava{display:inline-flex;align-items:center;justify-content:center;
+ width:30px;height:30px;border-radius:50%;border:1px solid #1A3F52;background:rgba(0,12,23,.9);flex:none}
+html:not([data-vs="off"]) #vsn.vs-una .vs-ava svg{width:16px;height:16px;stroke:#8FA8BE;fill:none}
+/* buscar */
+html:not([data-vs="off"]) #vsn.vs-una .bb{height:30px!important;border-radius:8px!important;
+ border:1px solid #1A3F52!important;background:rgba(0,12,23,.9)!important;color:#8FA8BE!important;
+ font:500 11.5px/1 var(--vsUI)!important}
+html:not([data-vs="off"]) #vsn.vs-una .bb kbd{font-family:var(--vsNum)!important;border-color:#1A3F52!important}
+
+/* la banda de marca duplicada de la portada: su contenido ya esta arriba */
+html:not([data-vs="off"]) body > header.vs-cab-dupe{display:none!important}
+/* en las pantallas de adentro, la columna derecha queda vacia */
+html:not([data-vs="off"]) .page-header .header-right:empty,
+html:not([data-vs="off"]) .hdr .hdr-right:empty,
+html:not([data-vs="off"]) .header-right:empty{display:none!important}
+
+@media (max-width:1100px){
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls .fecha-txt,
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #fecha-txt,
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #temp-menu-link{display:none!important}
+}
+@media (max-width:760px){
+ html:not([data-vs="off"]) #vsn.vs-una .marca .vs-msub{display:none!important}
+ html:not([data-vs="off"]) #vsn.vs-una .live-badge{display:none!important}
+}
+/* que el menu entre entero: en pantallas chicas se ceden primero la fecha y
+   la temporada, que estan a un clic de distancia, y nunca los accesos */
+html:not([data-vs="off"]) #vsn.vs-una .g{padding:0 9px!important;font-size:12px!important}
+html:not([data-vs="off"]) #vsn.vs-una .grupos{gap:1px!important;flex:1 1 auto!important}
+@media (max-width:1700px){
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #fecha-txt,
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls .fecha-txt{display:none!important}
+}
+@media (max-width:1500px){
+ html:not([data-vs="off"]) #vsn.vs-una .vs-ctls #temp-menu-link{display:none!important}
+ html:not([data-vs="off"]) #vsn.vs-una .marca{padding-right:12px!important;gap:9px!important}
+ html:not([data-vs="off"]) #vsn.vs-una .bb .txt{display:none!important}
+}
+@media (max-width:1320px){
+ html:not([data-vs="off"]) #vsn.vs-una .live-badge{display:none!important}
+}

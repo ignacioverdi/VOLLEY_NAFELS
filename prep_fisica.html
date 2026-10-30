@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="PREPARACIÓN FÍSICA — Axpo Volley Näfels">PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261030-1310"></script>
-<script src="selector_categoria.js?v=20261030-1310"></script>
-<script src="plantel_nafels.js?v=20261030-1310" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-1310"></script>
+<script src="categorias_club.js?v=20261030-1341"></script>
+<script src="selector_categoria.js?v=20261030-1341"></script>
+<script src="plantel_nafels.js?v=20261030-1341" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1341"></script>
   <script src="datos_equipo.js.enc?v=9f9a8042" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc?v=36085d95" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc?v=e83b3e20" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20261030-1310" onerror="void 0"></script>
-<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1310"></script>
+<script src="lang.js?v=20261030-1341" onerror="void 0"></script>
+<script src="firebase.js?v=20261030-1341" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1341"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -239,18 +239,18 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1310">
+<link rel="stylesheet" href="movil.css?v=20261030-1341">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-1310" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1341" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261030-1310" defer></script>
+<script src="iconos.js?v=20261030-1341" defer></script>
 
-<script src="nav.js?v=20261030-1310" defer></script>
+<script src="nav.js?v=20261030-1341" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
-<script src="vs_cab.js?v=20261030-1310" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1341">
+<script src="vs_cab.js?v=20261030-1341" defer></script>
 <style id="nv-pf">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · el selector, la calculadora y el jugador que entra solo
@@ -1291,9 +1291,9 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20261030-1310"></script>
-<script src="ayuda.js?v=20261030-1310"></script>
-<script src="volver_inicio.js?v=20261030-1310" defer></script>
+<script src="temporadas_menu.js?v=20261030-1341"></script>
+<script src="ayuda.js?v=20261030-1341"></script>
+<script src="volver_inicio.js?v=20261030-1341" defer></script>
 <script id="nv-pf-js">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · desplegable, calculadora arriba, y el jugador que entra solo
@@ -1674,6 +1674,73 @@ html.nv-pf2:not([data-vs="off"]) .welcome-icon .vs-i svg,
 html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height:40px!important;display:block!important;
  stroke:#C2D2E2!important;fill:none!important;stroke-width:1.5!important;
  filter:drop-shadow(0 0 14px rgba(255,10,78,.45))!important}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PARTE 2 · la fila de contadores y la calculadora, como en la plantilla
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.nv-pf2:not([data-vs="off"]) #nv-filakpi{display:flex;gap:14px;align-items:stretch;margin:14px 0 0}
+html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stats-row{display:flex!important;flex:1.25 1 0!important;
+ gap:14px!important;margin:0!important;width:auto!important}
+html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stat{flex:1 1 0!important;min-width:0!important;
+ display:flex!important;flex-direction:column!important;text-align:left!important;
+ padding:14px 16px 12px!important}
+html.nv-pf2:not([data-vs="off"]) .nv-kcab{display:flex;align-items:center;gap:10px;margin-bottom:0}
+html.nv-pf2:not([data-vs="off"]) .nv-kcab .jug-stat-lbl{margin:0!important;font:700 11.5px/1 var(--nvTit)!important;
+ letter-spacing:.16em!important;text-transform:uppercase!important;color:#B4D2E4!important}
+html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stat-val{font:400 30px/1 var(--nvNum)!important;
+ color:#56687E!important;text-align:center!important;margin:18px 0 16px!important;flex:1 1 auto!important;
+ display:flex!important;align-items:center!important;justify-content:center!important}
+html.nv-pf2:not([data-vs="off"]) .nv-kpie{display:flex;align-items:center;justify-content:space-between;
+ gap:10px;font:400 11px/1.2 var(--nvUI);color:#7E95AB}
+html.nv-pf2:not([data-vs="off"]) .nv-kpie i{font-style:normal;color:var(--nvR2);font-size:13px}
+
+/* la calculadora */
+html.nv-pf2:not([data-vs="off"]) #nv-filakpi .calc-section{flex:1.55 1 0!important;min-width:0!important;
+ margin:0!important;overflow:visible!important}
+html.nv-pf2:not([data-vs="off"]) .calc-header{border-bottom:0!important;align-items:flex-start!important;
+ padding:14px 16px 0!important}
+html.nv-pf2:not([data-vs="off"]) .calc-header .nv-pic2{margin-top:2px}
+html.nv-pf2:not([data-vs="off"]) .calc-header > div[style]{margin-left:0!important;font:400 11px/1.3 var(--nvUI)!important;
+ color:#7E95AB!important}
+html.nv-pf2:not([data-vs="off"]) .calc-title{margin-bottom:3px!important}
+html.nv-pf2:not([data-vs="off"]) .calc-body{padding:11px 16px 16px!important}
+html.nv-pf2:not([data-vs="off"]) .calc-grid{gap:12px!important;margin-bottom:14px!important}
+html.nv-pf2:not([data-vs="off"]) #nv-pfchev{display:none!important}
+/* el titulo y el subtitulo de la calculadora, uno debajo del otro */
+html.nv-pf2:not([data-vs="off"]) .calc-header{flex-wrap:wrap!important}
+html.nv-pf2:not([data-vs="off"]) .calc-header .calc-title{flex:0 0 auto!important}
+html.nv-pf2:not([data-vs="off"]) .calc-header > div[style]{flex:1 1 100%!important;
+ margin:0 0 0 33px!important;order:3!important}
+
+/* la nota del selector */
+html.nv-pf2:not([data-vs="off"]) .nv-nota{display:flex!important;align-items:flex-start!important;gap:10px!important;
+ margin:14px 0 0!important;font:400 11.5px/1.5 var(--nvUI)!important;color:#7E95AB!important;max-width:640px!important}
+html.nv-pf2:not([data-vs="off"]) .nv-nota svg{width:15px;height:15px;flex-shrink:0;margin-top:1px;
+ stroke:var(--nvDim);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+html.nv-pf2:not([data-vs="off"]) .nv-nota .welcome-sub{font:inherit!important;color:inherit!important;
+ text-align:left!important}
+html.nv-pf2:not([data-vs="off"]) .nv-wsub{margin-top:8px!important}
+
+/* el boton de armar rutinas */
+html.nv-pf2:not([data-vs="off"]) .nv-btnrut{display:inline-flex!important;align-items:center!important;
+ gap:10px!important;padding:10px 18px!important;border-radius:10px!important;
+ border:1px solid var(--nvR)!important;color:#fff!important;
+ font:700 11.5px/1 var(--nvUI)!important;letter-spacing:.11em!important;text-transform:uppercase!important;
+ background:linear-gradient(180deg,rgba(255,10,78,.18),rgba(255,10,78,.05))!important;
+ box-shadow:0 0 26px -8px rgba(255,10,78,.8),var(--nvAlto)!important;flex-shrink:0!important}
+html.nv-pf2:not([data-vs="off"]) .nv-btnrut svg{width:16px!important;height:16px!important;
+ stroke:var(--nvR2)!important;fill:none!important;stroke-width:1.7!important}
+html.nv-pf2:not([data-vs="off"]) .nv-btnrut b{color:var(--nvR2)!important;font-weight:400!important}
+
+@media (max-width:1100px){
+ html.nv-pf2:not([data-vs="off"]) #nv-filakpi{flex-wrap:wrap!important}
+ html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stats-row,
+ html.nv-pf2:not([data-vs="off"]) #nv-filakpi .calc-section{flex:1 1 100%!important}
+}
+@media (max-width:760px){
+ html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stats-row{flex-wrap:wrap!important}
+ html.nv-pf2:not([data-vs="off"]) #nv-filakpi .jug-stat{flex:1 1 calc(50% - 7px)!important}
+}
 </style>
 <script id="nv-piel-pf-js">
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1695,6 +1762,10 @@ html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height
   function sv(d, w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.6)+'" '+
     'stroke-linecap="round" stroke-linejoin="round">'+d+'</svg>'; }
   var I_PESA  = '<path d="M4 10v4M6.5 8v8M17.5 8v8M20 10v4"/><path d="M6.5 12h11"/>';
+  var I_CAL2  = '<rect x="3.6" y="5.2" width="16.8" height="15.2" rx="2.6"/><path d="M8 3v4M16 3v4M3.6 10.6h16.8"/>';
+  var I_BARRAS= '<path d="M6 18V11M11 18V6M16 18V14M21 18V9"/><path d="M3 18h18"/>';
+  var I_CALC  = '<rect x="5" y="3.2" width="14" height="17.6" rx="2.6"/><path d="M8.4 7h7.2M8.4 11h.1M12 11h.1M15.6 11h.1M8.4 14.4h.1M12 14.4h.1M15.6 14.4h.1M8.4 17.8h3.6M15.6 17.8h.1"/>';
+  var I_INFO  = '<path d="M12 20a8 8 0 100-16 8 8 0 000 16"/><path d="M12 11v5M12 8.2v.1"/>';
   var I_DIANA = '<path d="M12 20a8 8 0 100-16 8 8 0 000 16"/><path d="M12 16a4 4 0 100-8 4 4 0 000 8"/>'+
                 '<path d="M12 13a1 1 0 100-2 1 1 0 000 2"/>';
 
@@ -1717,6 +1788,20 @@ html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height
     sp.appendChild(r);
   }
 
+  /* ── 1b · el renglon de abajo del titulo ──────────────────────────────── */
+  function bajo(){
+    var ht = document.querySelector('.page-header .header-text');
+    var cont = ht && ht.querySelector('.page-title') && ht.querySelector('.page-title').parentElement;
+    if(!cont) return;
+    var ds = cont.children;
+    var b = ds[ds.length - 1];
+    if(!b || b === cont.querySelector('.page-title') || b.dataset.pl) return;
+    b.dataset.pl = '1';
+    b.setAttribute('data-t', 'RUTINAS PERSONALIZADAS \u00b7 SEGUIMIENTO \u00b7 PROGRESO');
+    b.innerHTML = '<span data-t="RUTINAS PERSONALIZADAS \u00b7 SEGUIMIENTO \u00b7 PROGRESO">' +
+                  T('RUTINAS PERSONALIZADAS \u00b7 SEGUIMIENTO \u00b7 PROGRESO') + '</span>';
+  }
+
   /* ── 2 · el lema de la derecha ─────────────────────────────────────────── */
   function lema(){
     var h = document.querySelector('.page-header'); if(!h || document.getElementById('nv-lema')) return;
@@ -1733,6 +1818,12 @@ html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height
     i.textContent = ''; i.innerHTML = sv(I_PESA, 1.5);
   }
 
+  function pintarBoton(b){
+    b = b || document.querySelector('.nv-btnrut'); if(!b) return;
+    b.innerHTML = sv(I_PESA, 1.7) + '<span>' + T('Armar rutinas').toUpperCase() + '</span>' +
+                  '<b aria-hidden="true">&rarr;</b>';
+  }
+
   /* ── 4 · la ficha del selector y el boton de rutinas ───────────────────── */
   function selector(){
     var ps = document.querySelector('.player-selector');
@@ -1747,11 +1838,103 @@ html.nv-pf2:not([data-vs="off"]) .welcome-icon > svg{width:40px!important;height
     /* el boton de armar rutinas viaja entero: conserva su data-solo-editor,
        asi que firebase.js lo sigue escondiendo para quien no es editor */
     var btn = document.querySelector('.page-header .header-right a[data-solo-editor]');
-    if(btn) fila.appendChild(btn);
+    if(btn){
+      btn.classList.add('nv-btnrut');
+      btn.removeAttribute('data-t');
+      pintarBoton(btn);
+      fila.appendChild(btn);
+    }
+
+    /* la nota: es el texto que ya estaba en el estado vacio, movido aca como
+       en la plantilla. El estado vacio se queda con su propia linea. */
+    var sub = document.querySelector('#welcome-screen .welcome-sub');
+    if(sub){
+      var nota = document.createElement('p'); nota.className = 'nv-nota';
+      nota.innerHTML = sv(I_INFO, 1.6);
+      sub.parentNode.insertBefore(nota, null);
+      nota.appendChild(sub);
+      ps.appendChild(nota);
+      var nueva = document.createElement('div'); nueva.className = 'welcome-sub nv-wsub';
+      nueva.setAttribute('data-t', 'para comenzar con su rutina personalizada');
+      nueva.innerHTML = '<span data-t="para comenzar con su rutina personalizada">' +
+                        T('para comenzar con su rutina personalizada') + '</span>';
+      var w = document.getElementById('welcome-screen');
+      if(w) w.appendChild(nueva);
+    }
+  }
+
+  /* ── 5 · la fila de contadores + calculadora ───────────────────────────
+     En la plantilla los tres contadores y la calculadora estan siempre a la
+     vista. En la app vivian adentro de #jug-content, que esta escondido
+     hasta elegir jugador. Se los saca de ahi y se los deja en .main: sin
+     jugador muestran un guion (no un cero inventado) y la calculadora ya se
+     puede usar, que no necesita jugador. Los ids no cambian, asi que
+     selectJugador() y calcularRM() siguen funcionando igual. */
+  var KPIS = [['stat-sesiones','D\u00edas', I_CAL2,   'Completados / Totales'],
+              ['stat-ejercicios','Ejercicios', I_PESA, 'Realizados / Totales'],
+              ['stat-registros','Registros', I_BARRAS, 'Cargados / Totales']];
+  function filaKpi(){
+    var main = document.querySelector('.main');
+    var row  = document.querySelector('.jug-stats-row');
+    var calc = document.querySelector('.calc-section');
+    var ws   = document.getElementById('welcome-screen');
+    if(!main || !row || !calc) return;
+    var f = document.getElementById('nv-filakpi');
+    if(!f){
+      f = document.createElement('div'); f.id = 'nv-filakpi';
+      main.insertBefore(f, ws || main.firstChild);
+    }
+    /* el bloque de nv-pf vuelve a mover la calculadora al lado de la ficha
+       del jugador durante los primeros segundos: se reafirma en cada pasada */
+    if(row.parentNode !== f) f.appendChild(row);
+    if(calc.parentNode !== f) f.appendChild(calc);
+    calc.classList.remove('nv-cerrada');
+    var h = calc.querySelector('.calc-header');
+    if(h) h.setAttribute('aria-expanded', 'true');
+    /* cada contador pasa a tener su ficha, su etiqueta arriba y su pie */
+    KPIS.forEach(function(k){
+      var v = document.getElementById(k[0]); if(!v) return;
+      var caja = v.parentElement; if(!caja || caja.dataset.pl) return;
+      caja.dataset.pl = '1';
+      var lbl = caja.querySelector('.jug-stat-lbl');
+      var cab = document.createElement('div'); cab.className = 'nv-kcab';
+      cab.innerHTML = '<span class="nv-pic2">' + sv(k[2], 1.65) + '</span>';
+      if(lbl) cab.appendChild(lbl);
+      caja.insertBefore(cab, caja.firstChild);
+      var pie = document.createElement('div'); pie.className = 'nv-kpie';
+      pie.innerHTML = '<span data-t="' + k[3] + '">' + T(k[3]) + '</span><i>\u203A</i>';
+      caja.appendChild(pie);
+    });
+    /* el icono de la calculadora, igual que en la plantilla */
+    var ch = calc.querySelector('.calc-header');
+    if(ch && !ch.querySelector('.nv-pic2')){
+      var e = ch.firstElementChild;
+      /* el emoji de la calculadora lo reemplaza el icono de linea */
+      [].slice.call(ch.childNodes).forEach(function(n){
+        if(n.nodeType === 3 && /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(n.nodeValue)) n.remove();
+      });
+      var vi = ch.querySelector('.vs-i'); if(vi) vi.remove();
+      var pic = document.createElement('span'); pic.className = 'nv-pic2';
+      pic.innerHTML = sv(I_CALC, 1.6);
+      ch.insertBefore(pic, ch.firstChild);
+    }
+  }
+  /* sin jugador elegido no hay numeros: va el guion, no un cero */
+  function guiones(){
+    var jc = document.getElementById('jug-content');
+    var oculto = !jc || getComputedStyle(jc).display === 'none';
+    KPIS.forEach(function(k){
+      var v = document.getElementById(k[0]); if(!v) return;
+      if(oculto) v.textContent = '\u2013';
+    });
   }
 
   function pasada(){
     try{ titulo(); }catch(e){}
+    try{ bajo(); }catch(e){}
+    try{ filaKpi(); }catch(e){}
+    try{ pintarBoton(); }catch(e){}
+    try{ guiones(); }catch(e){}
     try{ lema(); }catch(e){}
     try{ vacio(); }catch(e){}
     try{ selector(); }catch(e){}

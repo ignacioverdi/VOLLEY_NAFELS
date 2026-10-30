@@ -127,6 +127,85 @@
     return d;
   }
 
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     UNA SOLA BARRA ARRIBA
+     -----------------------------------------------------------------------
+     Hasta ahora cada pantalla mostraba DOS encabezados: la barra de menu
+     (#vsn, de nav.js) y debajo la banda de marca con el escudo, los idiomas,
+     el estado y la fecha. En la referencia hay una sola barra: marca + menu +
+     idiomas + estado + fecha + temporada + avatar, y recien despues la banda
+     de titulo de la pantalla.
+
+     Aca NO se crea nada nuevo ni se duplica: los controles que ya existian se
+     MUDAN enteros adentro de #vsn, con sus ids intactos, asi que lang.js,
+     temporadas_menu.js y el reloj de la fecha siguen escribiendo donde
+     siempre. En la portada, la banda de marca queda vacia y se esconde.
+     ═══════════════════════════════════════════════════════════════════════ */
+  function tr(s){
+    try{ if(typeof translateString === 'function')
+      return translateString(s, (typeof getLang === 'function' ? getLang() : 'es')); }catch(e){}
+    return s;
+  }
+  var AVA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" ' +
+            'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M12 12a4 4 0 100-8 4 4 0 000 8"/><path d="M5 20c0-3.6 3.1-5.5 7-5.5s7 1.9 7 5.5"/></svg>';
+
+  function barraUnica(){
+    var vsn = document.getElementById('vsn');
+    if(!vsn) return false;
+    vsn.classList.add('vs-una');
+
+    /* ── la marca ───────────────────────────────────────────────────────── */
+    var m = vsn.querySelector('.marca');
+    if(m && !m.dataset.vsUna){
+      m.dataset.vsUna = '1';
+      var sub = '';
+      var cs = document.querySelector('.club-sub');
+      if(cs) sub = (cs.textContent || '').trim();
+      if(!sub) sub = tr('Sistema de Análisis · NLA Suiza 2026/27');
+      var sp = m.querySelector('span');
+      if(sp) sp.innerHTML = '<b>NAFELS <em>VOLEY</em></b><i class="vs-msub"></i>';
+      var si = m.querySelector('.vs-msub');
+      if(si) si.textContent = sub;
+    }
+
+    /* ── los controles que ya existen, mudados ──────────────────────────── */
+    var der = vsn.querySelector('.der');
+    if(der){
+      var caja = der.querySelector('.vs-ctls');
+      if(!caja){
+        caja = document.createElement('span'); caja.className = 'vs-ctls';
+        der.insertBefore(caja, der.firstChild);
+      }
+      ['#lang-wrap', '.live-badge', '#fecha-txt', '.fecha-txt', '#temp-menu-link'].forEach(function(sel){
+        var e;
+        try{ e = document.querySelector(sel); }catch(err){ return; }
+        if(!e || caja.contains(e)) return;
+        e.classList.add('vs-ctl');
+        /* el boton de temporadas trae estilos propios en linea: se limpian
+           para que tome los de la barra y no desentone */
+        if(e.id === 'temp-menu-link') e.removeAttribute('style');
+        caja.appendChild(e);
+      });
+      if(!der.querySelector('.vs-ava')){
+        var av = document.createElement('span'); av.className = 'vs-ava';
+        av.setAttribute('aria-hidden', 'true'); av.innerHTML = AVA;
+        caja.appendChild(av);
+      }
+    }
+
+    /* ── la banda de marca de la portada ya no hace falta ───────────────── */
+    var hd = document.querySelector('body > header');
+    if(hd && hd.querySelector('.logo-wrap') && !hd.dataset.vsUna){
+      hd.dataset.vsUna = '1';
+      hd.classList.add('vs-cab-dupe');
+    }
+    /* en las pantallas de adentro, la columna derecha de la cabecera queda
+       vacia: se esconde sola con :empty desde el CSS */
+    return true;
+  }
+
   function armar(){
     var cab = document.querySelector(SEL);
     var creada = false;
@@ -247,7 +326,13 @@
 
   function arrancar(){
     try{ armar(); }catch(e){}
+    try{ barraUnica(); }catch(e){}
     try{ grano(); }catch(e){}
+    /* nav.js, lang.js y temporadas_menu.js dibujan sus cosas cuando pueden:
+       se vuelve a pasar unas veces hasta que esten todas adentro de la barra */
+    [250, 800, 1800, 3500].forEach(function(ms){
+      setTimeout(function(){ try{ barraUnica(); }catch(e){} }, ms);
+    });
     /* los paneles, al cargar y de nuevo cuando la pantalla termino de dibujar */
     try{ pintarPaneles(); }catch(e){}
     setTimeout(function(){ try{ pintarPaneles(); }catch(e){} }, 700);
@@ -255,6 +340,7 @@
     /* algunas pantallas dibujan su barra despues de bajar los datos */
     var n = 0, t = setInterval(function(){
       try{ if(!document.querySelector('.vs-cab-tit')) armar(); }catch(e){}
+      try{ barraUnica(); }catch(e){}
       if(++n > 20) clearInterval(t);
     }, 300);
   }

@@ -16,17 +16,17 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
 <!-- El lector va PRIMERO: los cifrados que se carguen antes no tienen
      quien los abra y el navegador los descarta. -->
   <!-- Las categorias del club: si tiene una sola, esto no hace nada. -->
-<script src="categorias_club.js?v=20261030-1310" onerror="void 0"></script>
-<script src="selector_categoria.js?v=20261030-1310" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261030-1310"></script>
-<script src="filtro_tipo.js?v=20261030-1310" onerror="void 0"></script>
-<script src="filtro_fase.js?v=20261030-1310" onerror="void 0"></script>
+<script src="categorias_club.js?v=20261030-1341" onerror="void 0"></script>
+<script src="selector_categoria.js?v=20261030-1341" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261030-1341"></script>
+<script src="filtro_tipo.js?v=20261030-1341" onerror="void 0"></script>
+<script src="filtro_fase.js?v=20261030-1341" onerror="void 0"></script>
   <!-- Los objetivos del equipo. Sin este, el recuadro de abajo de la tabla
        dice "objetivos.js no cargado". -->
   <!-- El plantel del club: de aca salen el puesto y el apellido de cada
        dorsal. Entre otras cosas, es lo que dice quienes son los centrales. -->
-  <script src="plantel_nafels.js?v=20261030-1310" onerror="void 0"></script>
-  <script src="objetivos_config.js?v=20261030-1310" onerror="void 0"></script>
+  <script src="plantel_nafels.js?v=20261030-1341" onerror="void 0"></script>
+  <script src="objetivos_config.js?v=20261030-1341" onerror="void 0"></script>
 
   <!-- Los datos de los entrenamientos. Sin estos las tablas salen vacias
        aunque el motor ya los haya generado. -->
@@ -43,11 +43,11 @@ else   { w('datos_partidos.js'); w('datos_historial.js'); }
   <!-- modo_toggle.js: el cartelito de PARTIDO / ENTRENAMIENTO. Antes era
        una barra arriba en el medio y chocaba con el selector de idioma;
        ahora es un cartel chico abajo a la izquierda. -->
-  <script src="modo_toggle.js?v=20261030-1310" onerror="void 0"></script>
+  <script src="modo_toggle.js?v=20261030-1341" onerror="void 0"></script>
 <script>window.ENTRENAMIENTOS_DATA=window.ENTRENAMIENTOS_DATA||{};</script>
   <!-- El historial y los entrenamientos. Sin estos, la lista de sesiones
        queda vacia aunque los datos existan. -->
-  <script src="datos_historial.js?v=20261030-1310" onerror="void 0"></script>
+  <script src="datos_historial.js?v=20261030-1341" onerror="void 0"></script>
   <script src="datos_historial_ent.js.enc?v=b574b2fa" onerror="void 0"></script>
   <script src="datos_entrenamientos.js.enc?v=ea01ae31" onerror="void 0"></script>
   
@@ -749,15 +749,15 @@ function dbatBuildSubfiltro(){
 </script>
 <!-- Puerta de entrada. Sin usuario y clave no se ve nada: firebase.js tapa
      la pagina con la pantalla de ingreso hasta que la sesion es valida. -->
-<script src="firebase.js?v=20261030-1310" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261030-1310"></script>
+<script src="firebase.js?v=20261030-1341" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261030-1341"></script>
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261030-1310">
+<link rel="stylesheet" href="movil.css?v=20261030-1341">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261030-1310" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261030-1341" onerror="void 0"></script>
 <script>
 /* ══ EL RESULTADO DE UN PARTIDO ═══════════════════════════════════════════
    El generador guarda los sets del club con SU nombre como clave:
@@ -782,14 +782,14 @@ function setsDelClub(res){
 function setsDelRival(res){ return (res && parseInt(res.rival,10)) || 0; }
 </script>
 
-<script src="iconos.js?v=20261030-1310" defer></script>
+<script src="iconos.js?v=20261030-1341" defer></script>
 
-<script src="nav.js?v=20261030-1310" defer></script>
+<script src="nav.js?v=20261030-1341" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261030-1310">
-<script src="vs_cab.js?v=20261030-1310" defer></script>
-<script src="vs_tabla.js?v=20261030-1310" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261030-1341">
+<script src="vs_cab.js?v=20261030-1341" defer></script>
+<script src="vs_tabla.js?v=20261030-1341" defer></script>
 </head>
 <body>
 <div class="header-right" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-left:auto"><div id="lang-wrap" style="display:flex;gap:4px"></div></div>
@@ -2755,11 +2755,11 @@ function showHeatmapMenu(){ document.getElementById('hm-overlay').classList.add(
 function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.remove('open'); }
 </script>
 
-<script src="chat_nafels.js?v=20261030-1310"></script>
-<script src="lang.js?v=20261030-1310"></script>
-<script src="temporadas_menu.js?v=20261030-1310"></script>
-<script src="ayuda.js?v=20261030-1310"></script>
-<script src="velocidades_saque.js?v=20261030-1310" onerror="void 0"></script>
+<script src="chat_nafels.js?v=20261030-1341"></script>
+<script src="lang.js?v=20261030-1341"></script>
+<script src="temporadas_menu.js?v=20261030-1341"></script>
+<script src="ayuda.js?v=20261030-1341"></script>
+<script src="velocidades_saque.js?v=20261030-1341" onerror="void 0"></script>
 <script>
 /* El boton de la velocidad del plantel. Si el modulo no cargo, el recuadro se
    esconde y el dashboard queda como antes. */
@@ -2809,7 +2809,7 @@ function closeHeatmapMenu(){ document.getElementById('hm-overlay').classList.rem
      nada. En un celular eso lo dejaba colgado.
      Los videos se ven en cortes.html e importar_video.html, que si los
      necesitan. -->
-<script src="volver_inicio.js?v=20261030-1310" defer></script>
+<script src="volver_inicio.js?v=20261030-1341" defer></script>
 <script id="nv-dash-js">
 /* ═══════════════════════════════════════════════════════════════════════════
    dashboard · LA PLANTILLA
@@ -3047,6 +3047,442 @@ html:not([data-vs="off"]) th.nv-pos,html:not([data-vs="off"]) td.nv-pos{
   html:not([data-vs="off"]) #nv-rail{margin-top:14px}
 }
 </style>
+<style id="nv-piel-d">
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD · PIEL 2026/27
+   Misma identidad que la portada y prep. fisica. Para apagarlo:
+   localStorage.setItem('vs_estilo','off') y recargar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html.nv-d2:not([data-vs="off"]){
+  --nvUI:'Inter',system-ui,-apple-system,sans-serif;
+  --nvTit:'Montserrat',system-ui,sans-serif;
+  --nvNum:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --nvR:#FF0A4E; --nvR2:#FF5C84; --nvMag:#F90656; --nvCyan:#00CFFF;
+  --nvLine:#102935; --nvLineAlta:#545D6C; --nvLine2:#1A3F52;
+  --nvInk:#EBF4F7; --nvInk2:#8FA8BE; --nvInk3:#B4D2E4; --nvDim:#6E869C;
+  --nvAlto:inset 0 1px 0 rgba(84,93,108,.85);
+  --nvSombra:0 26px 54px -32px rgba(0,0,0,.98);
+}
+html.nv-d2:not([data-vs="off"]) .nv-oculto{display:none!important}
+
+/* ── 1 · la banda de titulo ─────────────────────────────────────────────── */
+html.nv-d2:not([data-vs="off"]) .hdr{position:relative!important;min-height:152px!important;
+ padding:0!important;display:flex!important;align-items:center!important;overflow:hidden!important;
+ border-bottom:1px solid var(--nvLine)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+ background:
+  linear-gradient(90deg,#00040D 0%,rgba(0,4,13,.99) 17%,rgba(0,4,13,.88) 27%,
+    rgba(0,4,13,.46) 38%,rgba(0,4,13,.12) 50%,rgba(0,4,13,0) 60%,
+    rgba(0,4,13,.26) 86%,rgba(0,4,13,.72) 100%),
+  linear-gradient(180deg,rgba(0,4,13,.14),rgba(0,4,13,.28)),
+  url('vs_hero.jpg') right center / auto 100% no-repeat,
+  #00040D!important;
+ box-shadow:none!important}
+html.nv-d2:not([data-vs="off"]) .hdr::before{content:''!important;position:absolute!important;inset:0!important;
+ z-index:1!important;pointer-events:none!important;display:block!important;background-image:
+  linear-gradient(rgba(255,60,100,.09) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,60,100,.09) 1px,transparent 1px)!important;
+ background-size:36px 36px!important;
+ -webkit-mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 40%)!important;
+         mask-image:linear-gradient(90deg,rgba(0,0,0,.5),transparent 40%)!important}
+html.nv-d2:not([data-vs="off"]) .hdr::after{content:''!important;position:absolute!important;left:0!important;
+ right:0!important;bottom:0!important;top:auto!important;height:2px!important;z-index:6!important;display:block!important;
+ background:linear-gradient(90deg,var(--nvR),var(--nvMag) 50%,var(--nvCyan))!important;
+ box-shadow:0 0 18px rgba(255,10,78,.65)!important}
+html.nv-d2:not([data-vs="off"]) .hdr > div:first-child{position:relative;z-index:3;
+ flex-direction:column!important;align-items:flex-start!important;gap:0!important;
+ padding:16px 30px 18px!important}
+html.nv-d2:not([data-vs="off"]) .hdr .back-btn{border:0!important;background:none!important;padding:0!important;
+ margin:0 0 12px!important;color:var(--nvInk2)!important;font:400 12px/1 var(--nvUI)!important;
+ letter-spacing:0!important;text-transform:none!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-eye{font:600 10px/1 var(--nvUI);letter-spacing:.34em;
+ color:var(--nvR2);margin-bottom:11px;text-shadow:0 0 16px rgba(255,10,78,.6)}
+html.nv-d2:not([data-vs="off"]) .hdr-title{font:800 30px/1.08 var(--nvTit)!important;
+ letter-spacing:.075em!important;text-transform:uppercase!important;background:none!important;
+ -webkit-background-clip:border-box!important;background-clip:border-box!important;
+ color:#EBF4F7!important;-webkit-text-fill-color:#EBF4F7!important}
+html.nv-d2:not([data-vs="off"]) .hdr-title i{font-style:normal!important;color:var(--nvR)!important;
+ -webkit-text-fill-color:var(--nvR)!important;text-shadow:0 0 34px rgba(255,10,78,.85)}
+html.nv-d2:not([data-vs="off"]) .nv-d-sub{font:600 9.5px/1.4 var(--nvUI)!important;letter-spacing:.28em!important;
+ color:#7E95AB!important;margin-top:12px!important}
+html.nv-d2:not([data-vs="off"]) .hdr #nav-gen{position:absolute;right:30px;bottom:14px;z-index:3;
+ font:400 10px/1 var(--nvNum)!important;color:#7E95AB!important;letter-spacing:.06em!important}
+
+/* ── 2 · las pestañas ───────────────────────────────────────────────────── */
+html.nv-d2:not([data-vs="off"]) .main-tabs{padding:11px 24px 0!important;gap:6px!important;
+ background:none!important;border:0!important}
+html.nv-d2:not([data-vs="off"]) .mtab{height:32px!important;padding:0 13px!important;border-radius:9px!important;
+ border:1px solid var(--nvLine)!important;background:rgba(0,12,23,.8)!important;color:var(--nvInk2)!important;
+ font:500 11.5px/1 var(--nvUI)!important;letter-spacing:.02em!important;text-transform:none!important}
+html.nv-d2:not([data-vs="off"]) .mtab:hover{color:var(--nvInk)!important;border-color:var(--nvLine2)!important}
+html.nv-d2:not([data-vs="off"]) .mtab.on{background:rgba(255,10,78,.14)!important;
+ border-color:rgba(255,10,78,.45)!important;color:#fff!important;
+ box-shadow:0 0 18px -6px rgba(255,10,78,.7)!important}
+
+/* ── 3 · el area de trabajo ─────────────────────────────────────────────── */
+html.nv-d2:not([data-vs="off"]) .main{padding:14px 24px 28px!important;max-width:none!important}
+html.nv-d2:not([data-vs="off"]) .sec-lbl{font:700 11px/1 var(--nvTit)!important;letter-spacing:.2em!important;
+ text-transform:uppercase!important;color:#7E95AB!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-pan,html.nv-d2:not([data-vs="off"]) .nv-d-card,
+html.nv-d2:not([data-vs="off"]) .nv-d-strip,html.nv-d2:not([data-vs="off"]) .nv-d-ae{
+ border:1px solid var(--nvLine)!important;border-top-color:var(--nvLineAlta)!important;
+ border-radius:13px!important;position:relative;
+ background:radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important;min-width:0}
+html.nv-d2:not([data-vs="off"]) .nv-d-pan::before,html.nv-d2:not([data-vs="off"]) .nv-d-card::before,
+html.nv-d2:not([data-vs="off"]) .nv-d-strip::before,html.nv-d2:not([data-vs="off"]) .nv-d-ae::before{
+ content:'';position:absolute;left:18%;right:18%;top:-1px;height:1px;border-radius:1px;
+ background:linear-gradient(90deg,transparent,rgba(255,10,78,.75),transparent)}
+html.nv-d2:not([data-vs="off"]) .nv-ph h3{font-family:var(--nvTit)!important;font-size:13px!important;
+ font-weight:700!important;letter-spacing:.145em!important;text-transform:uppercase!important;
+ color:var(--nvInk)!important;margin:0!important;flex:1 1 auto;min-width:0}
+html.nv-d2:not([data-vs="off"]) .nv-ph .nv-pv{margin-left:auto;font:500 10.5px/1 var(--nvUI);
+ color:var(--nvInk2);white-space:nowrap}
+html.nv-d2:not([data-vs="off"]) .nv-ph .nv-pv b{color:var(--nvR2);font-weight:500}
+html.nv-d2:not([data-vs="off"]) .nv-pic svg{width:12px;height:12px;stroke:var(--nvR2);fill:none;
+ stroke-linecap:round;stroke-linejoin:round;display:block;margin:5px auto;
+ filter:drop-shadow(0 0 4px rgba(255,92,132,.55))}
+
+/* el panel de filtros */
+html.nv-d2:not([data-vs="off"]) .nv-d-filtros{margin:14px 0 0}
+html.nv-d2:not([data-vs="off"]) .nv-d-filtros .fbar{margin:0!important;padding:0 15px 14px!important;
+ border:0!important;background:none!important;gap:10px!important;flex-wrap:wrap!important}
+html.nv-d2:not([data-vs="off"]) .fbar-lbl{font:500 9px/1 var(--nvUI)!important;letter-spacing:.16em!important;
+ text-transform:uppercase!important;color:#7E95AB!important}
+html.nv-d2:not([data-vs="off"]) .ftag{height:34px!important;padding:0 14px!important;border-radius:9px!important;
+ border:1px solid var(--nvLine2)!important;background:rgba(0,14,26,.9)!important;color:var(--nvInk3)!important;
+ font:500 12px/1 var(--nvUI)!important;letter-spacing:0!important;box-shadow:var(--nvAlto)!important}
+html.nv-d2:not([data-vs="off"]) .ftag.on{background:rgba(255,10,78,.14)!important;
+ border-color:rgba(255,10,78,.45)!important;color:#fff!important}
+
+/* ── 4 · la fila de plan + velocidad + los seis fundamentos ─────────────── */
+html.nv-d2:not([data-vs="off"]) .nv-d-f2{display:flex;gap:14px;align-items:stretch;margin:14px 0 0}
+html.nv-d2:not([data-vs="off"]) .nv-d-card{flex:0 0 232px;display:flex;flex-direction:column;
+ text-decoration:none;overflow:hidden}
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-ph{padding:13px 15px 0!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-sub{padding:7px 15px 0!important;font:400 11px/1.4 var(--nvUI)!important;
+ letter-spacing:0!important;color:#7E95AB!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-cbody{margin-top:auto;padding:14px 15px 15px;min-height:26px}
+html.nv-d2:not([data-vs="off"]) .nv-d-barra{height:7px;border-radius:999px;background:#07131F;overflow:hidden}
+html.nv-d2:not([data-vs="off"]) .nv-d-barra i{display:block;height:100%;border-radius:999px;
+ background:linear-gradient(90deg,var(--nvR),var(--nvR2));box-shadow:0 0 14px rgba(255,10,78,.7)}
+html.nv-d2:not([data-vs="off"]) .nv-d-spark{width:100%;height:46px;display:block;
+ filter:drop-shadow(0 0 7px rgba(255,10,78,.55))}
+html.nv-d2:not([data-vs="off"]) .nv-d-card:hover{border-color:rgba(255,10,78,.45)!important}
+
+/* los seis fundamentos */
+html.nv-d2:not([data-vs="off"]) .nv-d-strip{flex:1 1 0;display:flex;align-items:stretch;padding:0!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .sub-tabs{display:flex!important;flex:1 1 auto!important;
+ margin:0!important;padding:0!important;gap:0!important;border:0!important;background:none!important;
+ overflow:visible!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab{flex:1 1 0!important;min-width:0!important;
+ display:flex!important;flex-direction:column!important;align-items:flex-start!important;
+ justify-content:center!important;gap:9px!important;height:auto!important;
+ padding:16px 14px!important;border:0!important;border-right:1px solid rgba(16,41,53,.9)!important;
+ border-radius:0!important;background:none!important;color:var(--nvInk3)!important;
+ font:700 11px/1.2 var(--nvTit)!important;letter-spacing:.14em!important;text-transform:uppercase!important;
+ text-align:left!important;white-space:normal!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab:last-child{border-right:0!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab .vs-i,
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab .vs-i svg{width:21px!important;height:21px!important;
+ flex-basis:21px!important;color:var(--nvR)!important;stroke:var(--nvR)!important;stroke-width:1.5!important;
+ filter:drop-shadow(0 0 7px rgba(255,10,78,.5))!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab.on{background:rgba(255,10,78,.08)!important;color:#fff!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab.on .vs-i svg{stroke:var(--nvR2)!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab::after{content:var(--vd,"Ver detalle") " \2192";
+ display:block;font:400 10px/1 var(--nvUI);letter-spacing:0;text-transform:none;color:#7E95AB;
+ margin-top:2px}
+
+/* ── 5 · la tabla ───────────────────────────────────────────────────────── */
+html.nv-d2:not([data-vs="off"]) #eq-tab-content{padding:0 0 4px!important}
+html.nv-d2:not([data-vs="off"]) #nv-wrap{margin-top:14px}
+html.nv-d2:not([data-vs="off"]) #eq-stats-row,
+html.nv-d2:not([data-vs="off"]) .view.on > .sec-lbl:first-child{display:none!important}
+
+/* ── 6 · la fila de abajo ───────────────────────────────────────────────── */
+html.nv-d2:not([data-vs="off"]) .nv-d-f4{display:flex;gap:14px;align-items:stretch;margin:14px 0 0;
+ flex-wrap:wrap}
+html.nv-d2:not([data-vs="off"]) .nv-d-f4 > *{flex:1 1 0;min-width:300px}
+html.nv-d2:not([data-vs="off"]) #velp-caja{margin:0!important;border:1px solid var(--nvLine)!important;
+ border-top-color:var(--nvLineAlta)!important;border-radius:13px!important;
+ background:radial-gradient(120% 90% at 0% 0%,rgba(255,10,78,.05),transparent 58%),
+   linear-gradient(165deg,#000F1B,#000913 64%)!important;
+ box-shadow:var(--nvAlto),var(--nvSombra)!important;position:relative}
+html.nv-d2:not([data-vs="off"]) #velp-caja > div:first-child{border-bottom:0!important;
+ font:700 13px/1 var(--nvTit)!important;letter-spacing:.145em!important;color:var(--nvInk)!important;
+ padding:13px 15px 0!important}
+html.nv-d2:not([data-vs="off"]) #velp-btn{background:rgba(255,10,78,.10)!important;
+ border:1px solid rgba(255,10,78,.45)!important;color:var(--nvR2)!important;border-radius:10px!important;
+ font:600 11.5px/1 var(--nvUI)!important;letter-spacing:.09em!important;padding:11px 18px!important}
+/* analisis por equipo */
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista{padding:0 13px 13px}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista a{display:flex;align-items:center;gap:11px;padding:9px 0;
+ border-bottom:1px solid rgba(16,41,53,.7);text-decoration:none}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista a:last-child{border-bottom:0}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista .tx{flex:1 1 auto;min-width:0}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista .tx b{display:block;font:600 12px/1.25 var(--nvUI);color:var(--nvInk)}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista .tx span{display:block;font:400 9.5px/1.3 var(--nvUI);
+ color:#7E95AB;margin-top:2px}
+html.nv-d2:not([data-vs="off"]) .nv-d-aelista .fl{color:var(--nvDim);font-size:14px}
+
+@media (max-width:1280px){
+ html.nv-d2:not([data-vs="off"]) .nv-d-f2{flex-wrap:wrap}
+ html.nv-d2:not([data-vs="off"]) .nv-d-card{flex:1 1 calc(50% - 7px)}
+ html.nv-d2:not([data-vs="off"]) .nv-d-strip{flex:1 1 100%}
+}
+@media (max-width:900px){
+ html.nv-d2:not([data-vs="off"]) .nv-d-strip{flex-wrap:wrap}
+ html.nv-d2:not([data-vs="off"]) .nv-d-strip .sub-tabs{flex-wrap:wrap!important}
+ html.nv-d2:not([data-vs="off"]) .nv-d-strip .stab{flex:1 1 33%!important;
+  border-bottom:1px solid rgba(16,41,53,.9)!important}
+ html.nv-d2:not([data-vs="off"]) .hdr{min-height:130px!important}
+ html.nv-d2:not([data-vs="off"]) .hdr-title{font-size:21px!important}
+}
+
+/* ── 7 · remates ────────────────────────────────────────────────────────── */
+/* el titulo del tablero no lleva la barra inclinada: esa es la de prep. fisica */
+html.nv-d2:not([data-vs="off"]) .hdr-title::before{display:none!important;content:none!important}
+html.nv-d2:not([data-vs="off"]) .hdr-title .vs-i{display:none!important}
+/* la cabecera de las dos tarjetas: titulo arriba, enlace abajo */
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-ph{flex-wrap:wrap!important;row-gap:6px!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-ph h3{font-size:12px!important;letter-spacing:.12em!important;
+ flex:1 1 100%!important;order:2!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-ph .nv-pic{order:1!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-card .nv-ph .nv-pv{order:1!important;margin-left:auto!important;
+ font-size:10px!important}
+html.nv-d2:not([data-vs="off"]) .nv-d-card{flex:0 0 250px}
+
+/* la barra inclinada la pone vs_cab.js dentro del titulo: en el tablero no va */
+html.nv-d2:not([data-vs="off"]) .hdr .vs-cab-tit::before{display:none!important;content:none!important}
+</style>
+<script id="nv-piel-d-js">
+/* ═══════════════════════════════════════════════════════════════════════════
+   DASHBOARD · PIEL 2026/27
+   Deja el tablero con la forma de la plantilla: banda de titulo, panel de
+   filtros, la fila de PLAN DE DESARROLLO + VELOCIDAD DE SAQUE + los seis
+   fundamentos, la tabla con su panel, la columna de la derecha, y abajo las
+   baterias, el medidor de saque y el analisis por equipo.
+   No crea datos: todo lo que se ve sale de lo que la pantalla ya calcula.
+   Las baterias quedan abajo, como quedamos.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  if(document.documentElement.getAttribute('data-vs') === 'off') return;
+  document.documentElement.classList.add('nv-d2');
+
+  function T(s){
+    try{ if(typeof translateString === 'function')
+      return translateString(s, (typeof getLang === 'function' ? getLang() : 'es')); }catch(e){}
+    return s;
+  }
+  function sv(d, w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||1.6)+'" '+
+    'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+d+'</svg>'; }
+  var IC = {
+    diana:  '<path d="M12 20a8 8 0 100-16 8 8 0 000 16"/><path d="M12 16a4 4 0 100-8 4 4 0 000 8"/><path d="M12 13a1 1 0 100-2 1 1 0 000 2"/>',
+    cohete: '<path d="M14.5 4.2c3 .6 5.3 2.9 5.3 5.3 0 4-4.2 8.2-7.6 10.2L9 16.5 5.8 13.4C7.8 10 12 5.8 14.5 4.2z"/><path d="M9 16.5l-3.3 3.3M13.6 10.4a1.4 1.4 0 102 2"/>',
+    barras: '<path d="M6 18V11M11 18V6M16 18V14M21 18V9"/><path d="M3 18h18"/>',
+    gente:  '<path d="M9 11a3 3 0 100-6 3 3 0 000 6"/><path d="M3.5 19c0-3 2.5-4.5 5.5-4.5s5.5 1.5 5.5 4.5"/><path d="M17 10.5a2.5 2.5 0 100-5M18 19c0-2.4-1-3.6-2.5-4.2"/>',
+    escudo: '<path d="M12 2.8l7.4 3v5.5c0 4.3-3 8.2-7.4 9.9-4.4-1.7-7.4-5.6-7.4-9.9V5.8z"/>',
+    tend:   '<path d="M4 19V5M4 19h16"/><path d="M7.5 15l3.5-4 3 2.5 4.5-6"/><path d="M19 7.5h-3M19 7.5v3"/>',
+    bandera:'<path d="M6 20V4"/><path d="M6 4h11l-2 3.5L17 11H6"/>',
+    filtro: '<path d="M4 6h16M7 12h10M10 18h4"/>'
+  };
+
+  /* ── 1 · la banda de titulo ────────────────────────────────────────────── */
+  function hero(){
+    var h = document.querySelector('.hdr'); if(!h || h.dataset.pl) return;
+    h.dataset.pl = '1';
+    var tit = h.querySelector('.hdr-title');
+    var cont = tit && tit.parentElement; if(!cont) return;
+    /* el copete usa el nombre que ya tenia la pantalla */
+    var eyebrow = document.createElement('div'); eyebrow.className = 'nv-d-eye';
+    eyebrow.textContent = T('Dashboard Entrenador').toUpperCase();
+    cont.insertBefore(eyebrow, tit);
+    /* el titulo, con la ultima palabra en rojo */
+    var txt = T('Análisis de rendimiento').toUpperCase();
+    var i = txt.lastIndexOf(' ');
+    tit.removeAttribute('data-t');
+    tit.innerHTML = (i > 0 ? txt.slice(0, i + 1) + '<i>' + txt.slice(i + 1) + '</i>' : txt);
+    /* el renglon de abajo */
+    var ds = cont.children, sub = ds[ds.length - 1];
+    if(sub && sub !== tit && sub !== eyebrow){
+      sub.removeAttribute('data-t');
+      sub.className = 'nv-d-sub';
+      sub.textContent = T('Equipo · Jugadores · Estadísticas').toUpperCase();
+    }
+  }
+
+  /* ── 2 · panel + cabecera para una caja que ya existe ──────────────────── */
+  function panelar(el, ico, titulo, extra){
+    if(!el || el.dataset.plPan) return el;
+    el.dataset.plPan = '1';
+    var p = document.createElement('section'); p.className = 'nv-pan nv-d-pan';
+    el.parentNode.insertBefore(p, el);
+    var ph = document.createElement('div'); ph.className = 'nv-ph';
+    ph.innerHTML = '<span class="nv-pic">' + sv(ico, 1.65) + '</span><h3>' + titulo + '</h3>' +
+                   (extra ? '<span class="nv-pv">' + extra + ' <b>&rarr;</b></span>' : '');
+    p.appendChild(ph); p.appendChild(el);
+    return p;
+  }
+
+  /* ── 3 · las filas ─────────────────────────────────────────────────────── */
+  function filas(){
+    var main = document.querySelector('.main');
+    var vista = document.getElementById('view-equipo');
+    if(!main || !vista || vista.dataset.pl) return;
+    var subs = vista.querySelector('.sub-tabs');
+    var fbar = vista.querySelector('.fbar');
+    var tabla = document.getElementById('eq-tab-content');
+    if(!subs || !fbar || !tabla) return;
+    vista.dataset.pl = '1';
+
+    /* fila 2: plan de desarrollo + velocidad + los seis fundamentos */
+    var f2 = document.createElement('div'); f2.className = 'nv-d-f2';
+    vista.insertBefore(f2, subs);
+
+    f2.appendChild(tarjetaLink('plan_desarrollo.html', IC.diana,
+      T('Plan de desarrollo'), T('Objetivos individuales y de equipo'), T('Ver detalles'), 'nv-d-plan'));
+    f2.appendChild(tarjetaLink('#velp-caja', IC.cohete,
+      T('Velocidad de saque'), T('Tu equipo en la velocidad de saque'), T('Ver análisis'), 'nv-d-velc'));
+
+    var strip = document.createElement('section'); strip.className = 'nv-pan nv-d-strip';
+    f2.appendChild(strip); strip.appendChild(subs);
+
+    /* los seis botones pasan a ser celdas con su "Ver detalle" */
+    verDetalle();
+
+    /* la barra de filtros, como panel */
+    panelar(fbar, IC.filtro, T('Filtros'), null);
+    var pf = fbar.parentElement;
+    if(pf && pf.classList.contains('nv-d-pan')){ pf.classList.add('nv-d-filtros'); vista.insertBefore(pf, f2); }
+
+    /* la tabla, con su cabecera */
+    panelar(tabla, IC.barras, T('Rendimiento individual').toUpperCase(), null);
+
+    /* fila 4: baterias + medidor + analisis por equipo */
+    var f4 = document.createElement('div'); f4.className = 'nv-d-f4';
+    vista.appendChild(f4);
+    var obj = document.getElementById('eq-objetivos');
+    if(obj){
+      var lbl = obj.previousElementSibling;
+      if(lbl && lbl.classList && lbl.classList.contains('sec-lbl')) lbl.classList.add('nv-oculto');
+      var po = panelar(obj, IC.bandera, T('Objetivos individuales').toUpperCase(), T('Ver todos'));
+      if(po) f4.appendChild(po);
+    }
+    var vel = document.getElementById('velp-caja');
+    if(vel) f4.appendChild(vel);
+    f4.appendChild(analisisEquipo());
+  }
+
+  /* lang.js reescribe el contenido de los botones al traducir, asi que el
+     "Ver detalle" se repone en cada pasada en vez de una sola vez */
+  function verDetalle(){
+    /* va como ::after con el texto en una variable CSS: lang.js reescribe el
+       contenido de los botones al traducir y se llevaba puesto cualquier
+       elemento que le colgaramos adentro. El atributo style sobrevive. */
+    var t = '"' + T('Ver detalle').replace(/"/g, '') + '"';
+    [].slice.call(document.querySelectorAll('.nv-d-strip .stab')).forEach(function(b){
+      if(b.style.getPropertyValue('--vd') !== t) b.style.setProperty('--vd', t);
+    });
+  }
+
+  /* el bloque nv-dash vuelve a mover el medidor de saque durante los primeros
+     segundos: se reafirma donde va */
+  function abajo(){
+    var f4 = document.querySelector('.nv-d-f4'); if(!f4) return;
+    var vel = document.getElementById('velp-caja');
+    var ae  = f4.querySelector('.nv-d-ae');
+    if(vel && vel.parentNode !== f4) f4.insertBefore(vel, ae || null);
+  }
+
+  function tarjetaLink(href, ico, titulo, sub, verbo, cls){
+    var a = document.createElement('a');
+    a.className = 'nv-pan nv-d-card ' + (cls || '');
+    a.href = href;
+    a.innerHTML =
+      '<div class="nv-ph"><span class="nv-pic">' + sv(ico, 1.65) + '</span><h3>' + titulo + '</h3>' +
+      '<span class="nv-pv">' + verbo + ' <b>&rarr;</b></span></div>' +
+      '<div class="nv-sub">' + sub + '</div>' +
+      '<div class="nv-d-cbody"></div>';
+    return a;
+  }
+
+  function analisisEquipo(){
+    var p = document.createElement('section'); p.className = 'nv-pan nv-d-ae';
+    var FILAS = [['equipo.html', IC.gente, 'Rendimiento general', 'Análisis completo del equipo'],
+                 ['comparador.html', IC.escudo, 'Comparativa con rivales', 'Datos y estadísticas frente a próximos rivales'],
+                 ['tendencias.html', IC.tend, 'Tendencias de rendimiento', 'Evolución y gráficas de la temporada']];
+    p.innerHTML = '<div class="nv-ph"><span class="nv-pic">' + sv(IC.barras, 1.65) + '</span>' +
+      '<h3>' + T('Análisis por equipo').toUpperCase() + '</h3>' +
+      '<span class="nv-pv">' + T('Ver todos') + ' <b>&rarr;</b></span></div>' +
+      '<div class="nv-d-aelista">' + FILAS.map(function(f){
+        return '<a href="' + f[0] + '"><span class="nv-pic">' + sv(f[1], 1.6) + '</span>' +
+               '<span class="tx"><b>' + T(f[2]) + '</b><span>' + T(f[3]) + '</span></span>' +
+               '<b class="fl">&rsaquo;</b></a>';
+      }).join('') + '</div>';
+    return p;
+  }
+
+  /* ── 4 · la barra de PLAN DE DESARROLLO, con lo que ya hay en pantalla ─── */
+  function barraPlan(){
+    var c = document.querySelector('.nv-d-plan .nv-d-cbody'); if(!c) return;
+    var obj = document.getElementById('eq-objetivos'); if(!obj) return;
+    /* se leen los porcentajes que las baterias ya dibujaron */
+    var pcts = [];
+    [].slice.call(obj.querySelectorAll('*')).forEach(function(e){
+      var t = (e.children.length ? '' : (e.textContent || '')).trim();
+      var m = t.match(/^(\d{1,3})\s*%$/);
+      if(m){ var v = +m[1]; if(v >= 0 && v <= 100) pcts.push(v); }
+    });
+    if(!pcts.length){ c.innerHTML = ''; return; }
+    var prom = Math.round(pcts.reduce(function(a, b){ return a + b; }, 0) / pcts.length);
+    if(c.dataset.v === String(prom)) return;
+    c.dataset.v = String(prom);
+    c.innerHTML = '<div class="nv-d-barra"><i style="width:' + prom + '%"></i></div>';
+  }
+
+  /* ── 5 · la chispa de velocidad, con los saques medidos ────────────────── */
+  function chispa(){
+    var c = document.querySelector('.nv-d-velc .nv-d-cbody'); if(!c || c.dataset.pl) return;
+    var V = window.VEL_SAQUE; if(!V || typeof V.sacadores !== 'function') return;
+    var S = []; try{ S = V.sacadores() || []; }catch(e){ return; }
+    var k = [];
+    S.forEach(function(j){ (j.data || []).forEach(function(f){
+      if(f.length >= 8 && typeof f[7] === 'number' && f[7] > 0) k.push(f[7]); }); });
+    if(k.length < 8) return;
+    c.dataset.pl = '1';
+    var ult = k.slice(-28), mx = Math.max.apply(null, ult), mn = Math.min.apply(null, ult);
+    var W = 210, H = 46, rng = (mx - mn) || 1;
+    var pts = ult.map(function(v, i){
+      return (i * (W / (ult.length - 1))).toFixed(1) + ',' + (H - 4 - ((v - mn) / rng) * (H - 10)).toFixed(1);
+    }).join(' ');
+    c.innerHTML = '<svg class="nv-d-spark" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">' +
+      '<polyline points="' + pts + '" fill="none" stroke="#FF0A4E" stroke-width="1.6" ' +
+      'stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+
+  function pasada(){
+    try{ hero(); }catch(e){}
+    try{ filas(); }catch(e){}
+    try{ verDetalle(); }catch(e){}
+    try{ abajo(); }catch(e){}
+    try{ barraPlan(); }catch(e){}
+    try{ chispa(); }catch(e){}
+  }
+  function arrancar(){
+    pasada();
+    [200, 700, 1600, 3000, 6000, 10000].forEach(function(ms){ setTimeout(pasada, ms); });
+    document.addEventListener('vbLangChange', function(){ setTimeout(pasada, 30); });
+    try{
+      var t = null;
+      new MutationObserver(function(){
+        clearTimeout(t); t = setTimeout(function(){ try{ barraPlan(); chispa(); }catch(e){} }, 240);
+      }).observe(document.body, { childList:true, subtree:true });
+    }catch(e){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
 </body>
 </html>
 
