@@ -208,3 +208,279 @@
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
   else montar();
 })();
+
+/*[vsl]*/
+/* ══════════════════════════════════════════════════════════════════════════
+   LA BARRA LATERAL · 2026/27
+   Medida sobre la maqueta, no a ojo. Los numeros de abajo salen de contar
+   pixeles en la imagen de referencia (1536 x 1024):
+
+     franja de arriba .... alto 88 px, de borde a borde (va ARRIBA del riel)
+     riel ................ ancho 171 px, arranca en y = 88
+     borde derecho ....... 1 px #0086A8
+     fondo del riel ...... #00121F arriba -> #030B17 abajo
+     item ................ alto 44 px, sin separacion entre uno y otro
+     icono ............... 24 x 24, de x 16 a x 40
+     etiqueta ............ arranca en x 61  (Barlow Condensed 500, 16,5 px)
+     item activo ......... degradado rojo: #730114 0%, #E40629 14%,
+                           #97031B 42%, #3E011B 70%, #0F0512 100%
+
+   COMO NO ROMPE NADA
+   · Los botones de grupo se MUEVEN adentro del riel, que es hijo de #vsn:
+     el manejador de clics, el buscador y el repintado al cambiar de idioma
+     siguen encontrando los mismos nodos.
+   · El riel es position:fixed; por eso #vsn no puede llevar backdrop-filter,
+     que crearia un marco de referencia y lo dejaria encerrado en la franja.
+   · En telefono y tablet (≤1100 px) el riel no aparece y manda el boton de
+     menu que nav.js ya traia.
+
+   APAGARLO:  localStorage.setItem('vs_lateral','off')  y recargar
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  try{ if(localStorage.getItem('vs_nav') === 'off') return; }catch(e){}
+  try{ if(localStorage.getItem('vs_lateral') === 'off') return; }catch(e){}
+  if(window.__VS_LATERAL) return; window.__VS_LATERAL = true;
+
+  var CSS = ''
+  + ':root{ --vsl-w:171px; }'
+  + 'html:not([data-vs="off"]):root, :root{ --vsn-h:88px; }'
+  + 'body{ padding-left:var(--vsl-w) !important; }'
+
+  /* ── la franja de arriba: de borde a borde, con la foto ──────────────── */
+  + '#vsn#vsn{ left:0 !important; right:0 !important; height:var(--vsn-h) !important;'
+  + '  padding:0 20px !important; border-bottom:0 !important;'
+  + '  backdrop-filter:none !important; -webkit-backdrop-filter:none !important;'
+  /*  EL FONDO DE LA FRANJA
+      En vez de aproximarlo con degradados, sale de la propia referencia:
+      vs_franja.jpg es el tramo de red que va entre el subtitulo del club y
+      los botones de idioma —430 px sin un solo texto encima—, espejado
+      hasta cubrir el ancho. Asi el color, el brillo y el dibujo de la red
+      son exactamente los de la maqueta, no una imitacion.                */
+  + '  background:'
+  /*  La maqueta NO lleva ninguna linea roja debajo de la franja: solo un
+      tramo corto a la altura del escudo. La que habia cruzaba los 1536 px. */
+  + '   linear-gradient(90deg,rgba(255,23,68,.85) 0%,rgba(249,6,86,.55) 60%,rgba(255,23,68,0) 100%)'
+  + '     left bottom / 150px 2px no-repeat,'
+  /*  y el lado derecho vuelve a oscurecerse: en la maqueta los botones de
+      idioma y la fecha caen sobre fondo casi negro, no sobre la red roja. */
+  + '   linear-gradient(90deg,rgba(0,16,24,0) 40%,rgba(0,16,24,.45) 50%,'
+  + '     rgba(0,14,22,.86) 60%,rgba(0,12,20,.96) 72%,rgba(0,12,20,.97) 100%),'
+  + '   linear-gradient(90deg,#001018 0%,rgba(0,16,24,.98) 20%,rgba(0,18,28,.74) 30%,'
+  + '     rgba(0,20,34,.30) 38%,rgba(0,20,34,.06) 46%,rgba(0,20,34,0) 54%),'
+  + '   url(\'vs_franja.jpg\') right center / auto 100% no-repeat,'
+  + '   #001525 !important;'
+  + '  box-shadow:0 14px 38px -26px #000 !important; }'
+
+  /* ── la marca de la franja, medida sobre la maqueta ───────────────────
+       escudo .... anillo de 71 px, centro en x 69
+       titulo .... altura de mayusculas 34 px, ancho 321 px
+       bajada .... 19 px de alto, x 183..517                             */
+  + '#vsn#vsn .marca{ gap:0 !important; padding:0 !important; margin:0 !important;'
+  + '  border-right:0 !important; align-items:center !important; }'
+  + '#vsn#vsn .marca img{ width:62px !important; height:62px !important;'
+  + '  border-radius:50% !important; padding:3px !important;'
+  + '  border:2px solid rgba(255,23,68,.92) !important;'
+  + '  box-shadow:0 0 24px -4px rgba(255,23,68,.8) !important;'
+  + '  margin:0 48px 0 14px !important; object-fit:contain !important; }'
+  + '#vsn#vsn .marca b{ font:700 37px/1 var(--vsTit) !important;'
+  + '  letter-spacing:.105em !important; color:#FFFFFF !important;'
+  + '  text-transform:uppercase !important; display:block !important; }'
+  + '#vsn#vsn .marca b em{ font-style:normal !important; color:var(--red) !important; }'
+  /*  los controles van pegados a la derecha, como en la maqueta: antes
+      quedaban amontonados junto al nombre del club.                      */
+  + '#vsn#vsn .marca{ margin-right:auto !important; padding-top:10px !important; }'
+  + '#vsn#vsn .vs-ctls{ margin-left:auto !important; gap:11px !important; }'
+  /* ── los controles de la derecha, medidos sobre la maqueta ───────────
+       idiomas ....... tres botones de 36x35, letra de 17 px
+       sistema ....... pastilla de 110x35, letra de 16 px
+       fecha ......... 15 px                                            */
+  + '#vsn#vsn .vs-ctls > .vs-ctl{ height:35px !important; }'
+  + '#vsn#vsn #lang-wrap{ gap:0 !important; height:35px !important; }'
+  + '#vsn#vsn #lang-wrap button{ min-width:36px !important; height:35px !important;'
+  + '  padding:0 9px !important; font:600 17px/1 var(--vsTit) !important;'
+  + '  letter-spacing:.06em !important; border-radius:0 !important; }'
+  + '#vsn#vsn #lang-wrap button:first-child{ border-radius:8px 0 0 8px !important; }'
+  + '#vsn#vsn #lang-wrap button:last-child{ border-radius:0 8px 8px 0 !important; }'
+  + '#vsn#vsn .live-badge{ height:35px !important; padding:0 15px !important;'
+  + '  border-radius:9px !important; gap:9px !important;'
+  + '  font:600 16px/1 var(--vsTit) !important; letter-spacing:.055em !important; }'
+  + '#vsn#vsn .live-badge .live-dot{ width:9px !important; height:9px !important; }'
+  + '#vsn#vsn #fecha-txt{ font:400 15px/1 var(--vsUI) !important;'
+  + '  letter-spacing:.012em !important; color:#C9DCE8 !important; }'
+  + '#vsn#vsn .vs-ctls select.vs-ctl,'
+  + '#vsn#vsn .vs-ctls a.vs-ctl{ height:35px !important; border-radius:9px !important;'
+  + '  font:500 14.5px/1 var(--vsUI) !important; }'
+  + '#vsn#vsn .vs-ctls .vs-ava{ width:38px !important; height:38px !important; }'
+  + '#vsn#vsn .der{ margin-left:0 !important; }'
+  + '#vsn#vsn .marca .vs-msub{ display:block !important; font-style:normal !important;'
+  + '  font:500 16px/1 var(--vsUI) !important; letter-spacing:.225em !important;'
+  + '  text-transform:uppercase !important; color:var(--cyan) !important;'
+  + '  margin-top:7px !important; }'
+
+  /* ── el riel, debajo de la franja ────────────────────────────────────── */
+  + '#vsn#vsn .vsl{ position:fixed; left:0; top:var(--vsn-h); bottom:0;'
+  + '  width:var(--vsl-w); z-index:2147482520; display:flex; flex-direction:column;'
+  + '  overflow:hidden;'
+  /*  EL FONDO DEL RIEL
+      Medido sobre la maqueta, columna x 115..165: el riel NO es
+      transparente. Tiene su propio azul verdoso —(0,15,26) abajo y
+      (0,32,46) en el tercio de arriba, donde hay un resplandor— y por eso
+      se despega del cuerpo. Dejandolo transparente se veia el fondo casi
+      negro de la pagina, (0,4,6), y quedaba apagado.                     */
+  + '  background:'
+  /*  y el haz rojo que en la maqueta cruza el riel por abajo, de la
+      esquina de abajo a la izquierda hacia arriba a la derecha        */
+  + '   linear-gradient(137deg, rgba(0,0,0,0) 61.5%, rgba(255,23,68,.13) 63.8%,'
+  + '     rgba(255,86,124,.80) 65.2%, rgba(255,23,68,.13) 66.6%, rgba(0,0,0,0) 69%),'
+  + '   radial-gradient(135% 40% at 52% 22%, rgba(0,205,245,.20), rgba(0,0,0,0) 74%),'
+  + '   radial-gradient(110% 26% at 50% 100%, rgba(0,160,210,.06), rgba(0,0,0,0) 72%),'
+  + '   linear-gradient(180deg,#001320 0%,#00121E 48%,#000D18 100%);'
+  + '  border-right:1px solid #0086A8; }'
+  + '#vsn#vsn .vsl *{ box-sizing:border-box; }'
+  + '#vsn#vsn .vsl .grupos{ display:flex !important; flex-direction:column !important;'
+  + '  align-items:stretch !important; gap:0 !important; flex:1 1 auto; min-height:0;'
+  + '  overflow-x:hidden !important; overflow-y:auto !important; padding:9px 0 0 !important; }'
+  + '#vsn#vsn .vsl .g{ display:flex !important; align-items:center !important;'
+  + '  justify-content:flex-start !important; gap:21px !important;'
+  + '  height:45px !important; min-height:45px !important; padding:0 0 0 16px !important;'
+  + '  border-radius:0 !important; white-space:normal !important; text-align:left;'
+  + '  font:500 17px/1.1 var(--vsUI,\'Barlow Condensed\',sans-serif) !important;'
+  + '  letter-spacing:.005em !important; color:#00D9F5 !important;'
+  + '  background:none !important; box-shadow:none !important; position:relative;'
+  + '  transition:background .15s ease,color .15s ease; }'
+  /*  lang.js envuelve cada etiqueta en un <span> propio, y ese span recibia
+      su tipografia de otra regla: heredar la del boton es lo unico que hace
+      que el tamaño y la fuente del riel sean los que se piden aca.        */
+  + '#vsn#vsn .vsl .g span, #vsn#vsn .vsl .g b, #vsn#vsn .vsl .g i{'
+  + '  font:inherit !important; color:inherit !important;'
+  + '  letter-spacing:inherit !important; text-transform:none !important; }'
+  /*  El dibujo de cada icono no llena su caja: con 24 px de caja el trazo
+      mide 17 de alto, y en la maqueta mide 25. La caja se deja en 24 —asi el
+      centrado y el hueco hasta la etiqueta no se mueven— y se agranda el
+      DIBUJO, que ademas engrosa el trazo igual que en la referencia.      */
+  + '#vsn#vsn .vsl .g svg{ width:24px !important; height:24px !important; flex:0 0 auto;'
+  + '  color:#FFFFFF !important; stroke-width:1.9 !important; opacity:1 !important;'
+  + '  transform:scale(1.38); }'
+  + '#vsn#vsn .vsl .g:hover{ background:rgba(0,217,245,.07) !important; color:#FFFFFF !important; }'
+  + '#vsn#vsn .vsl .g.aqui, #vsn#vsn .vsl .g.on{ color:#FFFFFF !important;'
+  + '  box-shadow:none !important;'
+  + '  background:linear-gradient(90deg,#730114 0%,#E40629 14%,#97031B 42%,'
+  + '    #3E011B 70%,#0F0512 100%) !important; }'
+  + '#vsn#vsn .vsl .g.aqui svg, #vsn#vsn .vsl .g.on svg{ color:#FFFFFF !important; }'
+  + '#vsn#vsn .vsl .g.aqui::after{ content:\'\' !important; position:absolute !important;'
+  + '  left:0 !important; top:0 !important; bottom:0 !important; right:auto !important;'
+  + '  width:3px !important; height:auto !important; transform:none !important;'
+  + '  border-radius:0 !important; background:#FF4D6D !important; }'
+
+  /* ── el pie ──────────────────────────────────────────────────────────── */
+  /* ── el pie, medido sobre la maqueta (ventana de 1024 px de alto) ─────
+       frase ..... CIAN, dos renglones, x 19..145, y 808..835
+       raya ...... roja, 3 px, x 11..147, y 845..847
+       escudo .... circulo de 85 px, x 34..117, y 862..947
+       hueco de abajo ... 77 px                                           */
+  + '#vsn#vsn .vsl .vsl-pie{ flex:0 0 auto; padding:0 11px 77px; }'
+  + '#vsn#vsn .vsl .vsl-lema{ margin:0 0 2px 8px; max-width:136px;'
+  + '  font:600 15px/17px var(--vsTit,\'Barlow Condensed\',sans-serif);'
+  + '  letter-spacing:.04em; text-transform:uppercase; color:#00D5F0; }'
+  + '#vsn#vsn .vsl .vsl-raya{ height:3px; width:137px; margin:0 0 15px; border-radius:2px;'
+  + '  background:linear-gradient(90deg,#F6091E 0%,#FF374D 55%,#EB0621 100%);'
+  + '  box-shadow:0 0 12px -2px rgba(255,23,68,.8); }'
+  + '#vsn#vsn .vsl .vsl-pie a{ display:block; margin:0 0 0 23px; padding:0;'
+  + '  width:85px; height:85px; border-radius:50%; line-height:0;'
+  + '  border:2px solid #FF1744;'
+  + '  box-shadow:0 0 28px -2px rgba(255,23,68,.75), inset 0 0 18px -6px rgba(255,23,68,.6); }'
+  + '#vsn#vsn .vsl .vsl-pie img{ width:100%; height:100%; border-radius:50%;'
+  + '  object-fit:contain; }'
+
+  /* ── lo que estaba fijo contra el borde izquierdo ─────────────────────── */
+  /*  el escudo flotante de abajo a la izquierda repetia el del pie del
+      riel, y la flecha de volver repetia "Inicio" del menu: en la maqueta
+      no estan ninguno de los dos.                                        */
+  + '#vb-volver, #vb-atras, #club-escudo{ display:none !important; }'
+  + '.savebar{ left:var(--vsl-w) !important; }'
+  + '#vsn-panel{ left:var(--vsl-w) !important; }'
+  + '#vsn-busca{ left:calc(50% + var(--vsl-w) / 2) !important; }'
+
+  + '@media (max-width:1100px){ :root{ --vsl-w:0px; } #vsn#vsn .vsl{ display:none; } }'
+  + '@media print{ #vsn#vsn .vsl{ display:none !important; } body{ padding-left:0 !important; } }';
+
+  function estilo(){
+    if(document.getElementById('vsl-css')) return;
+    var s = document.createElement('style');
+    s.id = 'vsl-css'; s.textContent = CSS;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  /*  ESTABAN DOS VECES: LA CHAPA Y LA FECHA
+      vs_cab.js arma el grupo de la derecha (.vs-ctls) con idiomas, "Sistema
+      activo", fecha, categoria, temporadas y usuario, en ese orden —que es
+      el de los modelos—. La piel habia sumado su propia chapa y su propia
+      fecha por delante, y la original quedaba escondida.                   */
+  function unaSola(){
+    var bar = document.getElementById('vsn'); if(!bar) return;
+    var ctls = bar.querySelector('.vs-ctls');
+    if(!ctls) return;
+    ['#vs-p-vivo', '.vs-p-fecha'].forEach(function(sel){
+      var e = bar.querySelector(sel);
+      if(e && !ctls.contains(e)) e.style.display = 'none';
+    });
+    var f = ctls.querySelector('#fecha-txt, .fecha-txt');
+    if(f) f.style.setProperty('display', 'flex', 'important');
+  }
+
+  /*  EL IDIOMA ACTIVO NO SE MARCABA
+      Los tres botones ES/EN/DE salen sin clase ni aria, asi que la regla que
+      los pinta en rojo no encontraba a ninguno y los tres se veian iguales.
+      En la maqueta el que esta puesto va con el rojo macizo.              */
+  function idiomaActivo(){
+    var w = document.getElementById('lang-wrap'); if(!w) return;
+    var l = 'es';
+    try{ l = (window.getLang && window.getLang()) || localStorage.getItem('vb_lang') || 'es'; }catch(e){}
+    l = String(l).slice(0,2).toLowerCase();
+    [].forEach.call(w.children, function(b){
+      var t = (b.textContent || '').trim().toLowerCase();
+      b.classList.toggle('on', t === l);
+    });
+  }
+
+  function armar(){
+    var bar = document.getElementById('vsn');
+    if(!bar) return false;
+    if(bar.querySelector('.vsl')) return true;
+    var grupos = bar.querySelector('.grupos');
+    if(!grupos) return false;
+
+    var riel = document.createElement('aside');
+    riel.className = 'vsl';
+
+    var pie = document.createElement('div');
+    pie.className = 'vsl-pie';
+    pie.innerHTML = '<div class="vsl-lema" data-t="Más análisis. Mejores decisiones.">'
+                  + 'Más análisis. Mejores decisiones.</div>'
+                  + '<div class="vsl-raya"></div>'
+                  + '<a href="index.html" title="Inicio">'
+                  + '<img src="escudo.png" alt="" onerror="this.style.display=\'none\'"></a>';
+
+    /*  se MUEVE, no se copia: siguen siendo los mismos nodos de nav.js  */
+    riel.appendChild(grupos);
+    riel.appendChild(pie);
+    bar.appendChild(riel);
+    return true;
+  }
+
+  function arrancar(){
+    estilo();
+    [0, 400, 1200, 2600].forEach(function(ms){
+      setTimeout(function(){ try{ unaSola(); idiomaActivo(); }catch(e){} }, ms);
+    });
+    if(armar()) return;
+    var i = 0, t = setInterval(function(){
+      if(armar() || ++i > 80) clearInterval(t);
+    }, 60);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+/*[/vsl]*/

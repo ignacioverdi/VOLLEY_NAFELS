@@ -71,10 +71,137 @@
     '.pp-vacio{font-size:12px;color:var(--mut,#8FA8BE);padding:4px 0}'
   ].join('\n');
 
+  /*  LA PANTALLA, COMO LA MAQUETA
+      Estas reglas viven aca y no en vs_piel.css porque plan_partido.html no
+      carga esa hoja: se inyectan con la misma etiqueta <style> que ya usaba
+      el resumen del armador, asi no hace falta tocar la pagina.          */
+  var CSS2 = `/*  6d · DETALLE POR ACCIONES (PLAN DE PARTIDO), SOBRE LA MAQUETA
+      chip de volver .. 177 x 25, borde cian, letra chica espaciada
+      titulo .......... alto de letra 33 px, la ultima palabra en rojo,
+                        con el galon rojo inclinado a la izquierda
+      bajada .......... 13 px, muy espaciada, en cian apagado
+      lema ............ tres renglones a la derecha, arriba del chip rojo
+      filtros ......... cada uno en su caja: rotulo chico arriba y el
+                        control abajo, con borde; "Filtrar" en rojo
+      pestanas ........ una sola barra con rayas finas entre las solapas,
+                        la abierta con el relleno rojo                     */
+html:not([data-vs="off"]) body.pp-p .masthead{
+  display:flex!important;align-items:flex-start!important;gap:20px!important;
+  padding:16px 24px 18px 30px!important;margin:0 0 12px!important;
+  border:1px solid var(--p-borde)!important;border-radius:14px!important;
+  border-bottom:1px solid var(--p-borde)!important;
+  min-height:128px!important;position:relative!important;overflow:hidden!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-izq{
+  flex:1 1 auto!important;min-width:0!important;position:relative!important;z-index:2!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-der{
+  order:9!important;margin-left:auto!important;position:relative!important;z-index:2!important;
+  display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:12px!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-volver{
+  display:inline-flex!important;align-items:center!important;gap:9px!important;
+  height:25px!important;padding:0 13px!important;margin:0 0 11px!important;
+  border:1px solid var(--p-borde2)!important;border-radius:7px!important;
+  background:rgba(0,16,26,.72)!important;color:#9FD2E2!important;
+  font:600 11.5px/1 var(--vsUI)!important;letter-spacing:.14em!important;
+  text-transform:uppercase!important;text-decoration:none!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-volver:hover{
+  border-color:var(--p-cyan)!important;color:#FFFFFF!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-h1{
+  position:relative!important;padding-left:26px!important;
+  font:700 46px/1 var(--vsTit)!important;letter-spacing:.012em!important;
+  color:#FFFFFF!important;margin:0 0 9px!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-h1 .rj{color:var(--red)!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-h1::before{
+  content:''!important;position:absolute!important;left:0!important;top:4px!important;
+  width:7px!important;height:36px!important;transform:skewX(-14deg)!important;
+  background:linear-gradient(180deg,#FF1744,#B8002D)!important;
+  box-shadow:0 0 14px -2px rgba(255,23,68,.75)!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-baja{
+  padding-left:26px!important;
+  font:600 13px/1 var(--vsUI)!important;letter-spacing:.17em!important;
+  text-transform:uppercase!important;color:#6FAFC8!important;margin:0 0 7px!important}
+html:not([data-vs="off"]) body.pp-p .masthead .sub{
+  padding-left:26px!important;font:400 12.5px/1 var(--vsUI)!important;
+  color:#8FA9BA!important;margin:0!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-lema{
+  display:flex!important;flex-direction:column!important;align-items:flex-end!important;
+  gap:4px!important;text-align:right!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-lema span{
+  font:600 11.5px/1 var(--vsUI)!important;letter-spacing:.21em!important;
+  text-transform:uppercase!important;color:#9FD2E2!important}
+html:not([data-vs="off"]) body.pp-p .masthead .pp-lema span:nth-child(2){color:#00D9F5!important}
+html:not([data-vs="off"]) body.pp-p .masthead .leyenda{margin:0!important}
+html:not([data-vs="off"]) body.pp-p .masthead .leyenda > summary{
+  display:inline-flex!important;align-items:center!important;
+  height:25px!important;padding:0 14px!important;list-style:none!important;
+  border:1px solid var(--red)!important;border-radius:6px!important;
+  background:rgba(255,23,68,.08)!important;color:#FF5C7A!important;
+  font:700 11px/1 var(--vsUI)!important;letter-spacing:.14em!important;
+  text-transform:uppercase!important;cursor:pointer!important}
+html:not([data-vs="off"]) body.pp-p .masthead .leyenda > summary::-webkit-details-marker{display:none!important}
+
+/*  la barra de filtros  */
+html:not([data-vs="off"]) body.pp-p .matchbar{
+  display:flex!important;align-items:flex-end!important;gap:17px!important;
+  flex-wrap:wrap!important;padding:13px 20px 15px!important;margin:0 0 12px!important;
+  border:1px solid var(--p-borde)!important;border-radius:12px!important;
+  background:linear-gradient(180deg,#000D18,#00070F)!important}
+html:not([data-vs="off"]) body.pp-p .matchbar .pp-campo{
+  display:flex!important;flex-direction:column!important;gap:6px!important;
+  min-width:0!important}
+html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls{
+  display:flex!important;align-items:center!important;gap:9px!important;
+  flex-wrap:nowrap!important}
+html:not([data-vs="off"]) body.pp-p .matchbar .mlab{
+  font:600 10.5px/1 var(--vsUI)!important;letter-spacing:.17em!important;
+  text-transform:uppercase!important;color:#6FA3BB!important;margin:0!important}
+html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > *{
+  height:40px!important;min-height:40px!important;margin:0!important;
+  padding:0 13px!important;box-sizing:border-box!important;
+  border:1px solid var(--p-borde2)!important;border-radius:8px!important;
+  background:var(--p-hueco)!important;color:#EAF4FA!important;
+  font:500 13.5px/38px var(--vsUI)!important;display:inline-flex!important;
+  align-items:center!important}
+html:not([data-vs="off"]) body.pp-p .matchbar .pp-hint{
+  margin-left:auto!important;align-self:center!important;
+  font:500 12.5px/1 var(--vsUI)!important;color:#8FA9BA!important}
+
+/*  las pestanas: una barra sola con rayas finas  */
+html:not([data-vs="off"]) body.pp-p #tabsbar{
+  display:flex!important;align-items:center!important;gap:0!important;
+  padding:0!important;margin:0 0 14px!important;
+  border:1px solid var(--p-borde)!important;border-radius:11px!important;
+  background:linear-gradient(180deg,#000D18,#00070F)!important;overflow:hidden!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab{
+  flex:1 1 0!important;min-width:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  gap:11px!important;height:45px!important;padding:0 10px!important;margin:0!important;
+  border:0!important;border-left:1px solid rgba(0,217,245,.20)!important;
+  border-radius:0!important;background:transparent!important;
+  color:#BBD7E6!important;font:600 12.5px/1 var(--vsUI)!important;
+  letter-spacing:.055em!important;text-transform:uppercase!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  box-shadow:none!important;cursor:pointer!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab:first-of-type{border-left:0!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab .pp-ti{
+  flex:0 0 20px!important;display:flex!important;align-items:center!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab .pp-ti svg{
+  width:20px!important;height:20px!important;stroke:currentColor!important;
+  color:currentColor!important;stroke-width:1.6!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab.active,
+html:not([data-vs="off"]) body.pp-p #tabsbar .ptab.on{
+  background:linear-gradient(180deg,#FF0A3C,#B00428)!important;color:#FFFFFF!important;
+  border-left-color:transparent!important;
+  box-shadow:0 0 26px -10px rgba(255,10,60,.9)!important}
+html:not([data-vs="off"]) body.pp-p #tabsbar #tabteam,
+html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
+  flex:0 0 auto!important;height:45px!important;margin:0!important;
+  border:0!important;border-right:1px solid rgba(0,217,245,.20)!important;
+  border-radius:0!important;background:transparent!important}`;
+
   function estilo() {
     if ($('pp-piel-css')) return;
     var s = document.createElement('style');
-    s.id = 'pp-piel-css'; s.textContent = CSS;
+    s.id = 'pp-piel-css'; s.textContent = CSS + '\n' + CSS2;
     document.head.appendChild(s);
   }
 
@@ -265,8 +392,151 @@
     return true;
   }
 
+
+  /* ══ LA BANDA, LOS CAMPOS Y LAS PESTANAS, COMO LA MAQUETA ══════════════
+     No se reescribe la pantalla: se toman los mismos nodos que ya existen
+     —el encabezado, los filtros y las pestanas— y se los acomoda en las
+     cajas de la maqueta. Si algo no esta, se saltea y la pantalla queda
+     como estaba.                                                          */
+  /*  esta pantalla no carga vs_piel.js, asi que los dibujos viajan aca.
+      Son los MISMOS trazados que usa iconos.js en el resto de la app.   */
+  var DIB = {
+    armado:   '<circle cx="12" cy="6.6" r="3.4"/><path d="m5.4 20.4 3.4-5.2M18.6 20.4l-3.4-5.2"/><path d="m8.8 15.2 3.2-2 3.2 2"/>',
+    rayo:     '<path d="M13.4 2.5 5.6 13.2h5.3l-.9 8.3 8.2-10.9h-5.4l.6-8.1Z"/>',
+    diana:    '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/>',
+    personas: '<circle cx="9.2" cy="8.2" r="3.2"/><path d="M2.8 20c.6-3.4 3.2-5.6 6.4-5.6s5.8 2.2 6.4 5.6"/><path d="M16.2 5.4a3.2 3.2 0 0 1 0 6.2"/><path d="M17.4 14.8c2.1.6 3.5 2.4 3.9 5.2"/>',
+    escudo:   '<path d="M12 3.2 5 6v5.6c0 4.2 2.8 7.5 7 9.2 4.2-1.7 7-5 7-9.2V6l-7-2.8Z"/>',
+    barras:   '<path d="M4 20h16"/><rect x="5.5" y="11" width="3.4" height="6"/><rect x="10.3" y="7" width="3.4" height="10"/><rect x="15.1" y="13.5" width="3.4" height="3.5"/>',
+    persona:  '<circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.4c.6-3.8 3.6-6.2 7.2-6.2s6.6 2.4 7.2 6.2"/>'
+  };
+  function icoP(n) {
+    var d = DIB[n] || DIB.diana;
+    return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"' +
+           ' stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+  }
+
+  /*  el titulo de la maqueta es el de la pestana abierta  */
+  function tituloActivo() {
+    var a = document.querySelector('#tabsbar .ptab.active, #tabsbar .ptab.on');
+    var t = a ? (a.textContent || '').trim() : '';
+    return t || T('Plan de partido');
+  }
+  function pintarTitulo() {
+    var h = document.querySelector('.masthead .pp-h1'); if (!h) return;
+    var t = tituloActivo().toUpperCase();
+    /*  la ultima palabra va en rojo, como en la maqueta  */
+    var i = t.lastIndexOf(' ');
+    h.innerHTML = '';
+    var b1 = document.createElement('span');
+    b1.textContent = i > 0 ? t.slice(0, i + 1) : t;
+    h.appendChild(b1);
+    if (i > 0) {
+      var b2 = document.createElement('span');
+      b2.className = 'rj'; b2.textContent = t.slice(i + 1);
+      h.appendChild(b2);
+    }
+  }
+
+  function banda() {
+    var m = document.querySelector('.masthead');
+    if (!m || m.dataset.pp === '1') return;
+    m.dataset.pp = '1';
+    var h1 = m.querySelector('h1');
+    var sub = m.querySelector('.sub');
+    var ley = m.querySelector('.leyenda');
+
+    var izq = document.createElement('div'); izq.className = 'pp-izq';
+    var chip = document.createElement('a');
+    chip.className = 'pp-volver'; chip.href = 'index.html';
+    chip.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;' +
+      'stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">' +
+      '<path d="M20 12H5"/><path d="m11 6-6 6 6 6"/></svg><span>' + T('Plan de partido') + '</span>';
+    izq.appendChild(chip);
+    var tit = document.createElement('div'); tit.className = 'pp-h1';
+    izq.appendChild(tit);
+    var baj = document.createElement('div'); baj.className = 'pp-baja';
+    baj.textContent = T('Distribución') + ' · ' + T('Direcciones') + ' · ' +
+                      T('Zonas') + ' · ' + T('Bloqueo');
+    izq.appendChild(baj);
+    if (sub) izq.appendChild(sub);
+
+    var der = document.createElement('div'); der.className = 'pp-der';
+    var lema = document.createElement('div'); lema.className = 'pp-lema';
+    lema.innerHTML = '<span>' + T('Analizar') + '</span><span>' + T('Planificar') +
+                     '</span><span>' + T('Competir') + '</span>';
+    der.appendChild(lema);
+    if (ley) der.appendChild(ley);
+
+    if (h1) h1.remove();
+    var eb = m.querySelector('.eyebrow'); if (eb) eb.remove();
+    m.insertBefore(der, m.firstChild);
+    m.insertBefore(izq, m.firstChild);
+    pintarTitulo();
+  }
+
+  /*  cada filtro en su caja, con el rotulo arriba  */
+  function campos() {
+    var bar = document.querySelector('.matchbar');
+    if (!bar || bar.dataset.pp === '1') return;
+    bar.dataset.pp = '1';
+    var hijos = [].slice.call(bar.children);
+    var caja = null;
+    hijos.forEach(function (e) {
+      if (e.classList && e.classList.contains('mlab')) {
+        caja = document.createElement('div'); caja.className = 'pp-campo';
+        bar.insertBefore(caja, e);
+        caja.appendChild(e);
+        var fila = document.createElement('div'); fila.className = 'pp-ctrls';
+        caja.appendChild(fila);
+        caja = fila;
+        return;
+      }
+      if (e.id === 'mhint') { e.classList.add('pp-hint'); caja = null; return; }
+      if (caja) caja.appendChild(e);
+    });
+  }
+
+  /*  un icono para cada pestana, como en la maqueta  */
+  var ICOTAB = [
+    [/armador|setter|zuspiel/i, 'armado'],
+    [/ataque|attack|angriff/i,  'rayo'],
+    [/saque|serve|aufschlag/i,  'diana'],
+    [/recep/i,                  'personas'],
+    [/defensa|defen/i,          'escudo'],
+    [/bloqueo|block/i,          'barras'],
+    [/jugador|player|spieler/i, 'persona']
+  ];
+  var ICOTAB_DEF = 'diana';
+  function pestanas() {
+    var barra = $('tabsbar'); if (!barra) return;
+    [].forEach.call(barra.querySelectorAll('.ptab'), function (b) {
+      if (b.dataset.pp === '1') return;
+      b.dataset.pp = '1';
+      var t = (b.textContent || '').trim();
+      var n = ICOTAB_DEF;
+      for (var i = 0; i < ICOTAB.length; i++) { if (ICOTAB[i][0].test(t)) { n = ICOTAB[i][1]; break; } }
+      var sp = document.createElement('span'); sp.className = 'pp-ti';
+      sp.innerHTML = icoP(n);
+      b.insertBefore(sp, b.firstChild);
+    });
+    if (!barra.dataset.pp) {
+      barra.dataset.pp = '1';
+      barra.addEventListener('click', function () { setTimeout(pintarTitulo, 60); });
+    }
+  }
+
+  function vestir() {
+    try { document.body.classList.add('pp-p'); } catch (e) {}
+    try { banda(); } catch (e) {}
+    try { campos(); } catch (e) {}
+    try { pestanas(); } catch (e) {}
+    try { pintarTitulo(); } catch (e) {}
+  }
+
   function arrancar() {
     estilo();
+    vestir();
+    var v = 0, tv = setInterval(function () { vestir(); if (++v > 24) clearInterval(tv); }, 350);
     if (!enganchar()) {
       var i = 0, t = setInterval(function () {
         if (enganchar() || ++i > 60) clearInterval(t);

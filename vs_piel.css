@@ -27,15 +27,15 @@
 
 html:not([data-vs="off"]) body{
   /* los tres acentos que la maqueta usa y la app todavia no tenia con nombre */
-  --p-cyan:#63D8EE;         /* el puesto del jugador, los rotulos de columna  */
-  --p-cyan-b:#8FE6F6;
-  --p-verde:#00E5A6;        /* "disponible", "optimo", el anillo que va bien  */
-  --p-ambar:#F5A524;        /* "en riesgo"                                    */
+  --p-cyan:#00D9F5;         /* el puesto del jugador, los rotulos de columna  */
+  --p-cyan-b:#35E8FF;
+  --p-verde:#00E6A0;        /* "disponible", "optimo", el anillo que va bien  */
+  --p-ambar:#FFBE55;        /* "en riesgo"                                    */
   --p-txt2:#8FA8BE;         /* el gris de la maqueta, el mismo del panel vivo */
-  --p-txt3:#5A7489;
-  --p-borde:rgba(99,216,238,.13);   /* el filo cyan apenas visible del panel  */
-  --p-borde2:rgba(99,216,238,.26);
-  --p-hueco:#02121E;        /* el relleno de los chips y los campos           */
+  --p-txt3:#71899A;
+  --p-borde:rgba(0,217,245,.30);   /* el filo cyan apenas visible del panel  */
+  --p-borde2:rgba(0,217,245,.52);
+  --p-hueco:#001825;        /* el relleno de los chips y los campos           */
   --p-r:14px;               /* el radio de los paneles                        */
   --p-r2:9px;               /* el radio de los chips y los botones            */
 }
@@ -1201,3 +1201,1139 @@ html:not([data-vs="off"]) body.cal-p .cal-prox .we-nota{
   border-top:1px solid var(--p-borde)}
 html:not([data-vs="off"]) body.cal-p .cal-prox .we-nota svg{width:14px;height:14px;flex:none;
   stroke:currentColor;fill:none;stroke-width:1.8}
+
+
+/*  8 · LA CABECERA DE HERRAMIENTAS
+      En la maqueta el titulo va en CIAN con "· SOLO DT" en rojo detras, la
+      bajada pegada abajo, y la chapa de "acceso exclusivo" no esta. Los
+      iconos de las fichas son blancos, no del color de cada tarjeta.      */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-ph{
+  height:auto!important;min-height:0!important;align-items:center!important;
+  gap:18px!important;margin:0 0 3px 0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pt{
+  color:var(--cyan)!important;margin-top:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .ix-solodt{
+  color:var(--red)!important;font:inherit!important;margin-left:8px!important;
+  letter-spacing:inherit!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-lock,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pv{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-psub,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pan > p,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pan > .sub{
+  margin:0 0 12px 0!important;font:500 12.5px/1.25 var(--vsUI)!important;
+  color:var(--mut)!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card .card-icon svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card .card-icon svg *{
+  color:#FFFFFF!important;stroke:currentColor!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card .card-icon{
+  background:none!important;border:0!important;box-shadow:none!important}
+/*  el chevron: estas fichas no lo traian en ::after como las otras  */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card{position:relative}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card::after{
+  content:'\203A'!important;position:absolute!important;right:11px!important;
+  top:50%!important;bottom:auto!important;left:auto!important;
+  transform:translateY(-50%)!important;font:400 21px/1 var(--vsUI)!important;
+  color:#6FDFF5!important;opacity:1!important}
+
+/*[piel-2]*/
+/* ══════════════════════════════════════════════════════════════════════════
+   TRES COSAS DE LA PORTADA, MEDIDAS CONTRA LA MAQUETA
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/*  1 · EL TITULO DEL HERO
+    La plantilla de la portada lo pone en MAYUSCULAS con un interletraje
+    ancho y el rojo de marca, desde #nv-hero h2. Ese selector lleva un id,
+    asi que le ganaba a todo lo que se escribiera con clases por mas
+    !important que tuviera. Aca va con el id adentro para poder corregirlo.
+
+    La maqueta tiene la frase en caja normal, dos renglones, el primero
+    blanco y el segundo en cian, y mide 418 px de ancho por 35 de alto:
+    eso da Rajdhani 700 a 37 px, que es lo que va abajo.                   */
+html:not([data-vs="off"]) body.ix-p #nv-hero.ix-hero h2,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2{
+  margin:10px 0 18px!important;
+  font:700 38px/.95 var(--vsTit)!important;
+  letter-spacing:.01em!important;
+  text-transform:none!important;
+  color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h1{color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h2{color:var(--p-cyan)!important}
+
+/*  2 · LOS CUATRO PANELES, A LA MISMA ALTURA
+    La fila es una grilla con align-items:start, asi que cada panel medi­a lo
+    que media su contenido y terminaban en cuatro alturas distintas. En la
+    maqueta los cuatro cierran en la misma linea.                          */
+/*  Los cuatro paneles, con los anchos EXACTOS de la maqueta:
+      188..608 (421) · 620..922 (303) · 934..1168 (235) · 1181..1518 (338)
+    con 12 px de hueco entre uno y otro, y la fila de 295 a 582.          */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec{
+  align-items:stretch!important;
+  grid-template-columns:420px 302px 234px minmax(0,1fr)!important;
+  gap:12px!important;
+  margin-top:7px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec > .nv-pan{
+  height:100%!important;display:flex!important;flex-direction:column!important}
+/*  y las filas de adentro reparten el alto sobrante, como en la maqueta:
+    en Fisico y Agenda, con dos accesos, las dos filas quedan mas altas en vez
+    de dejar medio panel vacio.                                              */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec > .nv-pan > .nv-gt{
+  flex:1 1 auto!important;align-content:stretch!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec > .nv-pan > .nv-gt > a.card{
+  height:auto!important;min-height:48px!important}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   LO MEDIDO VA AL FINAL: estas reglas repiten selectores de mas arriba
+   y tienen que ganar por orden, que es como decide el navegador cuando
+   la especificidad empata.                                           */
+/*  6 · LOS PANELES POR DENTRO, MEDIDOS SOBRE LA MAQUETA
+      panel ......... arranca en y 295, termina en 582
+      chip del icono  x 209..239, y 324..358  (31 x 35)
+      titulo ........ x 261..404, alto de mayuscula 16
+      bajada ........ x 260..410
+      1a tarjeta .... y 376, alto 45, 4 px de hueco entre una y otra       */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec > .nv-pan{
+  padding:29px 13px 14px 13px!important;
+  border:1px solid #017C95!important;border-radius:13px!important}
+/* ─────────────────────────────────────────────────────────────────────
+   LO MEDIDO VA AL FINAL: estas reglas repiten selectores de mas arriba
+   y tienen que ganar por orden, que es como decide el navegador cuando
+   la especificidad empata.                                           */
+/*  6 · LOS PANELES POR DENTRO, MEDIDOS SOBRE LA MAQUETA
+      panel ......... arranca en y 295, termina en 582
+      chip del icono  x 209..239, y 324..358  (31 x 35)
+      titulo ........ x 261..404, alto de mayuscula 16
+      bajada ........ x 260..410
+      1a tarjeta .... y 376, alto 45, 4 px de hueco entre una y otra       */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT > .nv-pan{
+  padding:29px 13px 14px 13px!important;
+  border:1px solid #017C95!important;border-radius:13px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-ph{
+  height:auto!important;min-height:51px!important;margin:0 0 1px 8px!important;
+  padding:0!important;gap:22px!important;align-items:flex-start!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-ph{
+  height:auto!important;min-height:51px!important;margin:0 0 1px 8px!important;
+  padding:0!important;gap:22px!important;align-items:flex-start!important}
+/*  NO es una pastilla con el icono adentro: midiendo la maqueta, el dibujo
+    ROJO ocupa los 31 x 35 enteros y lo unico que hay detras es su propio
+    resplandor. Antes iba un recuadro con borde y el icono chiquito adentro. */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-pic{
+  width:31px!important;min-width:31px!important;height:35px!important;
+  background:none!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;margin-top:-8px!important;
+  filter:drop-shadow(0 0 9px rgba(255,23,68,.55))}
+/*  NO es una pastilla con el icono adentro: midiendo la maqueta, el dibujo
+    ROJO ocupa los 31 x 35 enteros y lo unico que hay detras es su propio
+    resplandor. Antes iba un recuadro con borde y el icono chiquito adentro. */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pic{
+  width:31px!important;min-width:31px!important;height:35px!important;
+  background:none!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;margin-top:-8px!important;
+  filter:drop-shadow(0 0 9px rgba(255,23,68,.55))}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-pic svg{
+  width:31px!important;height:31px!important;transform:scale(2.02);
+  stroke-width:1.75!important;color:var(--red)!important;opacity:1!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pic svg{
+  width:31px!important;height:31px!important;transform:scale(2.02);
+  stroke-width:1.75!important;color:var(--red)!important;opacity:1!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-pt{
+  display:block!important;font:700 23px/1.05 var(--vsTit)!important;
+  letter-spacing:.045em!important;text-transform:uppercase!important;
+  color:#FFFFFF!important;margin-top:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pt{
+  display:block!important;font:700 23px/1.05 var(--vsTit)!important;
+  letter-spacing:.045em!important;text-transform:uppercase!important;
+  color:#FFFFFF!important;margin-top:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .ix-sub{
+  display:block!important;font:500 14.5px/1.2 var(--vsUI)!important;
+  letter-spacing:.005em!important;color:var(--p-cyan)!important;
+  margin:0!important;padding:0!important;white-space:nowrap!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .ix-sub{
+  display:block!important;font:500 14.5px/1.2 var(--vsUI)!important;
+  letter-spacing:.005em!important;color:var(--p-cyan)!important;
+  margin:0!important;padding:0!important;white-space:nowrap!important}
+/*  las filas reparten el alto que sobra: en Fisico y Agenda, con dos
+    accesos, las tarjetas quedan altas y llenan el panel, como en la maqueta */
+/*  LA RAYA DEBAJO DEL ENCABEZADO
+    En la maqueta hay un filo cian en y 376 que cruza todo el ancho util
+    del panel (x 200..598) y separa el titulo de las fichas. El nuestro no
+    la tenia, y por eso el encabezado se leia como un hueco grande.      */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-gt,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-gt{
+  border-top:1px solid transparent!important;
+  border-image:linear-gradient(90deg,rgba(0,217,245,.52),rgba(0,217,245,.32) 55%,rgba(0,217,245,.13)) 1!important;
+  border-left:0!important;border-right:0!important;border-bottom:0!important}
+/*  las filas reparten el alto que sobra: en Fisico y Agenda, con dos
+    accesos, las tarjetas quedan altas y llenan el panel, como en la maqueta */
+/*  LA RAYA DEBAJO DEL ENCABEZADO
+    En la maqueta hay un filo cian en y 376 que cruza todo el ancho util
+    del panel (x 200..598) y separa el titulo de las fichas. El nuestro no
+    la tenia, y por eso el encabezado se leia como un hueco grande.      */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-gt,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-gt{
+  border-top:1px solid transparent!important;
+  border-image:linear-gradient(90deg,rgba(0,217,245,.52),rgba(0,217,245,.32) 55%,rgba(0,217,245,.13)) 1!important;
+  border-left:0!important;border-right:0!important;border-bottom:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-gt{
+  gap:6px!important;padding:13px 0 0!important;margin:0!important;row-gap:6px!important;
+  flex:1 1 auto!important;align-content:stretch!important;
+  grid-auto-rows:minmax(40px,1fr)!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-gt{
+  gap:6px!important;padding:13px 0 0!important;margin:0!important;row-gap:6px!important;
+  flex:1 1 auto!important;align-content:stretch!important;
+  grid-auto-rows:minmax(40px,1fr)!important}
+
+/*  LA TARJETA POR DENTRO, medida sobre la maqueta
+      caja ...... x 201..395, y 376..421  (194 x 45)
+      icono ..... x 215..237, 24 px, a 14 px del borde
+      texto ..... arranca en x 256 (19 px despues del icono), alto 10 -> 14 px
+      chevron ... pegado a 10 px del borde derecho                        */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card{
+  padding:0 13px 0 14px!important;gap:15px!important;
+  display:flex!important;align-items:center!important}
+/*  LA TARJETA POR DENTRO, medida sobre la maqueta
+      caja ...... x 201..395, y 376..421  (194 x 45)
+      icono ..... x 215..237, 24 px, a 14 px del borde
+      texto ..... arranca en x 256 (19 px despues del icono), alto 10 -> 14 px
+      chevron ... pegado a 10 px del borde derecho                        */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card{
+  padding:0 13px 0 14px!important;gap:15px!important;
+  display:flex!important;align-items:center!important}
+/*  .card-top solo contiene el icono: tiene que medir lo que mide el icono,
+    si no empuja el texto al medio de la tarjeta.                          */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-top{
+  display:flex!important;align-items:center!important;gap:0!important;
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  justify-content:flex-start!important;margin:0!important;padding:0!important}
+/*  .card-top solo contiene el icono: tiene que medir lo que mide el icono,
+    si no empuja el texto al medio de la tarjeta.                          */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-top{
+  display:flex!important;align-items:center!important;gap:0!important;
+  flex:0 0 auto!important;width:auto!important;min-width:0!important;
+  justify-content:flex-start!important;margin:0!important;padding:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon.nv-chip{
+  width:31px!important;height:31px!important;min-width:31px!important;
+  max-width:31px!important;flex:0 0 31px!important;
+  padding:0!important;margin:0!important;
+  overflow:visible!important;background:none!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon.nv-chip{
+  width:31px!important;height:31px!important;min-width:31px!important;
+  max-width:31px!important;flex:0 0 31px!important;
+  padding:0!important;margin:0!important;
+  overflow:visible!important;background:none!important;border:0!important;
+  border-radius:0!important;box-shadow:none!important}
+/*  el dibujo no llena su caja: en la maqueta mide 24 px de alto y el
+    nuestro 18, asi que se agranda el dibujo sin mover la caja.           */
+/*  el brillo rojo que traia .vs-i quedaba recortado por la caja del chip y
+    dibujaba un cuadrado granate detras del icono: en la maqueta el icono es
+    una linea blanca limpia, sin resplandor ni recuadro.                   */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon .vs-i,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon .vs-i svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon > svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-icon svg{
+  width:30px!important;height:30px!important;
+  min-width:30px!important;flex-basis:30px!important;
+  transform:none!important;filter:none!important;
+  stroke-width:1.75!important;opacity:1!important;
+  color:#E8F3F9!important;stroke:#E8F3F9!important}
+/*  el dibujo no llena su caja: en la maqueta mide 24 px de alto y el
+    nuestro 18, asi que se agranda el dibujo sin mover la caja.           */
+/*  el brillo rojo que traia .vs-i quedaba recortado por la caja del chip y
+    dibujaba un cuadrado granate detras del icono: en la maqueta el icono es
+    una linea blanca limpia, sin resplandor ni recuadro.                   */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon .vs-i,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon .vs-i svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon > svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-icon svg{
+  width:30px!important;height:30px!important;
+  min-width:30px!important;flex-basis:30px!important;
+  transform:none!important;filter:none!important;
+  stroke-width:1.75!important;opacity:1!important;
+  color:#E8F3F9!important;stroke:#E8F3F9!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-body{
+  flex:1 1 auto!important;min-width:0!important;text-align:left!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:center!important;margin:0!important;padding:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-body{
+  flex:1 1 auto!important;min-width:0!important;text-align:left!important;
+  display:flex!important;flex-direction:column!important;
+  justify-content:center!important;margin:0!important;padding:0!important}
+/*  EL TEXTO DE LA FICHA, CENTRADO EN EL ALTO
+    .card-title medía 36.75 px aunque tuviera un solo renglon de 21, asi que
+    la palabra se apoyaba arriba del todo y quedaba 6 px por encima del
+    centro de la ficha. Se le fija el alto de UN renglon y el cuerpo, que
+    ya centra, la deja justo en el medio.                                 */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-title{
+  font:400 15px/19px var(--vsUI)!important;letter-spacing:.004em!important;
+  height:19px!important;min-height:0!important;max-height:19px!important;
+  color:#ECF4F9!important;white-space:nowrap!important;overflow:hidden!important;
+  text-overflow:ellipsis!important;text-align:left!important;display:block!important}
+/*  EL TEXTO DE LA FICHA, CENTRADO EN EL ALTO
+    .card-title medía 36.75 px aunque tuviera un solo renglon de 21, asi que
+    la palabra se apoyaba arriba del todo y quedaba 6 px por encima del
+    centro de la ficha. Se le fija el alto de UN renglon y el cuerpo, que
+    ya centra, la deja justo en el medio.                                 */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-title{
+  font:400 15px/19px var(--vsUI)!important;letter-spacing:.004em!important;
+  height:19px!important;min-height:0!important;max-height:19px!important;
+  color:#ECF4F9!important;white-space:nowrap!important;overflow:hidden!important;
+  text-overflow:ellipsis!important;text-align:left!important;display:block!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card::after{
+  right:11px!important;font-size:21px!important;color:#6FDFF5!important;font-weight:400!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card::after{
+  right:11px!important;font-size:21px!important;color:#6FDFF5!important;font-weight:400!important}
+
+/*  7 · HERRAMIENTAS DEL ENTRENADOR y FIXTURE, medidos sobre la maqueta
+      herramientas .. panel y 595..808, x 189..1517
+                      cabecera hasta y 664, filas de 57 px con 10 de hueco
+      fixture ....... arranca en y 843; el panel del fixture va de 189 a
+                      1035 y el del proximo partido de 1062 a 1517         */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT{
+  margin:9px 17px 0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT .nv-pan,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT > *{
+  border:1px solid #017C95!important;border-radius:13px!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:10px!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach > a{
+  height:57px!important;min-height:57px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo{
+  margin:12px 17px 0!important;
+  grid-template-columns:873px minmax(0,1fr)!important;gap:13px!important;
+  align-items:start!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec > .nv-pan > .nv-gt > a.card,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card{
+  height:auto!important;min-height:40px!important;padding:0 13px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT > .nv-pan > .nv-gt > a.card,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card{
+  height:auto!important;min-height:40px!important;padding:0 13px!important}
+
+/*  5 · EL HERO, MEDIDO SOBRE LA MAQUETA (imagen de 1536 px)
+      caja ............ x 188..1519, y 98..288  (panel con borde y esquinas)
+      volanta ......... "EL PROXIMO RIVAL" arranca en x 259, y 126
+      titulo .......... x 259..677 (419 px de ancho), alto de letra 28 px,
+                        dos renglones separados 43 px
+      boton ........... x 256..492 (236 x 42)
+    El texto arranca 71 px adentro del panel: ahi vive el galon rojo.      */
+/*  la foto del hero: en la maqueta la pelota queda chica y a la derecha,
+    con la red ocupando el centro. Antes estaba muy ampliada y la pelota
+    se comia el medio del panel.                                          */
+/*  LA FOTO DEL HERO
+    Igual que con la franja de arriba: en vez de aproximarla recortando
+    vs_hero.jpg —cuyo encuadre no coincide: la pelota queda grande y a la
+    izquierda— sale de la propia referencia. vs_hero_ix.jpg es el tramo
+    x 700..1519, y 98..288 de la maqueta; donde estaban las dos fichas
+    (opacas, no hay foto que rescatar) se estiro hacia abajo la ultima fila
+    limpia. Vive en el hijo .bg, no en el hero.                           */
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero > .bg{
+  background-image:url('vs_hero_ix.jpg'),url('vs_hero_izq2.jpg')!important;
+  background-size:819px 190px,819px 190px!important;
+  background-position:right center,left center!important;
+  background-repeat:no-repeat,no-repeat!important;
+  background-color:#00101B!important;
+  opacity:1!important}
+/*  la foto, mas apagada: en la maqueta la red se insinua, no domina  */
+/*  EL GALON ROJO DE LA IZQUIERDA
+    La maqueta abre el hero con dos barras rojas en diagonal y un chevron
+    grande, sobre la trama oscura. No se dibuja con CSS: es el tramo
+    x 189..256, y 99..287 de la propia maqueta —67x188, sin una sola letra
+    encima—, pegado al borde izquierdo del panel. Va en .shade y no en .bg
+    porque .bg queda debajo del velo oscuro y no se veria.               */
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero > .shade{
+  background:
+    url('vs_hero_izq.jpg') left center / 67px 188px no-repeat,
+    linear-gradient(90deg,rgba(0,12,22,.97) 0%,rgba(0,12,22,.90) 22%,
+    rgba(0,12,22,.80) 30%,rgba(0,12,22,.42) 38%,rgba(0,12,22,.10) 45%,
+    rgba(0,12,22,0) 52%)!important;
+  opacity:1!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero{background-color:#00121D!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero{
+  margin:10px 17px 0!important;
+  border:1px solid var(--p-borde)!important;border-radius:14px!important;
+  overflow:hidden!important;height:190px!important;min-height:190px!important;
+  padding:9px 24px 0 37px!important;box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:stretch!important;justify-content:flex-start!important}
+/*  lang.js envuelve cada frase en spans propios: hay que alcanzarlos a
+    todos, o el tamaño y el color se los lleva otra regla.                */
+html:not([data-vs="off"]) body.ix-p #nv-hero h2,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 *{
+  font:700 39px/1.10 var(--vsTit)!important;letter-spacing:.028em!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h1,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h1 *{color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h2,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h2 *{color:var(--p-cyan)!important}
+/*  la plantilla pintaba el titulo con un degradado recortado al texto
+    (color:transparent + background-clip:text). Mientras eso siga puesto, el
+    color no se ve: hay que apagar el recorte y fijar el relleno.          */
+html:not([data-vs="off"]) body.ix-p #nv-hero h2{
+  background:none!important;-webkit-background-clip:border-box!important;
+  background-clip:border-box!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h1,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h1 *{-webkit-text-fill-color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h2,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span.ix-h2 *{-webkit-text-fill-color:var(--p-cyan)!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero h2{margin:7px 0 6px!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k{margin:-22px 0 0 0!important}
+/*  el interlineado tambien va en los <span>: si no, cada renglon se queda
+    con el de la plantilla y las dos lineas se separan 42 px en vez de 36  */
+html:not([data-vs="off"]) body.ix-p #nv-hero h2,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span,
+html:not([data-vs="off"]) body.ix-p #nv-hero h2 span *{line-height:.95!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-boton{margin-bottom:5px!important}
+/*  EL AIRE ENTRE EL TITULO Y EL BOTON
+    En la maqueta "al partido" termina en y 227 y el boton arranca en 241.
+    Con el interlineado viejo (1.08) la segunda linea caia en 236 y tocaba
+    el boton: el renglon va mas junto y el bloque, mas arriba.            */
+/*  las fichas son mas altas que el boton y en la maqueta quedan centradas
+    respecto de el, no apoyadas abajo.                                    */
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta{align-items:center!important;
+  margin-top:-15px!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k,
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k *{
+  font:700 13px/1 var(--vsUI)!important;letter-spacing:.19em!important}
+/*  en la maqueta "RIVAL" es cian brillante, no rojo  */
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k b,
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k b *{
+  color:#0AF7FF!important;-webkit-text-fill-color:#0AF7FF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k span,
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-k > span *{
+  color:#F2FEFF!important;-webkit-text-fill-color:#F2FEFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-boton,
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-boton *{
+  font:700 14.5px/1 var(--vsUI)!important;letter-spacing:.075em!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-boton{
+  min-width:236px!important;height:42px!important;padding:0 20px!important}
+/*  las dos fichas van a la derecha y centradas, no abajo  */
+/*  En la maqueta el boton y las dos fichas estan en la franja de abajo del
+    hero (y 206..288) y el titulo les pasa por encima a la izquierda: no es
+    una pila vertical, son dos columnas.                                   */
+html:not([data-vs="off"]) body.ix-p #nv-hero{position:relative!important}
+/*  .txt es un hijo flexible del hero y se encogia al ancho de su contenido:
+    sin esto la franja de abajo no llega a la derecha.                     */
+html:not([data-vs="off"]) body.ix-p #nv-hero > .txt{
+  width:100%!important;flex:1 1 auto!important;align-self:stretch!important;
+  box-sizing:border-box!important;position:static!important}
+/*  la segunda ficha se empuja a la derecha con nth-child, que no depende de
+    que el boton y las fichas sean los dos <a>.                            */
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-cta > :nth-child(2){
+  margin-left:auto!important}
+/*  la franja de abajo del hero, con las medidas de la maqueta:
+      boton  x 256..492, y 238..280
+      fichas x 775..1215, y 206..288                                       */
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta{
+  position:absolute!important;left:70px!important;right:304px!important;
+  bottom:0!important;height:82px!important;margin:0!important;
+  width:auto!important;box-sizing:border-box!important;padding:0!important;
+  display:flex!important;align-items:flex-end!important;gap:5px!important;
+  flex-wrap:nowrap!important;z-index:3!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-boton{margin-bottom:8px!important}
+/*  el lema de la derecha: x 1399..1504, tres renglones de 184 a 249, con la
+    rayita roja en 264. Va absoluto para caer donde cae en la maqueta.     */
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema{
+  position:absolute!important;right:15px!important;top:120px!important;
+  left:auto!important;bottom:auto!important;margin:0!important;
+  display:block!important;text-align:right!important;z-index:4!important;
+  width:auto!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema span{
+  display:block!important;font:700 17px/26px var(--vsTit)!important;
+  letter-spacing:.20em!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema span:nth-child(1){color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema span:nth-child(2){color:var(--p-cyan)!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema span:nth-child(3){color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero#nv-hero .ix-lema::after{
+  content:''!important;display:block!important;height:3px!important;width:58px!important;
+  margin:14px 0 0 auto!important;border-radius:2px!important;
+  background:linear-gradient(90deg,#B8002D,#FF1744)!important}
+/*  el boton y las fichas son los dos <a>, asi que :first-of-type apuntaba al
+    boton y las fichas nunca se iban a la derecha.                         */
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta .ix-boton + .ix-tarj{margin-left:auto!important}
+/*  las dos fichas: en la maqueta miden 220 x 82 y arrancan en x 775  */
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta .ix-tarj{
+  min-width:220px!important;height:82px!important;padding:0 16px!important;
+  border-radius:11px!important;gap:15px!important;
+  border:1px solid var(--p-borde2)!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta .ix-tarj svg{
+  width:30px!important;height:30px!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta .ix-tarj b{
+  font:400 13.5px/1.25 var(--vsUI)!important;color:var(--mut2)!important;display:block!important}
+html:not([data-vs="off"]) body.ix-p #nv-hero .ix-cta .ix-tarj span{
+  font:700 16px/1.25 var(--vsUI)!important;color:#FFFFFF!important}
+
+/*  el resto del contenido lleva el mismo margen lateral que el hero: en la
+    maqueta todo arranca en x 188 y termina en 1519, no pegado al borde.   */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec,
+html:not([data-vs="off"]) body.ix-p #nv-zona > .nv-pan,
+html:not([data-vs="off"]) body.ix-p #ix-abajo,
+html:not([data-vs="off"]) body.ix-p #ix-hub{margin-left:17px!important;margin-right:17px!important}
+
+/*  3 · EL ICONO REPETIDO
+    En "Alta de jugadores" el chip del icono traia TRES iconos encimados: el
+    primero adentro del chip y los otros dos colgando abajo, sueltos sobre el
+    fondo. Se queda el primero, que es el que esta en su lugar.            */
+/*  el icono venia envuelto TRES veces, uno adentro del otro, con el emoji
+    original al final. Se queda el de afuera, que es el que esta en su sitio. */
+html:not([data-vs="off"]) .card-icon .vs-i .vs-i{display:none!important}
+/*  el segundo dibujo no cuelga del chip: cuelga de un <i> hermano, asi que
+    el selector viejo no lo agarraba. Del chip se queda SOLO lo primero.  */
+html:not([data-vs="off"]) .card-icon > *:not(:first-child){display:none!important}
+/*  la pagina fuerza display:flex sobre .vs-i con cinco clases; para que esto
+    gane hay que pesar mas que eso. El emoji de "Alta de jugadores" es una
+    cadena de TRES emojis unidos, asi que iconos.js dibujaba tres iconos y
+    dos colgaban sueltos abajo de la ficha.                                */
+html:not([data-vs="off"]) a.card.nv-tile.nv-tile .card-icon.nv-chip.nv-chip > *:not(:first-child){
+  display:none!important}
+/*  y por las dudas: lo que se desborde de la caja del icono, se recorta  */
+html:not([data-vs="off"]) .card-icon{overflow:hidden!important}
+
+/*  4 · LOS PANELES, COMO LA MAQUETA
+    Titulo blanco grande con el icono en un chip rojo, bajada en cian, y las
+    filas con borde cian, texto blanco, el icono en gris claro —sin el chip de
+    color que traia cada tarjeta— y el chevron a la derecha, que estaba
+    escondido.                                                              */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .ix-ptxt{display:block;min-width:0}
+/*  4 · LOS PANELES, COMO LA MAQUETA
+    Titulo blanco grande con el icono en un chip rojo, bajada en cian, y las
+    filas con borde cian, texto blanco, el icono en gris claro —sin el chip de
+    color que traia cada tarjeta— y el chevron a la derecha, que estaba
+    escondido.                                                              */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .ix-ptxt{display:block;min-width:0}
+
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card{
+  background:rgba(0,24,37,.52)!important;
+  border:1px solid var(--p-borde)!important;border-radius:10px!important;
+  box-shadow:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card{
+  background:rgba(0,24,37,.52)!important;
+  border:1px solid var(--p-borde)!important;border-radius:10px!important;
+  box-shadow:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card:hover{
+  background:rgba(8,33,46,.80)!important;border-color:rgba(0,217,245,.75)!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card:hover{
+  background:rgba(8,33,46,.80)!important;border-color:rgba(0,217,245,.75)!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-glow{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-glow{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-title,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-body{color:#F2F7FC!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-title,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-body{color:#F2F7FC!important}
+/*  la flecha de la maqueta es el chevron fino, no la flecha larga: la tarjeta
+    ya traia un "›" en ::after, asi que se usa ese y se esconde la otra       */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card .card-arrow{display:none!important}
+/*  la flecha de la maqueta es el chevron fino, no la flecha larga: la tarjeta
+    ya traia un "›" en ::after, asi que se usa ese y se esconde la otra       */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card .card-arrow{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card{position:relative}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card{position:relative}
+/*  EL CHEVRON
+    En la maqueta es un angulo dibujado con trazo grueso, no el caracter ">"
+    de la tipografia, que sale fino y desvaido. Se dibuja con dos bordes.  */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card::after{
+  content:''!important;position:absolute!important;
+  right:7px!important;top:50%!important;bottom:auto!important;left:auto!important;
+  width:9px!important;height:9px!important;padding:0!important;
+  font-size:0!important;line-height:0!important;
+  border:0!important;border-right:2.1px solid #4FD6F2!important;
+  border-top:2.1px solid #4FD6F2!important;
+  transform:translateY(-50%) rotate(45deg)!important;
+  opacity:1!important;background:none!important}
+/*  EL CHEVRON
+    En la maqueta es un angulo dibujado con trazo grueso, no el caracter ">"
+    de la tipografia, que sale fino y desvaido. Se dibuja con dos bordes.  */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card::after{
+  content:''!important;position:absolute!important;
+  right:7px!important;top:50%!important;bottom:auto!important;left:auto!important;
+  width:9px!important;height:9px!important;padding:0!important;
+  font-size:0!important;line-height:0!important;
+  border:0!important;border-right:2.1px solid #4FD6F2!important;
+  border-top:2.1px solid #4FD6F2!important;
+  transform:translateY(-50%) rotate(45deg)!important;
+  opacity:1!important;background:none!important}
+
+/*  6b · LAS HERRAMIENTAS DEL ENTRENADOR, MEDIDAS SOBRE LA MAQUETA
+      panel ......... y 583..796        icono ....... 20x21, rojo, en x 220
+      titulo ........ x 264, alto de letra 20 px (mas grande que el de los
+                      cuadrantes y SIN el espaciado ancho que traia)
+      bajada ........ x 264, pegada abajo del titulo
+      fichas ........ 57 px de alto, 8 de hueco, con el chevron a la derecha
+                      —que estaba puesto en display:none por la pagina—    */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pt{
+  font:700 22px/1 var(--vsTit)!important;letter-spacing:.008em!important;
+  margin:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .ix-sub{
+  margin:1px 0 0 69px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pan{
+  padding:12px 13px 13px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-gt{
+  padding-top:18px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pic{
+  margin-top:0!important}
+/*  "· SOLO DT" es chico y rosado al lado del titulo, no del mismo cuerpo  */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .ix-solodt{
+  font:700 15px/1 var(--vsTit)!important;letter-spacing:.075em!important;
+  color:#3FC8E8!important;margin-left:10px!important;
+  vertical-align:middle!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pic{
+  width:22px!important;min-width:22px!important;height:22px!important;
+  margin:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-pic svg{
+  width:22px!important;height:22px!important;transform:none!important;
+  stroke-width:1.9!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT .nv-ph{
+  gap:25px!important;align-items:center!important;margin-left:11px!important;
+  height:auto!important;min-height:0!important;padding:0!important}
+/*  el chevron de cada ficha: la pagina lo apagaba con display:none  */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card::after{
+  display:block!important;content:''!important;
+  width:8px!important;height:8px!important;
+  font-size:0!important;line-height:0!important;
+  border:0!important;border-right:2px solid #6FDFF5!important;
+  border-top:2px solid #6FDFF5!important;
+  transform:translateY(-50%) rotate(45deg)!important;
+  right:13px!important;background:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec#ix-rowSec a.card::after{
+  display:block!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowSec a.card::after{
+  display:block!important}
+/*  las fichas: 57 de alto y el nombre en dos renglones si hace falta,
+    como en la maqueta —antes se cortaba con puntos suspensivos—        */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card{
+  height:57px!important;min-height:57px!important;
+  padding:0 30px 0 13px!important;gap:13px!important;
+  align-items:center!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT#ix-rowDT a.card .card-title{
+  white-space:normal!important;overflow:hidden!important;
+  text-overflow:clip!important;
+  display:-webkit-box!important;-webkit-box-orient:vertical!important;
+  -webkit-line-clamp:2!important;
+  height:auto!important;max-height:none!important;
+  font:400 14.5px/1.22 var(--vsUI)!important;color:#ECF4F9!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach,
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas{margin-top:8px!important}
+
+/*  6b1 · EL PANEL POR DENTRO Y SU BORDE, MEDIDOS SOBRE LA MAQUETA
+      relleno .. la maqueta da (0,16,29) adentro del panel; el nuestro
+                 estaba en (0,10,20), o sea mas apagado
+      borde .... la maqueta da (0,158,205) y el nuestro (1,124,149)       */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-pan,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pan{
+  background:
+    radial-gradient(120% 90% at 0% 0%,rgba(255,23,68,.045),transparent 58%),
+    linear-gradient(165deg,#001625,#001220 72%)!important;
+  border-color:rgba(0,217,245,.70)!important}
+/*  6b1 · EL PANEL POR DENTRO Y SU BORDE, MEDIDOS SOBRE LA MAQUETA
+      relleno .. la maqueta da (0,16,29) adentro del panel; el nuestro
+                 estaba en (0,10,20), o sea mas apagado
+      borde .... la maqueta da (0,158,205) y el nuestro (1,124,149)       */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pan,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-pan{
+  background:
+    radial-gradient(120% 90% at 0% 0%,rgba(255,23,68,.045),transparent 58%),
+    linear-gradient(165deg,#001625,#001220 72%)!important;
+  border-color:rgba(0,217,245,.70)!important}
+
+/*  6b1b · LOS PANELES DE DOS ACCESOS
+      En la maqueta la ficha NO se estira para llenar el panel: mide 76 px,
+      hay 11 de hueco, y los 29 que sobran quedan abajo. El nuestro las
+      estiraba a 93 y el panel se veia inflado.                          */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec .nv-gt:has(> a.card:nth-child(2):last-child){
+  align-content:start!important;grid-auto-rows:76px!important;row-gap:11px!important}
+/*  6b1b · LOS PANELES DE DOS ACCESOS
+      En la maqueta la ficha NO se estira para llenar el panel: mide 76 px,
+      hay 11 de hueco, y los 29 que sobran quedan abajo. El nuestro las
+      estiraba a 93 y el panel se veia inflado.                          */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT .nv-gt:has(> a.card:nth-child(2):last-child){
+  align-content:start!important;grid-auto-rows:76px!important;row-gap:11px!important}
+
+/*  6b2 · LA FICHA ALTA, MEDIDA SOBRE LA MAQUETA
+      En "Fisico y bienestar" y en "Agenda" la ficha mide 78 px y no 45,
+      porque hay dos accesos en el alto de un panel de cuatro. En la maqueta
+      el icono y el texto crecen con la ficha: el icono pasa de 25 a 34 y la
+      palabra de 106 px de ancho contra los 91 que tenia. Asi no queda letra
+      chica adentro de un cuadro grande. El texto va centrado en el alto.  */
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta{
+  padding:0 15px 0 17px!important;gap:25px!important;
+  align-items:center!important}
+/*  6b2 · LA FICHA ALTA, MEDIDA SOBRE LA MAQUETA
+      En "Fisico y bienestar" y en "Agenda" la ficha mide 78 px y no 45,
+      porque hay dos accesos en el alto de un panel de cuatro. En la maqueta
+      el icono y el texto crecen con la ficha: el icono pasa de 25 a 34 y la
+      palabra de 106 px de ancho contra los 91 que tenia. Asi no queda letra
+      chica adentro de un cuadro grande. El texto va centrado en el alto.  */
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta{
+  padding:0 15px 0 17px!important;gap:25px!important;
+  align-items:center!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon.nv-chip{
+  width:35px!important;height:35px!important;min-width:35px!important;
+  max-width:35px!important;flex:0 0 35px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon.nv-chip{
+  width:35px!important;height:35px!important;min-width:35px!important;
+  max-width:35px!important;flex:0 0 35px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon .vs-i,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon .vs-i svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon > svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-icon svg{
+  width:34px!important;height:34px!important;
+  min-width:34px!important;flex-basis:34px!important;stroke-width:1.8!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon .vs-i,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon .vs-i svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon > svg,
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-icon svg{
+  width:34px!important;height:34px!important;
+  min-width:34px!important;flex-basis:34px!important;stroke-width:1.8!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta .card-title{
+  font:400 17.5px/22px var(--vsUI)!important;letter-spacing:.004em!important;
+  height:22px!important;max-height:22px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta .card-title{
+  font:400 17.5px/22px var(--vsUI)!important;letter-spacing:.004em!important;
+  height:22px!important;max-height:22px!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowSec#ix-rowSec a.card.ix-alta::after{
+  width:12px!important;height:12px!important;right:15px!important;
+  border-right-width:2.5px!important;border-top-width:2.5px!important;
+  border-right-color:#5FDCF5!important;border-top-color:#5FDCF5!important}
+html:not([data-vs="off"]) body.ix-p #ix-rowDT#ix-rowDT a.card.ix-alta::after{
+  width:12px!important;height:12px!important;right:15px!important;
+  border-right-width:2.5px!important;border-top-width:2.5px!important;
+  border-right-color:#5FDCF5!important;border-top-color:#5FDCF5!important}
+
+/*  6c1 · LAS DOS BARRAS DEL CALENDARIO, MEDIDAS SOBRE LA MAQUETA
+      pestanas ....... 146 x 38, LISTA / PLANIFICACION en mayusculas
+      acciones ....... 38 de alto, el texto COMO SE ESCRIBE, no en
+                       mayusculas: la maqueta dice "Suscribirme al
+                       calendario", no "SUSCRIBIRME AL CALENDARIO"
+      rango .......... Semana / Quincena / Mes / Hoy, tambien sin forzar   */
+html:not([data-vs="off"]) body.cal-p .cal-bar button,
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt,
+html:not([data-vs="off"]) body.cal-p .cal-bar .tab,
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg,
+html:not([data-vs="off"]) body.cal-p .cal-bar button span,
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt span,
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg span{
+  text-transform:none!important;
+  font:500 13.5px/1 var(--vsUI)!important;letter-spacing:.015em!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt,
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt span{
+  text-transform:uppercase!important;letter-spacing:.11em!important;
+  font-weight:700!important;font-size:14.5px!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt{
+  min-width:146px!important;justify-content:center!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt svg{display:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg,
+html:not([data-vs="off"]) body.cal-p .cal-bar #btn-hoy{min-width:82px!important;justify-content:center!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .nav-btn{
+  min-width:38px!important;width:38px!important;justify-content:center!important;
+  font-size:20px!important;color:#9FD2E2!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar button svg,
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt svg,
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg svg{
+  width:17px!important;height:17px!important;stroke-width:1.7!important}
+/*  los atajos de carga: dos renglones, como en la maqueta  */
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos button{
+  height:47px!important;align-items:center!important;
+  padding:0 17px!important;gap:11px!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos button svg,
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos button .vs-i,
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos button .vs-i svg{
+  width:23px!important;min-width:23px!important;max-width:23px!important;
+  height:23px!important;flex:0 0 23px!important;stroke-width:1.6!important}
+/*  la columna de la derecha: el numero del dia subrayado y una raya
+    separando la fecha del evento, como en la maqueta                      */
+html:not([data-vs="off"]) body.cal-p .cal-px{
+  gap:12px!important;padding:9px 12px!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .f{
+  border-right:1px solid rgba(0,217,245,.24)!important;padding-right:11px!important;
+  min-width:44px!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .f b{
+  border-bottom:2px solid currentColor!important;padding-bottom:1px!important;
+  display:inline-block!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .ic{
+  width:34px!important;height:34px!important;border-radius:9px!important;
+  border:1px solid currentColor!important;
+  display:flex!important;align-items:center!important;justify-content:center!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .ic svg{
+  width:19px!important;height:19px!important;stroke:currentColor!important;color:currentColor!important}
+
+/*  los atajos en dos renglones y los dos filtros como interruptores  */
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos .at-tx{
+  display:flex!important;flex-direction:column!important;
+  align-items:flex-start!important;gap:1px!important;line-height:1!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos .at-tx b{
+  font:600 13.5px/15px var(--vsUI)!important;color:#EAF4FA!important;
+  letter-spacing:.015em!important;text-transform:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos .at-tx i{
+  font:400 11px/13px var(--vsUI)!important;font-style:normal!important;
+  color:#8FA9BA!important;letter-spacing:.01em!important;text-transform:none!important}
+/*  cada atajo con su color, como en la maqueta: el gimnasio en ambar,
+    el voley en cian, Filzbach en azul                                     */
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-gym-btn{
+  border-color:#D9A441!important;color:#F0B64B!important;
+  background:rgba(217,164,65,.07)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-gym-btn svg{color:#F0B64B!important;stroke:#F0B64B!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-volley-btn{
+  border-color:#00C2DE!important;color:#3FD2EE!important;
+  background:rgba(0,194,222,.07)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-volley-btn svg{color:#3FD2EE!important;stroke:#3FD2EE!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-volley-btn .at-tx b{color:#3FD2EE!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-filzbach-btn{
+  border-color:#5A7FD4!important;color:#93AEEC!important;
+  background:rgba(90,127,212,.09)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-filzbach-btn svg{color:#93AEEC!important;stroke:#93AEEC!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-xmas-btn{
+  border-color:#2E7FA6!important;color:#9FD2E2!important;
+  background:rgba(46,127,166,.08)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos #import-xmas-btn svg{color:#CFE7F4!important;stroke:#CFE7F4!important}
+
+/*  "Partidos" y "Entrenamientos" van juntos en una caja, con el
+    interruptor a la izquierda, como en la maqueta                         */
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs{
+  height:47px!important;align-items:center!important;gap:16px!important;
+  padding:0 13px!important;flex:0 0 auto!important;width:auto!important;
+  min-width:max-content!important;
+  border:1px solid var(--p-borde2)!important;border-radius:var(--p-r2)!important;
+  background:var(--p-hueco)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab{
+  height:35px!important;padding:0 10px!important;gap:10px!important;
+  border:0!important;background:none!important;box-shadow:none!important;
+  color:#D7EAF4!important;font:600 13.5px/1 var(--vsUI)!important;
+  letter-spacing:.015em!important;text-transform:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab span{
+  text-transform:none!important;font:600 13.5px/1 var(--vsUI)!important;
+  letter-spacing:.015em!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab.on{
+  background:none!important;border:0!important;box-shadow:none!important;
+  color:#FFFFFF!important;text-decoration:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab::after{display:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab{
+  padding:0 2px!important;white-space:nowrap!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab svg{display:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab::before{
+  content:''!important;position:static!important;
+  flex:0 0 36px!important;width:36px!important;height:19px!important;
+  margin:0!important;inset:auto!important;transform:none!important;
+  border-radius:10px!important;
+  background:radial-gradient(circle 7.5px at 10.5px 9.5px,#5E7A8B 98%,transparent 100%),#132A37!important;
+  border:1px solid rgba(0,217,245,.22)!important;box-sizing:border-box!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab.on::before{
+  background:radial-gradient(circle 7.5px at 10.5px 9.5px,#FF1744 98%,transparent 100%),#2A0712!important;
+  border-color:rgba(255,23,68,.55)!important;
+  box-shadow:0 0 12px -2px rgba(255,23,68,.70)!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .tabs .tab#tab-entrenamientos.on::before{
+  background:radial-gradient(circle 7.5px at 10.5px 9.5px,#00D9F5 98%,transparent 100%),#042430!important;
+  border-color:rgba(0,217,245,.55)!important;
+  box-shadow:0 0 12px -2px rgba(0,217,245,.70)!important}
+
+/*  6c · EL CALENDARIO, MEDIDO SOBRE LA MAQUETA (imagen de 1672 px)
+      cabecera de dias .. "LUN" en cian, 12 px de alto de letra, centrado
+      grilla ............ sin huecos: las celdas se separan con una raya
+                          fina, no con un marco redondeado cada una
+      celda ............. 102 px de alto, el numero arriba a la izquierda
+      ficha ............. icono de 22 a la izquierda y tres renglones:
+                          hora, que es, y donde
+      colores ........... voley cian, gimnasio ambar, partido rojo,
+                          dia libre gris                                   */
+html:not([data-vs="off"]) body.cal-p #cal-mes{
+  border:1px solid #017C95!important;border-radius:12px!important;
+  background:#00111D!important;padding:0!important;overflow:hidden!important}
+html:not([data-vs="off"]) body.cal-p #cal-mes > .vs-p-pan-cab{
+  height:38px!important;min-height:38px!important;
+  padding:0 14px 0 20px!important;gap:16px!important;
+  border-bottom:1px solid #017C95!important;
+  background:linear-gradient(90deg,rgba(0,52,84,.80) 0%,rgba(0,36,60,.55) 36%,rgba(0,24,40,.18) 78%,rgba(0,20,34,0) 100%)!important}
+html:not([data-vs="off"]) body.cal-p #cal-mes > .vs-p-pan-cab .vs-p-ico{
+  width:22px!important;height:22px!important;min-width:22px!important;
+  background:none!important;border:0!important;padding:0!important}
+html:not([data-vs="off"]) body.cal-p #cal-mes > .vs-p-pan-cab .vs-p-ico svg{
+  width:22px!important;height:22px!important;stroke:var(--red)!important;
+  color:var(--red)!important;filter:drop-shadow(0 0 7px rgba(255,23,68,.55))!important}
+html:not([data-vs="off"]) body.cal-p #cal-mes > .vs-p-pan-cab .t{
+  font:700 17px/1 var(--vsTit)!important;letter-spacing:.05em!important;
+  text-transform:uppercase!important;color:#00E6F7!important}
+/*  el nombre del mes ya vive en la cabecera del panel  */
+html:not([data-vs="off"]) body.cal-p .plan-label{display:none!important}
+html:not([data-vs="off"]) body.cal-p #plan-grid{padding:0!important;margin:0!important}
+html:not([data-vs="off"]) body.cal-p .cal-grid{gap:0!important}
+html:not([data-vs="off"]) body.cal-p .cal-dow{
+  font:600 15px/1 var(--vsTit)!important;letter-spacing:.17em!important;
+  text-transform:uppercase!important;color:#2FC3E8!important;
+  text-align:center!important;padding:11px 0 10px!important;
+  border-bottom:1px solid rgba(0,217,245,.26)!important;background:transparent!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell{
+  border:0!important;border-right:1px solid rgba(0,217,245,.18)!important;
+  border-bottom:1px solid rgba(0,217,245,.18)!important;
+  border-radius:0!important;background:transparent!important;
+  min-height:102px!important;padding:6px 6px 7px!important;box-shadow:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-grid > .cal-cell:nth-child(7n+7){border-right:0!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.today{
+  background:rgba(255,23,68,.07)!important;box-shadow:inset 0 0 0 1px rgba(255,23,68,.55)!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.out{opacity:1!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.out .cal-daynum{color:#52697A!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.out .cal-ev{opacity:.42!important}
+html:not([data-vs="off"]) body.cal-p .cal-daynum{
+  font:400 20px/1 var(--vsTit)!important;color:#EAF4FA!important;
+  margin:2px 0 7px 5px!important;padding:0!important}
+html:not([data-vs="off"]) body.cal-p .cal-daynum .cal-m1{
+  font:400 11px/1 var(--vsUI)!important;color:#7D95A6!important;margin-left:3px!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev{
+  display:flex!important;align-items:center!important;gap:9px!important;
+  padding:4px 8px 5px!important;border-radius:8px!important;
+  border:1px solid currentColor!important;margin:0 0 5px 0!important;
+  font:400 12.5px/1 var(--vsUI)!important;cursor:pointer!important;
+  white-space:normal!important;overflow:hidden!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .ci{
+  flex:0 0 22px!important;display:flex!important;align-items:center!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .ci svg{
+  width:22px!important;height:22px!important;stroke:currentColor!important;
+  color:currentColor!important;stroke-width:1.6!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .cb{
+  display:flex!important;flex-direction:column!important;min-width:0!important;flex:1 1 auto!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .eh{
+  display:block!important;font:700 13px/17px var(--vsUI)!important;
+  color:currentColor!important;margin:0!important;opacity:1!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .et{
+  font:500 12.5px/16px var(--vsUI)!important;color:currentColor!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev .es{
+  font:400 12px/16px var(--vsUI)!important;color:#89A3B4!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.e{
+  color:#3FD2EE!important;background:rgba(0,120,152,.14)!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.e.gym{
+  color:#F0B64B!important;background:rgba(224,163,58,.11)!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.p{
+  color:#FF5C7A!important;background:rgba(200,16,46,.16)!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.ev{
+  color:#B79DF5!important;background:rgba(141,110,235,.13)!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.libre{
+  color:#64808F!important;background:transparent!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.libre .et{color:#7D95A6!important}
+/*  la columna de la derecha: la hora en su propio renglon  */
+html:not([data-vs="off"]) body.cal-p .cal-px .tx em{
+  display:block!important;font:700 13px/17px var(--vsUI)!important;
+  font-style:normal!important;color:currentColor!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .tx b{
+  display:block!important;font:600 13.5px/17px var(--vsUI)!important;color:#EAF4FA!important}
+html:not([data-vs="off"]) body.cal-p .cal-px .tx span{
+  display:block!important;font:400 12px/16px var(--vsUI)!important;color:#89A3B4!important}
+html:not([data-vs="off"]) body.cal-p .cal-px.e{color:#3FD2EE!important}
+html:not([data-vs="off"]) body.cal-p .cal-px.e.gym{color:#F0B64B!important}
+html:not([data-vs="off"]) body.cal-p .cal-px.p{color:#FF5C7A!important}
+
+/*  7 · EL FIXTURE Y EL PROXIMO PARTIDO, MEDIDOS SOBRE LA MAQUETA
+      Medidas tomadas sobre la imagen de 1536 px, no a ojo:
+        fila .......... los dos paneles arrancan en y 808
+        panel izq ..... x 189..1062   panel der ..... x 1075..1517
+        cabecera ...... 34 px de alto, la rayita abajo en y 843
+        icono ......... 24 px, rojo, sin recuadro, en x 214
+        titulo ........ cian, mayusculas, alto de letra 12 px, en x 257
+        tarjetas ...... y 856..954 (98 de alto), de x 210 a 1035,
+                        7 px de hueco: entran cuatro justas
+        dentro ........ fecha arriba centrada, escudo 42, los dos nombres
+                        uno debajo del otro, y "NLA · Jornada n" abajo
+        contador ...... cuatro cajas de 46x66 con borde rojo, a la DERECHA
+                        de los datos, no debajo                            */
+
+/*  los dos paneles  */
+html:not([data-vs="off"]) body.ix-p #ix-abajo > .vs-p-pan{
+  border:1px solid #017C95!important;border-radius:12px!important;
+  background:linear-gradient(170deg,#001726,#001220 76%)!important;
+  padding:0!important;overflow:hidden!important;box-shadow:none!important}
+
+/*  la cabecera: 34 px, icono rojo sin recuadro y titulo cian  */
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab{
+  height:34px!important;min-height:34px!important;
+  padding:0 14px 0 24px!important;gap:19px!important;
+  border-bottom:1px solid #017C95!important;
+  background:linear-gradient(90deg,rgba(0,52,84,.80) 0%,rgba(0,36,60,.55) 36%,rgba(0,24,40,.18) 78%,rgba(0,20,34,0) 100%)!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .vs-p-ico{
+  width:24px!important;height:24px!important;min-width:24px!important;
+  background:none!important;border:0!important;padding:0!important;
+  border-radius:0!important;box-shadow:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .vs-p-ico svg{
+  width:24px!important;height:24px!important;
+  stroke:var(--red)!important;color:var(--red)!important;
+  filter:drop-shadow(0 0 7px rgba(255,23,68,.60))!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .t{
+  font:700 16px/1 var(--vsTit)!important;letter-spacing:.022em!important;
+  text-transform:uppercase!important;color:#4FC2E4!important;
+  text-shadow:0 0 10px rgba(0,217,245,.30)!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .t b{
+  font:inherit!important;color:#00E6F7!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .der{
+  font:600 11.5px/1 var(--vsUI)!important;letter-spacing:.12em!important;
+  text-transform:uppercase!important;color:#4FC2E4!important;
+  opacity:.75!important;text-decoration:none!important;border:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .vs-p-pan-cab .der:hover{
+  opacity:1!important;color:#00E6F7!important}
+
+/*  el cuerpo del fixture: las tarjetas pegadas al borde y las flechas
+    sueltas a los costados, como en la maqueta —no botones redondos—   */
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fx .vs-p-pan-cuerpo{
+  position:relative!important;padding:13px 0 9px!important;
+  background:transparent!important;display:block!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fxw{
+  display:flex!important;gap:7px!important;
+  padding:0 26px 0 20px!important;margin:0!important;
+  overflow-x:auto!important;overflow-y:hidden!important;
+  scrollbar-width:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fxw::-webkit-scrollbar{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle{
+  position:absolute!important;top:50%!important;transform:translateY(-50%)!important;
+  width:17px!important;height:26px!important;min-width:0!important;
+  background:none!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;padding:0!important;z-index:3!important;
+  display:flex!important;align-items:center!important;justify-content:center!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle.izq{left:4px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle.der2{right:8px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle svg{
+  width:17px!important;height:26px!important;
+  stroke:#2FC3E8!important;color:#2FC3E8!important;stroke-width:2.1!important;
+  filter:drop-shadow(0 0 6px rgba(0,217,245,.45))!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle.izq svg{transform:rotate(180deg)!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-fle:hover svg{stroke:#8CE8FF!important;color:#8CE8FF!important}
+
+/*  la tarjeta de cada partido  */
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt{
+  flex:0 0 201px!important;width:201px!important;height:98px!important;
+  box-sizing:border-box!important;
+  border:1px solid #01749A!important;border-radius:10px!important;
+  background:#00101F!important;box-shadow:none!important;
+  padding:7px 12px 6px!important;margin:0!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:stretch!important;justify-content:space-between!important;
+  gap:0!important;text-decoration:none!important;overflow:hidden!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt:hover{
+  border-color:rgba(0,217,245,.85)!important;background:#021728!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .fe{
+  font:400 12px/14px var(--vsUI)!important;letter-spacing:.01em!important;
+  text-transform:capitalize!important;color:#BFE4F3!important;
+  text-align:center!important;white-space:nowrap!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .fe b{
+  font:400 12px/14px var(--vsUI)!important;color:#F2FAFF!important;
+  margin-left:11px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq{
+  display:flex!important;align-items:center!important;
+  gap:0!important;min-width:0!important;margin:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .e{
+  flex:0 0 40px!important;width:40px!important;height:40px!important;
+  border-radius:50%!important;overflow:hidden!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:#00080F!important;border:1.5px solid rgba(0,217,245,.70)!important;
+  box-shadow:0 0 9px rgba(0,217,245,.28)!important;
+  font:700 13px/1 var(--vsTit)!important;color:#CFE7F4!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .e.pro{
+  border-color:#FF1744!important;
+  box-shadow:0 0 11px rgba(255,23,68,.50)!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .e img{
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  padding:2px!important;box-sizing:border-box!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .e:first-child{margin-right:8px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .e:last-child{margin-left:6px!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .nn{
+  flex:1 1 auto!important;min-width:0!important;
+  display:flex!important;flex-wrap:wrap!important;
+  align-items:baseline!important;justify-content:center!important;
+  column-gap:7px!important;row-gap:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .n{
+  flex:0 0 auto!important;
+  font:700 13px/21px var(--vsTit)!important;letter-spacing:.012em!important;
+  text-transform:uppercase!important;color:#FFFFFF!important;
+  white-space:nowrap!important;max-width:100%!important;
+  overflow:hidden!important;text-overflow:ellipsis!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .n ~ .n{color:#CFE7F4!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .eq .vs{
+  flex:0 0 auto!important;
+  font:400 11px/21px var(--vsUI)!important;color:#8FC4DA!important;
+  text-transform:uppercase!important;letter-spacing:.05em!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-pt .li{
+  font:400 12.5px/14px var(--vsUI)!important;letter-spacing:.012em!important;
+  text-transform:none!important;color:#BFE4F3!important;
+  text-align:center!important;white-space:nowrap!important;
+  overflow:hidden!important;text-overflow:ellipsis!important}
+
+/*  el panel del proximo partido: datos a la izquierda y el reloj a la
+    derecha, los dos a la misma altura                                   */
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .vs-p-pan-cuerpo{
+  position:relative!important;
+  display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+  column-gap:24px!important;align-items:start!important;
+  padding:16px 16px 32px 75px!important;background:transparent!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj,
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdf{
+  grid-column:1!important;min-width:0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdr{
+  grid-column:2!important;grid-row:1 / span 3!important;
+  display:flex!important;gap:8px!important;align-self:start!important;
+  margin:4px 0 0 0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj{
+  display:flex!important;align-items:baseline!important;
+  gap:8px!important;margin:0 0 9px 0!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .e{
+  position:absolute!important;left:13px!important;top:15px!important;
+  width:44px!important;height:44px!important;
+  border-radius:50%!important;overflow:hidden!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  background:#00080F!important;border:1.5px solid #FF1744!important;
+  box-shadow:0 0 12px rgba(255,23,68,.50)!important;
+  font:700 14px/1 var(--vsTit)!important;color:#FFD3DB!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .e img{
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  padding:2px!important;box-sizing:border-box!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .e ~ .e{display:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .n{
+  font:700 17px/1 var(--vsTit)!important;letter-spacing:.015em!important;
+  text-transform:uppercase!important;color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .n ~ .n{color:#CFE7F4!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdj .vs{
+  font:400 12px/1 var(--vsUI)!important;color:#8FC4DA!important;
+  text-transform:uppercase!important;letter-spacing:.05em!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdf{
+  display:flex!important;align-items:center!important;gap:7px!important;
+  margin:0 0 6px 0!important;white-space:nowrap!important;
+  font:400 13.5px/17px var(--vsUI)!important;color:#D7ECF6!important;
+  text-transform:none!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdf span{
+  white-space:nowrap!important;text-transform:capitalize!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdf svg{
+  width:15px!important;height:15px!important;flex:0 0 15px!important;
+  stroke:#2FC3E8!important;color:#2FC3E8!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdf + .ix-cdf svg{
+  stroke:#FFFFFF!important;color:#FFFFFF!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdc{
+  flex:0 0 46px!important;width:46px!important;height:66px!important;
+  box-sizing:border-box!important;
+  display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:2px!important;
+  border:1px solid #B3001C!important;border-radius:7px!important;
+  background:linear-gradient(180deg,#160109 0%,#0C0206 100%)!important;
+  box-shadow:0 0 10px rgba(255,23,68,.16) inset!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdc b{
+  font:700 25px/1 var(--vsNum)!important;color:#FF1744!important;
+  letter-spacing:.01em!important;
+  text-shadow:0 0 12px rgba(255,23,68,.55)!important}
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdc i{
+  font:500 10px/1 var(--vsUI)!important;font-style:normal!important;
+  letter-spacing:.09em!important;text-transform:uppercase!important;
+  color:#E9EEF2!important}
+/*  EL PIE DEL FONDO
+    En la maqueta, abajo de todo corre una cordillera de lineas rojas sobre
+    la trama. No se aproxima con gradientes: es el tramo x 172..1536,
+    y 970..1024 de la propia maqueta, guardado como vs_pie.jpg. Va pegado
+    al borde de abajo de la pantalla, del riel hacia la derecha, y solo en
+    la portada: el resto de las maquetas no lo tiene.                      */
+html:not([data-vs="off"]) body.ix-p #nv-bg::after{
+  content:''!important;position:absolute!important;
+  left:var(--vsl-w)!important;right:0!important;bottom:0!important;
+  height:54px!important;pointer-events:none!important;
+  background:url('vs_pie.jpg') right bottom / 100% 100% no-repeat!important}
+
+html:not([data-vs="off"]) body.ix-p #ix-abajo .ix-cd .ix-cdya{
+  font:700 19px/1 var(--vsTit)!important;color:#FF1744!important;
+  text-transform:uppercase!important;letter-spacing:.03em!important}

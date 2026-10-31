@@ -167,7 +167,7 @@
       var sp = m.querySelector('span');
       /*  el nombre real del club: AXPO VOLLEY NAFELS, con la dieresis.
           La ultima palabra va en rojo, igual que los titulos de las bandas. */
-      if(sp) sp.innerHTML = '<b>AXPO VOLLEY <em>N\u00c4FELS</em></b><i class="vs-msub"></i>';
+      if(sp) sp.innerHTML = '<b>AXPO <em>VOLLEY</em> N\u00c4FELS</b><i class="vs-msub"></i>';
       var si = m.querySelector('.vs-msub');
       if(si) si.textContent = sub;
     }
