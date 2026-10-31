@@ -712,6 +712,10 @@ html:not([data-vs="off"]) body .tabs .tab.on::after{
 /* ═══════════════════════════════════════════════════════════════════════════
    PREPARACION FISICA · las dos pantallas de rutinas
    ---------------------------------------------------------------------------
+   Todo lo de aca cuelga de la clase vs-p-pf, que solo llevan estas dos
+   pantallas: sin eso las reglas de .card y .btn tocaban tambien wellness,
+   equipo y la portada, que comparten la clase vs-p.
+
    Estas dos ya tenian sus piezas armadas y funcionando (.card, .btn, .ses-hd,
    .semanas-tabs, .savebar, la calculadora de 1RM...). En vez de rehacerlas y
    arriesgar lo que anda, aca se las viste con la caja, la letra y los colores
@@ -719,111 +723,111 @@ html:not([data-vs="off"]) body .tabs .tab.on::after{
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* la banda del gimnasio */
-html:not([data-vs="off"]) body.vs-p.vs-p-gym .vs-cab::before{
+html:not([data-vs="off"]) body.vs-p-pf.vs-p-gym .vs-cab::before{
   background-image:url('vs_gym_ancho.jpg')}
 
 /* las tarjetas */
-html:not([data-vs="off"]) body.vs-p .card,
-html:not([data-vs="off"]) body.vs-p .prog-card,
-html:not([data-vs="off"]) body.vs-p .fb-card{
+html:not([data-vs="off"]) body.vs-p-pf .card,
+html:not([data-vs="off"]) body.vs-p-pf .prog-card,
+html:not([data-vs="off"]) body.vs-p-pf .fb-card{
   border:1px solid var(--p-borde)!important;border-radius:var(--p-r)!important;
   background:linear-gradient(180deg,#000D18,#00070F)!important;
   box-shadow:none!important;padding:15px 16px!important;margin-bottom:14px!important}
-html:not([data-vs="off"]) body.vs-p .card-ti,
-html:not([data-vs="off"]) body.vs-p .prog-head{
+html:not([data-vs="off"]) body.vs-p-pf .card-ti,
+html:not([data-vs="off"]) body.vs-p-pf .prog-head{
   font:700 14px/1.2 var(--vsTit)!important;letter-spacing:.14em!important;
   text-transform:uppercase!important;color:#EDF3F8!important}
-html:not([data-vs="off"]) body.vs-p .card-sub,
-html:not([data-vs="off"]) body.vs-p .prog-sub,
-html:not([data-vs="off"]) body.vs-p .hint{
+html:not([data-vs="off"]) body.vs-p-pf .card-sub,
+html:not([data-vs="off"]) body.vs-p-pf .prog-sub,
+html:not([data-vs="off"]) body.vs-p-pf .hint{
   font:500 12.5px/1.45 var(--vsUI)!important;color:var(--p-txt3)!important}
 
 /* los campos */
-html:not([data-vs="off"]) body.vs-p .fld,
-html:not([data-vs="off"]) body.vs-p .selector-label,
-html:not([data-vs="off"]) body.vs-p .calc-lbl{
+html:not([data-vs="off"]) body.vs-p-pf .fld,
+html:not([data-vs="off"]) body.vs-p-pf .selector-label,
+html:not([data-vs="off"]) body.vs-p-pf .calc-lbl{
   display:block;font:700 9.5px/1 var(--vsUI)!important;letter-spacing:.17em!important;
   text-transform:uppercase!important;color:var(--p-cyan)!important;margin-bottom:6px!important}
-html:not([data-vs="off"]) body.vs-p input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
-html:not([data-vs="off"]) body.vs-p select,
-html:not([data-vs="off"]) body.vs-p textarea{
+html:not([data-vs="off"]) body.vs-p-pf input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html:not([data-vs="off"]) body.vs-p-pf select,
+html:not([data-vs="off"]) body.vs-p-pf textarea{
   border:1px solid var(--p-borde2)!important;background:var(--p-hueco)!important;
   color:#E6EEF5!important;border-radius:var(--p-r2)!important;
   font-family:var(--vsUI)!important}
-html:not([data-vs="off"]) body.vs-p input:focus,
-html:not([data-vs="off"]) body.vs-p select:focus,
-html:not([data-vs="off"]) body.vs-p textarea:focus{border-color:var(--p-cyan)!important;outline:0}
+html:not([data-vs="off"]) body.vs-p-pf input:focus,
+html:not([data-vs="off"]) body.vs-p-pf select:focus,
+html:not([data-vs="off"]) body.vs-p-pf textarea:focus{border-color:var(--p-cyan)!important;outline:0}
 
 /* los botones */
-html:not([data-vs="off"]) body.vs-p .btn,
-html:not([data-vs="off"]) body.vs-p .vbtn,
-html:not([data-vs="off"]) body.vs-p .addrow{
+html:not([data-vs="off"]) body.vs-p-pf .btn,
+html:not([data-vs="off"]) body.vs-p-pf .vbtn,
+html:not([data-vs="off"]) body.vs-p-pf .addrow{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   border-radius:var(--p-r2)!important;
   font:600 13px/1 var(--vsUI)!important;letter-spacing:.05em!important;cursor:pointer}
-html:not([data-vs="off"]) body.vs-p .btn-ghost{
+html:not([data-vs="off"]) body.vs-p-pf .btn-ghost{
   border:1px solid var(--p-borde2)!important;background:var(--p-hueco)!important;
   color:var(--p-txt2)!important}
-html:not([data-vs="off"]) body.vs-p .btn-ghost:hover{border-color:var(--p-cyan)!important;color:#fff!important}
-html:not([data-vs="off"]) body.vs-p .btn-teal{
+html:not([data-vs="off"]) body.vs-p-pf .btn-ghost:hover{border-color:var(--p-cyan)!important;color:#fff!important}
+html:not([data-vs="off"]) body.vs-p-pf .btn-teal{
   border:1.5px solid rgba(0,229,166,.55)!important;background:rgba(0,229,166,.07)!important;
   color:var(--p-verde)!important;font-weight:700!important;
   letter-spacing:.13em!important;text-transform:uppercase!important}
-html:not([data-vs="off"]) body.vs-p .btn-teal:hover{background:rgba(0,229,166,.16)!important;color:#BFF7E6!important}
+html:not([data-vs="off"]) body.vs-p-pf .btn-teal:hover{background:rgba(0,229,166,.16)!important;color:#BFF7E6!important}
 
 /* las pestañas de semanas / meses */
-html:not([data-vs="off"]) body.vs-p .semanas-tabs{
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs{
   display:flex;align-items:stretch;gap:0;overflow-x:auto;
   border:1px solid var(--p-borde);border-radius:var(--p-r);
   background:linear-gradient(180deg,#000D18,#00070F);margin-bottom:14px;padding:0!important}
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > *{
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > *{
   position:relative;display:inline-flex;align-items:center;gap:8px;
   height:44px;padding:0 18px;border:0!important;background:none!important;border-radius:0!important;
   color:var(--p-txt2)!important;cursor:pointer;white-space:nowrap;
   font:700 12px/1 var(--vsUI)!important;letter-spacing:.13em!important;text-transform:uppercase!important}
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > * + *::before{
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > * + *::before{
   content:'';position:absolute;left:0;top:12px;bottom:12px;width:1px;background:var(--p-borde)}
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > *:hover{color:#fff!important;background:rgba(255,255,255,.035)!important}
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > .on,
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > .activa,
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > [aria-selected="true"]{
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > *:hover{color:#fff!important;background:rgba(255,255,255,.035)!important}
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > .on,
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > .activa,
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > [aria-selected="true"]{
   color:#fff!important;background:linear-gradient(180deg,rgba(255,10,60,.26),rgba(255,10,60,.04))!important}
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > .on::after,
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > .activa::after,
-html:not([data-vs="off"]) body.vs-p .semanas-tabs > [aria-selected="true"]::after{
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > .on::after,
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > .activa::after,
+html:not([data-vs="off"]) body.vs-p-pf .semanas-tabs > [aria-selected="true"]::after{
   content:'';position:absolute;left:0;right:0;bottom:0;height:2.5px;background:var(--red);
   box-shadow:0 0 14px -1px rgba(255,10,60,.95)}
 
 /* la cabecera de cada sesion del editor */
-html:not([data-vs="off"]) body.vs-p .ses-hd{
+html:not([data-vs="off"]) body.vs-p-pf .ses-hd{
   display:flex;align-items:center;gap:11px;padding:12px 15px!important;
   border-bottom:1px solid var(--p-borde)!important;
   font:700 13px/1 var(--vsTit)!important;letter-spacing:.13em!important;
   text-transform:uppercase!important;color:#EDF3F8!important}
-html:not([data-vs="off"]) body.vs-p .ses-bd{padding:13px 15px!important}
+html:not([data-vs="off"]) body.vs-p-pf .ses-bd{padding:13px 15px!important}
 
 /* las tres estadisticas del jugador */
-html:not([data-vs="off"]) body.vs-p .jug-stat{
+html:not([data-vs="off"]) body.vs-p-pf .jug-stat{
   border:1px solid var(--p-borde)!important;border-radius:var(--p-r)!important;
   background:linear-gradient(180deg,#000D18,#00070F)!important;padding:13px 15px!important}
-html:not([data-vs="off"]) body.vs-p .jug-stat-val{
+html:not([data-vs="off"]) body.vs-p-pf .jug-stat-val{
   font:700 24px/1 var(--vsTit)!important;color:#fff!important;letter-spacing:.02em!important}
-html:not([data-vs="off"]) body.vs-p .jug-stat-lbl{
+html:not([data-vs="off"]) body.vs-p-pf .jug-stat-lbl{
   font:700 9.5px/1 var(--vsUI)!important;letter-spacing:.2em!important;
   text-transform:uppercase!important;color:var(--p-cyan)!important;margin-top:6px!important}
 
 /* la calculadora de 1RM */
-html:not([data-vs="off"]) body.vs-p .calc-input{
+html:not([data-vs="off"]) body.vs-p-pf .calc-input{
   height:38px!important;padding:0 12px!important;font:500 14px/1 var(--vsUI)!important}
 
 /* la barra de acciones de abajo */
-html:not([data-vs="off"]) body.vs-p .savebar{
+html:not([data-vs="off"]) body.vs-p-pf .savebar{
   border-top:1px solid var(--p-borde)!important;
   background:rgba(0,7,15,.94)!important;backdrop-filter:blur(14px);
   padding:11px 20px!important;gap:10px!important}
 
 /* el boton de video de cada ejercicio */
-html:not([data-vs="off"]) body.vs-p .ej-video-btn{
+html:not([data-vs="off"]) body.vs-p-pf .ej-video-btn{
   border:1px solid rgba(255,10,60,.42)!important;background:rgba(255,10,60,.07)!important;
   color:var(--red)!important;border-radius:8px!important}
 
@@ -835,7 +839,7 @@ html:not([data-vs="off"]) body .vs-p-lema b{display:block;font-weight:700}
      Ahora el lema lo pone la piel, dentro de la columna de la derecha y
      arriba del boton, como en las maquetas 3 y 4. El de la pagina se
      esconde —no se borra: si se apaga la piel, vuelve solo—.            */
-html:not([data-vs="off"]) body.vs-p #nv-lema{display:none!important}
+html:not([data-vs="off"]) body.vs-p-pf #nv-lema{display:none!important}
 
 /* ── LOS TRES NUMEROS DEL WHOOP, AL FINAL DE LA ENCUESTA ─────────────────
    Van juntos y apagados: el que no tiene reloj tiene que poder saltearlos
@@ -869,3 +873,331 @@ html:not([data-vs="off"]) body .we-fila .val i{
   border:1px solid var(--p-borde2);background:rgba(99,216,238,.07);
   color:var(--p-cyan);font:700 9px/1 var(--vsUI);letter-spacing:.1em;
   text-transform:uppercase;opacity:1;vertical-align:middle}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA PORTADA · el modelo nuevo
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── el hero ───────────────────────────────────────────────────────────── */
+html:not([data-vs="off"]) body.ix-p #nv-hero.ix-hero{min-height:188px!important}
+html:not([data-vs="off"]) body.ix-p .ix-hero .txt{
+  max-width:none!important;padding:22px 28px!important;display:block!important}
+html:not([data-vs="off"]) body.ix-p .ix-k{
+  font:700 12px/1 var(--vsUI);letter-spacing:.24em;text-transform:uppercase;color:#D8E4EE}
+html:not([data-vs="off"]) body.ix-p .ix-k b{color:var(--red)}
+html:not([data-vs="off"]) body.ix-p .ix-hero h2{
+  margin:10px 0 16px!important;font:700 36px/1.06 var(--vsTit)!important;
+  letter-spacing:.005em!important;color:#fff!important;text-transform:none!important}
+/*  como en la maqueta: la primera linea blanca, la segunda en celeste  */
+html:not([data-vs="off"]) body.ix-p .ix-hero h2 span.ix-h1{color:#fff!important}
+html:not([data-vs="off"]) body.ix-p .ix-hero h2 span.ix-h2{color:var(--p-cyan)!important}
+html:not([data-vs="off"]) body.ix-p .ix-oculto{display:none!important}
+/*  el rotulo viejo de la derecha del hero (analisis / estrategia / rendimiento)
+    lo agrega nv-piel mas tarde y se encimaba con el lema nuevo. Se esconde por
+    CSS y no por javascript: asi no importa cuando aparezca.                 */
+html:not([data-vs="off"]) body.ix-p #nv-hero > div:not(.txt):not(.bg):not(.lux):not(.shade):not(.ix-lema){
+  display:none!important}
+html:not([data-vs="off"]) body.ix-p .ix-hub{margin-top:14px}
+html:not([data-vs="off"]) body.ix-p .ix-cta{display:flex;align-items:stretch;gap:12px;flex-wrap:wrap}
+html:not([data-vs="off"]) body.ix-p .ix-boton{
+  display:inline-flex;align-items:center;gap:11px;height:50px;padding:0 24px;border-radius:11px;
+  background:linear-gradient(180deg,#FF0A3C,#B00428);border:1px solid #FF2E58;color:#fff;
+  font:700 14px/1 var(--vsUI);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;
+  box-shadow:0 0 30px -8px rgba(255,10,60,.9),inset 0 1px 0 rgba(255,255,255,.22);
+  transition:box-shadow .15s,transform .15s}
+html:not([data-vs="off"]) body.ix-p .ix-boton:hover{box-shadow:0 0 38px -6px rgba(255,10,60,1);transform:translateY(-1px)}
+html:not([data-vs="off"]) body.ix-p .ix-boton svg{width:17px;height:17px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.ix-p .ix-tarj{
+  display:inline-flex;align-items:center;gap:11px;height:50px;padding:0 15px;border-radius:11px;
+  border:1px solid var(--p-borde2);background:rgba(0,10,20,.72);color:#DCE7F0;text-decoration:none;
+  min-width:168px;transition:border-color .15s}
+html:not([data-vs="off"]) body.ix-p .ix-tarj:hover{border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body.ix-p .ix-tarj > svg:first-child{width:20px;height:20px;flex:none;color:var(--p-cyan);
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.ix-p .ix-tarj span{flex:1;min-width:0;font:500 12.5px/1.25 var(--vsUI)}
+html:not([data-vs="off"]) body.ix-p .ix-tarj span b{display:block;font-weight:700;font-size:13.5px;color:#fff}
+html:not([data-vs="off"]) body.ix-p .ix-tarj > svg:last-child{width:14px;height:14px;flex:none;color:var(--p-txt3);
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.ix-p .ix-lema{
+  position:absolute;right:30px;top:50%;transform:translateY(-50%);z-index:4;
+  display:flex;flex-direction:column;align-items:flex-end;gap:5px;pointer-events:none}
+html:not([data-vs="off"]) body.ix-p .ix-lema span{
+  font:700 15px/1 var(--vsUI);letter-spacing:.26em;text-transform:uppercase;color:#E3ECF3}
+html:not([data-vs="off"]) body.ix-p .ix-lema::after{
+  content:'';width:92px;height:2px;margin-top:7px;background:var(--red);
+  box-shadow:0 0 12px -2px rgba(255,10,60,.9)}
+@media (max-width:1100px){ html:not([data-vs="off"]) body.ix-p .ix-lema{display:none} }
+@media (max-width:620px){
+  html:not([data-vs="off"]) body.ix-p .ix-hero h2{font-size:25px!important}
+  html:not([data-vs="off"]) body.ix-p .ix-tarj{min-width:0;flex:1 1 140px}
+}
+
+/* ── las tarjetas, en renglon ──────────────────────────────────────────── */
+html:not([data-vs="off"]) body.ix-p .nv-gt{
+  display:grid!important;gap:9px!important}
+html:not([data-vs="off"]) body.ix-p a.card.ix-fila,
+html:not([data-vs="off"]) body.ix-p .ix-fila{
+  display:flex!important;align-items:center!important;gap:12px!important;
+  flex-direction:row!important;justify-content:flex-start!important;text-align:left!important;
+  /*  la regla de la pagina clava height:92px: hay que soltarla  */
+  height:auto!important;min-height:48px!important;overflow:visible!important;
+  padding:9px 13px!important;border-radius:10px!important;
+  border:1px solid var(--p-borde)!important;
+  background:linear-gradient(180deg,#00101D,#00070F)!important;
+  transition:border-color .15s,background .15s}
+html:not([data-vs="off"]) body.ix-p .ix-fila:hover{
+  border-color:var(--p-borde2)!important;background:rgba(99,216,238,.05)!important}
+html:not([data-vs="off"]) body.ix-p .ix-fila .nv-chip,
+html:not([data-vs="off"]) body.ix-p .ix-fila .card-icon{
+  width:30px!important;height:30px!important;flex:none!important;margin:0!important;
+  display:grid!important;place-items:center!important;border-radius:9px!important;
+  border:1px solid rgba(255,10,60,.34)!important;background:rgba(255,10,60,.08)!important;
+  color:var(--red)!important;font-size:14px!important}
+html:not([data-vs="off"]) body.ix-p .ix-fila .nv-chip svg,
+html:not([data-vs="off"]) body.ix-p .ix-fila .card-icon svg{width:16px;height:16px}
+html:not([data-vs="off"]) body.ix-p .ix-fila .card-title,
+html:not([data-vs="off"]) body.ix-p .ix-fila > span:not(.ix-fl):not(.nv-chip):not(.card-icon),
+html:not([data-vs="off"]) body.ix-p .ix-fila > div{
+  flex:1!important;min-width:0!important;text-align:left!important;margin:0!important;
+  font:600 13.5px/1.25 var(--vsUI)!important;letter-spacing:.02em!important;color:#E6EEF5!important;
+  text-transform:none!important}
+/*  en renglon no entra la descripcion: en la maqueta va solo el nombre  */
+html:not([data-vs="off"]) body.ix-p .ix-fila .card-desc,
+/*  la pagina las fuerza con #nv-coach a.card.nv-tile .card-desc: hay que
+    repetir toda esa cadena para ganarle                                  */
+html:not([data-vs="off"]) body.ix-p #nv-coach a.card.nv-tile .card-desc,
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas a.card.nv-tile .card-desc,
+html:not([data-vs="off"]) body.ix-p .ix-fila .card-sub,
+html:not([data-vs="off"]) body.ix-p .ix-fila .nv-fav{display:none!important}
+/*  el envoltorio vacio que queda de la fila vieja  */
+html:not([data-vs="off"]) body.ix-p #nv-zona > .nv-zonaw,
+html:not([data-vs="off"]) body.ix-p #nv-zona > .nv-zonaw:empty,
+html:not([data-vs="off"]) body.ix-p #nv-zona > .nv-rowB:empty,
+html:not([data-vs="off"]) body.ix-p #nv-zona > .nv-rowC:empty{display:none!important}
+html:not([data-vs="off"]) body.ix-p .ix-fl{
+  flex:none;display:grid;place-items:center;color:var(--p-txt3)}
+html:not([data-vs="off"]) body.ix-p .ix-fl svg{width:15px;height:15px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* los paneles de la portada, con la caja de la piel */
+html:not([data-vs="off"]) body.ix-p .nv-pan{
+  border:1px solid var(--p-borde)!important;border-radius:var(--p-r)!important;
+  background:linear-gradient(180deg,#000D18,#00070F)!important;box-shadow:none!important}
+html:not([data-vs="off"]) body.ix-p .nv-pt{
+  font:700 15px/1 var(--vsTit)!important;letter-spacing:.14em!important;
+  text-transform:uppercase!important;color:#EDF3F8!important}
+html:not([data-vs="off"]) body.ix-p .ix-sub{
+  padding:0 15px 10px;margin-top:-6px;
+  font:500 12px/1.4 var(--vsUI);color:var(--p-txt3)}
+
+/* ── herramientas del entrenador, a todo el ancho ───────────────────────── */
+html:not([data-vs="off"]) body.ix-p .ix-rowSec{
+  display:grid;grid-template-columns:1.45fr 1fr 1fr 1.15fr;gap:14px;margin-top:14px;align-items:start}
+@media (max-width:1100px){
+  html:not([data-vs="off"]) body.ix-p .ix-rowSec{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  html:not([data-vs="off"]) body.ix-p .ix-rowSec{grid-template-columns:1fr}
+}
+/*  La portada tiene una animacion de entrada que arranca en opacity:0 y la
+    dispara un observador cuando el panel aparece en pantalla. Al mover un
+    panel de lugar, ese disparo ya no vuelve a ocurrir y el panel se queda
+    invisible. La animacion es un adorno: se la deja siempre encendida.   */
+html:not([data-vs="off"]) body.ix-p .nv-anim{
+  opacity:1!important;transform:none!important;animation:none!important}
+html:not([data-vs="off"]) body.ix-p .ix-rowDT{margin:14px 0 0}
+html:not([data-vs="off"]) body.ix-p .ix-rowDT .nv-pan{width:100%}
+html:not([data-vs="off"]) body.ix-p #nv-coach,
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas{
+  grid-template-columns:repeat(auto-fit,minmax(176px,1fr))!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas{margin-top:9px!important}
+/*  la caja del texto tiene que estirarse y la del icono quedarse quieta:
+    sin esto el nombre quedaba flotando en el medio de la fila            */
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-body{
+  flex:1 1 auto!important;min-width:0!important;text-align:left!important;
+  display:block!important;margin:0!important;padding:0!important}
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-top,
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-glow,
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-arrow,
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-fav{
+  flex:0 0 auto!important;margin:0!important}
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-arrow,
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-fav{display:none!important}
+html:not([data-vs="off"]) body.ix-p a.card.ix-fila .card-title,
+html:not([data-vs="off"]) body.ix-p a.card.nv-tile.ix-fila .card-title,
+html:not([data-vs="off"]) body.ix-p #nv-coach a.card.nv-tile .card-title,
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas a.card.nv-tile .card-title{
+  text-align:left!important;width:100%!important;
+  font:600 12.5px/1.25 var(--vsUI)!important;color:#E6EEF5!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach a.card.nv-tile,
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas a.card.nv-tile{
+  height:auto!important;min-height:50px!important;padding:9px 12px!important;
+  border-radius:10px!important;gap:11px!important}
+html:not([data-vs="off"]) body.ix-p #nv-coach-mas:not(.abierto){display:grid!important}
+html:not([data-vs="off"]) body.ix-p .nv-lock{
+  margin-left:10px;padding:3px 9px;border-radius:6px;
+  border:1px solid rgba(255,10,60,.38);background:rgba(255,10,60,.07);color:var(--red);
+  font:700 9.5px/1 var(--vsUI);letter-spacing:.14em;text-transform:uppercase}
+
+/* ── la fila de abajo: fixture y contador ───────────────────────────────── */
+html:not([data-vs="off"]) body.ix-p .ix-rowFX{
+  display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,1fr);gap:14px;margin-top:14px}
+@media (max-width:1000px){ html:not([data-vs="off"]) body.ix-p .ix-rowFX{grid-template-columns:1fr} }
+html:not([data-vs="off"]) body.ix-p .ix-fx .vs-p-pan-cuerpo{display:flex;align-items:center;gap:8px}
+html:not([data-vs="off"]) body.ix-p .ix-fxw{
+  flex:1;min-width:0;display:flex;gap:10px;overflow-x:auto;scroll-behavior:smooth;
+  scrollbar-width:none;padding:2px}
+html:not([data-vs="off"]) body.ix-p .ix-fxw::-webkit-scrollbar{display:none}
+html:not([data-vs="off"]) body.ix-p .ix-fle{
+  flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--p-borde2);background:var(--p-hueco);color:var(--p-txt2);cursor:pointer}
+html:not([data-vs="off"]) body.ix-p .ix-fle:hover{color:#fff;border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body.ix-p .ix-fle svg{width:14px;height:14px;
+  stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.ix-p .ix-fle.izq svg{transform:rotate(180deg)}
+html:not([data-vs="off"]) body.ix-p .ix-pt{
+  flex:0 0 228px;display:block;padding:11px 13px;border-radius:11px;text-decoration:none;
+  border:1px solid var(--p-borde);background:linear-gradient(180deg,#00101D,#00070F);
+  transition:border-color .15s}
+html:not([data-vs="off"]) body.ix-p .ix-pt:hover{border-color:var(--p-borde2)}
+html:not([data-vs="off"]) body.ix-p .ix-pt .fe{
+  font:600 10.5px/1 var(--vsUI);letter-spacing:.09em;color:var(--p-txt2);text-transform:uppercase}
+html:not([data-vs="off"]) body.ix-p .ix-pt .fe b{color:var(--p-cyan);margin-left:5px}
+html:not([data-vs="off"]) body.ix-p .ix-pt .eq{
+  display:flex;align-items:center;gap:7px;margin:9px 0 8px;min-width:0}
+html:not([data-vs="off"]) body.ix-p .ix-pt .eq .e{width:26px;height:26px;flex:none;display:grid;place-items:center}
+html:not([data-vs="off"]) body.ix-p .ix-pt .eq .e img{max-width:26px;max-height:26px;object-fit:contain}
+html:not([data-vs="off"]) body.ix-p .ix-esc-x{
+  width:26px;height:26px;display:grid;place-items:center;border-radius:50%;
+  border:1px solid var(--p-borde2);color:var(--p-txt3);font:700 9px/1 var(--vsUI)}
+html:not([data-vs="off"]) body.ix-p .ix-pt .eq .n{
+  flex:1 1 0;min-width:0;font:700 11.5px/1.15 var(--vsTit);letter-spacing:.04em;
+  text-transform:uppercase;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:not([data-vs="off"]) body.ix-p .ix-pt .eq .vs{
+  flex:none;font:500 9.5px/1 var(--vsUI);color:var(--p-txt3);text-transform:lowercase}
+html:not([data-vs="off"]) body.ix-p .ix-pt .li{
+  font:500 10px/1 var(--vsUI);letter-spacing:.11em;text-transform:uppercase;color:var(--p-txt3)}
+
+/* el contador */
+html:not([data-vs="off"]) body.ix-p .ix-cdj{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+html:not([data-vs="off"]) body.ix-p .ix-cdj .e{width:30px;height:30px;flex:none;display:grid;place-items:center}
+html:not([data-vs="off"]) body.ix-p .ix-cdj .e img{max-width:30px;max-height:30px;object-fit:contain}
+html:not([data-vs="off"]) body.ix-p .ix-cdj .n{
+  font:700 13px/1.1 var(--vsTit);letter-spacing:.05em;text-transform:uppercase;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:not([data-vs="off"]) body.ix-p .ix-cdj .vs{font:500 10px/1 var(--vsUI);color:var(--p-txt3)}
+html:not([data-vs="off"]) body.ix-p .ix-cdf{
+  display:flex;align-items:center;gap:8px;margin-bottom:6px;
+  font:500 12px/1.3 var(--vsUI);color:var(--p-txt2)}
+html:not([data-vs="off"]) body.ix-p .ix-cdf svg{width:15px;height:15px;flex:none;color:var(--p-cyan);
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.ix-p .ix-cdr{display:flex;gap:7px;margin-top:12px}
+html:not([data-vs="off"]) body.ix-p .ix-cdc{
+  flex:1 1 0;min-width:0;text-align:center;padding:9px 4px;border-radius:9px;
+  border:1px solid rgba(255,10,60,.38);background:rgba(255,10,60,.08)}
+html:not([data-vs="off"]) body.ix-p .ix-cdc b{
+  display:block;font:700 23px/1 var(--vsTit);color:#fff;font-variant-numeric:tabular-nums}
+html:not([data-vs="off"]) body.ix-p .ix-cdc i{
+  display:block;margin-top:5px;font-style:normal;
+  font:700 8.5px/1 var(--vsUI);letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+html:not([data-vs="off"]) body.ix-p .ix-cdya{
+  display:block;width:100%;text-align:center;padding:12px;border-radius:9px;
+  border:1px solid rgba(255,10,60,.5);background:rgba(255,10,60,.12);color:var(--red);
+  font:700 14px/1 var(--vsUI);letter-spacing:.14em;text-transform:uppercase}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EL CALENDARIO · el modelo nuevo
+   ═══════════════════════════════════════════════════════════════════════════ */
+html:not([data-vs="off"]) body.cal-p .cal-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px;
+  padding:9px 12px;border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F)}
+html:not([data-vs="off"]) body.cal-p .cal-bar .der{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+html:not([data-vs="off"]) body.cal-p .cal-bar .atajos{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/*  todos los botones del calendario, con la misma caja  */
+html:not([data-vs="off"]) body.cal-p .cal-bar button,
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt,
+html:not([data-vs="off"]) body.cal-p .cal-bar .tab,
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg{
+  display:inline-flex!important;align-items:center;gap:8px;width:auto!important;
+  height:38px!important;padding:0 15px!important;margin:0!important;
+  border:1px solid var(--p-borde2)!important;border-radius:var(--p-r2)!important;
+  background:var(--p-hueco)!important;color:var(--p-txt2)!important;
+  font:600 12.5px/1 var(--vsUI)!important;letter-spacing:.05em!important;
+  white-space:nowrap;cursor:pointer;box-shadow:none!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar button:hover{border-color:var(--p-cyan)!important;color:#fff!important}
+html:not([data-vs="off"]) body.cal-p .cal-bar .vt.on,
+html:not([data-vs="off"]) body.cal-p .cal-bar .tab.on,
+html:not([data-vs="off"]) body.cal-p .cal-bar .rg.on{
+  background:linear-gradient(180deg,#FF0A3C,#B00428)!important;border-color:#FF2E58!important;
+  color:#fff!important;font-weight:700!important;
+  box-shadow:0 0 22px -9px rgba(255,10,60,.85)!important}
+html:not([data-vs="off"]) body.cal-p .view-toggle,
+html:not([data-vs="off"]) body.cal-p .tabs,
+html:not([data-vs="off"]) body.cal-p .range-toggle{
+  display:flex!important;gap:8px!important;margin:0!important;padding:0!important;
+  border:0!important;background:none!important;grid-template-columns:none!important}
+
+/*  la grilla del mes  */
+html:not([data-vs="off"]) body.cal-p .cal-dos{
+  display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:14px;align-items:start}
+@media (max-width:1100px){ html:not([data-vs="off"]) body.cal-p .cal-dos{grid-template-columns:1fr} }
+html:not([data-vs="off"]) body.cal-p #plan-grid{
+  border:1px solid var(--p-borde);border-radius:var(--p-r);padding:12px;
+  background:linear-gradient(180deg,#000D18,#00070F)}
+html:not([data-vs="off"]) body.cal-p .cal-dow{
+  font:700 10px/1 var(--vsUI)!important;letter-spacing:.2em!important;text-transform:uppercase!important;
+  color:var(--p-cyan)!important;opacity:.85;padding:4px 0 10px!important;text-align:center!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell{
+  border:1px solid var(--p-borde)!important;border-radius:10px!important;
+  background:rgba(0,16,28,.55)!important;min-height:92px!important;padding:7px!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.out{opacity:.38!important}
+html:not([data-vs="off"]) body.cal-p .cal-cell.today{
+  border-color:var(--red)!important;box-shadow:0 0 20px -10px rgba(255,10,60,.9)!important}
+html:not([data-vs="off"]) body.cal-p .cal-daynum{
+  font:700 13px/1 var(--vsTit)!important;color:#D7E3EC!important;margin-bottom:6px!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev{
+  display:block!important;margin:0 0 5px!important;padding:6px 8px!important;border-radius:8px!important;
+  font:600 10.5px/1.3 var(--vsUI)!important;letter-spacing:.02em!important;cursor:pointer;
+  white-space:normal!important;overflow:hidden;text-overflow:ellipsis}
+html:not([data-vs="off"]) body.cal-p .cal-ev .eh{display:block;font-weight:700;opacity:.95;margin-bottom:1px}
+html:not([data-vs="off"]) body.cal-p .cal-ev.p{
+  border:1px solid rgba(255,10,60,.45)!important;background:rgba(255,10,60,.12)!important;color:#FF8DA6!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.e{
+  border:1px solid rgba(245,165,36,.42)!important;background:rgba(245,165,36,.10)!important;color:#F5C87A!important}
+html:not([data-vs="off"]) body.cal-p .cal-ev.ev{
+  border:1px solid var(--p-borde2)!important;background:rgba(99,216,238,.09)!important;color:var(--p-cyan-b)!important}
+
+/*  la columna de proximos eventos  */
+html:not([data-vs="off"]) body.cal-p .cal-px{
+  display:flex;align-items:center;gap:11px;padding:9px 0;
+  border-bottom:1px solid rgba(99,216,238,.08)}
+html:not([data-vs="off"]) body.cal-p .cal-px:last-of-type{border-bottom:0}
+html:not([data-vs="off"]) body.cal-p .cal-px .f{
+  flex:none;width:40px;text-align:center;line-height:1}
+html:not([data-vs="off"]) body.cal-p .cal-px .f i{
+  display:block;font-style:normal;font:700 8.5px/1 var(--vsUI);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--p-txt3)}
+html:not([data-vs="off"]) body.cal-p .cal-px .f b{
+  display:block;margin:2px 0;font:700 17px/1 var(--vsTit);color:#fff}
+html:not([data-vs="off"]) body.cal-p .cal-px .ic{
+  width:30px;height:30px;flex:none;display:grid;place-items:center;border-radius:8px;
+  border:1px solid var(--p-borde2);background:var(--p-hueco);color:var(--p-cyan)}
+html:not([data-vs="off"]) body.cal-p .cal-px.p .ic{
+  border-color:rgba(255,10,60,.42);background:rgba(255,10,60,.08);color:var(--red)}
+html:not([data-vs="off"]) body.cal-p .cal-px.e .ic{
+  border-color:rgba(245,165,36,.42);background:rgba(245,165,36,.08);color:#F5A524}
+html:not([data-vs="off"]) body.cal-p .cal-px .ic svg{width:16px;height:16px;
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body.cal-p .cal-px .tx{flex:1;min-width:0}
+html:not([data-vs="off"]) body.cal-p .cal-px .tx b{
+  display:block;font:700 12px/1.2 var(--vsUI);letter-spacing:.03em;color:#EDF3F8}
+html:not([data-vs="off"]) body.cal-p .cal-px .tx span{
+  display:block;font:500 11px/1.3 var(--vsUI);color:var(--p-txt3);margin-top:2px}
+html:not([data-vs="off"]) body.cal-p .cal-prox .we-nota{
+  display:flex;align-items:center;gap:7px;margin-top:11px;padding-top:10px;
+  border-top:1px solid var(--p-borde)}
+html:not([data-vs="off"]) body.cal-p .cal-prox .we-nota svg{width:14px;height:14px;flex:none;
+  stroke:currentColor;fill:none;stroke-width:1.8}
