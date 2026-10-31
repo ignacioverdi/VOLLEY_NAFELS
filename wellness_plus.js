@@ -344,9 +344,33 @@
       + '<input type="number" id="wp-min" min="0" max="300" step="5" placeholder="' + esc(T('ej. 90')) + '">'
       + '<div class="wp-mini">' + esc(T('Con esto el esfuerzo pasa a ser carga de verdad: RPE × minutos. Si lo dejás vacío se estiman 90.')) + '</div>'
       + '</div>';
+    /* ── LOS TRES NUMEROS DEL WHOOP ────────────────────────────────────
+       Opcionales y al final a proposito: el que no tiene reloj no tiene
+       que hacer nada y la encuesta le queda igual de corta que siempre. */
+    h += '<div class="wp-sep"></div>'
+      + '<div class="wp-extra wp-whoop">'
+      +   '<div class="wp-whoop-ti">' + esc(T('Si usás Whoop')) + '</div>'
+      +   '<div class="wp-whoop-3">'
+      +     campoWhoop('wp-w-rec', T('Recovery'), '%',  0, 100, 1,   'ej. 72')
+      +     campoWhoop('wp-w-hrv', T('HRV'),      'ms', 0, 300, 1,   'ej. 85')
+      +     campoWhoop('wp-w-hs',  T('Dormido'),  'h',  0, 14,  0.1, 'ej. 7.4')
+      +   '</div>'
+      +   '<div class="wp-mini">' + esc(T('Los copiás de la app del Whoop a la mañana. Si no tenés, dejalos vacíos: no cambia nada.')) + '</div>'
+      + '</div>';
     el('questions').innerHTML = h;
     W.CLAVES.concat(['rpe']).forEach(function (k) { window.onSlide(k); });
   };
+
+  /*  un campo chico del Whoop: rotulo, numero y la unidad al costado  */
+  function campoWhoop(id, lb, un, mn, mx, pa, ej) {
+    return '<div class="wp-wc">'
+      + '<label class="fld" for="' + id + '">' + esc(lb) + '</label>'
+      + '<span class="wp-wi">'
+      +   '<input type="number" id="' + id + '" inputmode="decimal" min="' + mn + '" max="' + mx +
+          '" step="' + pa + '" placeholder="' + esc(T(ej)) + '">'
+      +   '<i>' + esc(un) + '</i>'
+      + '</span></div>';
+  }
 
   function unaPregunta(k, x) {
     return '<div class="q wp-q">'
@@ -496,6 +520,13 @@
     var ho = el('wp-horas'), mi = el('wp-min');
     if (ho && ho.value !== '') e.horas = +ho.value;
     if (mi && mi.value !== '') e.min = +mi.value;
+    /*  el Whoop: solo lo que realmente cargaron  */
+    var W3 = {};
+    [['wp-w-rec', 'rec'], ['wp-w-hrv', 'hrv'], ['wp-w-hs', 'hs']].forEach(function (p) {
+      var c = el(p[0]);
+      if (c && c.value !== '' && isFinite(+c.value)) W3[p[1]] = +c.value;
+    });
+    if (Object.keys(W3).length) e.whoop = W3;
     if (Object.keys(W.MOL).length) e.mol = JSON.parse(JSON.stringify(W.MOL));
 
     WStore.save(e);

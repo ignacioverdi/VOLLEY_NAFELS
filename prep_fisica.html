@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title data-t="PREPARACIÓN FÍSICA — Axpo Volley Näfels">PREPARACIÓN FÍSICA — Axpo Volley Näfels</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
-<script src="categorias_club.js?v=20261031-0034"></script>
-<script src="selector_categoria.js?v=20261031-0034"></script>
-<script src="plantel_nafels.js?v=20261031-0034" onerror="void 0"></script>
-<script src="datos_seguros.js?v=20261031-0034"></script>
+<script src="categorias_club.js?v=20261031-0110"></script>
+<script src="selector_categoria.js?v=20261031-0110"></script>
+<script src="plantel_nafels.js?v=20261031-0110" onerror="void 0"></script>
+<script src="datos_seguros.js?v=20261031-0110"></script>
   <script src="datos_equipo.js.enc?v=9f9a8042" onerror="void 0"></script>
 <script src="datos_prep_fisica.js.enc?v=36085d95" onerror="void 0"></script>
 <script src="datos_ejercicios.js.enc?v=e83b3e20" onerror="void 0"></script>
   <script>abrirDatos();</script>
-<script src="lang.js?v=20261031-0034" onerror="void 0"></script>
-<script src="firebase.js?v=20261031-0034" onerror="void 0"></script>
-<script src="firebase_por_categoria.js?v=20261031-0034"></script>
+<script src="lang.js?v=20261031-0110" onerror="void 0"></script>
+<script src="firebase.js?v=20261031-0110" onerror="void 0"></script>
+<script src="firebase_por_categoria.js?v=20261031-0110"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -239,18 +239,18 @@ select,select option{color:#111!important;background-color:#fff!important}
 <!-- Adapta el encabezado al celular. Solo actua en pantallas chicas y solo
      toca el encabezado y las barras: en la computadora no hace nada.
      Va ULTIMO para poder corregir los estilos propios de cada pagina. -->
-<link rel="stylesheet" href="movil.css?v=20261031-0034">
+<link rel="stylesheet" href="movil.css?v=20261031-0110">
 <!-- Marca la fila del jugador que inicio sesion. Si no es un jugador, no
      hace nada: solo AGREGA una clase, nunca cambia como se arma la tabla. -->
-<script src="mi_fila.js?v=20261031-0034" onerror="void 0"></script>
+<script src="mi_fila.js?v=20261031-0110" onerror="void 0"></script>
 
-<script src="iconos.js?v=20261031-0034" defer></script>
+<script src="iconos.js?v=20261031-0110" defer></script>
 
-<script src="nav.js?v=20261031-0034" defer></script>
+<script src="nav.js?v=20261031-0110" defer></script>
 
 <script>try{if(localStorage.getItem('vs_estilo')==='off')document.documentElement.setAttribute('data-vs','off')}catch(e){}</script>
-<link rel="stylesheet" href="vs_estilo.css?v=20261031-0034">
-<script src="vs_cab.js?v=20261031-0034" defer></script>
+<link rel="stylesheet" href="vs_estilo.css?v=20261031-0110">
+<script src="vs_cab.js?v=20261031-0110" defer></script>
 <style id="nv-pf">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · el selector, la calculadora y el jugador que entra solo
@@ -300,26 +300,27 @@ select,select option{color:#111!important;background-color:#fff!important}
   .player-selector{ padding:12px 16px!important; }
 }
 </style>
+<!--pf-piel-->
+<link rel="stylesheet" href="vs_piel.css?v=20261031-0110">
+<script src="vs_piel.js?v=20261031-0110" onerror="void 0"></script>
+<!--/pf-piel-->
 </head>
 <body>
+<!--pf-hero-->
 <div class="page-header header">
-  <div class="header-text" style="display:flex;align-items:center;gap:14px;">
-    <a href="index.html" class="back-btn" data-t="← Inicio"><span data-t="← Inicio">← Inicio</span></a>
-    <div>
-      <div class="page-title">💪 <span data-t="prep_fisica">Preparación Física</span></div>
-      <div style="font-size:9px;color:var(--mut);letter-spacing:2px;text-transform:uppercase;">AXPO VOLLEY NÄFELS · NLA Suiza 2026/27</div>
-    </div>
+  <div class="vs-p-hero-izq">
+    <a href="index.html" class="vs-p-volver"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round"><path d="M20 12H5"/><path d="m11 6-6 6 6 6"/></svg><span data-t="Volver">Volver</span></a>
+    <div class="vs-p-tit vs-cab-tit"><span data-t="Rutina de">Rutina de</span> <b data-t="Entrenamiento (titulo)">Entrenamiento</b></div>
+    <div class="vs-p-sub" data-t="Rutinas personalizadas · Seguimiento · Progreso">Rutinas personalizadas · Seguimiento · Progreso</div>
   </div>
-  <!-- header-right hace que en el celular esta columna baje a su propio
-       renglon en vez de encimarse con el titulo: movil.css la busca por ese
-       nombre. Sin ella, el boton de rutinas y el de temporadas quedaban
-       montados sobre el titulo. -->
-  <div class="header-right" style="display:flex;align-items:center;gap:12px;">
-    <a href="prep_builder.html" class="back-btn" style="border-color:rgba(239,39,64,.4);color:#ff5870" data-solo-editor data-t="✏️ Armar rutinas"><span data-t="✏️ Armar rutinas">✏️ Armar rutinas</span></a>
-    <div id="lang-wrap" style="display:flex;align-items:center;gap:4px"></div>
-    <div class="fecha-txt" style="font-size:9px;color:var(--mut);letter-spacing:1.5px;text-transform:uppercase;" id="fecha-hoy"></div>
+  <div class="vs-p-hero-der col">
+    <div class="vs-p-lema"><b data-t="Disciplina hoy.">Disciplina hoy.</b><span data-t="Rendimiento mañana.">Rendimiento mañana.</span></div>
+    <a href="prep_builder.html" class="vs-p-pill rojo" data-solo-editor data-t="Armar rutinas"><span data-t="Armar rutinas">Armar rutinas</span></a>
+    <div id="lang-wrap" style="display:none"></div>
+    <div class="fecha-txt" style="display:none" id="fecha-hoy"></div>
   </div>
 </div>
+<!--/pf-hero-->
 
 <div class="player-selector">
   <div class="selector-label" data-t="selecciona_jugador">Seleccioná tu nombre para ver tu rutina personalizada</div>
@@ -1291,9 +1292,9 @@ window.addEventListener('langchange', function(e){
   try { if(window.translateTextNodes) window.translateTextNodes((e&&e.detail&&e.detail.lang)||document.documentElement.lang); } catch(_){}
 });
 </script>
-<script src="temporadas_menu.js?v=20261031-0034"></script>
-<script src="ayuda.js?v=20261031-0034"></script>
-<script src="volver_inicio.js?v=20261031-0034" defer></script>
+<script src="temporadas_menu.js?v=20261031-0110"></script>
+<script src="ayuda.js?v=20261031-0110"></script>
+<script src="volver_inicio.js?v=20261031-0110" defer></script>
 <script id="nv-pf-js">
 /* ═══════════════════════════════════════════════════════════════════════════
    PREP. FISICA · desplegable, calculadora arriba, y el jugador que entra solo
@@ -2026,6 +2027,17 @@ html.nv-pf2:not([data-vs="off"]) .welcome-sub{font-size:12.5px!important}
   else arrancar();
 })();
 </script>
+<!--pf-pie-->
+<script>
+(function(){
+  function poner(){
+    if(window.VSP && VSP.pie) VSP.pie(VSP.t({es:'Disciplina. Trabajo. Resultados.',en:'Discipline. Work. Results.',de:'Disziplin. Arbeit. Ergebnisse.'}));
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', poner);
+  else poner();
+})();
+</script>
+<!--/pf-pie-->
 </body>
 </html>
 <!-- © 2025-2026 Ignacio Verdi · NAFELS VOLEY · Software propietario - Todos los derechos reservados -->

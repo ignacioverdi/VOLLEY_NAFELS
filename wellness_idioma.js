@@ -92,6 +92,17 @@
     '¿Cuántos minutos duró?':   { en:'How many minutes did it last?', de:'Wie viele Minuten hat sie gedauert?' },
     'ej. 7.5': { en:'e.g. 7.5', de:'z. B. 7.5' },
     'ej. 90':  { en:'e.g. 90',  de:'z. B. 90' },
+    /* ── los tres numeros del Whoop ─────────────── */
+    'Si usás Whoop': { en:'If you use Whoop', de:'Wenn du Whoop nutzt' },
+    'Recovery': { en:'Recovery', de:'Recovery' },
+    'HRV': { en:'HRV', de:'HRV' },
+    'Dormido': { en:'Slept', de:'Geschlafen' },
+    'Los copiás de la app del Whoop a la mañana. Si no tenés, dejalos vacíos: no cambia nada.':
+      { en:'Copy them from the Whoop app in the morning. If you do not have one, leave them empty: nothing changes.',
+        de:'Morgens aus der Whoop-App abschreiben. Ohne Whoop einfach leer lassen: es ändert nichts.' },
+    'ej. 72':  { en:'e.g. 72',  de:'z. B. 72' },
+    'ej. 85':  { en:'e.g. 85',  de:'z. B. 85' },
+    'ej. 7.4': { en:'e.g. 7.4', de:'z. B. 7.4' },
     'Opcional. Las horas y cómo dormiste no son lo mismo: 8 horas malas son 8 horas malas.':
       { en:'Optional. Hours and quality are not the same: 8 bad hours are 8 bad hours.',
         de:'Optional. Stunden und Qualität sind nicht dasselbe: 8 schlechte Stunden bleiben 8 schlechte Stunden.' },

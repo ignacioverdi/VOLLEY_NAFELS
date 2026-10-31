@@ -107,6 +107,7 @@ html:not([data-vs="off"]) body .vs-p-sub{
 /* la pildora de la derecha de la banda ("12 JUGADORES", "PLANTILLA", ...) */
 html:not([data-vs="off"]) body .vs-p-hero-der{
   display:flex;align-items:center;gap:12px;flex:0 0 auto;margin-left:auto;z-index:3}
+html:not([data-vs="off"]) body .vs-p-hero-der.col{flex-direction:column;align-items:flex-end;gap:10px}
 /*   la mitad izquierda de la banda: volver, titulo y subtitulo, apilados.
      Va en UN solo hijo para que el flex de la banda no tenga que acomodar
      tres piezas sueltas: con tres se iban de ancho y la pagina terminaba
@@ -130,6 +131,7 @@ html:not([data-vs="off"]) body .vs-p-pill svg{width:17px;height:17px;flex:none;
 }
 
 /* el lema vertical de la derecha ("DISCIPLINA HOY. RENDIMIENTO MANIANA.") */
+html:not([data-vs="off"]) body .vs-p-hero-der .vs-p-lema{position:static;right:auto;top:auto}
 html:not([data-vs="off"]) body .vs-p-lema{
   position:absolute;right:26px;top:18px;z-index:3;text-align:right;
   font:700 11.5px/1.65 var(--vsUI);letter-spacing:.2em;text-transform:uppercase;
@@ -498,3 +500,372 @@ html:not([data-vs="off"]) body .eq-resumen .eq-rl{
   color:var(--p-cyan);opacity:.85;margin-top:6px}
 html:not([data-vs="off"]) body .eq-resumen .eq-fuente{
   flex:1 1 100%;font:500 12.5px/1.4 var(--vsUI);color:var(--p-txt3)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BIENESTAR DEL EQUIPO · las piezas propias de esa pantalla
+   Van aca y no en wellness.html porque comparten los mismos tokens, los
+   mismos paneles y los mismos chips que el resto de la piel.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* la tira de condiciones: clima y proximo partido */
+html:not([data-vs="off"]) body .we-cond{
+  display:flex;align-items:stretch;flex-wrap:wrap;margin:0 0 14px;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);overflow:hidden}
+html:not([data-vs="off"]) body .we-dato{
+  display:flex;align-items:center;gap:11px;padding:13px 20px;flex:1 1 180px;min-width:0;
+  border-right:1px solid var(--p-borde)}
+html:not([data-vs="off"]) body .we-dato:last-child{border-right:0;flex:1 1 240px}
+html:not([data-vs="off"]) body .we-dato .rot{
+  font:700 9.5px/1 var(--vsUI);letter-spacing:.2em;text-transform:uppercase;color:var(--p-cyan);
+  opacity:.9;margin-bottom:5px}
+html:not([data-vs="off"]) body .we-dato .val{font:600 16px/1.15 var(--vsUI);color:#F0F6FA}
+html:not([data-vs="off"]) body .we-dato .val .chico{font-size:12.5px;color:var(--p-txt2);font-weight:500}
+html:not([data-vs="off"]) body .we-dato .sub{font:500 11.5px/1.3 var(--vsUI);color:var(--p-txt3);margin-top:3px}
+html:not([data-vs="off"]) body .we-ic{
+  width:30px;height:30px;flex:none;display:grid;place-items:center;color:var(--p-cyan)}
+html:not([data-vs="off"]) body .we-ic svg{width:21px;height:21px;
+  stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body .we-ic.chico{width:20px;height:20px}
+html:not([data-vs="off"]) body .we-ic.chico svg{width:15px;height:15px}
+
+/* la tira de jugadores */
+html:not([data-vs="off"]) body .we-tira{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:10px;margin-bottom:14px}
+html:not([data-vs="off"]) body .we-jt{
+  display:flex;align-items:center;gap:9px;padding:8px 10px;min-width:0;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);cursor:pointer;text-align:left;
+  transition:border-color .15s,box-shadow .15s}
+html:not([data-vs="off"]) body .we-jt:hover{border-color:var(--p-borde2)}
+html:not([data-vs="off"]) body .we-jt.on{
+  border-color:var(--red);box-shadow:0 0 26px -12px rgba(255,10,60,.9),inset 0 0 0 1px rgba(255,10,60,.25)}
+html:not([data-vs="off"]) body .we-jt .fo{
+  width:40px;height:46px;flex:none;border-radius:8px;overflow:hidden;background:#00101C;
+  display:grid;place-items:center;color:#2A4A63;font:700 17px/1 var(--vsTit)}
+html:not([data-vs="off"]) body .we-jt .fo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+html:not([data-vs="off"]) body .we-jt .tx{flex:1 1 auto;min-width:62px}
+html:not([data-vs="off"]) body .we-jt .tx b{
+  display:block;font:700 12.5px/1.1 var(--vsTit);letter-spacing:.03em;text-transform:uppercase;color:#fff;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html:not([data-vs="off"]) body .we-jt .tx i{
+  display:block;font-style:normal;font:500 10.5px/1.2 var(--vsUI);color:var(--p-txt3);margin-top:2px}
+html:not([data-vs="off"]) body .we-jt .es{
+  font:600 10px/1.1 var(--vsUI);letter-spacing:.06em;flex:0 0 auto;max-width:52px}
+html:not([data-vs="off"]) body .we-jt .fl{display:grid;place-items:center;color:var(--p-txt3)}
+html:not([data-vs="off"]) body .we-jt .fl svg{width:14px;height:14px;
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body .we-jt.todos{justify-content:center;gap:7px;
+  color:var(--p-cyan);font:700 11px/1 var(--vsUI);letter-spacing:.14em;text-transform:uppercase}
+html:not([data-vs="off"]) body .we-jt.todos svg{width:18px;height:18px;
+  stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+html:not([data-vs="off"]) body .we-an{position:relative;display:grid;place-items:center;flex:none;width:40px;height:40px}
+html:not([data-vs="off"]) body .we-an svg{position:absolute;inset:0}
+html:not([data-vs="off"]) body .we-an b{position:relative;font:700 13px/1 var(--vsTit);color:#fff}
+
+/* las tres columnas */
+html:not([data-vs="off"]) body .we-grid{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,.92fr);
+  gap:14px;align-items:start}
+@media (max-width:1240px){
+  html:not([data-vs="off"]) body .we-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  html:not([data-vs="off"]) body .we-grid > :last-child{grid-column:1 / -1}
+}
+@media (max-width:820px){
+  html:not([data-vs="off"]) body .we-grid{grid-template-columns:1fr}
+  html:not([data-vs="off"]) body .we-grid > :last-child{grid-column:1}
+}
+
+/* la cabecera del jugador elegido */
+html:not([data-vs="off"]) body .we-cabjug{
+  display:flex;align-items:center;gap:12px;padding:13px 15px;border-bottom:1px solid var(--p-borde)}
+html:not([data-vs="off"]) body .we-cabjug .fo{
+  width:52px;height:60px;flex:none;border-radius:9px;overflow:hidden;background:#00101C;
+  display:grid;place-items:center;color:#2A4A63;font:700 22px/1 var(--vsTit)}
+html:not([data-vs="off"]) body .we-cabjug .fo img{width:100%;height:100%;object-fit:cover;object-position:center top}
+html:not([data-vs="off"]) body .we-cabjug .nm{flex:1;min-width:0}
+html:not([data-vs="off"]) body .we-cabjug .nm b{
+  display:block;font:700 17px/1.1 var(--vsTit);letter-spacing:.03em;text-transform:uppercase;color:#fff}
+html:not([data-vs="off"]) body .we-cabjug .nm i{
+  display:block;font-style:normal;font:600 11px/1.2 var(--vsUI);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--p-cyan);margin-top:4px}
+html:not([data-vs="off"]) body .we-cabjug .pc{display:flex;align-items:center;gap:10px;flex:none}
+html:not([data-vs="off"]) body .we-cabjug .pc .lb{display:block;text-align:right}
+html:not([data-vs="off"]) body .we-cabjug .pc .lb i{
+  display:block;font-style:normal;font:600 9.5px/1 var(--vsUI);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--p-txt3)}
+html:not([data-vs="off"]) body .we-cabjug .pc .lb b{
+  display:block;font:700 14px/1 var(--vsTit);letter-spacing:.06em;text-transform:uppercase;margin-top:5px}
+
+/* las pestañas chicas del panel del jugador */
+html:not([data-vs="off"]) body .vs-p-tabs.chico{border:0;border-radius:0;background:none;
+  border-bottom:1px solid var(--p-borde);margin:0}
+html:not([data-vs="off"]) body .vs-p-tabs.chico > button{height:38px;padding:0 13px;font-size:11px;letter-spacing:.1em}
+
+/* las filas de estadistica */
+html:not([data-vs="off"]) body .we-fila{
+  display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:9px;
+  padding:8px 0;border-bottom:1px solid rgba(99,216,238,.08)}
+html:not([data-vs="off"]) body .we-fila:last-child{border-bottom:0}
+html:not([data-vs="off"]) body .we-fila .rot{font:500 13px/1.25 var(--vsUI);color:#CBDAE5;min-width:0}
+html:not([data-vs="off"]) body .we-fila .val{font:700 13px/1 var(--vsUI);white-space:nowrap;text-align:right}
+html:not([data-vs="off"]) body .we-fila .val i{font-style:normal;font-weight:500;opacity:.7;font-size:11.5px}
+html:not([data-vs="off"]) body .we-fila .bar{
+  grid-column:2 / -1;height:4px;border-radius:3px;background:rgba(99,216,238,.11);overflow:hidden}
+html:not([data-vs="off"]) body .we-fila .bar i{display:block;height:100%;border-radius:3px}
+html:not([data-vs="off"]) body .we-rot{
+  font:700 9.5px/1 var(--vsUI);letter-spacing:.22em;text-transform:uppercase;
+  color:var(--p-cyan);opacity:.85;margin:2px 0 9px}
+html:not([data-vs="off"]) body .we-obs{margin-top:12px;padding-top:11px;border-top:1px solid var(--p-borde)}
+html:not([data-vs="off"]) body .we-obs p{margin:0;font:500 12.5px/1.5 var(--vsUI);color:var(--p-txt2)}
+html:not([data-vs="off"]) body .we-nota{
+  margin:10px 0 0;font:500 11.5px/1.45 var(--vsUI);color:var(--p-txt3)}
+html:not([data-vs="off"]) body .we-vacio{
+  padding:22px 14px;text-align:center;color:var(--p-txt3);font:500 13px/1.5 var(--vsUI);
+  border:1px dashed var(--p-borde);border-radius:10px}
+html:not([data-vs="off"]) body .we-vacio.chico{padding:14px 10px;font-size:12px}
+
+/* los graficos */
+html:not([data-vs="off"]) body .we-graf{width:100%;height:150px;display:block}
+html:not([data-vs="off"]) body .we-graf.chico{height:92px}
+html:not([data-vs="off"]) body .we-graf .ejx,
+html:not([data-vs="off"]) body .we-graf .ejy{
+  font:500 9px var(--vsUI);fill:var(--p-txt3);text-anchor:middle;letter-spacing:.04em}
+html:not([data-vs="off"]) body .we-graf .ejy{text-anchor:start}
+html:not([data-vs="off"]) body .we-dos{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+html:not([data-vs="off"]) body .we-media{display:flex;flex-direction:column;align-items:center;gap:7px;flex:0 0 auto}
+html:not([data-vs="off"]) body .we-media.ancha{flex:1 1 180px;align-items:stretch}
+html:not([data-vs="off"]) body .we-media .pie{
+  font:600 10px/1.2 var(--vsUI);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--p-txt3);text-align:center;max-width:120px}
+
+/* el resumen del equipo */
+html:not([data-vs="off"]) body .we-res{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+html:not([data-vs="off"]) body .we-res .tx{flex:1 1 110px;min-width:0}
+html:not([data-vs="off"]) body .we-res .tx b{
+  display:block;font:600 12px/1.35 var(--vsUI);color:var(--p-txt2)}
+html:not([data-vs="off"]) body .we-res .tx span{
+  display:block;font:700 22px/1.1 var(--vsTit);color:#fff;margin-top:4px}
+html:not([data-vs="off"]) body .we-res .tx i{
+  display:block;font-style:normal;font:500 11px/1.3 var(--vsUI);color:var(--p-txt3);margin-top:4px}
+html:not([data-vs="off"]) body .we-res .ley{list-style:none;margin:0;padding:0;flex:0 0 auto}
+html:not([data-vs="off"]) body .we-res .ley li{
+  display:flex;align-items:center;gap:8px;font:500 12.5px/1 var(--vsUI);color:var(--p-txt2);padding:5px 0}
+html:not([data-vs="off"]) body .we-res .ley .p{width:9px;height:9px;border-radius:50%;flex:none}
+html:not([data-vs="off"]) body .we-res .ley b{margin-left:auto;color:#fff;font:700 13px/1 var(--vsTit);padding-left:14px}
+
+/* las listas de alertas y recomendaciones */
+html:not([data-vs="off"]) body .we-lista{list-style:none;margin:0;padding:0}
+html:not([data-vs="off"]) body .we-lista li{
+  display:flex;align-items:center;gap:10px;padding:10px 0;
+  border-bottom:1px solid rgba(99,216,238,.08);cursor:pointer}
+html:not([data-vs="off"]) body .we-lista.chica li{cursor:default;align-items:flex-start}
+html:not([data-vs="off"]) body .we-lista li:last-child{border-bottom:0}
+html:not([data-vs="off"]) body .we-lista li:hover{background:rgba(99,216,238,.04)}
+html:not([data-vs="off"]) body .we-lista.chica li:hover{background:none}
+html:not([data-vs="off"]) body .we-lista .tx{flex:1;min-width:0}
+html:not([data-vs="off"]) body .we-lista .tx b{
+  display:block;font:700 12.5px/1.1 var(--vsTit);letter-spacing:.04em;text-transform:uppercase}
+html:not([data-vs="off"]) body .we-lista .tx span{
+  display:block;font:500 12px/1.4 var(--vsUI);color:var(--p-txt2);margin-top:3px}
+html:not([data-vs="off"]) body .we-lista > li > svg{width:14px;height:14px;flex:none;color:var(--p-txt3);
+  stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* la tabla chica del historial */
+html:not([data-vs="off"]) body .vs-p-tabla.chica{border-spacing:0 4px}
+html:not([data-vs="off"]) body .vs-p-tabla.chica td{font-size:12.5px;padding:3px 6px}
+html:not([data-vs="off"]) body .vs-p-tabla.chica th{font-size:9.5px;padding:0 6px 6px}
+
+/* los filtros heredados, dentro de la barra de la piel */
+html:not([data-vs="off"]) body .we-filtros{margin:0 0 14px}
+html:not([data-vs="off"]) body .we-filtros .row2{
+  display:flex!important;grid-template-columns:none!important;
+  align-items:flex-end;gap:14px;flex-wrap:wrap;margin:0!important;max-width:none!important;width:100%}
+html:not([data-vs="off"]) body .we-filtros .row2 > div{flex:1 1 170px;min-width:150px}
+html:not([data-vs="off"]) body .we-filtros .fld{
+  display:block;font:700 9.5px/1 var(--vsUI);letter-spacing:.17em;text-transform:uppercase;
+  color:var(--p-cyan);margin-bottom:6px}
+html:not([data-vs="off"]) body .we-filtros input,
+html:not([data-vs="off"]) body .we-filtros select{
+  width:100%;height:38px;padding:0 12px;border-radius:var(--p-r2);
+  border:1px solid var(--p-borde2);background:var(--p-hueco);color:#E6EEF5;
+  font:500 14px/1 var(--vsUI);outline:0}
+
+/* las tres solapas propias de wellness, con el estilo de la piel */
+html:not([data-vs="off"]) body .tabs{
+  display:flex;align-items:stretch;gap:0;overflow-x:auto;margin:0 0 14px;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F)}
+html:not([data-vs="off"]) body .tabs .tab{
+  position:relative;height:44px;padding:0 20px;border:0!important;background:none!important;
+  cursor:pointer;color:var(--p-txt2)!important;border-radius:0!important;
+  font:700 12px/1 var(--vsUI)!important;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+html:not([data-vs="off"]) body .tabs .tab + .tab::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;width:1px;background:var(--p-borde)}
+html:not([data-vs="off"]) body .tabs .tab:hover{color:#fff!important;background:rgba(255,255,255,.035)!important}
+html:not([data-vs="off"]) body .tabs .tab.on{
+  color:#fff!important;background:linear-gradient(180deg,rgba(255,10,60,.26),rgba(255,10,60,.04))!important}
+html:not([data-vs="off"]) body .tabs .tab.on::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2.5px;background:var(--red);
+  box-shadow:0 0 14px -1px rgba(255,10,60,.95)}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PREPARACION FISICA · las dos pantallas de rutinas
+   ---------------------------------------------------------------------------
+   Estas dos ya tenian sus piezas armadas y funcionando (.card, .btn, .ses-hd,
+   .semanas-tabs, .savebar, la calculadora de 1RM...). En vez de rehacerlas y
+   arriesgar lo que anda, aca se las viste con la caja, la letra y los colores
+   de la piel: cambia como se ven, no lo que hacen.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* la banda del gimnasio */
+html:not([data-vs="off"]) body.vs-p.vs-p-gym .vs-cab::before{
+  background-image:url('vs_gym_ancho.jpg')}
+
+/* las tarjetas */
+html:not([data-vs="off"]) body.vs-p .card,
+html:not([data-vs="off"]) body.vs-p .prog-card,
+html:not([data-vs="off"]) body.vs-p .fb-card{
+  border:1px solid var(--p-borde)!important;border-radius:var(--p-r)!important;
+  background:linear-gradient(180deg,#000D18,#00070F)!important;
+  box-shadow:none!important;padding:15px 16px!important;margin-bottom:14px!important}
+html:not([data-vs="off"]) body.vs-p .card-ti,
+html:not([data-vs="off"]) body.vs-p .prog-head{
+  font:700 14px/1.2 var(--vsTit)!important;letter-spacing:.14em!important;
+  text-transform:uppercase!important;color:#EDF3F8!important}
+html:not([data-vs="off"]) body.vs-p .card-sub,
+html:not([data-vs="off"]) body.vs-p .prog-sub,
+html:not([data-vs="off"]) body.vs-p .hint{
+  font:500 12.5px/1.45 var(--vsUI)!important;color:var(--p-txt3)!important}
+
+/* los campos */
+html:not([data-vs="off"]) body.vs-p .fld,
+html:not([data-vs="off"]) body.vs-p .selector-label,
+html:not([data-vs="off"]) body.vs-p .calc-lbl{
+  display:block;font:700 9.5px/1 var(--vsUI)!important;letter-spacing:.17em!important;
+  text-transform:uppercase!important;color:var(--p-cyan)!important;margin-bottom:6px!important}
+html:not([data-vs="off"]) body.vs-p input:not([type="range"]):not([type="checkbox"]):not([type="radio"]),
+html:not([data-vs="off"]) body.vs-p select,
+html:not([data-vs="off"]) body.vs-p textarea{
+  border:1px solid var(--p-borde2)!important;background:var(--p-hueco)!important;
+  color:#E6EEF5!important;border-radius:var(--p-r2)!important;
+  font-family:var(--vsUI)!important}
+html:not([data-vs="off"]) body.vs-p input:focus,
+html:not([data-vs="off"]) body.vs-p select:focus,
+html:not([data-vs="off"]) body.vs-p textarea:focus{border-color:var(--p-cyan)!important;outline:0}
+
+/* los botones */
+html:not([data-vs="off"]) body.vs-p .btn,
+html:not([data-vs="off"]) body.vs-p .vbtn,
+html:not([data-vs="off"]) body.vs-p .addrow{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:var(--p-r2)!important;
+  font:600 13px/1 var(--vsUI)!important;letter-spacing:.05em!important;cursor:pointer}
+html:not([data-vs="off"]) body.vs-p .btn-ghost{
+  border:1px solid var(--p-borde2)!important;background:var(--p-hueco)!important;
+  color:var(--p-txt2)!important}
+html:not([data-vs="off"]) body.vs-p .btn-ghost:hover{border-color:var(--p-cyan)!important;color:#fff!important}
+html:not([data-vs="off"]) body.vs-p .btn-teal{
+  border:1.5px solid rgba(0,229,166,.55)!important;background:rgba(0,229,166,.07)!important;
+  color:var(--p-verde)!important;font-weight:700!important;
+  letter-spacing:.13em!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) body.vs-p .btn-teal:hover{background:rgba(0,229,166,.16)!important;color:#BFF7E6!important}
+
+/* las pestañas de semanas / meses */
+html:not([data-vs="off"]) body.vs-p .semanas-tabs{
+  display:flex;align-items:stretch;gap:0;overflow-x:auto;
+  border:1px solid var(--p-borde);border-radius:var(--p-r);
+  background:linear-gradient(180deg,#000D18,#00070F);margin-bottom:14px;padding:0!important}
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > *{
+  position:relative;display:inline-flex;align-items:center;gap:8px;
+  height:44px;padding:0 18px;border:0!important;background:none!important;border-radius:0!important;
+  color:var(--p-txt2)!important;cursor:pointer;white-space:nowrap;
+  font:700 12px/1 var(--vsUI)!important;letter-spacing:.13em!important;text-transform:uppercase!important}
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > * + *::before{
+  content:'';position:absolute;left:0;top:12px;bottom:12px;width:1px;background:var(--p-borde)}
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > *:hover{color:#fff!important;background:rgba(255,255,255,.035)!important}
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > .on,
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > .activa,
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > [aria-selected="true"]{
+  color:#fff!important;background:linear-gradient(180deg,rgba(255,10,60,.26),rgba(255,10,60,.04))!important}
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > .on::after,
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > .activa::after,
+html:not([data-vs="off"]) body.vs-p .semanas-tabs > [aria-selected="true"]::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:2.5px;background:var(--red);
+  box-shadow:0 0 14px -1px rgba(255,10,60,.95)}
+
+/* la cabecera de cada sesion del editor */
+html:not([data-vs="off"]) body.vs-p .ses-hd{
+  display:flex;align-items:center;gap:11px;padding:12px 15px!important;
+  border-bottom:1px solid var(--p-borde)!important;
+  font:700 13px/1 var(--vsTit)!important;letter-spacing:.13em!important;
+  text-transform:uppercase!important;color:#EDF3F8!important}
+html:not([data-vs="off"]) body.vs-p .ses-bd{padding:13px 15px!important}
+
+/* las tres estadisticas del jugador */
+html:not([data-vs="off"]) body.vs-p .jug-stat{
+  border:1px solid var(--p-borde)!important;border-radius:var(--p-r)!important;
+  background:linear-gradient(180deg,#000D18,#00070F)!important;padding:13px 15px!important}
+html:not([data-vs="off"]) body.vs-p .jug-stat-val{
+  font:700 24px/1 var(--vsTit)!important;color:#fff!important;letter-spacing:.02em!important}
+html:not([data-vs="off"]) body.vs-p .jug-stat-lbl{
+  font:700 9.5px/1 var(--vsUI)!important;letter-spacing:.2em!important;
+  text-transform:uppercase!important;color:var(--p-cyan)!important;margin-top:6px!important}
+
+/* la calculadora de 1RM */
+html:not([data-vs="off"]) body.vs-p .calc-input{
+  height:38px!important;padding:0 12px!important;font:500 14px/1 var(--vsUI)!important}
+
+/* la barra de acciones de abajo */
+html:not([data-vs="off"]) body.vs-p .savebar{
+  border-top:1px solid var(--p-borde)!important;
+  background:rgba(0,7,15,.94)!important;backdrop-filter:blur(14px);
+  padding:11px 20px!important;gap:10px!important}
+
+/* el boton de video de cada ejercicio */
+html:not([data-vs="off"]) body.vs-p .ej-video-btn{
+  border:1px solid rgba(255,10,60,.42)!important;background:rgba(255,10,60,.07)!important;
+  color:var(--red)!important;border-radius:8px!important}
+
+/* el lema vertical de la derecha, el de las maquetas 3 y 4 */
+html:not([data-vs="off"]) body .vs-p-lema b{display:block;font-weight:700}
+
+/*   prep_fisica trae su propio lema (#nv-lema), puesto por nv-piel-pf y
+     clavado a la derecha de la banda: ahi se montaba sobre la pildora.
+     Ahora el lema lo pone la piel, dentro de la columna de la derecha y
+     arriba del boton, como en las maquetas 3 y 4. El de la pagina se
+     esconde —no se borra: si se apaga la piel, vuelve solo—.            */
+html:not([data-vs="off"]) body.vs-p #nv-lema{display:none!important}
+
+/* ── LOS TRES NUMEROS DEL WHOOP, AL FINAL DE LA ENCUESTA ─────────────────
+   Van juntos y apagados: el que no tiene reloj tiene que poder saltearlos
+   sin pensarlo. El titulo dice "si usás Whoop" para que quede claro que no
+   es obligatorio. */
+html:not([data-vs="off"]) body .wp-whoop{
+  border:1px dashed var(--p-borde2)!important;border-radius:var(--p-r)!important;
+  background:rgba(99,216,238,.035)!important;padding:13px 15px!important}
+html:not([data-vs="off"]) body .wp-whoop-ti{
+  font:700 10px/1 var(--vsUI);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--p-cyan);margin-bottom:11px}
+html:not([data-vs="off"]) body .wp-whoop-3{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:11px}
+html:not([data-vs="off"]) body .wp-wc .fld{margin-bottom:5px!important}
+html:not([data-vs="off"]) body .wp-wi{position:relative;display:block}
+html:not([data-vs="off"]) body .wp-wi input{
+  /*  max-width: la hoja de la pagina le pone un ancho fijo a los input de
+      la encuesta y la unidad quedaba lejos del campo.                   */
+  width:100%!important;max-width:none!important;min-width:0;
+  height:38px;padding:0 34px 0 12px;border-radius:var(--p-r2);
+  border:1px solid var(--p-borde2);background:var(--p-hueco);color:#E6EEF5;
+  font:500 15px/1 var(--vsUI);outline:0}
+html:not([data-vs="off"]) body .wp-wi input:focus{border-color:var(--p-cyan)}
+html:not([data-vs="off"]) body .wp-wi i{
+  position:absolute;right:11px;top:50%;transform:translateY(-50%);
+  font-style:normal;font:600 11px/1 var(--vsUI);letter-spacing:.08em;color:var(--p-txt3);
+  pointer-events:none}
+/* la marquita "Whoop" al lado de un valor medido */
+html:not([data-vs="off"]) body .we-fila .val i{
+  display:inline-block;margin-left:5px;padding:2px 6px;border-radius:5px;
+  border:1px solid var(--p-borde2);background:rgba(99,216,238,.07);
+  color:var(--p-cyan);font:700 9px/1 var(--vsUI);letter-spacing:.1em;
+  text-transform:uppercase;opacity:1;vertical-align:middle}
