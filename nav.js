@@ -397,7 +397,16 @@
   /*  el escudo flotante de abajo a la izquierda repetia el del pie del
       riel, y la flecha de volver repetia "Inicio" del menu: en la maqueta
       no estan ninguno de los dos.                                        */
-  + '#vb-volver, #vb-atras, #club-escudo{ display:none !important; }'
+  /*  EL ESCUDO PARA VOLVER AL MENU
+      Estaba escondido junto con el escudo repetido de lang.js, y con el se
+      fue el unico camino de vuelta al inicio que tienen 30 pantallas. No se
+      esconde: se corre a la derecha del riel, que es lo que lo tapaba. En la
+      portada si sobra —el riel ya tiene el escudo y el boton llevaria a la
+      misma pagina—, asi que ahi y solo ahi se oculta.                    */
+  + '#vb-volver, #vb-atras, #club-escudo{'
+  + '  left:calc(var(--vsl-w) + 14px) !important; z-index:9998 !important; }'
+  + 'body.ix-p #vb-volver, body.ix-p #vb-atras, body.ix-p #club-escudo{'
+  + '  display:none !important; }'
   + '.savebar{ left:var(--vsl-w) !important; }'
   + '#vsn-panel{ left:var(--vsl-w) !important; }'
   + '#vsn-busca{ left:calc(50% + var(--vsl-w) / 2) !important; }'
