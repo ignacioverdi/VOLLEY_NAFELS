@@ -550,3 +550,548 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
   /*  los datos cifrados llegan despues: el mismo aviso que usa la pagina  */
   try { window.addEventListener('datos-listos', function () { setTimeout(pintar, 120); }); } catch (e) {}
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PLAN DE PARTIDO · LA CANCHA EN PERSPECTIVA  (maquetas 4 y 5)
+
+   Hasta ahora cada rotacion y cada jugador mostraban sus nueve zonas como
+   nueve cuadraditos planos. La maqueta las muestra sobre una cancha vista
+   desde atras: trapecio en perspectiva, la red arriba con las dos antenas,
+   la linea de ataque, y el calor de cada zona pintado adentro del dibujo.
+
+   Esto NO vuelve a calcular nada. Agarra las mismas nueve celdas que ya
+   dibujo la pagina —con su color de calor, su numero y su doble-clic de
+   video— y las recorta con clip-path sobre el trapecio. El dato es el mismo;
+   cambia donde se apoya.
+
+   La flecha de cada zona mide lo que dice el numero: largo proporcional al
+   porcentaje que ya esta escrito en la celda. No hay ningun dato nuevo.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  /*  LA FORMA DEL TRAPECIO, MEDIDA SOBRE LA MAQUETA
+      En 4_armador.png la cancha de una ficha va de x215 a x416 abajo y de
+      x233 a x393 arriba: 160/201 = .796 de ancho arriba. Alto 135 sobre
+      201 de ancho = .67. La linea de ataque cae a .467 del alto.          */
+  var ARRIBA = 0.796;          /* ancho del borde de arriba (red) */
+  /*  DOS CANCHAS DISTINTAS, COMO CORRESPONDE
+      El armador reparte a SEIS puestos: tres adelante (4-3-2) y tres
+      atras (5-6-1). Las zonas 7-8-9 del scout son esos mismos tres de
+      atras, mas profundos: 7 con 5, 8 con 6, 9 con 1. Por eso la cancha
+      del armador tiene seis cuadrantes y se suman los pares.
+      Donde CAE la pelota -ataque, saque, recepcion, defensa, bloqueo- si
+      son nueve zonas de verdad, y esas canchas van de a nueve.          */
+  var FILAS9 = [0, 0.30, 0.60, 1];
+  var FILAS6 = [0, 0.44, 1];
+  var FILAS  = FILAS9;
+  /*  en orden ARMZ (4,3,2,7,8,9,5,6,1): que celda se come a cual        */
+  var PARES = [[3, 6], [4, 7], [5, 8]];
+
+  function pt(fy, fx) {                 /* fx 0..1 de izquierda a derecha  */
+    var w = ARRIBA + (1 - ARRIBA) * fy;
+    return [(0.5 - w / 2 + fx * w) * 100, fy * 100];
+  }
+  function poli(f, c, F) {              /* fila f, columna c (0..2)        */
+    F = F || FILAS;
+    var y0 = F[f], y1 = F[f + 1];
+    var a = pt(y0, c / 3), b = pt(y0, (c + 1) / 3),
+        d = pt(y1, (c + 1) / 3), e = pt(y1, c / 3);
+    return [a, b, d, e];
+  }
+  function centro(p) {
+    var x = 0, y = 0; p.forEach(function (q) { x += q[0]; y += q[1]; });
+    return [x / 4, y / 4];
+  }
+  function clip(p) {
+    return 'polygon(' + p.map(function (q) {
+      return q[0].toFixed(2) + '% ' + q[1].toFixed(2) + '%';
+    }).join(',') + ')';
+  }
+
+  /*  EL DIBUJO DE ATRAS: red, antenas, lineas y el resplandor rojo         */
+  function svgFondo() {
+    var P = function (q) { return q[0].toFixed(2) + ',' + q[1].toFixed(2); };
+    var cuatro = P(pt(0,0)) + ' ' + P(pt(0,1)) + ' ' + P(pt(1,1)) + ' ' + P(pt(1,0));
+    return '<svg class="pp-cv" viewBox="0 0 100 100" preserveAspectRatio="none">'
+      + '<defs><radialGradient id="ppG" cx="50%" cy="-4%" r="86%">'
+      + '<stop offset="0" stop-color="#FF2B5E" stop-opacity=".52"/>'
+      + '<stop offset=".38" stop-color="#C0003A" stop-opacity=".20"/>'
+      + '<stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>'
+      + '<polygon points="' + cuatro + '" fill="#01080F"/>'
+      + '<polygon points="' + cuatro + '" fill="url(#ppG)"/>'
+      + '</svg>';
+  }
+
+  function svgFrente(F) {
+    var P = function (q) { return q[0].toFixed(2) + ',' + q[1].toFixed(2); };
+    var cuatro = P(pt(0,0)) + ' ' + P(pt(0,1)) + ' ' + P(pt(1,1)) + ' ' + P(pt(1,0));
+    var s = '<svg class="pp-cv" viewBox="0 0 100 100" preserveAspectRatio="none">'
+      + '<defs><linearGradient id="ppD" x1="0" y1="0" x2="0" y2="1">'
+      + '<stop offset="0" stop-color="#FF4D73" stop-opacity=".92"/>'
+      + '<stop offset="1" stop-color="#FF2B5E" stop-opacity=".22"/></linearGradient></defs>';
+    [1, 2].forEach(function (c) {
+      s += '<line x1="' + pt(0, c/3)[0].toFixed(2) + '" y1="0" x2="' + pt(1, c/3)[0].toFixed(2)
+         + '" y2="100" stroke="url(#ppD)" stroke-width="1.6" vector-effect="non-scaling-stroke"/>';
+    });
+    for (var f = 1; f < F.length - 1; f++) {
+      s += '<line x1="' + pt(F[f], 0)[0].toFixed(2) + '" y1="' + (F[f]*100).toFixed(2)
+         + '" x2="' + pt(F[f], 1)[0].toFixed(2) + '" y2="' + (F[f]*100).toFixed(2)
+         + '" stroke="#DCEFFA" stroke-opacity="' + (f > 1 ? '.30' : '.62')
+         + '" stroke-width="1.1" vector-effect="non-scaling-stroke"/>';
+    }
+    s += '<polygon points="' + cuatro + '" fill="none" stroke="#EAF7FF" stroke-opacity=".92"'
+       + ' stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg>';
+    var x0 = pt(0, 0)[0], x1 = pt(0, 1)[0];
+    s += '<i class="pp-red" style="left:' + x0.toFixed(2) + '%;width:' + (x1 - x0).toFixed(2) + '%"></i>'
+       + '<i class="pp-ant" style="left:' + x0.toFixed(2) + '%"></i>'
+       + '<i class="pp-ant" style="left:' + x1.toFixed(2) + '%"></i>';
+    return s;
+  }
+
+  /*  JUNTA DOS ZONAS EN UNA SOLA CELDA
+      7 con 5, 8 con 6, 9 con 1: es el mismo puesto de atras, mas o menos
+      profundo. Manda la que tiene mas acciones -se queda con su doble-clic
+      de video- y se le suman las del par. Si la otra tambien tiene, el
+      titulo lo aclara: no se esconde nada.                              */
+  function juntar(a, b) {
+    var na = contar(a), nb = contar(b);
+    var jefe = nb > na ? b : a, otro = nb > na ? a : b;
+    var nj = Math.max(na, nb), no = Math.min(na, nb), tot = na + nb;
+    if (!tot) { otro.style.display = 'none'; return jefe; }
+    var pa = porc(a), pb = porc(b), ka = punto(a), kb = punto(b);
+    var n = jefe.querySelector('.cn-n'), p = jefe.querySelector('.cn-p');
+    if (!n) {                                   /* el jefe venia vacio    */
+      jefe.innerHTML = otro.innerHTML;
+      n = jefe.querySelector('.cn-n'); p = jefe.querySelector('.cn-p');
+    }
+    if (n) n.textContent = tot;
+    if (p) p.textContent = (pa + pb) + '% · '
+      + Math.round((ka * na + kb * nb) / (tot || 1)) + '%';
+    jefe.title = (no > 0)
+      ? 'Suma de las dos zonas de atrás de esta columna (' + tot
+        + ' en total). El video abre la de ' + nj + '.'
+      : '';
+    otro.style.display = 'none';
+    return jefe;
+  }
+  function contar(c) { var e = c.querySelector('.cn-n'); return e ? (parseInt(e.textContent, 10) || 0) : 0; }
+  function porc(c)   { var e = c.querySelector('.cn-p'), m = e && e.textContent.match(/(\d+)\s*%/); return m ? +m[1] : 0; }
+  function punto(c)  { var e = c.querySelector('.cn-p'), m = e && e.textContent.match(/·\s*(\d+)\s*%/); return m ? +m[1] : 0; }
+
+  /*  CONVIERTE LA GRILLA EN LA CANCHA  (seis o nueve cuadrantes)        */
+  function cancha(g, seis) {
+    if (!g || g.dataset.ppc === '1') return;
+    var cel = [].slice.call(g.children).filter(function (e) {
+      return /(^|\s)cell(\s|$)/.test(e.className || '');
+    });
+    if (cel.length !== 9) return;
+    g.dataset.ppc = '1';
+    g.classList.add('pp-ch');
+    if (seis) g.classList.add('pp-ch6');
+    var F = seis ? FILAS6 : FILAS9;
+    var bg = document.createElement('div');
+    bg.className = 'pp-bg'; bg.innerHTML = svgFondo();
+    g.insertBefore(bg, g.firstChild);
+
+    var vivas;
+    if (seis) {
+      vivas = [cel[0], cel[1], cel[2]];
+      PARES.forEach(function (par) { vivas.push(juntar(cel[par[0]], cel[par[1]])); });
+    } else {
+      vivas = cel;
+    }
+
+    var flechas = [];
+    vivas.forEach(function (c, i) {
+      var f = Math.floor(i / 3), col = i % 3;
+      var p = poli(f, col, F), ce = centro(p);
+      var fondoViejo = c.style.background || '';
+      c.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;'
+        + 'clip-path:' + clip(p) + ';-webkit-clip-path:' + clip(p) + ';'
+        + 'background:' + flojo(fondoViejo) + ';border:0;border-radius:0;'
+        + 'min-width:0;padding:0;margin:0';
+      var hijos = [].slice.call(c.children);
+      if (hijos.length) {
+        var lab = document.createElement('span');
+        lab.className = 'pp-lab';
+        lab.style.left = ce[0].toFixed(2) + '%';
+        lab.style.top  = ce[1].toFixed(2) + '%';
+        hijos.forEach(function (h) { lab.appendChild(h); });
+        c.appendChild(lab);
+        var txt = (lab.textContent || '').match(/(\d+)\s*%/);
+        var pct = txt ? +txt[1] : 0;
+        /*  el largo se corta dentro de su propia fila: una flecha que se
+            sale de la zona apunta a otra zona y miente.                  */
+        var alto = (F[f + 1] - F[f]) * 100 * 0.46;
+        if (pct > 0) flechas.push([ce[0], ce[1], pct, alto]);
+      }
+    });
+    var fg = document.createElement('div');
+    fg.className = 'pp-fg';
+    fg.innerHTML = svgFrente(F) + flechas.map(function (f) {
+      return '<i class="pp-fl" style="left:' + f[0].toFixed(2) + '%;top:' + (f[1] - 2.2).toFixed(2)
+        + '%;height:' + Math.min(f[3], 3.5 + f[2] * 0.40).toFixed(1) + '%;opacity:'
+        + Math.min(.95, .34 + f[2] / 42).toFixed(2) + '"></i>';
+    }).join('');
+    g.appendChild(fg);
+  }
+
+  /*  EL CALOR, MAS FLOJO
+      La maqueta pinta la cancha casi a oscuras y deja que mande el rojo de
+      la red. El color por zona que ya usaba la pagina sigue estando -asi se
+      reconoce de que zona se habla- pero a menos de la mitad de fuerza.    */
+  function flojo(bg) {
+    if (!bg) return 'transparent';
+    /*  Sobre la cancha la zona ya se reconoce por DONDE esta: el arcoiris
+        de nueve colores era para una grilla suelta, aca sobra y pelea con
+        el rojo de la maqueta. Queda una sola escala roja, con la misma
+        fuerza que traia cada celda.                                      */
+    var m = bg.match(/rgba\([^)]*?,\s*([0-9.]+)\)/);
+    if (!m) return 'transparent';
+    var a = Math.min(0.30, (+m[1]) * 0.40);
+    return 'rgba(255,43,94,' + a.toFixed(3) + ')';
+  }
+
+  /*  LOS NUMEROS AL COSTADO DE LA CANCHA
+      Los dos salen de las mismas celdas que estan dibujadas: la suma de
+      acciones y el % de punto pesado por esas acciones. Nada nuevo.      */
+  function lado(g) {
+    var card = g.closest ? g.closest('.armrot') : null;
+    if (!card || card.dataset.ppl === '1') return;
+    card.dataset.ppl = '1';
+    var tot = 0, pun = 0, cab = card.querySelector('.rt span'), rot = null;
+    if (cab) {
+      var mm = (cab.textContent || '').trim().match(/^(\d+)\s+\S+$/);
+      if (mm) { rot = +mm[1]; cab.style.display = 'none'; }
+    }
+    [].forEach.call(g.querySelectorAll('.pp-lab'), function (l) {
+      var n = (l.querySelector('.cn-n') || {}).textContent;
+      var p = (l.querySelector('.cn-p') || {}).textContent || '';
+      var v = parseInt(n, 10); if (!(v > 0)) return;
+      var m = p.match(/·\s*(\d+)\s*%/);
+      tot += v; if (m) pun += v * (+m[1]) / 100;
+    });
+    if (!tot) return;
+    var env = document.createElement('div'); env.className = 'pp-cw';
+    g.parentNode.insertBefore(env, g); env.appendChild(g);
+    var d = document.createElement('div'); d.className = 'pp-lado';
+    d.innerHTML = '<div><u data-t="Armados">Armados</u><b>' + (rot != null ? rot : tot) + '</b></div>'
+                + '<div><u data-t="% de punto">% de punto</u><b>'
+                + Math.round(pun / tot * 100) + '%</b></div>';
+    env.appendChild(d);
+  }
+
+  function canchas() {
+    [].forEach.call(document.querySelectorAll('.armcourt'), function (g) {
+      try { cancha(g, true); lado(g); } catch (e) {}
+    });
+    [].forEach.call(document.querySelectorAll('.courtbox .court'), function (g) {
+      try { cancha(g, false); } catch (e) {}
+    });
+  }
+
+  /* ── EL ESTILO ──────────────────────────────────────────────────────── */
+  var CSS = [
+    '.pp-ch{position:relative!important;display:block!important;width:100%;',
+    '  aspect-ratio:200/152;padding:0!important;gap:0!important;overflow:visible}',
+    '.pp-ch6{aspect-ratio:201/135}',
+    '.pp-bg,.pp-fg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none}',
+    '.pp-fg{z-index:4}',
+    /*  la ficha: cancha a la izquierda, numeros a la derecha              */
+    '.pp-cw{display:flex;align-items:stretch;gap:9px;margin-top:6px}',
+    '.pp-cw>.pp-ch{flex:1 1 auto;min-width:0}',
+    '.pp-lado{position:relative;flex:0 0 66px;display:flex;flex-direction:column;',
+    '  justify-content:center;gap:10px;padding-left:10px}',
+    '.pp-lado::before{content:"";position:absolute;left:0;top:6%;bottom:6%;width:1.5px;border-radius:1px;',
+    '  background:linear-gradient(180deg,rgba(255,43,94,0),#FF2B5E 22%,#FF2B5E 78%,rgba(255,43,94,0))}',
+    '.pp-lado u{display:block;font-style:normal;text-decoration:none;font-size:10.5px;',
+    '  font-weight:600;color:#6FD8F0;line-height:1.2;letter-spacing:.01em}',
+    '.pp-lado b{display:block;font-family:var(--vsNum,inherit);font-size:17px;font-weight:700;',
+    '  color:#EEF7FB;line-height:1.15;margin-top:1px}',
+    '.pp-cv{position:absolute;left:0;top:0;width:100%;height:100%;display:block}',
+    '.pp-red{position:absolute;top:0;height:7.5px;transform:translateY(-4px);',
+    '  background:repeating-linear-gradient(90deg,rgba(220,243,253,.48) 0 1px,transparent 1px 3.6px),',
+    '    repeating-linear-gradient(0deg,rgba(220,243,253,.26) 0 1px,transparent 1px 3.6px),',
+    '    linear-gradient(180deg,rgba(214,240,252,.30),rgba(214,240,252,.06));',
+    '  border-top:2px solid rgba(232,249,255,.95);pointer-events:none}',
+    '.pp-ant{position:absolute;top:0;width:3.4px;height:17px;transform:translate(-1.7px,-11px);',
+    '  background:linear-gradient(180deg,#A6F2FF,#00C4F0);border-radius:2px;',
+    '  box-shadow:0 0 9px rgba(0,208,246,.85);pointer-events:none}',
+    '.pp-ch .cell{box-shadow:none!important}',
+    '.pp-ch .cell::after{content:"";position:absolute;inset:0;pointer-events:none;',
+    '  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 55%)}',
+    '.pp-lab{position:absolute;transform:translate(-50%,-50%);display:flex;',
+    '  flex-direction:column;align-items:center;justify-content:center;line-height:1.05;',
+    '  white-space:nowrap;pointer-events:none;z-index:3;text-shadow:0 1px 3px rgba(0,0,0,.85)}',
+    '.pp-ch .cn-n{font-family:var(--vsNum,inherit);font-size:17px;font-weight:700;line-height:1.02}',
+    '.pp-ch .cn-p{font-size:10px;font-weight:600;opacity:.92;letter-spacing:.02em}',
+    /*  las canchas de nueve usan .zn (el rotulo de zona) y .cn (el numero) */
+    '.pp-ch .zn{font-size:9.5px;font-weight:700;letter-spacing:.06em;opacity:.78;line-height:1.1}',
+    '.pp-ch .cn{font-family:var(--vsNum,inherit);font-size:16px;font-weight:700;line-height:1.08}',
+    '.pp-fl{position:absolute;width:0;transform:translate(-50%,-100%);pointer-events:none;z-index:2;',
+    '  border-left:1.6px solid #FF2B5E;filter:drop-shadow(0 0 4px rgba(255,43,94,.6))}',
+    '.pp-fl::before{content:"";position:absolute;left:-4.2px;top:-1px;border:4px solid transparent;',
+    '  border-bottom-color:#FF4D73;border-top:0}',
+    /*  la ficha de rotacion, con su chapita numerada como la maqueta      */
+    '.pp-p .armrot .rt{align-items:center}',
+    '.pp-nb{flex:0 0 auto;width:21px;height:21px;border-radius:50%;display:inline-flex;',
+    '  align-items:center;justify-content:center;font-family:var(--vsNum,inherit);font-size:11px;',
+    '  font-weight:700;color:#FFE9EE;border:1.6px solid #FF2B5E;',
+    '  box-shadow:0 0 9px rgba(255,43,94,.45) inset,0 0 7px rgba(255,43,94,.30);margin-right:7px}'
+  ].join('');
+
+  function estilo() {
+    if (document.getElementById('pp2-css')) return;
+    var s = document.createElement('style'); s.id = 'pp2-css'; s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+
+  /*  la chapita numerada delante del titulo de cada rotacion              */
+  function chapas() {
+    [].forEach.call(document.querySelectorAll('.armrot .rt'), function (rt) {
+      if (rt.dataset.ppn === '1') return;
+      rt.dataset.ppn = '1';
+      var n = (rt.textContent || '').match(/P\s*(\d)/);
+      var b = document.createElement('em');
+      b.className = 'pp-nb'; b.textContent = n ? n[1] : '\u00b7';
+      rt.insertBefore(b, rt.firstChild);
+    });
+  }
+
+  function pintar2() {
+    estilo();
+    try { canchas(); } catch (e) {}
+    try { chapas(); } catch (e) {}
+  }
+  window.__pp2 = pintar2;
+
+  /*  se vuelve a dibujar cada vez que la pagina rehace una grilla          */
+  function mirar() {
+    if (!window.MutationObserver || !document.body) return;
+    var t = null;
+    new MutationObserver(function () {
+      clearTimeout(t); t = setTimeout(pintar2, 90);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  function arrancar() { pintar2(); mirar(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PLAN DE PARTIDO · LA TIRA DE LA SECUENCIA Y LA COLUMNA DE LA DERECHA
+
+   Dos cosas de la maqueta que faltaban:
+
+   1) La tira de abajo con las seis fases del punto. No es decoracion: cada
+      numero que TIENE pantalla propia lleva a su solapa, y el que esta
+      mirando queda encendido. Las fases sin pantalla (contraataque) se ven
+      apagadas a proposito, no se inventa un link que no existe.
+
+   2) La columna de la derecha pasa a la forma de la maqueta: el anillo con
+      su tabla al lado, y las barras con el nombre a la izquierda, la barra
+      en el medio y el numero a la derecha, todo en un renglon.
+
+   Ningun numero cambia. Es la misma columna que ya calculaba pp_piel.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  function $(id) { return document.getElementById(id); }
+
+  /*  las seis fases de la maqueta, con la solapa que le corresponde a cada
+      una. null = esa fase no tiene pantalla propia todavia.               */
+  var FASES = [
+    ['Recepción',   'recepcion'],
+    ['Colocación',  'armador'],
+    ['Ataque',      'ataque'],
+    ['Bloqueo',     'bloqueo'],
+    ['Defensa',     'defensa'],
+    ['Contraataque', null]
+  ];
+
+  var CSS = [
+    '#pp-tira{margin:16px 0 4px;background:linear-gradient(180deg,#00121E,#000C16);',
+    '  border:1px solid rgba(0,217,245,.30);border-radius:14px;padding:13px 16px 12px;',
+    '  display:flex;align-items:center;gap:18px;flex-wrap:wrap}',
+    '#pp-tira .tt{display:flex;align-items:center;gap:9px;flex:0 0 auto}',
+    '#pp-tira .tt i{width:25px;height:25px;border-radius:50%;border:1.6px solid #FF2B5E;',
+    '  display:flex;align-items:center;justify-content:center;',
+    '  box-shadow:0 0 10px rgba(255,43,94,.35)}',
+    '#pp-tira .tt i svg{width:11px;height:11px;fill:#FF4D73}',
+    '#pp-tira .tt b{font-family:var(--vsTit,inherit);font-size:11.5px;font-weight:700;',
+    '  letter-spacing:.17em;text-transform:uppercase;color:#D9E9F2}',
+    '#pp-pasos{flex:1 1 380px;display:flex;align-items:flex-start;min-width:280px;',
+    '  position:relative;padding-top:2px}',
+    '#pp-pasos .ps{flex:1 1 0;display:flex;flex-direction:column;align-items:center;',
+    '  gap:6px;position:relative;background:none;border:0;padding:0;cursor:default}',
+    '#pp-pasos .ps[data-ir]{cursor:pointer}',
+    '#pp-pasos .ps::before{content:"";position:absolute;top:12px;left:50%;right:-50%;height:1.6px;',
+    '  background:linear-gradient(90deg,#FF2B5E,rgba(255,43,94,.45));z-index:0}',
+    '#pp-pasos .ps:last-child::before{background:linear-gradient(90deg,rgba(64,150,200,.75),rgba(64,150,200,0))}',
+    '#pp-pasos .ps u{position:relative;z-index:1;width:25px;height:25px;border-radius:50%;',
+    '  display:flex;align-items:center;justify-content:center;text-decoration:none;',
+    '  font-family:var(--vsNum,inherit);font-size:12px;font-weight:700;color:#CFE6F2;',
+    '  background:#00121E;border:1.6px solid rgba(120,180,215,.65)}',
+    '#pp-pasos .ps s{text-decoration:none;font-size:11px;color:#8FA8BE;white-space:nowrap}',
+    '#pp-pasos .ps.on u{background:#FF2B5E;border-color:#FF2B5E;color:#fff;',
+    '  box-shadow:0 0 0 4px rgba(255,43,94,.18),0 0 12px rgba(255,43,94,.55)}',
+    '#pp-pasos .ps.on s{color:#FF6B8A;font-weight:700}',
+    '#pp-pasos .ps[data-ir]:hover u{border-color:#FF2B5E;color:#fff}',
+    '#pp-bts{flex:0 0 auto;display:flex;gap:10px;margin-left:auto}',
+    '#pp-bts button{display:inline-flex;align-items:center;gap:8px;background:rgba(0,20,33,.55);',
+    '  border:1px solid rgba(90,165,205,.45);border-radius:9px;padding:10px 15px;cursor:pointer;',
+    '  font-family:var(--vsTit,inherit);font-size:11.5px;font-weight:700;letter-spacing:.13em;',
+    '  text-transform:uppercase;color:#E3F1F8}',
+    '#pp-bts button:hover{border-color:#FF2B5E;color:#fff}',
+    '#pp-bts button[disabled]{opacity:.38;cursor:not-allowed}',
+    '#pp-bts button svg{width:14px;height:14px;flex:0 0 auto}',
+    /*  la columna de la derecha, con la forma de la maqueta               */
+    '.pp-card:has(>.pp-ring){display:grid;grid-template-columns:auto minmax(140px,1fr);',
+    '  column-gap:16px;align-items:center}',
+    '.pp-card>.pp-h{grid-column:1/-1}',
+    '.pp-card>.pp-ring{grid-column:1}',
+    '.pp-card>.pp-kpis{grid-column:2;display:block;margin-top:0}',
+    '.pp-card>.pp-kpis>div{display:flex;flex-direction:row-reverse;align-items:baseline;',
+    '  justify-content:space-between;gap:10px;background:none;border:0;border-radius:0;',
+    '  padding:7px 0;text-align:left;border-bottom:1px solid rgba(90,150,185,.16)}',
+    '.pp-card>.pp-kpis>div:last-child{border-bottom:0}',
+    '.pp-card>.pp-kpis>div b{font-size:13.5px;flex:0 0 auto}',
+    '.pp-card>.pp-kpis>div i{font-size:11.5px;letter-spacing:0;text-transform:none;margin-top:0;',
+    '  color:#9FB8CC;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.pp-bar{display:grid;grid-template-columns:minmax(74px,auto) minmax(60px,1fr) 40px;',
+    '  align-items:center;column-gap:11px;margin:0 0 7px}',
+    '.pp-bar .bl{display:contents}',
+    '.pp-bar .bl span{grid-column:1;margin:0;font-size:11.5px}',
+    '.pp-bar .bl b{grid-column:3;text-align:right;font-size:11.5px}',
+    '.pp-bar .bt{grid-column:2;height:9px;border-radius:5px}',
+    '.pp-bar .bf{border-radius:5px}'
+  ].join('');
+
+  function estilo() {
+    if ($('pp3-css')) return;
+    var s = document.createElement('style'); s.id = 'pp3-css'; s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+
+  var PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z"/></svg>';
+  var ICO = {
+    video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'
+         + ' stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg>',
+    lista: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'
+         + ' stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>',
+    full:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'
+         + ' stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>'
+  };
+
+  function seccion() {
+    var t = (typeof window.solapaActiva === 'function') ? window.solapaActiva() : 'armador';
+    return t === 'armador' ? $('armsec') : $('tab-' + t);
+  }
+
+  /*  VER VIDEO: dispara el MISMO control que ya existe en la pantalla.
+      En las solapas de zonas es el "Ver todo" de la primera ficha; en la
+      del armador, la celda con mas acciones que tenga video. Si no hay
+      ninguno, el boton queda apagado: no se abre una ventana vacia.      */
+  function controlVideo() {
+    var s = seccion(); if (!s) return null;
+    var vt = s.querySelector('button.vtodo, [onclick*="openZone"]');
+    if (vt) return vt;
+    var mejor = null, max = -1;
+    [].forEach.call(s.querySelectorAll('.cell.vid'), function (c) {
+      var n = parseInt((c.querySelector('.cn-n') || {}).textContent, 10) || 0;
+      if (n > max) { max = n; mejor = c; }
+    });
+    return mejor;
+  }
+
+  function verVideo() {
+    var e = controlVideo(); if (!e) return;
+    if (e.tagName === 'BUTTON') e.click();
+    else { var f = e.getAttribute('ondblclick'); if (f) { try { (new Function(f)).call(e); } catch (x) {} } }
+  }
+
+  function irAFiltros() {
+    var b = document.querySelector('#filtrosbar, .filtrosbar, #tabsbar');
+    if (!b) return;
+    b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    b.style.transition = 'box-shadow .35s';
+    b.style.boxShadow = '0 0 0 2px rgba(255,43,94,.55)';
+    setTimeout(function () { b.style.boxShadow = ''; }, 1100);
+  }
+
+  function pantallaCompleta() {
+    var s = seccion(); if (!s) return;
+    if (document.fullscreenElement) { document.exitFullscreen(); return; }
+    var f = s.requestFullscreen || s.webkitRequestFullscreen;
+    if (f) try { f.call(s); } catch (e) {}
+  }
+
+  function construir() {
+    if ($('pp-tira')) return $('pp-tira');
+    var ancla = $('armsec'); if (!ancla || !ancla.parentNode) return null;
+    var d = document.createElement('div'); d.id = 'pp-tira';
+    var pasos = FASES.map(function (f, i) {
+      return '<button class="ps" type="button"' + (f[1] ? ' data-ir="' + f[1] + '"' : '')
+        + '><u>' + (i + 1) + '</u><s data-t="' + f[0] + '">' + f[0] + '</s></button>';
+    }).join('');
+    d.innerHTML =
+        '<div class="tt"><i>' + PLAY + '</i><b data-t="Secuencia de juego">Secuencia de juego</b></div>'
+      + '<div id="pp-pasos">' + pasos + '</div>'
+      + '<div id="pp-bts">'
+      + '<button type="button" id="pp-bv" title="Abre el video que ya tiene esta pantalla">'
+      +   ICO.video + '<span data-t="Ver video">Ver video</span></button>'
+      + '<button type="button" id="pp-ba" title="Lleva a los filtros de arriba">'
+      +   ICO.lista + '<span data-t="Acciones">Acciones</span></button>'
+      + '<button type="button" id="pp-bf" title="Agranda esta sección a pantalla completa">'
+      +   ICO.full + '<span data-t="Pantalla completa">Pantalla completa</span></button>'
+      + '</div>';
+    /*  la tira va despues de la ultima seccion, nunca adentro de una  */
+    var ult = ancla.parentNode.lastElementChild;
+    ancla.parentNode.appendChild(d);
+    d.querySelector('#pp-bv').addEventListener('click', verVideo);
+    d.querySelector('#pp-ba').addEventListener('click', irAFiltros);
+    d.querySelector('#pp-bf').addEventListener('click', pantallaCompleta);
+    [].forEach.call(d.querySelectorAll('.ps[data-ir]'), function (b) {
+      b.addEventListener('click', function () {
+        if (typeof window.setTab === 'function') window.setTab(b.dataset.ir);
+        setTimeout(marcar, 60);
+      });
+    });
+    return d;
+  }
+
+  function marcar() {
+    var d = $('pp-tira'); if (!d) return;
+    var t = (typeof window.solapaActiva === 'function') ? window.solapaActiva() : '';
+    [].forEach.call(d.querySelectorAll('.ps'), function (b) {
+      b.classList.toggle('on', b.dataset.ir === t);
+    });
+    var bv = $('pp-bv'); if (bv) bv.disabled = !controlVideo();
+  }
+
+  function engancharTab() {
+    if (typeof window.setTab !== 'function' || window.setTab.__pp3) return false;
+    var o = window.setTab;
+    var n = function () { var r = o.apply(this, arguments); setTimeout(marcar, 40); return r; };
+    n.__pp3 = true; window.setTab = n;
+    return true;
+  }
+
+  function arrancar() {
+    estilo();
+    if (construir()) marcar();
+    engancharTab();
+    var i = 0, t = setInterval(function () {
+      estilo();
+      if (construir()) marcar();
+      engancharTab();
+      if (++i > 40) clearInterval(t);
+    }, 400);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
