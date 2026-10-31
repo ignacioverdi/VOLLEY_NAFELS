@@ -776,8 +776,13 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
     var env = document.createElement('div'); env.className = 'pp-cw';
     g.parentNode.insertBefore(env, g); env.appendChild(g);
     var d = document.createElement('div'); d.className = 'pp-lado';
+    /*  El % sale de los armados que TIENEN zona anotada, que son los que
+        estan dibujados. Si el scout dejo alguno sin zona, el total de
+        arriba es mayor: por eso el aviso dice sobre cuantos se calculo. */
+    var av = 'Punto directo sobre los ' + tot + ' armados con zona anotada'
+           + (rot != null && rot !== tot ? ' (de ' + rot + ' en la rotaci\u00f3n)' : '') + '.';
     d.innerHTML = '<div><u data-t="Armados">Armados</u><b>' + (rot != null ? rot : tot) + '</b></div>'
-                + '<div><u data-t="% de punto">% de punto</u><b>'
+                + '<div title="' + av + '"><u data-t="% de punto">% de punto</u><b>'
                 + Math.round(pun / tot * 100) + '%</b></div>';
     env.appendChild(d);
   }
@@ -967,7 +972,24 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
     '.pp-bar .bl span{grid-column:1;margin:0;font-size:11.5px}',
     '.pp-bar .bl b{grid-column:3;text-align:right;font-size:11.5px}',
     '.pp-bar .bt{grid-column:2;height:9px;border-radius:5px}',
-    '.pp-bar .bf{border-radius:5px}'
+    '.pp-bar .bf{border-radius:5px}',
+    /*  TRES FICHAS POR RENGLON, COMO LA MAQUETA
+        Con dos por renglon las rotaciones salian P4-P3 / P2-P5 / P6-P1 y la
+        cancha quedaba estirada. Con tres salen P4-P3-P2 arriba y P5-P6-P1
+        abajo, que es el orden que se pidio y el de la maqueta.           */
+    '.pp-dos{grid-template-columns:minmax(0,1fr) 392px!important}',
+    '.pp-dos>#armgrid{grid-template-columns:repeat(3,minmax(0,1fr))!important}',
+    '@media(max-width:1400px){.pp-dos{grid-template-columns:minmax(0,1fr) 332px!important}',
+    '  .pp-dos>#armgrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}',
+    '@media(max-width:980px){.pp-dos{grid-template-columns:minmax(0,1fr)!important}',
+    '  .pp-dos>#armgrid{grid-template-columns:minmax(0,1fr)!important}}',
+    /*  el titulo de la ficha arranca pegado a su chapita, no en el medio  */
+    '.pp-p .armrot .rt{justify-content:flex-start!important}',
+    '.pp-p .armrot .rt b{margin:0!important}',
+    '.pp-p .armrot .rt select,.pp-p .armrot .rt .blqsel{margin-left:auto!important}',
+    /*  el renglon del anillo: el texto largo no puede comerse la tabla    */
+    '.pp-card>.pp-ring{max-width:190px}',
+    '.pp-ring .rl i{font-size:10.5px;line-height:1.35}'
   ].join('');
 
   function estilo() {

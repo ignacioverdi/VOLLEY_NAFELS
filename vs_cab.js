@@ -652,6 +652,39 @@
     }catch(e){}
   }
 
+  /*  LOS DOS CONTROLES QUE QUEDABAN SUELTOS ARRIBA
+      El selector de idioma flotante baja adentro de la barra, donde ya
+      viven los demas controles, y la cajita CAT se saca cuando su
+      desplegable ya subio y quedo vacia.                             */
+  function ordenarCtrls(){
+    var caja = document.querySelector('#vsn .vs-ctls');
+    if(caja){
+      var w = document.getElementById('lang-wrap');
+      if(w){
+        var pos = '';
+        try{ pos = getComputedStyle(w).position; }catch(e){}
+        /*  el flotante de lang.js viene fijo arriba a la derecha y ahi
+            pisa al buscador: adentro de la barra va en el flujo       */
+        if(pos === 'fixed' || pos === 'absolute'){
+          w.removeAttribute('style');
+          w.style.display = 'flex';
+        }
+        if(!caja.contains(w)){
+          var av = caja.querySelector('.vs-ava');
+          if(av) caja.insertBefore(w, av); else caja.appendChild(w);
+        }
+        /*  equipo y preparacion fisica lo traen con display:none de
+            cuando el selector vivia en otro lado: adentro de la barra
+            no estorba a nadie y sin el no hay como cambiar de idioma */
+        if(caja.contains(w) && w.style.display === 'none') w.style.display = 'flex';
+        w.classList.add('vs-ctl');
+      }
+    }
+    var cf = document.getElementById('cat-flotante');
+    if(cf && !cf.querySelector('select') && cf.parentNode)
+      cf.parentNode.removeChild(cf);
+  }
+
   function arrancar(){
     /*  Las pantallas de proyeccion (el video con retardo) van a pantalla
         completa sobre la pared: una barra fija arriba taparia la imagen. Esas
@@ -675,7 +708,7 @@
     try{ pintarPaneles(); }catch(e){}
     try{ pintarAcentos(); }catch(e){}
     [700, 2200, 4500].forEach(function(ms){
-      setTimeout(function(){ try{ destapar(); pintarPaneles(); pintarAcentos(); }catch(e){} }, ms);
+      setTimeout(function(){ try{ destapar(); pintarPaneles(); pintarAcentos(); ordenarCtrls(); }catch(e){} }, ms);
     });
     /* las pantallas dibujan botones despues de bajar los datos */
     try{
@@ -695,6 +728,7 @@
       if(SIN_BARRA){ clearInterval(t); return; }
       try{ if(!document.querySelector('.vs-cab-tit')) armar(); }catch(e){}
       try{ barraUnica(); }catch(e){}
+      try{ ordenarCtrls(); }catch(e){}
       if(++n > 20) clearInterval(t);
     }, 300);
   }
