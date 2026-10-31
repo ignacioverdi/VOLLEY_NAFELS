@@ -411,6 +411,19 @@
   + '#vsn-panel{ left:var(--vsl-w) !important; }'
   + '#vsn-busca{ left:calc(50% + var(--vsl-w) / 2) !important; }'
 
+  /*  LAS VENTANAS DE PANTALLA COMPLETA DE LOS DOS PANELES
+      Son overlays fijos con inset:0, pensados para tapar TODA la pantalla,
+      de cuando la barra de arriba no existia. Con la barra nueva -que va
+      muy por encima en z-index- el overlay les quedaba por debajo y la
+      primera franja se cortaba: en panel vivo, la fila "+ Nuevo partido /
+      Abrir .dvw / Sumar al historial" quedaba escondida atras del titulo.
+      Se les devuelve la capa que siempre esperaron: arriba de todo. Asi
+      vuelven a verse enteras, que es como estaban hechas.
+      La ventanita flotante del video (.vdock) y la suelta no se tocan.    */
+  + 'body.vsp-vivo .modal:not(.vdock):not(.suelto),'
+  + 'body.vsp-vivo .podio-overlay, body.vsp-vivo .cancha-modal,'
+  + 'body.vsp-vivo #an-overlay{ z-index:2147482900 !important; }'
+
   + '@media (max-width:1100px){ :root{ --vsl-w:0px; } #vsn#vsn .vsl{ display:none; } }'
   + '@media print{ #vsn#vsn .vsl{ display:none !important; } body{ padding-left:0 !important; } }';
 
@@ -478,8 +491,60 @@
     return true;
   }
 
+  /*  las dos pantallas del partido: se marcan para que sus ventanas de
+      pantalla completa queden por encima de la barra (ver el CSS)       */
+  function marcarPagina(){
+    try{
+      var f = (location.pathname.split('/').pop() || '').toLowerCase();
+      if(f === 'panel_vivo.html' || f === 'panel_voley.html')
+        document.body.classList.add('vsp-vivo');
+    }catch(e){}
+  }
+
+  /*  LAS VENTANAS DE PANTALLA COMPLETA, POR ENCIMA DE LA BARRA
+      Los dos paneles del partido tienen DECENAS de capas de pantalla
+      completa —el inicio, el armado, los planteles, las baterias, el
+      video, la tabla, el podio, la cancha— y cada una con su z-index
+      propio, de cuando la barra de arriba no existia. Enumerarlas una por
+      una era garantia de olvidarse alguna justo el dia del partido.
+
+      Asi que no se enumeran: se reconocen. Una capa de pantalla completa
+      es la que esta fija y pegada a los cuatro bordes. A esas, y solo a
+      esas, se les sube la capa. Se mide el estilo calculado y no el
+      tamanio en pantalla, porque mientras estan cerradas no miden nada.
+
+      Quedan afuera las de la barra misma (empiezan con vs) y los fondos,
+      que van a proposito por debajo de todo.                            */
+  var CAPA_ALTA = '2147482900';
+  function subirCapas(){
+    if(!document.body || !document.body.classList.contains('vsp-vivo')) return;
+    var bar = document.getElementById('vsn');
+    var zBar = 0;
+    try{ zBar = parseInt(getComputedStyle(bar).zIndex, 10) || 0; }catch(e){}
+    if(!zBar) return;
+    [].forEach.call(document.querySelectorAll('body *'), function(e){
+      if(e.dataset.vsz === '1') return;
+      if(bar && (e === bar || bar.contains(e))) return;
+      var id = e.id || '';
+      if(id.indexOf('vs') === 0) return;
+      if(e.classList && (e.classList.contains('vdock') || e.classList.contains('suelto'))) return;
+      var cs;
+      try{ cs = getComputedStyle(e); }catch(err){ return; }
+      if(cs.position !== 'fixed') return;
+      if(cs.top !== '0px' || cs.left !== '0px' || cs.right !== '0px' || cs.bottom !== '0px') return;
+      var z = cs.zIndex === 'auto' ? 0 : (parseInt(cs.zIndex, 10) || 0);
+      if(z < 1 || z >= zBar) return;      /* los fondos (z negativo) no se tocan */
+      e.dataset.vsz = '1';
+      e.style.zIndex = CAPA_ALTA;
+    });
+  }
+
   function arrancar(){
     estilo();
+    marcarPagina();
+    [0, 500, 1500, 3200, 6000].forEach(function(ms){
+      setTimeout(function(){ try{ subirCapas(); }catch(e){} }, ms);
+    });
     [0, 400, 1200, 2600].forEach(function(ms){
       setTimeout(function(){ try{ unaSola(); idiomaActivo(); }catch(e){} }, ms);
     });

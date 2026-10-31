@@ -681,7 +681,22 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
 
   /*  CONVIERTE LA GRILLA EN LA CANCHA  (seis o nueve cuadrantes)        */
   function cancha(g, seis) {
-    if (!g || g.dataset.ppc === '1') return;
+    if (!g) return;
+    /*  LA GRILLA SE REDIBUJA SOLA
+        render() de la pagina reescribe el innerHTML de cada cancha cada vez
+        que se toca un filtro. La caja queda -con la clase pp-ch puesta- pero
+        las celdas son nuevas y sin recortar: se veian nueve bloques apilados
+        uno abajo del otro. Por eso la marca no alcanza: hay que mirar si el
+        dibujo de atras sigue adentro. Si no esta, se rehace todo.         */
+    var hecha = g.dataset.ppc === '1' && g.querySelector(':scope > .pp-bg');
+    if (hecha) return;
+    if (g.dataset.ppc === '1') {
+      [].forEach.call(g.querySelectorAll(':scope > .pp-bg, :scope > .pp-fg'), function (e) {
+        e.parentNode.removeChild(e);
+      });
+      g.classList.remove('pp-ch', 'pp-ch6');
+      g.dataset.ppc = '';
+    }
     var cel = [].slice.call(g.children).filter(function (e) {
       return /(^|\s)cell(\s|$)/.test(e.className || '');
     });
@@ -702,10 +717,18 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
       vivas = cel;
     }
 
-    var flechas = [];
+    var flechas = [], plays = [];
     vivas.forEach(function (c, i) {
       var f = Math.floor(i / 3), col = i % 3;
       var p = poli(f, col, F), ce = centro(p);
+      /*  el ▶ que avisa que esa zona tiene video. El de la pagina se
+          dibujaba en la esquina de la CAJA, que ahora es toda la cancha;
+          recortado por el cuadrante no se veia. Va a la capa de arriba,
+          en la esquina de su propio cuadrante.                           */
+      if (/(^|\s)vid(\s|$)/.test(c.className || '')) {
+        plays.push([p[1][0] + (ce[0] - p[1][0]) * 0.30,
+                    p[1][1] + (ce[1] - p[1][1]) * 0.46]);
+      }
       var fondoViejo = c.style.background || '';
       c.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;'
         + 'clip-path:' + clip(p) + ';-webkit-clip-path:' + clip(p) + ';'
@@ -733,6 +756,8 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
       return '<i class="pp-fl" style="left:' + f[0].toFixed(2) + '%;top:' + (f[1] - 2.2).toFixed(2)
         + '%;height:' + Math.min(f[3], 3.5 + f[2] * 0.40).toFixed(1) + '%;opacity:'
         + Math.min(.95, .34 + f[2] / 42).toFixed(2) + '"></i>';
+    }).join('') + plays.map(function (q) {
+      return '<i class="pp-pl" style="left:' + q[0].toFixed(2) + '%;top:' + q[1].toFixed(2) + '%"></i>';
     }).join('');
     g.appendChild(fg);
   }
@@ -824,8 +849,13 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
     '  background:linear-gradient(180deg,#A6F2FF,#00C4F0);border-radius:2px;',
     '  box-shadow:0 0 9px rgba(0,208,246,.85);pointer-events:none}',
     '.pp-ch .cell{box-shadow:none!important}',
-    '.pp-ch .cell::after{content:"";position:absolute;inset:0;pointer-events:none;',
-    '  background:linear-gradient(180deg,rgba(255,255,255,.025),transparent 55%)}',
+    '.pp-ch .cell::after{display:none}',
+    '.pp-pl{position:absolute;transform:translate(-50%,-50%);width:12px;height:12px;',
+    '  border-radius:50%;background:rgba(2,10,18,.80);border:1px solid rgba(255,77,115,.85);',
+    '  box-shadow:0 0 7px rgba(255,43,94,.55);z-index:5;pointer-events:none}',
+    '.pp-pl::before{content:"";position:absolute;left:50%;top:50%;',
+    '  transform:translate(-38%,-50%);border:3px solid transparent;border-left-color:#FFE3EA;',
+    '  border-right:0}',
     '.pp-lab{position:absolute;transform:translate(-50%,-50%);display:flex;',
     '  flex-direction:column;align-items:center;justify-content:center;line-height:1.05;',
     '  white-space:nowrap;pointer-events:none;z-index:3;text-shadow:0 1px 3px rgba(0,0,0,.85)}',
@@ -1110,6 +1140,173 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
       estilo();
       if (construir()) marcar();
       engancharTab();
+      if (++i > 40) clearInterval(t);
+    }, 400);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   PLAN DE PARTIDO · EL EQUIPO, EN UN DESPLEGABLE
+
+   La fila de botones de equipo se comia un renglon entero: catorce botones
+   en linea, y los seis ultimos con el nombre tal cual viene del archivo.
+
+   Ahora va un solo control del alto de los demas filtros: el escudo, el
+   nombre y la flecha. Al tocarlo se abre la lista con los catorce, cada uno
+   con su escudo, y el que esta elegido en rojo.
+
+   No reemplaza ninguna logica: el <select> original sigue existiendo, se
+   esconde, y cada eleccion le escribe el valor y le dispara su 'change'.
+   Es exactamente el mismo camino que ya usaba la pantalla —setTeam(),
+   buildTeam(), buildFocusSel()— asi que no hay nada nuevo que pueda fallar.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  function $(id) { return document.getElementById(id); }
+  function esc(t) {
+    return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /*  el nombre del archivo del escudo no siempre es el del equipo  */
+  var ALIAS = { schonenwerd: 'schoenenwerd', schoenenwerd: 'schoenenwerd' };
+
+  function escudo(slug) {
+    var s = String(slug || '').toLowerCase();
+    if (s === 'nafels' || s === 'home') return '<img src="escudo.png" alt="">';
+    s = ALIAS[s] || s;
+    var ini = esc(String(slug || '?').slice(0, 2).toUpperCase());
+    return '<img src="escudos/' + esc(s) + '.png" alt="" onerror="this.replaceWith('
+      + 'Object.assign(document.createElement(\'span\'),{className:\'pp-eqx\','
+      + 'textContent:\'' + ini + '\'}))">';
+  }
+
+  var CSS = [
+    /*  la fila vieja de botones y el <select> nativo quedan fuera de vista:
+        la regla general de .pp-ctrls los forzaba a mostrarse aunque la
+        propia pagina los traia con display:none                          */
+    'html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > #teambtns,',
+    'html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > #teamsel,',
+    'html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > [style*="display:none"],',
+    'html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > [hidden]{display:none!important}',
+    '.pp-eq{position:relative;flex:0 0 auto}',
+    'html:not([data-vs="off"]) body.pp-p .matchbar .pp-ctrls > .pp-eq{',
+    '  padding:0!important;border:0!important;background:none!important;height:40px!important}',
+    '.pp-eqb{display:flex;align-items:center;gap:9px;height:40px;padding:0 11px 0 9px;',
+    '  border:1px solid rgba(90,165,205,.42);border-radius:8px;background:rgba(0,20,33,.55);',
+    '  color:#EAF4FA;font:500 13.5px/1 var(--vsUI,inherit);cursor:pointer;min-width:168px}',
+    '.pp-eqb:hover,.pp-eq.abierto .pp-eqb{border-color:#FF2B5E}',
+    '.pp-eqb b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;',
+    '  max-width:160px}',
+    '.pp-eqb .ch{margin-left:auto;width:7px;height:7px;border-right:1.8px solid #7FB6CE;',
+    '  border-bottom:1.8px solid #7FB6CE;transform:rotate(45deg) translate(-2px,-2px);flex:0 0 auto}',
+    '.pp-eq.abierto .pp-eqb .ch{transform:rotate(225deg) translate(-2px,-2px);border-color:#FF4D73}',
+    '.pp-eq .e{width:22px;height:22px;flex:0 0 auto;display:flex;align-items:center;',
+    '  justify-content:center}',
+    '.pp-eq .e img{max-width:100%;max-height:100%;object-fit:contain;display:block}',
+    '.pp-eqx{display:flex;align-items:center;justify-content:center;width:22px;height:22px;',
+    '  border-radius:5px;background:rgba(0,217,245,.10);border:1px solid rgba(0,217,245,.30);',
+    '  font:700 9px/1 var(--vsTit,inherit);letter-spacing:.04em;color:#7FD8EE}',
+    '.pp-eqm{position:absolute;top:calc(100% + 6px);left:0;z-index:2147482600;display:none;',
+    '  min-width:240px;max-height:52vh;overflow:auto;padding:6px;border-radius:11px;',
+    '  background:linear-gradient(180deg,#00141F,#000B13);border:1px solid rgba(0,217,245,.34);',
+    '  box-shadow:0 14px 34px rgba(0,0,0,.6)}',
+    '.pp-eq.abierto .pp-eqm{display:block}',
+    '.pp-eqm button{display:flex;align-items:center;gap:9px;width:100%;padding:7px 9px;',
+    '  border:0;border-radius:8px;background:none;color:#D7E7F0;cursor:pointer;text-align:left;',
+    '  font:500 13px/1.2 var(--vsUI,inherit)}',
+    '.pp-eqm button:hover{background:rgba(0,217,245,.10)}',
+    '.pp-eqm button.on{background:rgba(255,43,94,.16);color:#fff;',
+    '  box-shadow:inset 2px 0 0 #FF2B5E}',
+    '.pp-eqm button b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}'
+  ].join('');
+
+  function estilo() {
+    if ($('pp4-css')) return;
+    var s = document.createElement('style'); s.id = 'pp4-css'; s.textContent = CSS;
+    document.head.appendChild(s);
+  }
+
+  function equipos() {
+    var sel = $('teamsel'); if (!sel) return [];
+    return [].map.call(sel.options, function (o) {
+      return { slug: o.value, nom: o.textContent };
+    });
+  }
+
+  function elegir(slug) {
+    var sel = $('teamsel'); if (!sel) return;
+    sel.value = slug;
+    /*  el mismo camino que el desplegable original: su propio 'change'  */
+    try { sel.dispatchEvent(new Event('change', { bubbles: true })); }
+    catch (e) { if (typeof window.setTeam === 'function') window.setTeam(slug); }
+    cerrar();
+    setTimeout(pintar, 30);
+  }
+
+  function cerrar() { var c = $('pp-eq'); if (c) c.classList.remove('abierto'); }
+
+  function construir() {
+    var sel = $('teamsel'); if (!sel || !sel.parentNode) return null;
+    if ($('pp-eq')) return $('pp-eq');
+    if (!sel.options.length) return null;
+    var c = document.createElement('div'); c.className = 'pp-eq'; c.id = 'pp-eq';
+    c.innerHTML = '<button class="pp-eqb" type="button" aria-haspopup="listbox">'
+      + '<span class="e"></span><b></b><i class="ch"></i></button>'
+      + '<div class="pp-eqm" role="listbox"></div>';
+    sel.parentNode.insertBefore(c, sel);
+    c.querySelector('.pp-eqb').addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      c.classList.toggle('abierto');
+    });
+    c.querySelector('.pp-eqm').addEventListener('click', function (ev) {
+      var b = ev.target.closest ? ev.target.closest('button[data-s]') : null;
+      if (b) { ev.stopPropagation(); elegir(b.dataset.s); }
+    });
+    document.addEventListener('click', cerrar);
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') cerrar();
+    });
+    return c;
+  }
+
+  function pintar() {
+    var c = construir(); if (!c) return;
+    var sel = $('teamsel'), act = sel ? sel.value : '';
+    var lista = equipos();
+    var hoy = lista.filter(function (q) { return q.slug === act; })[0] || lista[0] || { slug: '', nom: '' };
+    var cab = c.querySelector('.pp-eqb');
+    var firma = act + '|' + lista.length;
+    if (c.dataset.firma !== firma) {
+      c.dataset.firma = firma;
+      cab.querySelector('.e').innerHTML = escudo(hoy.slug);
+      cab.querySelector('b').textContent = hoy.nom;
+      c.querySelector('.pp-eqm').innerHTML = lista.map(function (q) {
+        return '<button type="button" data-s="' + esc(q.slug) + '"'
+          + (q.slug === act ? ' class="on"' : '') + ' role="option">'
+          + '<span class="e">' + escudo(q.slug) + '</span><b>' + esc(q.nom) + '</b></button>';
+      }).join('');
+    }
+  }
+
+  /*  cada vez que la pagina repinta los equipos, el control se pone al dia  */
+  function enganchar() {
+    if (typeof window.pintarBotonesEquipo !== 'function'
+        || window.pintarBotonesEquipo.__pp4) return false;
+    var o = window.pintarBotonesEquipo;
+    var n = function () { var r = o.apply(this, arguments); setTimeout(pintar, 20); return r; };
+    n.__pp4 = true; window.pintarBotonesEquipo = n;
+    return true;
+  }
+
+  function arrancar() {
+    estilo(); pintar(); enganchar();
+    var i = 0, t = setInterval(function () {
+      estilo(); pintar(); enganchar();
       if (++i > 40) clearInterval(t);
     }, 400);
   }

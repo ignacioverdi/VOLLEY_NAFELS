@@ -3195,6 +3195,7 @@
     "Colocación":{en:"Setting",de:"Zuspiel"},
     "Contraataque":{en:"Counter-attack",de:"Gegenangriff"},
     "Ver video":{en:"Watch video",de:"Video ansehen"},
+    "por acciones":{en:"by actions",de:"nach Aktionen"},
     "Panel en vivo":{en:"Live panel",de:"Live-Panel"},
     "Resumen general":{en:"Overview",de:"Übersicht"},
     "Tipos de distribución":{en:"Set types",de:"Zuspielarten"},

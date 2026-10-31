@@ -80,7 +80,7 @@
         '<a class="ix-tarj" href="' + esc(hPlay) + '">' + ico('personas') +
           '<span><b>' + T('Equipo') + '</b>' + T('Playbook') + '</span>' + ico('chevron') + '</a>' +
         '<a class="ix-tarj" href="' + esc(hPlan) + '">' + ico('nota') +
-          '<span><b>' + T('Detalle') + '</b>' + T('imprimible') + '</span>' + ico('chevron') + '</a>' +
+          '<span><b>' + T('Detalle') + '</b>' + T('por acciones') + '</span>' + ico('chevron') + '</a>' +
       '</div>';
 
     if (!h.querySelector('.ix-lema')) {
