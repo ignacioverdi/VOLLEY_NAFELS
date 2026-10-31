@@ -629,7 +629,14 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
     var s = '<svg class="pp-cv" viewBox="0 0 100 100" preserveAspectRatio="none">'
       + '<defs><linearGradient id="ppD" x1="0" y1="0" x2="0" y2="1">'
       + '<stop offset="0" stop-color="#FF4D73" stop-opacity=".92"/>'
-      + '<stop offset="1" stop-color="#FF2B5E" stop-opacity=".22"/></linearGradient></defs>';
+      + '<stop offset="1" stop-color="#FF2B5E" stop-opacity=".22"/></linearGradient>'
+      + '<radialGradient id="ppL" cx="50%" cy="-2%" r="82%">'
+      + '<stop offset="0" stop-color="#FFE9EF" stop-opacity=".22"/>'
+      + '<stop offset=".42" stop-color="#FF6B8A" stop-opacity=".07"/>'
+      + '<stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient></defs>';
+    /*  el resplandor de la red, POR ENCIMA del relleno: es lo que le da
+        profundidad a la maqueta. Va antes de las lineas para no apagarlas */
+    s += '<polygon points="' + cuatro + '" fill="url(#ppL)" style="pointer-events:none"/>';
     [1, 2].forEach(function (c) {
       s += '<line x1="' + pt(0, c/3)[0].toFixed(2) + '" y1="0" x2="' + pt(1, c/3)[0].toFixed(2)
          + '" y2="100" stroke="url(#ppD)" stroke-width="1.6" vector-effect="non-scaling-stroke"/>';
@@ -732,7 +739,7 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
       var fondoViejo = c.style.background || '';
       c.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;'
         + 'clip-path:' + clip(p) + ';-webkit-clip-path:' + clip(p) + ';'
-        + 'background:' + flojo(fondoViejo) + ';border:0;border-radius:0;'
+        + 'background:' + flojo(fondoViejo, seis) + ';border:0;border-radius:0;'
         + 'min-width:0;padding:0;margin:0';
       var hijos = [].slice.call(c.children);
       if (hijos.length) {
@@ -766,16 +773,26 @@ html:not([data-vs="off"]) body.pp-p #tabsbar #focusSel{
       La maqueta pinta la cancha casi a oscuras y deja que mande el rojo de
       la red. El color por zona que ya usaba la pagina sigue estando -asi se
       reconoce de que zona se habla- pero a menos de la mitad de fuerza.    */
-  function flojo(bg) {
+  function flojo(bg, seis) {
     if (!bg) return 'transparent';
-    /*  Sobre la cancha la zona ya se reconoce por DONDE esta: el arcoiris
-        de nueve colores era para una grilla suelta, aca sobra y pelea con
-        el rojo de la maqueta. Queda una sola escala roja, con la misma
-        fuerza que traia cada celda.                                      */
-    var m = bg.match(/rgba\([^)]*?,\s*([0-9.]+)\)/);
-    if (!m) return 'transparent';
-    var a = Math.min(0.30, (+m[1]) * 0.40);
-    return 'rgba(255,43,94,' + a.toFixed(3) + ')';
+
+    /*  LA CANCHA DEL ARMADOR: UNA SOLA ESCALA ROJA
+        Ahi la zona ya se reconoce por DONDE esta, y el arcoiris de nueve
+        colores peleaba con el rojo de la red. El color llega en rgba y lo
+        unico que se conserva es su fuerza.                               */
+    if (seis) {
+      var m = bg.match(/rgba?\([^)]*?,\s*([0-9.]+)\)/);
+      if (!m) return 'transparent';
+      return 'rgba(255,43,94,' + Math.min(0.30, (+m[1]) * 0.40).toFixed(3) + ')';
+    }
+
+    /*  LAS CANCHAS DE NUEVE: EL COLOR QUEDA COMO ESTABA
+        Ataque, saque, recepcion, defensa y bloqueo ya tenian su escala de
+        tres tonos, maciza y bien marcada, y asi se leia de un vistazo cual
+        zona pesa. No se le toca nada: pasa tal cual venia. Las lineas de
+        la cancha y el resplandor de la red van por encima, en la capa de
+        adelante, asi que se siguen viendo igual.                         */
+    return bg;
   }
 
   /*  LOS NUMEROS AL COSTADO DE LA CANCHA
